@@ -1,3 +1,23 @@
-﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Connect.Conference.Core.Models.Conferences.Conference>
+﻿@inherits Connect.DNN.Modules.Conference.Common.ConferenceWebPage<Connect.Conference.Core.Models.Conferences.Conference>
 
-<h1>Hello World</h1>
+@{
+ if (ModuleContext.Security.CanEdit)
+ {
+  if (Model.ConferenceId > 0)
+  {
+   <div class="right">
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="dnnSecondaryAction">
+     @Dnn.LocalizeString("Edit")
+    </a>
+   </div>
+  }
+  else
+  {
+   <div class="right">
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="dnnPrimaryAction">
+     @Dnn.LocalizeString("New")
+    </a>
+   </div>
+  }
+ }
+}

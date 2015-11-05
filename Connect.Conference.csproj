@@ -81,6 +81,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_References\System.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_References\System.Web.WebPages.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
@@ -89,6 +94,9 @@
   <ItemGroup>
     <Compile Include="Common\ConferenceMvcController.cs" />
     <Compile Include="Common\ConferenceService.cs" />
+    <Compile Include="Common\ConferenceWebPageOfT.cs" />
+    <Compile Include="Common\ConferenceWebPage.cs" />
+    <Compile Include="Common\ContextHelper.cs" />
     <Compile Include="Common\ContextSecurity.cs" />
     <Compile Include="Common\Globals.cs" />
     <Compile Include="Common\RouteMapper.cs" />
@@ -96,6 +104,7 @@
     <Compile Include="Common\Settings\ModuleScopedSettings.cs" />
     <Compile Include="Common\Settings\ModuleSettings.cs" />
     <Compile Include="Common\Settings\StringBasedSettings.cs" />
+    <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.ascx.cs">
@@ -128,6 +137,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Conference.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Home.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
