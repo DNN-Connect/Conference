@@ -1,5 +1,6 @@
 
 using System;
+using System.Linq;
 using System.IO;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
@@ -25,12 +26,12 @@ namespace Connect.DNN.Modules.Conference
                 if (Page.IsPostBack == false)
                 {
                     ddView.Items.Clear();
-                    ddView.Items.Add(new ListItem("Home", "Home"));
-                    System.IO.DirectoryInfo viewDir = new DirectoryInfo(Server.MapPath("~/DesktopModules/Albatros/Balises/Views"));
+                    ddView.Items.Add(new ListItem("Index", "Index"));
+                    System.IO.DirectoryInfo viewDir = new DirectoryInfo(Server.MapPath("~/DesktopModules/MVC/Connect/Conference/Views/Home"));
                     foreach (var f in viewDir.GetFiles("*.cshtml"))
                     {
                         string vwName = Path.GetFileNameWithoutExtension(f.Name);
-                        if (vwName.ToLower() != "home")
+                        if (vwName.ToLower() != "index")
                         {
                             ddView.Items.Add(new ListItem(vwName, vwName));
                         }
@@ -38,6 +39,14 @@ namespace Connect.DNN.Modules.Conference
                     try
                     {
                         ddView.Items.FindByValue(ModSettings.View).Selected = true;
+                    }
+                    catch { }
+                    ddConference.DataSource = Connect.Conference.Core.Controllers.ConferencesController.GetConferences(PortalId);
+                    ddConference.DataBind();
+                    ddConference.Items.Insert(0, new ListItem(LocalizeString("None"), "-1"));
+                    try
+                    {
+                        ddConference.Items.FindByValue(ModSettings.Conference.ToString()).Selected = true;
                     }
                     catch { }
                 }
@@ -53,6 +62,7 @@ namespace Connect.DNN.Modules.Conference
             try
             {
                 ModSettings.View = ddView.SelectedValue;
+                ModSettings.Conference = int.Parse(ddConference.SelectedValue);
                 ModSettings.SaveSettings();
             }
             catch (Exception exc) //Module failed to load

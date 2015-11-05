@@ -2,13 +2,13 @@
  <packages>
   <package name="Conference" type="Module" version="01.00.00">
    <friendlyName>Conference</friendlyName>
-   <description>Connect Conference module</description>
+   <description>DNN Connect Conference module</description>
    <iconFile>DesktopModules/Connect/Conference/img/Conference.png</iconFile>
    <owner>
-    <name>Connect</name>
-    <organization>Connect</organization>
-    <url>http://www.Connect.net</url>
-    <email>info@Connect.net</email>
+    <name></name>
+    <organization>DNN Connect</organization>
+    <url>http://dnn-connect.net</url>
+    <email>webmaster@dnn-connect.net</email>
    </owner>
    <license src="License.txt"></license>
    <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
@@ -27,7 +27,7 @@
         <moduleControls>
          <moduleControl>
           <controlKey />
-          <controlSrc>Connect.DNN.Modules.Conference.ModuleHome, Connect.DNN.MODULES.Conference</controlSrc>
+          <controlSrc>Home/Index.mvc</controlSrc>
           <supportsPartialRendering>False</supportsPartialRendering>
           <controlTitle />
           <controlType>View</controlType>
@@ -37,18 +37,21 @@
          </moduleControl>
          <moduleControl>
           <controlKey>Settings</controlKey>
-          <controlSrc>DesktopModules/Connect/Conference/Settings.ascx</controlSrc>
+          <controlSrc>DesktopModules/MVC/Connect/Conference/Settings.ascx</controlSrc>
           <supportsPartialRendering>False</supportsPartialRendering>
-          <controlTitle>Conference Settings</controlTitle>
+          <controlTitle>Conference Module Settings</controlTitle>
           <controlType>Edit</controlType>
           <iconFile />
           <helpUrl />
           <viewOrder>0</viewOrder>
          </moduleControl>
         </moduleControls>
-	   <permissions>
-		<permission code="Connect_Conference_MODULE" key="ADDER" name="Add Stuff"/>
-88888888888888	   </permissions>
+        <permissions>
+         <permission code="Connect_Conference_MODULE" key="SESSIONSUBMIT" name="Submit Sessions"/>
+         <permission code="Connect_Conference_MODULE" key="SESSIONAPPROVE" name="Approve Sessions"/>
+         <permission code="Connect_Conference_MODULE" key="CANATTEND" name="Can Attend"/>
+         <permission code="Connect_Conference_MODULE" key="MANAGEATTENDEES" name="Manage Attendees"/>
+        </permissions>
        </moduleDefinition>
       </moduleDefinitions>
      </desktopModule>

@@ -11,9 +11,14 @@ namespace Connect.DNN.Modules.Conference.Common.Settings
         #region Properties
         internal ISettingsStore Store;
 
+        public int Conference
+        {
+            get { return Store.Get(-1); }
+            set { Store.Set(value); }
+        }
         public string View
         {
-            get { return Store.Get("Home"); }
+            get { return Store.Get("Index"); }
             set { Store.Set(value); }
         }
         public string Version = typeof(ModuleSettings).Assembly.GetName().Version.ToString();

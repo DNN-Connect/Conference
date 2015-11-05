@@ -6,5 +6,9 @@
   <dnn:label id="lblView" runat="server" controlname="ddView" suffix=":" />
   <asp:DropDownList runat="server" ID="ddView" />
  </div>
+ <div class="dnnFormItem">
+  <dnn:label id="lblConference" runat="server" controlname="ddConference" suffix=":" />
+  <asp:DropDownList runat="server" ID="ddConference" DataTextField="Name" DataValueField="ConferenceId" />
+ </div>
 </fieldset>
 
