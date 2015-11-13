@@ -10,10 +10,18 @@ namespace Connect.Conference.Core.Models.Slots
     [TableName("Connect_Conference_Slots")]
     [PrimaryKey("SlotId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class SlotBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SlotBase()
+        {
+            SlotId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int SlotId { get; set; }
         [DataMember]
@@ -30,7 +38,7 @@ namespace Connect.Conference.Core.Models.Slots
         public string Description { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSlotBase(SlotBase slot)
         {
             if (slot.SlotId > -1)

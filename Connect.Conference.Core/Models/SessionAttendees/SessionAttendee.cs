@@ -7,30 +7,24 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 
     [TableName("vw_Connect_Conference_SessionAttendees")]
     [DataContract]
+    [Scope("SessionId")]                
     public partial class SessionAttendee  : SessionAttendeeBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public SessionAttendee()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string Title { get; set; }
         [DataMember]
         public string SessionAttendeeName { get; set; }
-        [DataMember]
-        public string CreatedByUser { get; set; }
-        [DataMember]
-        public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public SessionAttendeeBase GetSessionAttendeeBase()
         {
             SessionAttendeeBase res = new SessionAttendeeBase();

@@ -9,10 +9,17 @@ namespace Connect.Conference.Core.Models.Attendees
 {
     [TableName("Connect_Conference_Attendees")]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class AttendeeBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public AttendeeBase()
+        {
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int ConferenceId { get; set; }
         [DataMember]
@@ -23,7 +30,7 @@ namespace Connect.Conference.Core.Models.Attendees
         public bool ReceiveNotifications { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadAttendeeBase(AttendeeBase attendee)
         {
             if (attendee.ConferenceId > -1)

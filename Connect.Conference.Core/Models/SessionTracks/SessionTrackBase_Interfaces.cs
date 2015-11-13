@@ -12,11 +12,10 @@ namespace Connect.Conference.Core.Models.SessionTracks
     public partial class SessionTrackBase : IHydratable, IPropertyAccess
     {
 
-        #region " IHydratable Methods "
+        #region IHydratable
 
         public virtual void Fill(IDataReader dr)
         {
-            FillAuditFields(dr);
    TrackId = Convert.ToInt32(Null.SetNull(dr["TrackId"], TrackId));
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
         }
@@ -29,7 +28,7 @@ namespace Connect.Conference.Core.Models.SessionTracks
         }
         #endregion
 
-        #region " IPropertyAccess Methods "
+        #region IPropertyAccess
         public virtual string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
         {
             switch (strPropertyName.ToLower())

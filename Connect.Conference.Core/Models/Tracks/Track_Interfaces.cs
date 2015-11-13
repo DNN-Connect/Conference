@@ -13,19 +13,26 @@ namespace Connect.Conference.Core.Models.Tracks
  public partial class Track
  {
 
-  #region " IHydratable Implementation "
+  #region IHydratable
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
+   NrSessions = Convert.ToInt32(Null.SetNull(dr["NrSessions"], NrSessions));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
   #endregion
 
-  #region " IPropertyAccess Implementation "
+  #region IPropertyAccess
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
+    case "nrsessions": // Int
+     if (NrSessions == null);
+     {
+         return "";
+     };
+     return ((int)NrSessions).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null);
      {

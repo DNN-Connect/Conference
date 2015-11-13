@@ -10,10 +10,18 @@ namespace Connect.Conference.Core.Models.Tracks
     [TableName("Connect_Conference_Tracks")]
     [PrimaryKey("TrackId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class TrackBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public TrackBase()
+        {
+            TrackId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int TrackId { get; set; }
         [DataMember]
@@ -30,7 +38,7 @@ namespace Connect.Conference.Core.Models.Tracks
         public string Description { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadTrackBase(TrackBase track)
         {
             if (track.TrackId > -1)

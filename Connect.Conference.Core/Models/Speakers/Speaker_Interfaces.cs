@@ -13,7 +13,7 @@ namespace Connect.Conference.Core.Models.Speakers
  public partial class Speaker
  {
 
-  #region " IHydratable Implementation "
+  #region IHydratable
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
@@ -30,12 +30,13 @@ namespace Connect.Conference.Core.Models.Speakers
    PhotoContentType = Convert.ToString(Null.SetNull(dr["PhotoContentType"], PhotoContentType));
    Biography = Convert.ToString(Null.SetNull(dr["Biography"], Biography));
    Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
+   NrPresentations = Convert.ToInt32(Null.SetNull(dr["NrPresentations"], NrPresentations));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
   #endregion
 
-  #region " IPropertyAccess Implementation "
+  #region IPropertyAccess
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
@@ -101,6 +102,12 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(Company, strFormat);
+    case "nrpresentations": // Int
+     if (NrPresentations == null);
+     {
+         return "";
+     };
+     return ((int)NrPresentations).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null);
      {

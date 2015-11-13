@@ -9,10 +9,17 @@ namespace Connect.Conference.Core.Models.Speakers
 {
     [TableName("Connect_Conference_Speakers")]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class SpeakerBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SpeakerBase()
+        {
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int ConferenceId { get; set; }
         [DataMember]
@@ -27,7 +34,7 @@ namespace Connect.Conference.Core.Models.Speakers
         public string DescriptionShort { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSpeakerBase(SpeakerBase speaker)
         {
             if (speaker.ConferenceId > -1)

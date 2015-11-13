@@ -8,19 +8,21 @@ namespace Connect.Conference.Core.Models.Sessions
     [TableName("vw_Connect_Conference_Sessions")]
     [PrimaryKey("SessionId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]                
     public partial class Session  : SessionBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Session()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
+        [DataMember]
+        public int? NrAttendees { get; set; }
+        [DataMember]
+        public int? NrSpeakers { get; set; }
         [DataMember]
         public string LocationName { get; set; }
         [DataMember]
@@ -31,7 +33,7 @@ namespace Connect.Conference.Core.Models.Sessions
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public SessionBase GetSessionBase()
         {
             SessionBase res = new SessionBase();

@@ -7,19 +7,17 @@ namespace Connect.Conference.Core.Models.Speakers
 
     [TableName("vw_Connect_Conference_Speakers")]
     [DataContract]
+    [Scope("ConferenceId")]                
     public partial class Speaker  : SpeakerBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Speaker()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string DisplayName { get; set; }
         [DataMember]
@@ -47,12 +45,14 @@ namespace Connect.Conference.Core.Models.Speakers
         [DataMember]
         public string Company { get; set; }
         [DataMember]
+        public int? NrPresentations { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public SpeakerBase GetSpeakerBase()
         {
             SpeakerBase res = new SpeakerBase();

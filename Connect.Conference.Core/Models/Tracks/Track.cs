@@ -8,26 +8,26 @@ namespace Connect.Conference.Core.Models.Tracks
     [TableName("vw_Connect_Conference_Tracks")]
     [PrimaryKey("TrackId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]                
     public partial class Track  : TrackBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Track()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
+        [DataMember]
+        public int? NrSessions { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public TrackBase GetTrackBase()
         {
             TrackBase res = new TrackBase();

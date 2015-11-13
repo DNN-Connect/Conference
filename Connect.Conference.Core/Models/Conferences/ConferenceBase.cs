@@ -10,11 +10,18 @@ namespace Connect.Conference.Core.Models.Conferences
     [TableName("Connect_Conference_Conferences")]
     [PrimaryKey("ConferenceId", AutoIncrement = true)]
     [DataContract]
-     [Scope("PortalId")]
+    [Scope("PortalId")]
     public partial class ConferenceBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public ConferenceBase()
+        {
+            ConferenceId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int ConferenceId { get; set; }
         [DataMember]
@@ -37,7 +44,7 @@ namespace Connect.Conference.Core.Models.Conferences
         public int? SpeakerRole { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadConferenceBase(ConferenceBase conference)
         {
             if (conference.ConferenceId > -1)

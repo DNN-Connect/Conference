@@ -12,7 +12,7 @@ namespace Connect.Conference.Core.Models.Tracks
     public partial class TrackBase : IHydratable, IPropertyAccess
     {
 
-        #region " IHydratable Methods "
+        #region IHydratable
 
         public virtual void Fill(IDataReader dr)
         {
@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Models.Tracks
         }
         #endregion
 
-        #region " IPropertyAccess Methods "
+        #region IPropertyAccess
         public virtual string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
         {
             switch (strPropertyName.ToLower())

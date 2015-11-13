@@ -9,17 +9,23 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 {
     [TableName("Connect_Conference_SessionAttendees")]
     [DataContract]
-    public partial class SessionAttendeeBase  : AuditableEntity 
-    {
+    [Scope("SessionId")]
+    public partial class SessionAttendeeBase     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SessionAttendeeBase()
+        {
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int SessionId { get; set; }
         [DataMember]
         public int UserId { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSessionAttendeeBase(SessionAttendeeBase sessionAttendee)
         {
             if (sessionAttendee.SessionId > -1)

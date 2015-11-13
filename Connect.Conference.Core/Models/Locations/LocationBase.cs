@@ -10,10 +10,18 @@ namespace Connect.Conference.Core.Models.Locations
     [TableName("Connect_Conference_Locations")]
     [PrimaryKey("LocationId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class LocationBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public LocationBase()
+        {
+            LocationId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int LocationId { get; set; }
         [DataMember]
@@ -30,7 +38,7 @@ namespace Connect.Conference.Core.Models.Locations
         public string BackgroundColor { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadLocationBase(LocationBase location)
         {
             if (location.LocationId > -1)

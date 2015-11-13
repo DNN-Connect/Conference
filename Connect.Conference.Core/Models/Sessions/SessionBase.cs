@@ -10,10 +10,18 @@ namespace Connect.Conference.Core.Models.Sessions
     [TableName("Connect_Conference_Sessions")]
     [PrimaryKey("SessionId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]
     public partial class SessionBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SessionBase()
+        {
+            SessionId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int SessionId { get; set; }
         [DataMember]
@@ -42,7 +50,7 @@ namespace Connect.Conference.Core.Models.Sessions
         public int? Status { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSessionBase(SessionBase session)
         {
             if (session.SessionId > -1)

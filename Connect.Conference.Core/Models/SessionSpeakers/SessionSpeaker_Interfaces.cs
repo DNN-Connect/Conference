@@ -13,7 +13,7 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
  public partial class SessionSpeaker
  {
 
-  #region " IHydratable Implementation "
+  #region IHydratable
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
@@ -27,7 +27,7 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
   }
   #endregion
 
-  #region " IPropertyAccess Implementation "
+  #region IPropertyAccess
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {

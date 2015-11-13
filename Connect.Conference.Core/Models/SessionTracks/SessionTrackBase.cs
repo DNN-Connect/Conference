@@ -9,17 +9,23 @@ namespace Connect.Conference.Core.Models.SessionTracks
 {
     [TableName("Connect_Conference_SessionTracks")]
     [DataContract]
-    public partial class SessionTrackBase  : AuditableEntity 
-    {
+    [Scope("SessionId")]
+    public partial class SessionTrackBase     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SessionTrackBase()
+        {
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int TrackId { get; set; }
         [DataMember]
         public int SessionId { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSessionTrackBase(SessionTrackBase sessionTrack)
         {
             if (sessionTrack.TrackId > -1)

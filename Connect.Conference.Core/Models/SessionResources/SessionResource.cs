@@ -8,26 +8,24 @@ namespace Connect.Conference.Core.Models.SessionResources
     [TableName("vw_Connect_Conference_SessionResources")]
     [PrimaryKey("SessionResourceId", AutoIncrement = true)]
     [DataContract]
+    [Scope("SessionId")]                
     public partial class SessionResource  : SessionResourceBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public SessionResource()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public SessionResourceBase GetSessionResourceBase()
         {
             SessionResourceBase res = new SessionResourceBase();

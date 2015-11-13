@@ -10,10 +10,18 @@ namespace Connect.Conference.Core.Models.SessionResources
     [TableName("Connect_Conference_SessionResources")]
     [PrimaryKey("SessionResourceId", AutoIncrement = true)]
     [DataContract]
+    [Scope("SessionId")]
     public partial class SessionResourceBase  : AuditableEntity 
     {
 
-        #region " Public Properties "
+        #region .ctor
+        public SessionResourceBase()
+        {
+            SessionResourceId = -1;
+        }
+        #endregion
+
+        #region Properties
         [DataMember]
         public int SessionResourceId { get; set; }
         [DataMember]
@@ -28,7 +36,7 @@ namespace Connect.Conference.Core.Models.SessionResources
         public int Visibility { get; set; }
         #endregion
 
-        #region " Methods "
+        #region Methods
         public void ReadSessionResourceBase(SessionResourceBase sessionResource)
         {
             if (sessionResource.SessionResourceId > -1)

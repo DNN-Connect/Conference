@@ -12,11 +12,10 @@ namespace Connect.Conference.Core.Models.SessionAttendees
     public partial class SessionAttendeeBase : IHydratable, IPropertyAccess
     {
 
-        #region " IHydratable Methods "
+        #region IHydratable
 
         public virtual void Fill(IDataReader dr)
         {
-            FillAuditFields(dr);
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
    UserId = Convert.ToInt32(Null.SetNull(dr["UserId"], UserId));
         }
@@ -29,7 +28,7 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         }
         #endregion
 
-        #region " IPropertyAccess Methods "
+        #region IPropertyAccess
         public virtual string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
         {
             switch (strPropertyName.ToLower())

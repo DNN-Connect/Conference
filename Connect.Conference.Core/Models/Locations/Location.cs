@@ -8,26 +8,24 @@ namespace Connect.Conference.Core.Models.Locations
     [TableName("vw_Connect_Conference_Locations")]
     [PrimaryKey("LocationId", AutoIncrement = true)]
     [DataContract]
+    [Scope("ConferenceId")]                
     public partial class Location  : LocationBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Location()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public LocationBase GetLocationBase()
         {
             LocationBase res = new LocationBase();

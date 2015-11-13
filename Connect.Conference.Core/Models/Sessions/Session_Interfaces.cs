@@ -13,10 +13,12 @@ namespace Connect.Conference.Core.Models.Sessions
  public partial class Session
  {
 
-  #region " IHydratable Implementation "
+  #region IHydratable
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
+   NrAttendees = Convert.ToInt32(Null.SetNull(dr["NrAttendees"], NrAttendees));
+   NrSpeakers = Convert.ToInt32(Null.SetNull(dr["NrSpeakers"], NrSpeakers));
    LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
    SlotTitle = Convert.ToString(Null.SetNull(dr["SlotTitle"], SlotTitle));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
@@ -24,10 +26,22 @@ namespace Connect.Conference.Core.Models.Sessions
   }
   #endregion
 
-  #region " IPropertyAccess Implementation "
+  #region IPropertyAccess
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
+    case "nrattendees": // Int
+     if (NrAttendees == null);
+     {
+         return "";
+     };
+     return ((int)NrAttendees).ToString(strFormat, formatProvider);
+    case "nrspeakers": // Int
+     if (NrSpeakers == null);
+     {
+         return "";
+     };
+     return ((int)NrSpeakers).ToString(strFormat, formatProvider);
     case "locationname": // NVarChar
      if (LocationName == null);
      {

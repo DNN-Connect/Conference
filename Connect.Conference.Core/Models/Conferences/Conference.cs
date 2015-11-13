@@ -12,23 +12,28 @@ namespace Connect.Conference.Core.Models.Conferences
     public partial class Conference  : ConferenceBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Conference()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
+        [DataMember]
+        public int? NrAttendees { get; set; }
+        [DataMember]
+        public int? NrSpeakers { get; set; }
+        [DataMember]
+        public int? NrLocations { get; set; }
+        [DataMember]
+        public int? NrTracks { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public ConferenceBase GetConferenceBase()
         {
             ConferenceBase res = new ConferenceBase();

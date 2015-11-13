@@ -7,19 +7,17 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
 
     [TableName("vw_Connect_Conference_SessionSpeakers")]
     [DataContract]
+    [Scope("SessionId")]                
     public partial class SessionSpeaker  : SessionSpeakerBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public SessionSpeaker()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string DisplayName { get; set; }
         [DataMember]
@@ -36,7 +34,7 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public SessionSpeakerBase GetSessionSpeakerBase()
         {
             SessionSpeakerBase res = new SessionSpeakerBase();

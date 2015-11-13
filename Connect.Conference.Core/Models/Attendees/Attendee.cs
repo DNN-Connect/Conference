@@ -7,19 +7,17 @@ namespace Connect.Conference.Core.Models.Attendees
 
     [TableName("vw_Connect_Conference_Attendees")]
     [DataContract]
+    [Scope("ConferenceId")]                
     public partial class Attendee  : AttendeeBase 
     {
 
-        #region " Private Members "
-        #endregion
-
-        #region " Constructors "
+        #region .ctor
         public Attendee()  : base() 
         {
         }
         #endregion
 
-        #region " Public Properties "
+        #region Properties
         [DataMember]
         public string DisplayName { get; set; }
         [DataMember]
@@ -52,7 +50,7 @@ namespace Connect.Conference.Core.Models.Attendees
         public string LastModifiedByUser { get; set; }
         #endregion
 
-        #region " Public Methods "
+        #region Methods
         public AttendeeBase GetAttendeeBase()
         {
             AttendeeBase res = new AttendeeBase();
