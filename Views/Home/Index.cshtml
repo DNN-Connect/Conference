@@ -1,23 +1,53 @@
-﻿@inherits Connect.DNN.Modules.Conference.Common.ConferenceWebPage<Connect.Conference.Core.Models.Conferences.Conference>
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+ var conferences = ConferenceRepository.Instance.GetConferences(Dnn.PortalSettings.PortalId);
+}
+
+@foreach (Conference c in conferences.OrderBy(x => x.StartDate))
+{
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+   <h3 class="panel-title">@c.Name</h3>
+   <h6>
+    @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("d MMMM") : "")
+   - @((c.EndDate != null) ? ((System.DateTime)c.EndDate).ToString("d MMMM") : "")
+    @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("yyyy") : "")
+  </h6>
+  </div>
+  <div class="panel-body">
+   <div>
+    @c.Description
+   </div>
+  </div>
+  <div class="panel-footer">
+   <div>
+    <span>
+     @Dnn.LocalizeString("MaxCapacity"): @c.MaxCapacity
+    </span>
+    <span>
+     @Dnn.LocalizeString("NrAttendees"): @c.NrAttendees
+    </span>
+     @if (ModuleContext.Security.CanEdit)
+     {
+      <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right">
+       @Dnn.LocalizeString("Edit")
+      </a>
+     }
+   </div>
+  </div>
+ </div>
+}
 
 @{
  if (ModuleContext.Security.CanEdit)
  {
-  if (Model.ConferenceId > 0)
-  {
    <div class="right">
-    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="dnnSecondaryAction">
-     @Dnn.LocalizeString("Edit")
-    </a>
-   </div>
-  }
-  else
-  {
-   <div class="right">
-    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="dnnPrimaryAction">
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
      @Dnn.LocalizeString("New")
     </a>
    </div>
-  }
  }
 }

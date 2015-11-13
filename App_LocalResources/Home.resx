@@ -120,7 +120,13 @@
   <data name="Edit.Text" xml:space="preserve">
     <value>Edit Conference</value>
   </data>
+  <data name="MaxCapacity.Text" xml:space="preserve">
+    <value>Max Capacity</value>
+  </data>
   <data name="New.Text" xml:space="preserve">
     <value>New Conference</value>
+  </data>
+  <data name="NrAttendees.Text" xml:space="preserve">
+    <value>Nr Attendees</value>
   </data>
 </root>

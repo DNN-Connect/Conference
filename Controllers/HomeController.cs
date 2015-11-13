@@ -18,7 +18,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var conference = Connect.Conference.Core.Controllers.ConferencesController.GetConference(PortalSettings.PortalId, Settings.Conference);
+            // var conference = Connect.Conference.Core.Controllers.ConferencesController.GetConference(PortalSettings.PortalId, Settings.Conference);
+            var conference = Connect.Conference.Core.Repositories.ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, Settings.Conference);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference(); }
             return View(Settings.View, conference);
         }
