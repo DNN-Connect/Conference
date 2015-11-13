@@ -5,17 +5,43 @@ using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Web.Mvc.Framework.ActionFilters;
 using DotNetNuke.Web.Mvc.Framework.Controllers;
 using Connect.DNN.Modules.Conference.Common;
+using Connect.Conference.Core.Repositories;
+using Connect.Conference.Core.Models.Conferences;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
     public class ConferenceController : ConferenceMvcController
     {
-        [HttpGet]
-        public ActionResult Edit()
+        private readonly IConferenceRepository _repository;
+
+        public ConferenceController() : this(ConferenceRepository.Instance) { }
+
+        public ConferenceController(IConferenceRepository repository)
         {
-            var conference = Connect.Conference.Core.Controllers.ConferencesController.GetConference(PortalSettings.PortalId, Settings.Conference);
-            if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference(); }
-            return View(conference);
+            Requires.NotNull(repository);
+            _repository = repository;
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int conferenceId)
+        {
+            var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
+            if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            return View(conference.GetConferenceBase());
+        }
+
+        [HttpPost]
+        public ActionResult Edit(ConferenceBase conference)
+        {
+            if (conference.ConferenceId == -1)
+            {
+                _repository.AddConference(conference, User.UserID);
+            }
+            else
+            {
+                _repository.UpdateConference(conference, User.UserID);
+            }
+            return RedirectToDefaultRoute();
         }
 
     }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Web.UI.WebControls;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
+using Connect.Conference.Core.Repositories;
 
 namespace Connect.DNN.Modules.Conference
 {
@@ -41,7 +42,7 @@ namespace Connect.DNN.Modules.Conference
                         ddView.Items.FindByValue(ModSettings.View).Selected = true;
                     }
                     catch { }
-                    ddConference.DataSource = Connect.Conference.Core.Controllers.ConferencesController.GetConferences(PortalId);
+                    ddConference.DataSource = Connect.Conference.Core.Repositories.ConferenceRepository.Instance.GetConferences(PortalId);
                     ddConference.DataBind();
                     ddConference.Items.Insert(0, new ListItem(LocalizeString("None"), "-1"));
                     try
