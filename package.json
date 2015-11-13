@@ -1,0 +1,25 @@
+{
+  "name": "conference",
+  "version": "1.0.0",
+  "description": "Conference module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DNN-Connect/Conference.git"
+  },
+  "author": "Peter Donker <peter@bring2mind.net> (http://www.bring2mind.net)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DNN-Connect/Conference/issues"
+  },
+  "homepage": "https://github.com/DNN-Connect/Conference#readme",
+  "devDependencies": {
+    "bootstrap": "^3.3.5",
+    "gulp": "^3.9.0",
+    "gulp-less": "^3.0.4",
+    "path": "^0.12.7"
+  }
+}
