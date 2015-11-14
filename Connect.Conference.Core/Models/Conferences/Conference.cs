@@ -47,6 +47,7 @@ namespace Connect.Conference.Core.Models.Conferences
              res.SessionVoting = SessionVoting;
              res.AttendeeRole = AttendeeRole;
              res.SpeakerRole = SpeakerRole;
+             res.Location = Location;
             return res;
         }
         #endregion

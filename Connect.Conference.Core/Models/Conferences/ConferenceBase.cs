@@ -18,6 +18,8 @@ namespace Connect.Conference.Core.Models.Conferences
         public ConferenceBase()
         {
             ConferenceId = -1;
+            AttendeeRole = -1;
+            SpeakerRole = -1;
         }
         #endregion
 
@@ -39,9 +41,11 @@ namespace Connect.Conference.Core.Models.Conferences
         [DataMember]
         public bool SessionVoting { get; set; }
         [DataMember]
-        public int? AttendeeRole { get; set; }
+        public int AttendeeRole { get; set; }
         [DataMember]
-        public int? SpeakerRole { get; set; }
+        public int SpeakerRole { get; set; }
+        [DataMember]
+        public string Location { get; set; }
         #endregion
 
         #region Methods
@@ -75,6 +79,9 @@ namespace Connect.Conference.Core.Models.Conferences
 
             if (conference.SpeakerRole > -1)
                 SpeakerRole = conference.SpeakerRole;
+
+            if (!String.IsNullOrEmpty(conference.Location))
+                Location = conference.Location;
 
         }
         #endregion

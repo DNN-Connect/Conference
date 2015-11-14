@@ -33,12 +33,15 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpPost]
         public ActionResult Edit(ConferenceBase conference)
         {
-            if (conference.ConferenceId == -1)
+            var previousRecord = _repository.GetConference(PortalSettings.PortalId, conference.ConferenceId);
+            if (previousRecord == null)
             {
                 _repository.AddConference(conference, User.UserID);
             }
             else
             {
+                conference.CreatedOnDate = previousRecord.CreatedOnDate;
+                conference.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateConference(conference, User.UserID);
             }
             return RedirectToDefaultRoute();

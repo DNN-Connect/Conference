@@ -27,6 +27,7 @@ namespace Connect.Conference.Core.Models.Conferences
    SessionVoting = Convert.ToBoolean(Null.SetNull(dr["SessionVoting"], SessionVoting));
    AttendeeRole = Convert.ToInt32(Null.SetNull(dr["AttendeeRole"], AttendeeRole));
    SpeakerRole = Convert.ToInt32(Null.SetNull(dr["SpeakerRole"], SpeakerRole));
+   Location = Convert.ToString(Null.SetNull(dr["Location"], Location));
         }
 
         [IgnoreColumn()]
@@ -75,17 +76,15 @@ namespace Connect.Conference.Core.Models.Conferences
     case "sessionvoting": // Bit
      return SessionVoting.ToString();
     case "attendeerole": // Int
-     if (AttendeeRole == null);
-     {
-         return "";
-     };
-     return ((int)AttendeeRole).ToString(strFormat, formatProvider);
+     return AttendeeRole.ToString(strFormat, formatProvider);
     case "speakerrole": // Int
-     if (SpeakerRole == null);
+     return SpeakerRole.ToString(strFormat, formatProvider);
+    case "location": // NVarChar
+     if (Location == null);
      {
          return "";
      };
-     return ((int)SpeakerRole).ToString(strFormat, formatProvider);
+     return PropertyAccess.FormatString(Location, strFormat);
                 default:
                     propertyNotFound = true;
                     break;
