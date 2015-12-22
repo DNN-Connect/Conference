@@ -3,20 +3,20 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using Connect.Conference.Core.Repositories;
 @{
- var conferences = ConferenceRepository.Instance.GetConferences(Dnn.PortalSettings.PortalId);
+    var conferences = ConferenceRepository.Instance.GetConferences(Dnn.PortalSettings.PortalId);
 }
 
 @foreach (Conference c in conferences.OrderBy(x => x.StartDate))
 {
  <div class="panel panel-primary">
   <div class="panel-heading">
-   <h3 class="panel-title">@c.Name</h3>
+   <h3 class="panel-title"><a href="@Url.Action("View", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")">@c.Name</a></h3>
    <h6>
-    @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("d MMMM") : "")
-   - @((c.EndDate != null) ? ((System.DateTime)c.EndDate).ToString("d MMMM") : "")
-    @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("yyyy") : "")
-    @c.Location
-  </h6>
+     @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("d MMMM") : "")
+     - @((c.EndDate != null) ? ((System.DateTime)c.EndDate).ToString("d MMMM") : "")
+     @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("yyyy") : "")
+     @c.Location
+   </h6>
   </div>
   <div class="panel-body">
    <div>
@@ -31,24 +31,24 @@
     <span>
      @Dnn.LocalizeString("NrAttendees"): @c.NrAttendees
     </span>
-     @if (ModuleContext.Security.CanEdit)
-     {
-      <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right">
-       @Dnn.LocalizeString("Edit")
-      </a>
-     }
+    @if (ModuleContext.Security.CanEdit)
+    {
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right">
+     @Dnn.LocalizeString("Edit")
+    </a>
+    }
    </div>
   </div>
  </div>
 }
 
 @{
- if (ModuleContext.Security.CanEdit)
- {
-   <div class="right">
-    <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
-     @Dnn.LocalizeString("New")
-    </a>
-   </div>
- }
+    if (ModuleContext.Security.CanEdit)
+    {
+    <div class="right">
+     <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
+      @Dnn.LocalizeString("New")
+     </a>
+    </div>
+    }
 }

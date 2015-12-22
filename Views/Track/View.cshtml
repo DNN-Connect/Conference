@@ -1,0 +1,13 @@
+﻿@inherits ConferenceWebPage<Track>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Tracks;
+@using DotNetNuke.Web.Mvc.Helpers;
+
+<h3>@Dnn.LocalizeString("Track")</h3>
+<h3>@Model.Title</h3>
+<p>@Model.Description</p>
+
+
+<div class="right">
+ <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Back")</a>
+</div>

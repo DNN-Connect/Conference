@@ -110,6 +110,7 @@
     <Compile Include="Common\Settings\ModuleScopedSettings.cs" />
     <Compile Include="Common\Settings\ModuleSettings.cs" />
     <Compile Include="Common\Settings\StringBasedSettings.cs" />
+    <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,6 +153,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Conference\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\View.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Track\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Track\View.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

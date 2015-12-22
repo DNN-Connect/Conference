@@ -1,0 +1,27 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using DotNetNuke.Web.Mvc.Helpers;
+
+<h3>@Model.Name</h3>
+<p>@Model.Description</p>
+
+<h3>@Dnn.LocalizeString("Tracks")</h3>
+<table class="table">
+ @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId)) {
+  <tr>
+   <td>@t.Title</td>
+   <td>@t.Description</td>
+   <td>@t.NrSessions</td>
+   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId })">@Dnn.LocalizeString("Edit")</a></td>
+  </tr>
+ }
+ <tr>
+  <td colspan="3"></td>
+  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId })">@Dnn.LocalizeString("Add")</a></td>
+ </tr>
+</table>
+
+<div class="right">
+ <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
+</div>
