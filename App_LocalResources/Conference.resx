@@ -135,6 +135,9 @@
   <data name="MaxCapacity.Text" xml:space="preserve">
     <value>Max Capacity</value>
   </data>
+  <data name="MaxCapacityInteger.Error" xml:space="preserve">
+    <value>The maximum capacity should be an integer</value>
+  </data>
   <data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
