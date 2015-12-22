@@ -1,7 +1,8 @@
-﻿@inherits Connect.DNN.Modules.Conference.Common.ConferenceWebPage<Connect.Conference.Core.Models.Conferences.ConferenceBase>
-@using DotNetNuke.Web.Mvc.Helpers;
+﻿@inherits ConferenceWebPage<ConferenceBase>
 @using Connect.DNN.Modules.Conference.Common;
-@{ 
+@using Connect.Conference.Core.Models.Conferences;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
     var roles = new List<System.Web.Mvc.SelectListItem>();
     roles.Add(new System.Web.Mvc.SelectListItem { Text = Dnn.LocalizeString("SelectRole"), Value = "-1" });
     var rc = new DotNetNuke.Security.Roles.RoleController();
@@ -72,3 +73,11 @@
   <button type="submit" class="btn btn-primary">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>
+
+<script type="text/javascript">
+ $(function () {
+  $('input[data-editor="date"]').datetimepicker({
+   format: 'MM/DD/YYYY'
+  });
+ });
+</script>

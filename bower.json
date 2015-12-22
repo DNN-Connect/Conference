@@ -1,0 +1,19 @@
+{
+  "name": "Conference",
+  "version": "0.0.0",
+  "homepage": "https://github.com/DNN-Connect/Conference",
+  "authors": [
+    "Peter Donker <peter@bring2mind.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+  }
+}
