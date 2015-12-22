@@ -1,9 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using DotNetNuke.Common;
-using DotNetNuke.Entities.Modules.Actions;
-using DotNetNuke.Web.Mvc.Framework.ActionFilters;
-using DotNetNuke.Web.Mvc.Framework.Controllers;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Conferences;
@@ -27,6 +24,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            AddEditScripts();
             return View(conference.GetConferenceBase());
         }
 
