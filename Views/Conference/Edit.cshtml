@@ -12,7 +12,7 @@
     }
 }
 
-<fieldset>
+<fieldset id="editConference">
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Name")</label>
@@ -47,7 +47,9 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("MaxCapacity")</label>
   </div>
-  @Html.TextBoxFor(m => m.MaxCapacity)
+  <div>
+   @Html.TextBoxFor(m => m.MaxCapacity, new { data_validator = "integer", data_message = "Testing this" })
+  </div>
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
@@ -68,9 +70,11 @@
   </div>
   @Html.DropDownListFor(m => m.AttendeeRole, roles)
  </div>
+ <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
+ </div>
  <div class="right">
   @Html.ActionLink(Dnn.LocalizeString("Cancel"), "Index", "Home", null, new { @class = "btn btn-default" })
-  <button type="submit" class="btn btn-primary">@Dnn.LocalizeString("Save")</button>
+  <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>
 
@@ -79,5 +83,6 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
+  validateForm($('#editConference'), $('#cmdSave'), $('#formErrors'));
  });
 </script>

@@ -25,6 +25,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
             AddBootstrap();
+            AddModuleScript();
             AddEditScripts();
             return View(conference.GetConferenceBase());
         }
