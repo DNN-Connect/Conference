@@ -18,7 +18,9 @@
   "homepage": "https://github.com/DNN-Connect/Conference#readme",
   "devDependencies": {
     "bootstrap": "^3.3.5",
+    "browserify": "^12.0.1",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-less": "^3.0.4",
     "path": "^0.12.7"
   }

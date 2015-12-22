@@ -52,6 +52,11 @@
       <HintPath>_References\DotNetNuke.Web.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DotNetNuke.Web.Client, Version=8.0.0.346, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_References\DotNetNuke.Web.Client.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DotNetNuke.Web.Mvc, Version=8.0.0.346, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_References\DotNetNuke.Web.Mvc.dll</HintPath>
@@ -147,9 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Conference\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="src\module.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
