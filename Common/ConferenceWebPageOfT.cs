@@ -7,7 +7,7 @@ namespace Connect.DNN.Modules.Conference.Common
     public abstract class ConferenceWebPage<TModel> : DnnWebViewPage<TModel>
     {
 
-        public ContextHelper ModuleContext { get; set; }
+        public ContextHelper ConferenceModuleContext { get; set; }
 
         public override void InitHelpers()
         {
@@ -15,7 +15,7 @@ namespace Connect.DNN.Modules.Conference.Common
             Html = new DnnHtmlHelper<TModel>(ViewContext, this);
             Url = new DnnUrlHelper(ViewContext);
             Dnn = new DnnHelper<TModel>(ViewContext, this);
-            ModuleContext = new ContextHelper(ViewContext);
+            ConferenceModuleContext = new ContextHelper(ViewContext);
         }
     
     }

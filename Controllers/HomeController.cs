@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using DotNetNuke.Common;
-using DotNetNuke.Entities.Modules.Actions;
-using DotNetNuke.Web.Mvc.Framework.ActionFilters;
-using DotNetNuke.Web.Mvc.Framework.Controllers;
+﻿using System.Web.Mvc;
 using Connect.DNN.Modules.Conference.Common;
 
 namespace Connect.DNN.Modules.Conference.Controllers
@@ -18,11 +13,10 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            // var conference = Connect.Conference.Core.Controllers.ConferencesController.GetConference(PortalSettings.PortalId, Settings.Conference);
-            var conference = Connect.Conference.Core.Repositories.ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, Settings.Conference);
+            var conference = Connect.Conference.Core.Repositories.ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, ConferenceModuleContext.Settings.Conference);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference(); }
-            AddBootstrap();
-            return View(Settings.View, conference);
+            ConferenceModuleContext.AddBootstrapCss();
+            return View(ConferenceModuleContext.Settings.View, conference);
         }
     }
 }
