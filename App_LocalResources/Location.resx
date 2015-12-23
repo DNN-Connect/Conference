@@ -117,55 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AttendeeRole.Text" xml:space="preserve">
-    <value>Attendee Role</value>
-  </data>
-  <data name="Capacity.Text" xml:space="preserve">
-    <value>Capacity</value>
-  </data>
-  <data name="Description.Text" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="EndDate.Text" xml:space="preserve">
-    <value>End Date</value>
-  </data>
-  <data name="Location.Text" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="Locations.Text" xml:space="preserve">
-    <value>Locations</value>
-  </data>
-  <data name="MaxCapacity.Text" xml:space="preserve">
-    <value>Max Capacity</value>
-  </data>
-  <data name="Name.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="NrSessions.Text" xml:space="preserve">
-    <value>Nr Sessions</value>
-  </data>
-  <data name="Return.Text" xml:space="preserve">
-    <value>Return</value>
-  </data>
-  <data name="Save.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="SessionVoting.Text" xml:space="preserve">
-    <value>Session Voting</value>
-  </data>
-  <data name="SpeakerRole.Text" xml:space="preserve">
-    <value>Speaker Role</value>
-  </data>
-  <data name="StartDate.Text" xml:space="preserve">
-    <value>Start Date</value>
-  </data>
-  <data name="Title.Text" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="Track.Text" xml:space="preserve">
-    <value>Track</value>
-  </data>
-  <data name="Tracks.Text" xml:space="preserve">
-    <value>Tracks</value>
+  <data name="CapacityInteger.Error" xml:space="preserve">
+    <value>The capacity should be an integer</value>
   </data>
 </root>

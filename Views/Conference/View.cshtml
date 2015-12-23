@@ -22,6 +22,23 @@
  </tr>
 </table>
 
+<h3>@Dnn.LocalizeString("Locations")</h3>
+<table class="table">
+ @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId))
+ {
+ <tr>
+  <td>@l.Name</td>
+  <td>@l.Description</td>
+  <td>@l.Capacity</td>
+  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId })">@Dnn.LocalizeString("Edit")</a></td>
+ </tr>
+ }
+ <tr>
+  <td colspan="3"></td>
+  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId })">@Dnn.LocalizeString("Add")</a></td>
+ </tr>
+</table>
+
 <div class="right">
  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
 </div>

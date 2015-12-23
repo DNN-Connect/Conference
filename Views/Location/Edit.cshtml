@@ -1,0 +1,40 @@
+﻿@inherits ConferenceWebPage<LocationBase>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Locations;
+@using DotNetNuke.Web.Mvc.Helpers;
+
+<fieldset id="editLocation">
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Name")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Name)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Description")</label>
+  </div>
+  @Html.TextAreaFor(m => m.Description)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Capacity")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Capacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("CapacityInteger.Error") })
+ </div>
+ <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
+ </div>
+ <div class="right">
+  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
+  <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
+ </div>
+</fieldset>
+
+<script type="text/javascript">
+ $(function () {
+  $('input[data-editor="date"]').datetimepicker({
+   format: 'MM/DD/YYYY'
+  });
+  validateForm($('#editLocation'), $('#cmdSave'), $('#formErrors'));
+ });
+</script>
