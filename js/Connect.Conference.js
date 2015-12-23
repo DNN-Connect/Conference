@@ -5,7 +5,6 @@ function ModuleConferenceService($, settings, mid) {
  var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
  this.apiCall = function (method, controller, action, id, data, success, fail) {
-  //alert(JSON.stringify(data));
   showLoading();
   var path = baseServicepath + controller + '/' + action;
   if (id != null) { path += '/' + id }
@@ -13,7 +12,7 @@ function ModuleConferenceService($, settings, mid) {
    type: method,
    url: path,
    beforeSend: $.dnnSF(moduleId).setModuleHeaders,
-   data: JSON.stringify(data)
+   data: data
   }).done(function (data) {
    hideLoading();
    if (success != undefined) {
@@ -28,7 +27,7 @@ function ModuleConferenceService($, settings, mid) {
  }
 
  this.orderTracks = function (conferenceId, newOrder, success, fail) {
-  this.apiCall('POST', 'Tracks', 'Reorder', null, { ConferenceId: conferenceId, NewOrder: newOrder }, success, fail);
+  this.apiCall('POST', 'Tracks', 'Reorder', null, JSON.stringify({ Id: conferenceId, NewOrder: newOrder }), success, fail);
  }
 }
 

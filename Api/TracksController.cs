@@ -17,17 +17,6 @@ namespace Connect.DNN.Modules.Conference.Api
 
         #region " Service Methods "
 
-        public class Order
-        {
-            public int id { get; set; }
-            public int order { get; set; }
-        }
-        public class ReorderDto
-        {
-            public int ConferenceId;
-            public IEnumerable<Order> NewOrder;
-        }
-
         [HttpPost()]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
         public HttpResponseMessage Reorder([NakedBody] string raw)
@@ -36,7 +25,7 @@ namespace Connect.DNN.Modules.Conference.Api
             ITrackRepository _repository = TrackRepository.Instance;
             foreach (Order no in data.NewOrder)
             {
-                var track = _repository.GetTrack(data.ConferenceId, no.id);
+                var track = _repository.GetTrack(data.Id, no.id);
                 if (track != null)
                 {
                     track.Sort = no.order;
