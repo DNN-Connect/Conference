@@ -4,6 +4,8 @@ using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Tracks;
+using System.Web.Routing;
+using DotNetNuke.Web.Mvc.Routing;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -54,7 +56,17 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 track.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateTrack(track, User.UserID);
             }
-            return View("View", _repository.GetTrack(track.ConferenceId, track.TrackId));
+            RouteValueDictionary routeValues = new RouteValueDictionary();
+            switch (GetRouteParameter())
+            {
+                case "c":
+                    routeValues["controller"] = "Conference";
+                    routeValues["action"] = "View";
+                    routeValues.Add("conferenceId", track.ConferenceId);
+                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+                default:
+                    return View("View", _repository.GetTrack(track.ConferenceId, track.TrackId));
+            }
         }
 
     }

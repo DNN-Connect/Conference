@@ -13,12 +13,12 @@
    <td>@t.Title</td>
    <td>@t.Description</td>
    <td>@t.NrSessions</td>
-   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId })">@Dnn.LocalizeString("Edit")</a></td>
+   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
   </tr>
  }
  <tr>
   <td colspan="3"></td>
-  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId })">@Dnn.LocalizeString("Add")</a></td>
+  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
 
@@ -30,12 +30,12 @@
   <td>@l.Name</td>
   <td>@l.Description</td>
   <td>@l.Capacity</td>
-  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId })">@Dnn.LocalizeString("Edit")</a></td>
+  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
  </tr>
  }
  <tr>
   <td colspan="3"></td>
-  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId })">@Dnn.LocalizeString("Add")</a></td>
+  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
 
