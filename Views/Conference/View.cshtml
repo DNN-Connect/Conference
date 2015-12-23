@@ -7,15 +7,18 @@
 <p>@Model.Description</p>
 
 <h3>@Dnn.LocalizeString("Tracks")</h3>
-<table class="table">
- @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId)) {
-  <tr>
+<table class="table" id="tblTracks">
+ <tbody>
+  @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort))
+  {
+  <tr data-id="@t.TrackId" class="sortable">
    <td>@t.Title</td>
    <td>@t.Description</td>
    <td>@t.NrSessions</td>
    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
   </tr>
- }
+  }
+ </tbody>
  <tr>
   <td colspan="3"></td>
   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
@@ -23,16 +26,18 @@
 </table>
 
 <h3>@Dnn.LocalizeString("Locations")</h3>
-<table class="table">
- @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId))
- {
- <tr>
-  <td>@l.Name</td>
-  <td>@l.Description</td>
-  <td>@l.Capacity</td>
-  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
- </tr>
- }
+<table class="table" id="tblLocations">
+ <tbody>
+  @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId))
+  {
+  <tr data-id="@l.LocationId" class="sortable">
+   <td>@l.Name</td>
+   <td>@l.Description</td>
+   <td>@l.Capacity</td>
+   <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
+  </tr>
+  }
+ </tbody>
  <tr>
   <td colspan="3"></td>
   <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
@@ -42,3 +47,24 @@
 <div class="right">
  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
 </div>
+
+@{
+    ConferenceModuleContext.AddModuleService();
+    ConferenceModuleContext.AddJqueryUi();
+}
+
+<script type="text/javascript">
+ $(function () {
+  $('#tblTracks tbody:first').sortable({
+   update: function (event, ui) {
+    moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
+   }
+  });
+  $('#tblLocations tbody:first').sortable({
+   update: function (event, ui) {
+    alert(getTableOrder('tblLocations').toSource());
+    // pImagesService.reorder($(this).sortable('serialize'), null)
+   }
+  });
+ });
+</script>

@@ -25,7 +25,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             return View(conference);
         }
 
@@ -35,7 +35,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             ConferenceModuleContext.AddEditScripts();
             return View(conference.GetConferenceBase());
         }

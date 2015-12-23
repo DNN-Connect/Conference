@@ -63,6 +63,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_References\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -98,6 +103,18 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AttendeesController.cs" />
+    <Compile Include="Api\ConferencesController.cs" />
+    <Compile Include="Api\LocationsController.cs" />
+    <Compile Include="Api\SessionAttendeesController.cs" />
+    <Compile Include="Api\SessionsController.cs" />
+    <Compile Include="Api\SessionSpeakersController.cs" />
+    <Compile Include="Api\SessionTracksController.cs" />
+    <Compile Include="Api\SlotsController.cs" />
+    <Compile Include="Api\SpeakersController.cs" />
+    <Compile Include="Api\TracksController.cs" />
+    <Compile Include="Common\ConferenceApiController.cs" />
+    <Compile Include="Common\ConferenceAuthorizeAttribute.cs" />
     <Compile Include="Common\ConferenceMvcController.cs" />
     <Compile Include="Common\ConferenceService.cs" />
     <Compile Include="Common\ConferenceWebPageOfT.cs" />
@@ -105,6 +122,7 @@
     <Compile Include="Common\ContextHelper.cs" />
     <Compile Include="Common\ContextSecurity.cs" />
     <Compile Include="Common\Globals.cs" />
+    <Compile Include="Common\NakedBodyParameter.cs" />
     <Compile Include="Common\RouteMapper.cs" />
     <Compile Include="Common\Settings\ISettingsStore.cs" />
     <Compile Include="Common\Settings\ModuleScopedSettings.cs" />

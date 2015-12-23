@@ -27,7 +27,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var Location = _repository.GetLocation(conferenceId, locationId);
             if (Location == null) { Location = new Location() { ConferenceId = conferenceId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             return View(Location);
         }
 
@@ -37,7 +37,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var location = _repository.GetLocation(conferenceId, locationId);
             if (location == null) { location = new Location() { ConferenceId = conferenceId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             ConferenceModuleContext.AddEditScripts();
             return View(location.GetLocationBase());
         }

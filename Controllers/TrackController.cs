@@ -27,7 +27,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var track = _repository.GetTrack(conferenceId, trackId);
             if (track == null) { track = new Track() { ConferenceId = conferenceId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             return View(track);
         }
 
@@ -37,7 +37,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var track = _repository.GetTrack(conferenceId, trackId);
             if (track == null) { track = new Track() { ConferenceId = conferenceId }; }
             ConferenceModuleContext.AddBootstrapCss();
-            ConferenceModuleContext.AddModuleScript();
+            ConferenceModuleContext.AddModuleService();
             ConferenceModuleContext.AddEditScripts();
             return View(track.GetTrackBase());
         }

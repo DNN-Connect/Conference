@@ -62,8 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ConferenceApiController.cs" />
-    <Compile Include="Common\ContextSecurity.cs" />
     <Compile Include="Common\Globals.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />
