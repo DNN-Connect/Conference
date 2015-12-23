@@ -36,6 +36,10 @@ namespace Connect.Conference.Core.Models.Locations
              res.Capacity = Capacity;
              res.Sort = Sort;
              res.BackgroundColor = BackgroundColor;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

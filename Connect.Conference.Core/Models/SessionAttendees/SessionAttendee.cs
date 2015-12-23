@@ -22,6 +22,10 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         public string Title { get; set; }
         [DataMember]
         public string SessionAttendeeName { get; set; }
+        [DataMember]
+        public string CreatedByUser { get; set; }
+        [DataMember]
+        public string LastModifiedByUser { get; set; }
         #endregion
 
         #region Methods
@@ -30,6 +34,10 @@ namespace Connect.Conference.Core.Models.SessionAttendees
             SessionAttendeeBase res = new SessionAttendeeBase();
              res.SessionId = SessionId;
              res.UserId = UserId;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

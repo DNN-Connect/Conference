@@ -41,6 +41,10 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
              res.SpeakerId = SpeakerId;
              res.SessionId = SessionId;
              res.Sort = Sort;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

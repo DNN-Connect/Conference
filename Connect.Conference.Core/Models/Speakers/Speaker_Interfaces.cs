@@ -30,9 +30,9 @@ namespace Connect.Conference.Core.Models.Speakers
    PhotoContentType = Convert.ToString(Null.SetNull(dr["PhotoContentType"], PhotoContentType));
    Biography = Convert.ToString(Null.SetNull(dr["Biography"], Biography));
    Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
-   NrPresentations = Convert.ToInt32(Null.SetNull(dr["NrPresentations"], NrPresentations));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
+   NrPresentations = Convert.ToInt32(Null.SetNull(dr["NrPresentations"], NrPresentations));
   }
   #endregion
 
@@ -102,12 +102,6 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(Company, strFormat);
-    case "nrpresentations": // Int
-     if (NrPresentations == null);
-     {
-         return "";
-     };
-     return ((int)NrPresentations).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null);
      {
@@ -120,6 +114,12 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(LastModifiedByUser, strFormat);
+    case "nrpresentations": // Int
+     if (NrPresentations == null);
+     {
+         return "";
+     };
+     return ((int)NrPresentations).ToString(strFormat, formatProvider);
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }

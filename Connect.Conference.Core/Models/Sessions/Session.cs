@@ -50,6 +50,10 @@ namespace Connect.Conference.Core.Models.Sessions
              res.SubTitle = SubTitle;
              res.Description = Description;
              res.Status = Status;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

@@ -76,9 +76,17 @@ namespace Connect.Conference.Core.Models.Conferences
     case "sessionvoting": // Bit
      return SessionVoting.ToString();
     case "attendeerole": // Int
-     return AttendeeRole.ToString(strFormat, formatProvider);
+     if (AttendeeRole == null);
+     {
+         return "";
+     };
+     return ((int)AttendeeRole).ToString(strFormat, formatProvider);
     case "speakerrole": // Int
-     return SpeakerRole.ToString(strFormat, formatProvider);
+     if (SpeakerRole == null);
+     {
+         return "";
+     };
+     return ((int)SpeakerRole).ToString(strFormat, formatProvider);
     case "location": // NVarChar
      if (Location == null);
      {

@@ -20,11 +20,11 @@ namespace Connect.Conference.Core.Models.Tracks
 
         #region Properties
         [DataMember]
-        public int? NrSessions { get; set; }
-        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
+        [DataMember]
+        public int? NrSessions { get; set; }
         #endregion
 
         #region Methods

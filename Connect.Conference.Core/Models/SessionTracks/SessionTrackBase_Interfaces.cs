@@ -16,6 +16,7 @@ namespace Connect.Conference.Core.Models.SessionTracks
 
         public virtual void Fill(IDataReader dr)
         {
+            FillAuditFields(dr);
    TrackId = Convert.ToInt32(Null.SetNull(dr["TrackId"], TrackId));
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
         }

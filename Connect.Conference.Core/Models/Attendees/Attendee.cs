@@ -58,6 +58,10 @@ namespace Connect.Conference.Core.Models.Attendees
              res.UserId = UserId;
              res.Status = Status;
              res.ReceiveNotifications = ReceiveNotifications;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

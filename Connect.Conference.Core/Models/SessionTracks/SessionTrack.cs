@@ -24,6 +24,10 @@ namespace Connect.Conference.Core.Models.SessionTracks
         public string TrackTitle { get; set; }
         [DataMember]
         public int? Sort { get; set; }
+        [DataMember]
+        public string CreatedByUser { get; set; }
+        [DataMember]
+        public string LastModifiedByUser { get; set; }
         #endregion
 
         #region Methods
@@ -32,6 +36,10 @@ namespace Connect.Conference.Core.Models.SessionTracks
             SessionTrackBase res = new SessionTrackBase();
              res.TrackId = TrackId;
              res.SessionId = SessionId;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

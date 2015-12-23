@@ -10,7 +10,8 @@ namespace Connect.Conference.Core.Models.SessionTracks
     [TableName("Connect_Conference_SessionTracks")]
     [DataContract]
     [Scope("SessionId")]
-    public partial class SessionTrackBase     {
+    public partial class SessionTrackBase  : AuditableEntity 
+    {
 
         #region .ctor
         public SessionTrackBase()

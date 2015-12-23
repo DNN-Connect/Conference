@@ -10,7 +10,8 @@ namespace Connect.Conference.Core.Models.SessionAttendees
     [TableName("Connect_Conference_SessionAttendees")]
     [DataContract]
     [Scope("SessionId")]
-    public partial class SessionAttendeeBase     {
+    public partial class SessionAttendeeBase  : AuditableEntity 
+    {
 
         #region .ctor
         public SessionAttendeeBase()

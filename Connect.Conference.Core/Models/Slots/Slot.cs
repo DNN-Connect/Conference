@@ -36,6 +36,10 @@ namespace Connect.Conference.Core.Models.Slots
              res.SlotType = SlotType;
              res.Title = Title;
              res.Description = Description;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

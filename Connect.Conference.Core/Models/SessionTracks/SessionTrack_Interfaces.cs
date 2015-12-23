@@ -20,6 +20,8 @@ namespace Connect.Conference.Core.Models.SessionTracks
    SessionTitle = Convert.ToString(Null.SetNull(dr["SessionTitle"], SessionTitle));
    TrackTitle = Convert.ToString(Null.SetNull(dr["TrackTitle"], TrackTitle));
    Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
+   CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
+   LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
   #endregion
 
@@ -45,6 +47,18 @@ namespace Connect.Conference.Core.Models.SessionTracks
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
+    case "createdbyuser": // NVarChar
+     if (CreatedByUser == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(CreatedByUser, strFormat);
+    case "lastmodifiedbyuser": // NVarChar
+     if (LastModifiedByUser == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(LastModifiedByUser, strFormat);
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }

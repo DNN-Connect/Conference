@@ -45,11 +45,11 @@ namespace Connect.Conference.Core.Models.Speakers
         [DataMember]
         public string Company { get; set; }
         [DataMember]
-        public int? NrPresentations { get; set; }
-        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
+        [DataMember]
+        public int? NrPresentations { get; set; }
         #endregion
 
         #region Methods
@@ -62,6 +62,10 @@ namespace Connect.Conference.Core.Models.Speakers
              res.Url = Url;
              res.Description = Description;
              res.DescriptionShort = DescriptionShort;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion
