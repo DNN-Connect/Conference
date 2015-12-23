@@ -37,7 +37,7 @@ namespace Connect.Conference.Core.Repositories
         public int AddLocation(LocationBase location, int userId)
         {
             Requires.NotNull(location);
-            Requires.PropertyNotNegative(location, "PortalId");
+            Requires.PropertyNotNegative(location, "ConferenceId");
             location.CreatedByUserID = userId;
             location.CreatedOnDate = DateTime.Now;
             location.LastModifiedByUserID = userId;

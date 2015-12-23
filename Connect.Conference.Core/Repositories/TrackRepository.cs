@@ -37,7 +37,7 @@ namespace Connect.Conference.Core.Repositories
         public int AddTrack(TrackBase track, int userId)
         {
             Requires.NotNull(track);
-            Requires.PropertyNotNegative(track, "PortalId");
+            Requires.PropertyNotNegative(track, "ConferenceId");
             track.CreatedByUserID = userId;
             track.CreatedOnDate = DateTime.Now;
             track.LastModifiedByUserID = userId;

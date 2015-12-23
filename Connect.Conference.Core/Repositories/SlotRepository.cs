@@ -37,7 +37,7 @@ namespace Connect.Conference.Core.Repositories
         public int AddSlot(SlotBase slot, int userId)
         {
             Requires.NotNull(slot);
-            Requires.PropertyNotNegative(slot, "PortalId");
+            Requires.PropertyNotNegative(slot, "ConferenceId");
             slot.CreatedByUserID = userId;
             slot.CreatedOnDate = DateTime.Now;
             slot.LastModifiedByUserID = userId;

@@ -18,7 +18,7 @@
  }
  <tr>
   <td colspan="3"></td>
-  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
+  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
 
@@ -35,7 +35,7 @@
  }
  <tr>
   <td colspan="3"></td>
-  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
+  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
 

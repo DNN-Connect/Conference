@@ -37,7 +37,7 @@ namespace Connect.Conference.Core.Repositories
         public int AddSession(SessionBase session, int userId)
         {
             Requires.NotNull(session);
-            Requires.PropertyNotNegative(session, "PortalId");
+            Requires.PropertyNotNegative(session, "ConferenceId");
             session.CreatedByUserID = userId;
             session.CreatedOnDate = DateTime.Now;
             session.LastModifiedByUserID = userId;
