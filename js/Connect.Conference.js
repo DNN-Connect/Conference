@@ -37,6 +37,9 @@ function ModuleConferenceService($, settings, mid) {
  this.deleteTrack = function (conferenceId, trackId, success, fail) {
   this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
  }
+ this.deleteLocation = function (conferenceId, locationId, success, fail) {
+  this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
+ }
 }
 
 function showLoading() {

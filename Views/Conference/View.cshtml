@@ -76,5 +76,14 @@
    }
    return false;
   });
+  $('.deleteLocation').click(function() {
+   if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
+    var that = this;
+    moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+     $(that).parent().parent().remove();
+    });
+   }
+   return false;
+  });
  });
 </script>

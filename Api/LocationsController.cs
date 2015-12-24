@@ -35,6 +35,16 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
+        public HttpResponseMessage Delete(int conferenceId, int id)
+        {
+            ILocationRepository _repository = LocationRepository.Instance;
+            _repository.DeleteLocation(conferenceId, id);
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
+
     }
 }
 
