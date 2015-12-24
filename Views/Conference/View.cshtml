@@ -16,11 +16,12 @@
    <td>@t.Description</td>
    <td>@t.NrSessions</td>
    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
+   <td><a href="#" class="deleteTrack">@Dnn.LocalizeString("Delete")</a></td>
   </tr>
   }
  </tbody>
  <tr>
-  <td colspan="3"></td>
+  <td colspan="4"></td>
   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
@@ -35,11 +36,12 @@
    <td>@l.Description</td>
    <td>@l.Capacity</td>
    <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
+   <td><a href="#" class="deleteLocation">@Dnn.LocalizeString("Delete")</a></td>
   </tr>
   }
  </tbody>
  <tr>
-  <td colspan="3"></td>
+  <td colspan="4"></td>
   <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
 </table>
@@ -64,6 +66,15 @@
    update: function (event, ui) {
     moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
    }
+  });
+  $('.deleteTrack').click(function() {
+   if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
+    var that = this;
+    moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+     $(that).parent().parent().remove();
+    });
+   }
+   return false;
   });
  });
 </script>

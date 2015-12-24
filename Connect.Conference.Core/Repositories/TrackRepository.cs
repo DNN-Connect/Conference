@@ -59,6 +59,16 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(track);
             }
         }
+        public void DeleteTrack(int conferenceId, int trackId)
+        {
+            Requires.NotNull(conferenceId);
+            Requires.NotNull(trackId);
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<TrackBase>();
+                rep.Delete("WHERE ConferenceId = @0 AND TrackId = @1", conferenceId, trackId);
+            }
+        }
         public void UpdateTrack(TrackBase track, int userId)
         {
             Requires.NotNull(track);
@@ -79,6 +89,7 @@ namespace Connect.Conference.Core.Repositories
         Track GetTrack(int conferenceId, int trackId);
         int AddTrack(TrackBase track, int userId);
         void DeleteTrack(TrackBase track);
+        void DeleteTrack(int conferenceId, int trackId);
         void UpdateTrack(TrackBase track, int userId);
     }
 }

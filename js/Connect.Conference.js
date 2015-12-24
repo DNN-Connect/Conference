@@ -4,9 +4,11 @@ function ModuleConferenceService($, settings, mid) {
  var moduleId = mid;
  var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
- this.apiCall = function (method, controller, action, id, data, success, fail) {
+ this.apiCall = function (method, controller, action, conferenceId, id, data, success, fail) {
   showLoading();
-  var path = baseServicepath + controller + '/' + action;
+  var path = baseServicepath;
+  if (conferenceId != null) { path += 'Conference/' + conferenceId + '/' }
+  path = path + controller + '/' + action;
   if (id != null) { path += '/' + id }
   $.ajax({
    type: method,
@@ -27,10 +29,13 @@ function ModuleConferenceService($, settings, mid) {
  }
 
  this.orderTracks = function (conferenceId, newOrder, success, fail) {
-  this.apiCall('POST', 'Tracks', 'Reorder', null, JSON.stringify({ Id: conferenceId, NewOrder: newOrder }), success, fail);
+  this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
  }
  this.orderLocations = function (conferenceId, newOrder, success, fail) {
-  this.apiCall('POST', 'Locations', 'Reorder', null, JSON.stringify({ Id: conferenceId, NewOrder: newOrder }), success, fail);
+  this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+ }
+ this.deleteTrack = function (conferenceId, trackId, success, fail) {
+  this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
  }
 }
 

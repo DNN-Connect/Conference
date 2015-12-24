@@ -9,7 +9,6 @@ namespace Connect.DNN.Modules.Conference.Common
     }
     public class ReorderDto
     {
-        public int Id;
         public IEnumerable<Order> NewOrder;
     }
 

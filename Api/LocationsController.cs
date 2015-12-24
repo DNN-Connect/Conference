@@ -6,6 +6,8 @@ using DotNetNuke.Web.Api;
 using Connect.DNN.Modules.Conference.Common;
 using Newtonsoft.Json;
 using Connect.Conference.Core.Repositories;
+using System.Collections.Generic;
+using System.Web;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -16,13 +18,14 @@ namespace Connect.DNN.Modules.Conference.Api
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
-        public HttpResponseMessage Reorder([NakedBody] string raw)
+        public HttpResponseMessage Reorder(int conferenceId)
         {
-            var data = JsonConvert.DeserializeObject<ReorderDto>(raw);
+            var raw = new System.IO.StreamReader(HttpContext.Current.Request.InputStream).ReadToEnd();
+            var data = JsonConvert.DeserializeObject<List<Order>>(raw);
             ILocationRepository _repository = LocationRepository.Instance;
-            foreach (Order no in data.NewOrder)
+            foreach (Order no in data)
             {
-                var location = _repository.GetLocation(data.Id, no.id);
+                var location = _repository.GetLocation(conferenceId, no.id);
                 if (location != null)
                 {
                     location.Sort = no.order;
