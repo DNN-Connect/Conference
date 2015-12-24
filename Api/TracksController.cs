@@ -15,9 +15,8 @@ namespace Connect.DNN.Modules.Conference.Api
     public partial class TracksController : ConferenceApiController
     {
 
-        #region " Service Methods "
-
-        [HttpPost()]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
         public HttpResponseMessage Reorder([NakedBody] string raw)
         {
@@ -34,7 +33,6 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
-        #endregion
 
     }
 }

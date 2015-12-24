@@ -29,6 +29,9 @@ function ModuleConferenceService($, settings, mid) {
  this.orderTracks = function (conferenceId, newOrder, success, fail) {
   this.apiCall('POST', 'Tracks', 'Reorder', null, JSON.stringify({ Id: conferenceId, NewOrder: newOrder }), success, fail);
  }
+ this.orderLocations = function (conferenceId, newOrder, success, fail) {
+  this.apiCall('POST', 'Locations', 'Reorder', null, JSON.stringify({ Id: conferenceId, NewOrder: newOrder }), success, fail);
+ }
 }
 
 function showLoading() {

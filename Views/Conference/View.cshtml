@@ -28,7 +28,7 @@
 <h3>@Dnn.LocalizeString("Locations")</h3>
 <table class="table" id="tblLocations">
  <tbody>
-  @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId))
+  @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort))
   {
   <tr data-id="@l.LocationId" class="sortable">
    <td>@l.Name</td>
@@ -62,8 +62,7 @@
   });
   $('#tblLocations tbody:first').sortable({
    update: function (event, ui) {
-    alert(getTableOrder('tblLocations').toSource());
-    // pImagesService.reorder($(this).sortable('serialize'), null)
+    moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
    }
   });
  });
