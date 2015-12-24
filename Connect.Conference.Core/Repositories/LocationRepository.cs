@@ -59,6 +59,14 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(location);
             }
         }
+        public void DeleteLocation(int conferenceId, int locationId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<LocationBase>();
+                rep.Delete("WHERE ConferenceId = @0 AND LocationId = @1", conferenceId, locationId);
+            }
+        }
         public void UpdateLocation(LocationBase location, int userId)
         {
             Requires.NotNull(location);
@@ -79,6 +87,7 @@ namespace Connect.Conference.Core.Repositories
         Location GetLocation(int conferenceId, int locationId);
         int AddLocation(LocationBase location, int userId);
         void DeleteLocation(LocationBase location);
+        void DeleteLocation(int conferenceId, int locationId);
         void UpdateLocation(LocationBase location, int userId);
     }
 }

@@ -59,6 +59,14 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(slot);
             }
         }
+        public void DeleteSlot(int conferenceId, int slotId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SlotBase>();
+                rep.Delete("WHERE ConferenceId = @0 AND SlotId = @1", conferenceId, slotId);
+            }
+        }
         public void UpdateSlot(SlotBase slot, int userId)
         {
             Requires.NotNull(slot);
@@ -79,6 +87,7 @@ namespace Connect.Conference.Core.Repositories
         Slot GetSlot(int conferenceId, int slotId);
         int AddSlot(SlotBase slot, int userId);
         void DeleteSlot(SlotBase slot);
+        void DeleteSlot(int conferenceId, int slotId);
         void UpdateSlot(SlotBase slot, int userId);
     }
 }

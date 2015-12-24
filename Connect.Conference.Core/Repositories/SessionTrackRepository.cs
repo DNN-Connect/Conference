@@ -68,6 +68,15 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(sessionTrack);
             }
         }
+        public void DeleteSessionTracksBySession(int sessionId)
+        {
+            Requires.NotNull(sessionId);
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SessionTrackBase>();
+                rep.Delete("WHERE SessionId=@0", sessionId);
+            }
+        }
         public void DeleteSessionTracksByTrack(int trackId)
         {
             Requires.NotNull(trackId);
@@ -86,6 +95,7 @@ namespace Connect.Conference.Core.Repositories
         void SetSessionTrack(int trackId, int sessionId);
         void SetSessionTracks(int trackId, List<int> sessionTracks);
         void DeleteSessionTrack(SessionTrackBase sessionTrack);
+        void DeleteSessionTracksBySession(int sessionId);
         void DeleteSessionTracksByTrack(int trackId);
     }
 }

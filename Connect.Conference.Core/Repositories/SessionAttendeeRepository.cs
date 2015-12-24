@@ -68,6 +68,24 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(sessionAttendee);
             }
         }
+        public void DeleteSessionAttendeesBySession(int sessionId)
+        {
+            Requires.NotNull(sessionId);
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SessionAttendeeBase>();
+                rep.Delete("WHERE SessionId=@0", sessionId);
+            }
+        }
+        public void DeleteSessionAttendeesByUser(int userId)
+        {
+            Requires.NotNull(userId);
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SessionAttendeeBase>();
+                rep.Delete("WHERE UserId=@0", userId);
+            }
+        }
  }
 
     public interface ISessionAttendeeRepository
@@ -77,6 +95,8 @@ namespace Connect.Conference.Core.Repositories
         void SetSessionAttendee(int sessionId, int userId);
         void SetSessionAttendees(int sessionId, List<int> sessionAttendees);
         void DeleteSessionAttendee(SessionAttendeeBase sessionAttendee);
+        void DeleteSessionAttendeesBySession(int sessionId);
+        void DeleteSessionAttendeesByUser(int userId);
     }
 }
 

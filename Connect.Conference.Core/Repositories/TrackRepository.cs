@@ -61,8 +61,6 @@ namespace Connect.Conference.Core.Repositories
         }
         public void DeleteTrack(int conferenceId, int trackId)
         {
-            Requires.NotNull(conferenceId);
-            Requires.NotNull(trackId);
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<TrackBase>();

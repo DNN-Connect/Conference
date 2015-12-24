@@ -59,6 +59,14 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(session);
             }
         }
+        public void DeleteSession(int conferenceId, int sessionId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SessionBase>();
+                rep.Delete("WHERE ConferenceId = @0 AND SessionId = @1", conferenceId, sessionId);
+            }
+        }
         public void UpdateSession(SessionBase session, int userId)
         {
             Requires.NotNull(session);
@@ -79,6 +87,7 @@ namespace Connect.Conference.Core.Repositories
         Session GetSession(int conferenceId, int sessionId);
         int AddSession(SessionBase session, int userId);
         void DeleteSession(SessionBase session);
+        void DeleteSession(int conferenceId, int sessionId);
         void UpdateSession(SessionBase session, int userId);
     }
 }
