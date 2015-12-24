@@ -15,15 +15,21 @@
    <td>@t.Title</td>
    <td>@t.Description</td>
    <td>@t.NrSessions</td>
+   @if (ConferenceModuleContext.Security.CanEdit)
+   {
    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
    <td><a href="#" class="deleteTrack">@Dnn.LocalizeString("Delete")</a></td>
+   }
   </tr>
   }
  </tbody>
+ @if (ConferenceModuleContext.Security.CanEdit)
+ {
  <tr>
   <td colspan="4"></td>
   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
+ }
 </table>
 
 <h3>@Dnn.LocalizeString("Locations")</h3>
@@ -35,15 +41,21 @@
    <td>@l.Name</td>
    <td>@l.Description</td>
    <td>@l.Capacity</td>
+   @if (ConferenceModuleContext.Security.CanEdit)
+   {
    <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
    <td><a href="#" class="deleteLocation">@Dnn.LocalizeString("Delete")</a></td>
+   }
   </tr>
   }
  </tbody>
+ @if (ConferenceModuleContext.Security.CanEdit)
+ {
  <tr>
   <td colspan="4"></td>
   <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
  </tr>
+ }
 </table>
 
 <div class="right">
@@ -55,8 +67,11 @@
     ConferenceModuleContext.AddJqueryUi();
 }
 
+@if (ConferenceModuleContext.Security.CanEdit)
+{
 <script type="text/javascript">
  $(function () {
+
   $('#tblTracks tbody:first').sortable({
    update: function (event, ui) {
     moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
@@ -87,3 +102,4 @@
   });
  });
 </script>
+}
