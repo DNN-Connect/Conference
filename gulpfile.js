@@ -1,9 +1,21 @@
 var gulp = require('gulp'),
+  msbuild = require('gulp-msbuild'),
+  browserify = require('gulp-browserify'),
+  minifyCss = require('gulp-minify-css'),
+  uglify = require('gulp-uglify'),
+  assemblyInfo = require('gulp-dotnet-assembly-info'),
+  plumber = require('gulp-plumber'),
+  config = require('./package.json'),
+  zip = require('gulp-zip'),
+  filter = require('gulp-filter'),
+  merge = require('merge2'),
+  gutil = require('gulp-util'),
+  markdown = require('gulp-markdown'),
+  rename = require('gulp-rename'),
+  manifest = require('gulp-dnn-manifest'),
   path = require('path'),
   concat = require('gulp-concat'),
   less = require('gulp-less'),
-  browserify = require('browserify'),
-  rename = require('gulp-rename'),
   lessPluginCleanCSS = require('less-plugin-clean-css'),
   cleancss = new lessPluginCleanCSS({ advanced: true });
 
@@ -41,5 +53,19 @@ gulp.task('js', function() {
     'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
     ])
   .pipe(gulp.dest('js'));
+});
+
+gulp.task('browserify', function() {
+  gulp.src('js/src/Conference.js')
+    .pipe(plumber())
+    .pipe(browserify({
+      transform: 'reactify',
+      ignore: 'react'
+    }))
+    .pipe(gulp.dest('js/'));
+});
+
+gulp.task('watch', function() {
+  gulp.watch('js/src/**/*.js', ['browserify']);
 });
 

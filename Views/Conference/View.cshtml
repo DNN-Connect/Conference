@@ -58,6 +58,10 @@
  }
 </table>
 
+<div class="connectConference slotsTimesheet" data-moduleid="@Dnn.ModuleContext.ModuleId">
+
+</div>
+
 <div class="timesheet">
  <div class="timesheet-grid">
   @for (int i = 0; i < 24; i++)
@@ -91,16 +95,19 @@
 
 
 @{
-    ConferenceModuleContext.AddModuleService();
     ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddScript("interact.min.js", "interact", "1.2.6");
     ConferenceModuleContext.AddScript("interact.module.js");
+    ConferenceModuleContext.AddScript("Conference.js");
 }
 
 @if (ConferenceModuleContext.Security.CanEdit)
 {
  <script type="text/javascript">
   $(function () {
+
+   var moduleConferenceService = ConnectConference.modules[@Dnn.ModuleContext.ModuleId].service;
+   alert(moduleConferenceService);
 
    $('#tblTracks tbody:first').sortable({
     update: function (event, ui) {
