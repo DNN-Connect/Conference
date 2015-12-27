@@ -58,48 +58,81 @@
  }
 </table>
 
+<div class="timesheet">
+ <div class="timesheet-grid">
+  @for (int i = 0; i < 24; i++)
+  {
+<section>@i.ToString("00"):00</section>
+  }
+ </div>
+ <ul class="data">
+  <li>&nbsp;</li>
+  @foreach (var s in Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId))
+  {
+  <li>
+   <span class="timesheet-box"
+         data-id="@s.SlotId"
+         data-oldstart="@s.Start.TotalMinutes"
+         data-start="@s.Start.TotalMinutes"
+         data-scale="48"
+         data-length="@s.DurationMins"
+         style="margin-left:@(s.Start.TotalMinutes*1152/1440)px; width:@(s.DurationMins*1152/1440)px; z-index:999"></span>
+   <span class="timesheet-time" style="margin-left:@(s.DurationMins*1152/1440)px" id="start@(s.SlotId)">@s.Start.ToString("h\\:mm") @(s.DurationMins.MinutesToString())</span>
+   <span class="timesheet-title">@s.Title</span>
+  </li>
+  }
+ </ul>
+</div>
+
+
 <div class="right">
  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
 </div>
 
+
 @{
     ConferenceModuleContext.AddModuleService();
     ConferenceModuleContext.AddJqueryUi();
+    ConferenceModuleContext.AddScript("interact.min.js", "interact", "1.2.6");
+    ConferenceModuleContext.AddScript("interact.module.js");
 }
 
 @if (ConferenceModuleContext.Security.CanEdit)
 {
-<script type="text/javascript">
- $(function () {
+ <script type="text/javascript">
+  $(function () {
 
-  $('#tblTracks tbody:first').sortable({
-   update: function (event, ui) {
-    moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
-   }
+   $('#tblTracks tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
+    }
+   });
+   $('#tblLocations tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
+    }
+   });
+   $('.deleteTrack').click(function() {
+    if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
+     var that = this;
+     moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+      $(that).parent().parent().remove();
+     });
+    }
+    return false;
+   });
+   $('.deleteLocation').click(function() {
+    if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
+     var that = this;
+     moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+      $(that).parent().parent().remove();
+     });
+    }
+    return false;
+   });
+   $(".timesheet").css({'height':(($(".timesheet .data").height() + 20)+'px')});
+  
+
   });
-  $('#tblLocations tbody:first').sortable({
-   update: function (event, ui) {
-    moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
-   }
-  });
-  $('.deleteTrack').click(function() {
-   if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
-    var that = this;
-    moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-     $(that).parent().parent().remove();
-    });
-   }
-   return false;
-  });
-  $('.deleteLocation').click(function() {
-   if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
-    var that = this;
-    moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-     $(that).parent().parent().remove();
-    });
-   }
-   return false;
-  });
- });
-</script>
+ </script>
 }

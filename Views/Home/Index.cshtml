@@ -46,7 +46,7 @@
     if (ConferenceModuleContext.Security.CanEdit)
     {
     <div class="right">
-     <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
+     <a href="@Url.Action("Edit", "Conference", new {conferenceId = -1})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
       @Dnn.LocalizeString("New")
      </a>
     </div>

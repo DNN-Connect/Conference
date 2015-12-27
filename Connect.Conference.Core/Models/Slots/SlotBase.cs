@@ -27,7 +27,7 @@ namespace Connect.Conference.Core.Models.Slots
         [DataMember]
         public int ConferenceId { get; set; }
         [DataMember]
-        public DateTime Start { get; set; }
+        public TimeSpan Start { get; set; }
         [DataMember]
         public int DurationMins { get; set; }
         [DataMember]
