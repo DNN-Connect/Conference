@@ -36,6 +36,7 @@ namespace Connect.Conference.Core.Models.Slots
              res.SlotType = SlotType;
              res.Title = Title;
              res.Description = Description;
+             res.DayNr = DayNr;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

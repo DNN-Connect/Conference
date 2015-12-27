@@ -25,11 +25,12 @@ namespace Connect.Conference.Core.Models.Sessions
    Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
    Capacity = Convert.ToInt32(Null.SetNull(dr["Capacity"], Capacity));
    SlotId = Convert.ToInt32(Null.SetNull(dr["SlotId"], SlotId));
-   SessionDate = Convert.ToDateTime(Null.SetNull(dr["SessionDate"], SessionDate));
    Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
    SubTitle = Convert.ToString(Null.SetNull(dr["SubTitle"], SubTitle));
    Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
    Status = Convert.ToInt32(Null.SetNull(dr["Status"], Status));
+   IsPlenary = Convert.ToBoolean(Null.SetNull(dr["IsPlenary"], IsPlenary));
+   DayNr = Convert.ToInt32(Null.SetNull(dr["DayNr"], DayNr));
         }
 
         [IgnoreColumn()]
@@ -81,8 +82,6 @@ namespace Connect.Conference.Core.Models.Sessions
      return ((int)Capacity).ToString(strFormat, formatProvider);
     case "slotid": // Int
      return SlotId.ToString(strFormat, formatProvider);
-    case "sessiondate": // Date
-     return SessionDate.ToString(strFormat, formatProvider);
     case "title": // NVarChar
      if (Title == null);
      {
@@ -107,6 +106,10 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return ((int)Status).ToString(strFormat, formatProvider);
+    case "isplenary": // Bit
+     return IsPlenary.ToString();
+    case "daynr": // Int
+     return DayNr.ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

@@ -20,13 +20,15 @@ namespace Connect.Conference.Core.Models.Sessions
 
         #region Properties
         [DataMember]
-        public int? NrAttendees { get; set; }
-        [DataMember]
-        public int? NrSpeakers { get; set; }
+        public System.DateTime? SessionDate { get; set; }
         [DataMember]
         public string LocationName { get; set; }
         [DataMember]
         public string SlotTitle { get; set; }
+        [DataMember]
+        public int? NrAttendees { get; set; }
+        [DataMember]
+        public int? NrSpeakers { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -45,11 +47,12 @@ namespace Connect.Conference.Core.Models.Sessions
              res.Sort = Sort;
              res.Capacity = Capacity;
              res.SlotId = SlotId;
-             res.SessionDate = SessionDate;
              res.Title = Title;
              res.SubTitle = SubTitle;
              res.Description = Description;
              res.Status = Status;
+             res.IsPlenary = IsPlenary;
+             res.DayNr = DayNr;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

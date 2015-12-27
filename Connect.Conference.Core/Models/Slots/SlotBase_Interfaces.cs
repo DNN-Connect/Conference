@@ -17,13 +17,14 @@ namespace Connect.Conference.Core.Models.Slots
         public virtual void Fill(IDataReader dr)
         {
             FillAuditFields(dr);
-            SlotId = Convert.ToInt32(Null.SetNull(dr["SlotId"], SlotId));
-            ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
-            if (dr["Start"] != DBNull.Value) { Start = (TimeSpan)dr["Start"]; }
-            DurationMins = Convert.ToInt32(Null.SetNull(dr["DurationMins"], DurationMins));
-            SlotType = Convert.ToInt32(Null.SetNull(dr["SlotType"], SlotType));
-            Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
-            Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
+   SlotId = Convert.ToInt32(Null.SetNull(dr["SlotId"], SlotId));
+   ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
+   if (dr["Start"] != DBNull.Value) { Start = (TimeSpan)dr["Start"]; }
+   DurationMins = Convert.ToInt32(Null.SetNull(dr["DurationMins"], DurationMins));
+   SlotType = Convert.ToInt32(Null.SetNull(dr["SlotType"], SlotType));
+   Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
+   Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
+   DayNr = Convert.ToInt32(Null.SetNull(dr["DayNr"], DayNr));
         }
 
         [IgnoreColumn()]
@@ -39,28 +40,34 @@ namespace Connect.Conference.Core.Models.Slots
         {
             switch (strPropertyName.ToLower())
             {
-                case "slotid": // Int
-                    return SlotId.ToString(strFormat, formatProvider);
-                case "conferenceid": // Int
-                    return ConferenceId.ToString(strFormat, formatProvider);
-                case "start": // Time
-                    return Start.ToString(strFormat, formatProvider);
-                case "durationmins": // Int
-                    return DurationMins.ToString(strFormat, formatProvider);
-                case "slottype": // Int
-                    return SlotType.ToString(strFormat, formatProvider);
-                case "title": // NVarChar
-                    if (Title == null) ;
-                    {
-                        return "";
-                    };
-                    return PropertyAccess.FormatString(Title, strFormat);
-                case "description": // NVarCharMax
-                    if (Description == null) ;
-                    {
-                        return "";
-                    };
-                    return PropertyAccess.FormatString(Description, strFormat);
+    case "slotid": // Int
+     return SlotId.ToString(strFormat, formatProvider);
+    case "conferenceid": // Int
+     return ConferenceId.ToString(strFormat, formatProvider);
+    case "start": // Time
+     return Start.ToString(strFormat, formatProvider);
+    case "durationmins": // Int
+     return DurationMins.ToString(strFormat, formatProvider);
+    case "slottype": // Int
+     return SlotType.ToString(strFormat, formatProvider);
+    case "title": // NVarChar
+     if (Title == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Title, strFormat);
+    case "description": // NVarCharMax
+     if (Description == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Description, strFormat);
+    case "daynr": // Int
+     if (DayNr == null);
+     {
+         return "";
+     };
+     return ((int)DayNr).ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

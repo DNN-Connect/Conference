@@ -39,8 +39,6 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int SlotId { get; set; }
         [DataMember]
-        public DateTime SessionDate { get; set; }
-        [DataMember]
         public string Title { get; set; }
         [DataMember]
         public string SubTitle { get; set; }
@@ -48,6 +46,10 @@ namespace Connect.Conference.Core.Models.Sessions
         public string Description { get; set; }
         [DataMember]
         public int? Status { get; set; }
+        [DataMember]
+        public bool IsPlenary { get; set; }
+        [DataMember]
+        public int DayNr { get; set; }
         #endregion
 
         #region Methods
@@ -77,8 +79,6 @@ namespace Connect.Conference.Core.Models.Sessions
             if (session.SlotId > -1)
                 SlotId = session.SlotId;
 
-            SessionDate = session.SessionDate;
-
             if (!String.IsNullOrEmpty(session.Title))
                 Title = session.Title;
 
@@ -90,6 +90,11 @@ namespace Connect.Conference.Core.Models.Sessions
 
             if (session.Status > -1)
                 Status = session.Status;
+
+            IsPlenary = session.IsPlenary;
+
+            if (session.DayNr > -1)
+                DayNr = session.DayNr;
 
         }
         #endregion

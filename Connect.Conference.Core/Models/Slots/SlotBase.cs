@@ -36,6 +36,8 @@ namespace Connect.Conference.Core.Models.Slots
         public string Title { get; set; }
         [DataMember]
         public string Description { get; set; }
+        [DataMember]
+        public int? DayNr { get; set; }
         #endregion
 
         #region Methods
@@ -60,6 +62,9 @@ namespace Connect.Conference.Core.Models.Slots
 
             if (!String.IsNullOrEmpty(slot.Description))
                 Description = slot.Description;
+
+            if (slot.DayNr > -1)
+                DayNr = slot.DayNr;
 
         }
         #endregion
