@@ -8,12 +8,12 @@ var gulp = require('gulp'),
   cleancss = new lessPluginCleanCSS({ advanced: true });
 
 gulp.task('less', function() {
-  return gulp.src('src/less/module.less')
+  return gulp.src('css/src/less/module.less')
     .pipe(less({
       paths: [path.join(__dirname, 'less', 'includes')],
       plugins: [cleancss]
     }))
-    .pipe(gulp.dest('src'));
+    .pipe(gulp.dest('css/src'));
 });
 
 gulp.task('css', ['less'], function() {
@@ -26,7 +26,7 @@ gulp.task('css', ['less'], function() {
     .pipe(gulp.dest('css'));
   gulp.src('node_modules/bootstrap/dist/fonts/*.*')
     .pipe(gulp.dest('fonts'));
-  return gulp.src(['src/module.css',
+  return gulp.src(['css/src/module.css',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
     ])
     .pipe(concat('module.css'))
