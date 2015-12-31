@@ -35,7 +35,9 @@ var TimesheetEditorSlot = React.createClass({
                data-scale="48"
                data-length={this.state.lastLength}
                style={barStyle}
+               title={this.state.slot.Title}
                ref="timeBar">
+           <strong>{this.state.slot.DayNr}</strong> {this.state.slot.Title}
         </span>
         <span className="timesheet-time" style={txtStyle} ref="timeText">{timeString}</span>
       </li>

@@ -99,8 +99,10 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 
   setupEditor: function() {
 
-    $(".timesheet").css({
-      'height': (($(".timesheet .data").height() + 20) + 'px')
+    var mainDiv = this.refs.mainDiv.getDOMNode();
+    var childDiv = mainDiv.getElementsByTagName('ul')[0];
+    $(mainDiv).css({
+      'height': (($(childDiv).height() + 30) + 'px')
     });
 
   }
@@ -149,7 +151,9 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
                "data-scale": "48", 
                "data-length": this.state.lastLength, 
                style: barStyle, 
-               ref: "timeBar"}
+               title: this.state.slot.Title, 
+               ref: "timeBar"}, 
+           React.createElement("strong", null, this.state.slot.DayNr), " ", this.state.slot.Title
         ), 
         React.createElement("span", {className: "timesheet-time", style: txtStyle, ref: "timeText"}, timeString)
       )
