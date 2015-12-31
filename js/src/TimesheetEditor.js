@@ -41,8 +41,10 @@ var TimesheetEditor = React.createClass({
 
   setupEditor: function() {
 
-    $(".timesheet").css({
-      'height': (($(".timesheet .data").height() + 20) + 'px')
+    var mainDiv = this.refs.mainDiv.getDOMNode();
+    var childDiv = mainDiv.getElementsByTagName('ul')[0];
+    $(mainDiv).css({
+      'height': (($(childDiv).height() + 30) + 'px')
     });
 
   }

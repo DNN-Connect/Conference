@@ -129,6 +129,9 @@
   <data name="EndDate.Text" xml:space="preserve">
     <value>End Date</value>
   </data>
+  <data name="GeneralSlots.Text" xml:space="preserve">
+    <value>General Slots</value>
+  </data>
   <data name="Location.Text" xml:space="preserve">
     <value>Location</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="Save.Text" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="SessionSlots.Text" xml:space="preserve">
+    <value>Session Slots</value>
   </data>
   <data name="SessionVoting.Text" xml:space="preserve">
     <value>Session Voting</value>
