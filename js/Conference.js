@@ -4,7 +4,7 @@ var ConferenceService = function($, mid) {
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
-    showLoading();
+    //showLoading();
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -19,12 +19,12 @@ var ConferenceService = function($, mid) {
       beforeSend: $.dnnSF(moduleId).setModuleHeaders,
       data: data
     }).done(function(data) {
-      hideLoading();
+      //hideLoading();
       if (success != undefined) {
         success(data);
       }
     }).fail(function(xhr, status) {
-      showError(xhr.responseText);
+      //showError(xhr.responseText);
       if (fail != undefined) {
         fail(xhr.responseText);
       }
@@ -45,6 +45,9 @@ var ConferenceService = function($, mid) {
   }
   this.getConferenceSlots = function(conferenceId, success, fail) {
     this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+  }
+  this.updateSlot = function(conferenceId, slot, success, fail) {
+    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
   }
 
 }
@@ -68,7 +71,6 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 
   componentDidMount: function() {
     this.setupEditor();
-    // interactSetup();
   },
 
   render: function() {
@@ -117,14 +119,16 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
     return {
       moduleId: this.props.moduleId,
       slot: this.props.slot,
-      service: ConnectConference.modules[this.props.moduleId].service
+      service: ConnectConference.modules[this.props.moduleId].service,
+      lastStart: this.props.slot.StartMinutes,
+      lastLength: this.props.slot.DurationMins
     }
   },
 
   render: function() {
-    var start = this.state.slot.StartMinutes,
+    var start = this.state.lastStart,
       startPixels = start * 1152 / 1440,
-      len = this.state.slot.DurationMins,
+      len = this.state.lastLength,
       lenPixels = len * 1152 / 1440,
       timeString = this.getTimestring(start, len);
     var barStyle = {
@@ -139,10 +143,11 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
       React.createElement("li", null, 
         React.createElement("span", {className: "timesheet-box", 
                "data-id": this.state.slot.SlotId, 
-               "data-oldstart": this.state.slot.StartMinutes, 
-               "data-start": this.state.slot.StartMinutes, 
+               "data-oldstart": this.state.lastStart, 
+               "data-oldlength": this.state.lastLength, 
+               "data-start": this.state.lastStart, 
                "data-scale": "48", 
-               "data-length": this.state.slot.DurationMins, 
+               "data-length": this.state.lastLength, 
                style: barStyle, 
                ref: "timeBar"}
         ), 
@@ -180,7 +185,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
             'translate(' + roundX + 'px, 0px)';
           textSpan.innerHTML = that.getTimestring(newMins, parseInt(target.getAttribute('data-length')));
         },
-        onend: function(event) {}
+        onend: that.updateSlot
       })
       .resizable({
         preserveAspectRatio: false,
@@ -203,7 +208,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
           target.style.width = roundLen + 'px';
           textSpan.innerHTML = that.getTimestring(parseInt(target.getAttribute('data-start')), newMins);
         },
-        onend: function(event) {}
+        onend: that.updateSlot
       });
   },
 
@@ -224,6 +229,29 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
     }
     timeString += (Math.floor(len / 60)).toString() + ':' + minsDuration;
     return timeString;
+  },
+
+  updateSlot: function(event) {
+    var timeBar = this.refs.timeBar.getDOMNode(),
+      timeText = this.refs.timeText.getDOMNode(),
+      slot = this.state.slot,
+      that = this;
+    slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
+    slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
+    this.state.service.updateSlot(slot.ConferenceId, slot, function() {
+      that.setState({
+        lastStart: slot.NewStartMinutes,
+        lastLength: slot.DurationMins
+      });
+    }, function() {
+      timeBar.style.webkitTransform =
+        timeBar.style.transform = null;
+      timeText.style.transform = null;
+      var len = that.state.lastLength,
+        lenPixels = len * 1152 / 1440;
+      timeBar.style.width = lenPixels + 'px';
+    });
+    return false;
   }
 
 });

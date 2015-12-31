@@ -3,7 +3,7 @@ var ConferenceService = function($, mid) {
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
-    showLoading();
+    //showLoading();
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -18,12 +18,12 @@ var ConferenceService = function($, mid) {
       beforeSend: $.dnnSF(moduleId).setModuleHeaders,
       data: data
     }).done(function(data) {
-      hideLoading();
+      //hideLoading();
       if (success != undefined) {
         success(data);
       }
     }).fail(function(xhr, status) {
-      showError(xhr.responseText);
+      //showError(xhr.responseText);
       if (fail != undefined) {
         fail(xhr.responseText);
       }
@@ -44,6 +44,9 @@ var ConferenceService = function($, mid) {
   }
   this.getConferenceSlots = function(conferenceId, success, fail) {
     this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+  }
+  this.updateSlot = function(conferenceId, slot, success, fail) {
+    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
   }
 
 }

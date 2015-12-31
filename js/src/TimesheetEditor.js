@@ -13,7 +13,6 @@ var TimesheetEditor = React.createClass({
 
   componentDidMount: function() {
     this.setupEditor();
-    // interactSetup();
   },
 
   render: function() {
