@@ -58,34 +58,8 @@
  }
 </table>
 
-<div class="connectConference slotsTimesheet" data-moduleid="@Dnn.ModuleContext.ModuleId">
-
-</div>
-
-<div class="timesheet">
- <div class="timesheet-grid">
-  @for (int i = 0; i < 24; i++)
-  {
-<section>@i.ToString("00"):00</section>
-  }
- </div>
- <ul class="data">
-  <li>&nbsp;</li>
-  @foreach (var s in Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId))
-  {
-  <li>
-   <span class="timesheet-box"
-         data-id="@s.SlotId"
-         data-oldstart="@s.Start.TotalMinutes"
-         data-start="@s.Start.TotalMinutes"
-         data-scale="48"
-         data-length="@s.DurationMins"
-         style="margin-left:@(s.Start.TotalMinutes*1152/1440)px; width:@(s.DurationMins*1152/1440)px; z-index:999"></span>
-   <span class="timesheet-time" style="margin-left:@(s.DurationMins*1152/1440)px" id="start@(s.SlotId)">@s.Start.ToString("h\\:mm") @(s.DurationMins.MinutesToString())</span>
-   <span class="timesheet-title">@s.Title</span>
-  </li>
-  }
- </ul>
+<div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId)))">
 </div>
 
 
@@ -97,7 +71,7 @@
 @{
     ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddScript("interact.min.js", "interact", "1.2.6");
-    ConferenceModuleContext.AddScript("interact.module.js");
+    ConferenceModuleContext.AddScript("react.min.js");
     ConferenceModuleContext.AddScript("Conference.js");
 }
 
@@ -107,7 +81,6 @@
   $(function () {
 
    var moduleConferenceService = ConnectConference.modules[@Dnn.ModuleContext.ModuleId].service;
-   alert(moduleConferenceService);
 
    $('#tblTracks tbody:first').sortable({
     update: function (event, ui) {
@@ -137,7 +110,6 @@
     }
     return false;
    });
-   $(".timesheet").css({'height':(($(".timesheet .data").height() + 20)+'px')});
   
 
   });

@@ -1,4 +1,6 @@
-var ConferenceService = require('./ConferenceService');
+/** @jsx React.DOM */
+var ConferenceService = require('./ConferenceService'),
+    TimesheetEditor = require('./TimesheetEditor');
 
 ;
 (function($, window, document, undefined) {
@@ -17,6 +19,11 @@ var ConferenceService = require('./ConferenceService');
           service: new ConferenceService($, moduleId)
         };
         ConnectConference.modules[moduleId] = newModule;
+      });
+      $('.timesheetEditor').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var slots = $(el).data('slots');
+        React.render(<TimesheetEditor moduleId={moduleId} slots={slots} />, el);
       });
     },
 

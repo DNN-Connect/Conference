@@ -47,6 +47,7 @@ gulp.task('css', ['less'], function() {
 
 gulp.task('js', function() {
   return gulp.src([
+    'node_modules/react/dist/react.min.js',
     'bower_components/moment/min/moment.min.js',
     'bower_components/interact/dist/interact.min.js',
     'node_modules/bootstrap/dist/js/bootstrap.min.js',

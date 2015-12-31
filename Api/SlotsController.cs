@@ -11,15 +11,12 @@ namespace Connect.DNN.Modules.Conference.Api
 	public partial class SlotsController : ConferenceApiController
 	{
 
-		#region " Service Methods "
 		[HttpGet()]
-		[DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]
-		public HttpResponseMessage MyMethod(int id)
+		[ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+		public HttpResponseMessage List(int conferenceId)
 		{
-			bool res = true;
-			return Request.CreateResponse(HttpStatusCode.OK, res);
+			return Request.CreateResponse(HttpStatusCode.OK, Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(conferenceId));
 		}
-		#endregion
 
 	}
 }
