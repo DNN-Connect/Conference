@@ -70,6 +70,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     return {
       moduleId: this.props.moduleId,
       slots: this.props.slots,
+      nrDays: this.props.nrDays,
       service: ConnectConference.modules[this.props.moduleId].service
     }
   },
@@ -94,6 +95,15 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
            key: crtSlots[i].SlotId, 
            slot: crtSlots[i], 
            editSlot: this.editSlot})
+      );
+    }
+    var daySelector = [];
+    for (var i = 1; i <= this.state.nrDays; i++) {
+      var id = 'dnOpt' + i;
+      daySelector.push(
+        React.createElement("label", {className: "btn btn-primary"}, 
+            React.createElement("input", {type: "radio", name: "daynr", value: i, autocomplete: "off", id: id}), " ", i
+          )
       );
     }
     return (
@@ -124,7 +134,18 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
                 ), 
                 React.createElement("div", {className: "form-group"}, 
                   React.createElement("label", null, "Description"), 
-                  React.createElement("input", {type: "text", className: "form-control", placeholder: "Description", ref: "description"})
+                  React.createElement("textarea", {className: "form-control", placeholder: "Description", ref: "description"})
+                ), 
+                React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Days"), 
+                  React.createElement("div", {ref: "dayNrButtons"}, 
+                    React.createElement("div", {className: "btn-group", "data-toggle": "buttons"}, 
+                      React.createElement("label", {className: "btn btn-primary"}, 
+                        React.createElement("input", {type: "radio", name: "daynr", autocomplete: "off", value: "-1", id: "dnOpt0"}), " All"
+                      ), 
+                       daySelector 
+                    )
+                  )
                 )
               ), 
               React.createElement("div", {className: "modal-footer"}, 
@@ -150,6 +171,15 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
   resetPopup: function() {
     this.refs.title.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
+    this.setDayNr(null);
+  },
+
+  setDayNr: function(dayNr) {
+    var dnDiv = $(this.refs.dayNrButtons.getDOMNode());
+    var btns = dnDiv.children().first().children();
+    btns.removeClass('active');
+    dayNr = dayNr ? dayNr : 0;
+    btns.eq(dayNr).addClass('active');
   },
 
   addClick: function() {
@@ -165,6 +195,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     this.resetPopup();
     this.refs.title.getDOMNode().value = slot.Title;
     this.refs.description.getDOMNode().value = slot.Description;
+    this.setDayNr(slot.DayNr);
     $(this.refs.popup.getDOMNode()).modal();
     $(this.refs.cmdDelete.getDOMNode()).show();
   },
@@ -183,6 +214,14 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     }
     slot.Title = this.refs.title.getDOMNode().value;
     slot.Description = this.refs.description.getDOMNode().value;
+    var dayNr = $(this.refs.dayNrButtons.getDOMNode())
+     .children().first().children('label.active').first()
+     .children().first().val();
+    if (dayNr == -1) {
+      slot.DayNr = null;
+    } else {
+      slot.DayNr = dayNr;
+    }
     this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
       var newSlots = [];
       $(that.refs.popup.getDOMNode()).modal('hide');
@@ -417,8 +456,9 @@ var ConferenceService = require('./ConferenceService'),
         var slots = $(el).data('slots');
         var slotType = $(el).data('slottype');
         var conferenceId = $(el).data('conference');
+        var nrDays = $(el).data('nrdays');
         React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, 
-           slottype: slotType, conferenceId: conferenceId}), el);
+           slottype: slotType, conferenceId: conferenceId, nrDays: nrDays}), el);
       });
     },
 

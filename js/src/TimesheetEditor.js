@@ -9,6 +9,7 @@ var TimesheetEditor = React.createClass({
     return {
       moduleId: this.props.moduleId,
       slots: this.props.slots,
+      nrDays: this.props.nrDays,
       service: ConnectConference.modules[this.props.moduleId].service
     }
   },
@@ -33,6 +34,15 @@ var TimesheetEditor = React.createClass({
            key={crtSlots[i].SlotId} 
            slot={crtSlots[i]} 
            editSlot={this.editSlot} />
+      );
+    }
+    var daySelector = [];
+    for (var i = 1; i <= this.state.nrDays; i++) {
+      var id = 'dnOpt' + i;
+      daySelector.push(
+        <label className="btn btn-primary">
+            <input type="radio" name="daynr" value={i} autocomplete="off" id={id} /> {i}
+          </label>
       );
     }
     return (
@@ -63,7 +73,18 @@ var TimesheetEditor = React.createClass({
                 </div>
                 <div className="form-group">
                   <label>Description</label>
-                  <input type="text" className="form-control" placeholder="Description" ref="description" />
+                  <textarea className="form-control" placeholder="Description" ref="description" />
+                </div>
+                <div className="form-group">
+                  <label>Days</label>
+                  <div ref="dayNrButtons">
+                    <div className="btn-group" data-toggle="buttons">
+                      <label className="btn btn-primary">
+                        <input type="radio" name="daynr" autocomplete="off" value="-1" id="dnOpt0" /> All
+                      </label>
+                      { daySelector }
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="modal-footer">
@@ -89,6 +110,15 @@ var TimesheetEditor = React.createClass({
   resetPopup: function() {
     this.refs.title.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
+    this.setDayNr(null);
+  },
+
+  setDayNr: function(dayNr) {
+    var dnDiv = $(this.refs.dayNrButtons.getDOMNode());
+    var btns = dnDiv.children().first().children();
+    btns.removeClass('active');
+    dayNr = dayNr ? dayNr : 0;
+    btns.eq(dayNr).addClass('active');
   },
 
   addClick: function() {
@@ -104,6 +134,7 @@ var TimesheetEditor = React.createClass({
     this.resetPopup();
     this.refs.title.getDOMNode().value = slot.Title;
     this.refs.description.getDOMNode().value = slot.Description;
+    this.setDayNr(slot.DayNr);
     $(this.refs.popup.getDOMNode()).modal();
     $(this.refs.cmdDelete.getDOMNode()).show();
   },
@@ -122,6 +153,14 @@ var TimesheetEditor = React.createClass({
     }
     slot.Title = this.refs.title.getDOMNode().value;
     slot.Description = this.refs.description.getDOMNode().value;
+    var dayNr = $(this.refs.dayNrButtons.getDOMNode())
+     .children().first().children('label.active').first()
+     .children().first().val();
+    if (dayNr == -1) {
+      slot.DayNr = null;
+    } else {
+      slot.DayNr = dayNr;
+    }
     this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
       var newSlots = [];
       $(that.refs.popup.getDOMNode()).modal('hide');

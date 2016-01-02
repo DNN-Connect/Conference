@@ -25,8 +25,9 @@ var ConferenceService = require('./ConferenceService'),
         var slots = $(el).data('slots');
         var slotType = $(el).data('slottype');
         var conferenceId = $(el).data('conference');
+        var nrDays = $(el).data('nrdays');
         React.render(<TimesheetEditor moduleId={moduleId} slots={slots} 
-           slottype={slotType} conferenceId={conferenceId} />, el);
+           slottype={slotType} conferenceId={conferenceId} nrDays={nrDays} />, el);
       });
     },
 
