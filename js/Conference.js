@@ -129,6 +129,13 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
               ), 
               React.createElement("div", {className: "modal-body"}, 
                 React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Type"), 
+                  React.createElement("select", {className: "form-control", ref: "slotType"}, 
+                    React.createElement("option", {value: "0"}, "Session"), 
+                    React.createElement("option", {value: "1"}, "General")
+                  )
+                ), 
+                React.createElement("div", {className: "form-group"}, 
                   React.createElement("label", null, "Title"), 
                   React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title"})
                 ), 
@@ -171,6 +178,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
   resetPopup: function() {
     this.refs.title.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
+    this.refs.slotType.getDOMNode().value = '0';
     this.setDayNr(null);
   },
 
@@ -195,6 +203,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     this.resetPopup();
     this.refs.title.getDOMNode().value = slot.Title;
     this.refs.description.getDOMNode().value = slot.Description;
+    this.refs.slotType.getDOMNode().value = slot.SlotType;
     this.setDayNr(slot.DayNr);
     $(this.refs.popup.getDOMNode()).modal();
     $(this.refs.cmdDelete.getDOMNode()).show();
@@ -207,16 +216,17 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
       slot = {
         SlotId: -1,
         ConferenceId: this.props.conferenceId,
-        SlotType: this.props.slottype,
         DurationMins: 60,
         NewStartMinutes: 0
       }
     }
     slot.Title = this.refs.title.getDOMNode().value;
     slot.Description = this.refs.description.getDOMNode().value;
+    var e = this.refs.slotType.getDOMNode();
+    slot.SlotType = parseInt(e.options[e.selectedIndex].value);
     var dayNr = $(this.refs.dayNrButtons.getDOMNode())
-     .children().first().children('label.active').first()
-     .children().first().val();
+      .children().first().children('label.active').first()
+      .children().first().val();
     if (dayNr == -1) {
       slot.DayNr = null;
     } else {
@@ -298,9 +308,18 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
     var txtStyle = {
       marginLeft: lenPixels + 'px'
     };
+    var classes = "timesheet-box";
+    switch (this.state.slot.SlotType) {
+      case 0:
+        classes += ' timesheet-box-sessions';
+        break;
+      case 1:
+        classes += ' timesheet-box-general';
+        break;
+    }
     return (
       React.createElement("li", null, 
-        React.createElement("span", {className: "timesheet-box", 
+        React.createElement("span", {className: classes, 
                "data-id": this.state.slot.SlotId, 
                "data-oldstart": this.state.lastStart, 
                "data-oldlength": this.state.lastLength, 
@@ -454,11 +473,10 @@ var ConferenceService = require('./ConferenceService'),
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var slots = $(el).data('slots');
-        var slotType = $(el).data('slottype');
         var conferenceId = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
         React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, 
-           slottype: slotType, conferenceId: conferenceId, nrDays: nrDays}), el);
+           conferenceId: conferenceId, nrDays: nrDays}), el);
       });
     },
 

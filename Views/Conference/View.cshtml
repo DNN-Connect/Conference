@@ -58,18 +58,11 @@
  }
 </table>
 
-<h3>@Dnn.LocalizeString("GeneralSlots")</h3>
+<h3>@Dnn.LocalizeString("Slots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 1).OrderBy(s => s.Start)))"
-     data-slottype="1" data-conference="@Model.ConferenceId" data-nrdays="@((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays)">
+     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).OrderBy(s => s.Start)))"
+     data-conference="@Model.ConferenceId" data-nrdays="@((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays)">
 </div>
-
-<h3>@Dnn.LocalizeString("SessionSlots")</h3>
-<div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 0).OrderBy(s => s.Start)))"
-     data-slottype="0" data-conference="@Model.ConferenceId" data-nrdays="@((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays)">
-</div>
-
 
 <div class="right">
  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>

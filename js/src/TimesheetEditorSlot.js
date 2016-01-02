@@ -25,9 +25,18 @@ var TimesheetEditorSlot = React.createClass({
     var txtStyle = {
       marginLeft: lenPixels + 'px'
     };
+    var classes = "timesheet-box";
+    switch (this.state.slot.SlotType) {
+      case 0:
+        classes += ' timesheet-box-sessions';
+        break;
+      case 1:
+        classes += ' timesheet-box-general';
+        break;
+    }
     return (
       <li>
-        <span className="timesheet-box"
+        <span className={classes}
                data-id={this.state.slot.SlotId}
                data-oldstart={this.state.lastStart}
                data-oldlength={this.state.lastLength}

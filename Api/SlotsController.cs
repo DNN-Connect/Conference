@@ -23,7 +23,9 @@ namespace Connect.DNN.Modules.Conference.Api
         public HttpResponseMessage Update(int conferenceId, int id, [FromBody]SlotDTO slot)
         {
             var bslot = slot.GetSlotBase();
-            bslot.Start = new System.TimeSpan(0, slot.NewStartMinutes, 0);
+            if (slot.NewStartMinutes > -1) {
+                bslot.Start = new System.TimeSpan(0, slot.NewStartMinutes, 0);
+            }
             if (bslot.SlotId < 0)
             {
                 SlotRepository.Instance.AddSlot(ref bslot, UserInfo.UserID);
@@ -46,8 +48,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
     public class SlotDTO : Slot
     {
-        public int NewStartMinutes { get; set; }
-
+        public int NewStartMinutes { get; set; } = -1;
     }
 }
 
