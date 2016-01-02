@@ -104,7 +104,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
             slots
           )
         ), 
-        React.createElement("div", {className: "right"}, 
+        React.createElement("div", {className: "buttons-right"}, 
           React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.addClick}, "Add")
         ), 
         React.createElement("div", {className: "modal fade", tabindex: "-1", role: "dialog", ref: "popup"}, 
@@ -172,8 +172,8 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     slot.Description = this.refs.description.getDOMNode().value;
     this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
       var newSlots = [];
-      this.refs.title.getDOMNode().value = '';
-      this.refs.description.getDOMNode().value = '';
+      that.refs.title.getDOMNode().value = '';
+      that.refs.description.getDOMNode().value = '';
       $(that.refs.popup.getDOMNode()).modal('hide');
       if (that.slotBeingEdited == null) {
         newSlots = that.state.slots;
@@ -330,6 +330,9 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
     slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
     slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
     this.state.service.updateSlot(slot.ConferenceId, slot, function() {
+      timeBar.style.webkitTransform =
+        timeBar.style.transform = null;
+      timeText.style.transform = null;
       that.setState({
         lastStart: slot.NewStartMinutes,
         lastLength: slot.DurationMins

@@ -46,7 +46,7 @@ var TimesheetEditor = React.createClass({
             {slots}
           </ul>
         </div>
-        <div className="right">
+        <div className="buttons-right">
           <a href="#" className="btn btn-default" onClick={this.addClick}>Add</a>
         </div>
         <div className="modal fade" tabindex="-1" role="dialog" ref="popup">
@@ -114,8 +114,8 @@ var TimesheetEditor = React.createClass({
     slot.Description = this.refs.description.getDOMNode().value;
     this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
       var newSlots = [];
-      this.refs.title.getDOMNode().value = '';
-      this.refs.description.getDOMNode().value = '';
+      that.refs.title.getDOMNode().value = '';
+      that.refs.description.getDOMNode().value = '';
       $(that.refs.popup.getDOMNode()).modal('hide');
       if (that.slotBeingEdited == null) {
         newSlots = that.state.slots;
