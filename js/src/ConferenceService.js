@@ -48,6 +48,9 @@ var ConferenceService = function($, mid) {
   this.updateSlot = function(conferenceId, slot, success, fail) {
     this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
   }
+  this.deleteSlot = function(conferenceId, slotId, success, fail) {
+    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+  }
 
 }
 

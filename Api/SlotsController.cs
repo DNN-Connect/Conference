@@ -34,6 +34,13 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             return Request.CreateResponse(HttpStatusCode.OK, SlotRepository.Instance.GetSlot(bslot.ConferenceId, bslot.SlotId));
         }
+        [HttpPost]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
+        public HttpResponseMessage Delete(int conferenceId, int id)
+        {
+            SlotRepository.Instance.DeleteSlot(conferenceId, id);
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
 
     }
 

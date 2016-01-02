@@ -68,6 +68,7 @@ var TimesheetEditor = React.createClass({
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-warning" onClick={this.cmdDelete} ref="cmdDelete">Delete</button>
                 <button type="button" className="btn btn-primary" onClick={this.cmdSave}>Save changes</button>
               </div>
             </div>
@@ -85,17 +86,26 @@ var TimesheetEditor = React.createClass({
     });
   },
 
+  resetPopup: function() {
+    this.refs.title.getDOMNode().value = '';
+    this.refs.description.getDOMNode().value = '';
+  },
+
   addClick: function() {
     this.slotBeingEdited = null;
+    this.resetPopup();
     $(this.refs.popup.getDOMNode()).modal();
+    $(this.refs.cmdDelete.getDOMNode()).hide();
     return false;
   },
 
   editSlot: function(slot) {
+    this.slotBeingEdited = slot;
+    this.resetPopup();
     this.refs.title.getDOMNode().value = slot.Title;
     this.refs.description.getDOMNode().value = slot.Description;
-    this.slotBeingEdited = slot;
     $(this.refs.popup.getDOMNode()).modal();
+    $(this.refs.cmdDelete.getDOMNode()).show();
   },
 
   cmdSave: function(e) {
@@ -114,8 +124,6 @@ var TimesheetEditor = React.createClass({
     slot.Description = this.refs.description.getDOMNode().value;
     this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
       var newSlots = [];
-      that.refs.title.getDOMNode().value = '';
-      that.refs.description.getDOMNode().value = '';
       $(that.refs.popup.getDOMNode()).modal('hide');
       if (that.slotBeingEdited == null) {
         newSlots = that.state.slots;
@@ -132,7 +140,28 @@ var TimesheetEditor = React.createClass({
       that.setState({
         slots: newSlots
       });
+      that.setupEditor();
     }, function() {});
+  },
+
+  cmdDelete: function(e) {
+    if (confirm('Do you wish to delete this slot?')) {
+      $(this.refs.popup.getDOMNode()).modal('hide');
+      var slot = this.slotBeingEdited,
+        that = this;
+      this.state.service.deleteSlot(slot.ConferenceId, slot.SlotId, function() {
+        var newSlots = [];
+        for (var i = 0; i < that.state.slots.length; i++) {
+          if (that.state.slots[i].SlotId != slot.SlotId) {
+            newSlots.push(that.state.slots[i]);
+          }
+        }
+        that.setState({
+          slots: newSlots
+        });
+        that.setupEditor();
+      });
+    }
   }
 
 
