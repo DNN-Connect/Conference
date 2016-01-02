@@ -36,6 +36,7 @@ var TimesheetEditorSlot = React.createClass({
                data-length={this.state.lastLength}
                style={barStyle}
                title={this.state.slot.Title}
+               onDoubleClick={this.doubleClicked}
                ref="timeBar">
            <strong>{this.state.slot.DayNr}</strong> {this.state.slot.Title}
         </span>
@@ -140,6 +141,10 @@ var TimesheetEditorSlot = React.createClass({
       timeBar.style.width = lenPixels + 'px';
     });
     return false;
+  },
+
+  doubleClicked: function() {
+    this.props.editSlot(this.state.slot);
   }
 
 });

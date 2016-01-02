@@ -61,6 +61,8 @@ var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
 var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 
+  slotBeingEdited: null,
+
   getInitialState: function() {
     return {
       moduleId: this.props.moduleId,
@@ -78,33 +80,117 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     for (var i = 0; i < 24; i++) {
       hours.push(React.createElement("section", null, i, ":00"));
     }
+    var crtSlots = this.state.slots;
+    crtSlots.sort(function(a, b) {
+      return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
+    });
     var slots = [];
-    for (var i = 0; i < this.state.slots.length; i++) {
+    for (var i = 0; i < crtSlots.length; i++) {
       slots.push(
-        React.createElement(TimesheetEditorSlot, {moduleId: this.state.moduleId, slot: this.state.slots[i]})
+        React.createElement(TimesheetEditorSlot, {moduleId: this.state.moduleId, 
+           key: crtSlots[i].SlotId, 
+           slot: crtSlots[i], 
+           editSlot: this.editSlot})
       );
     }
     return (
-      React.createElement("div", {ref: "mainDiv", className: "timesheet"}, 
-        React.createElement("div", {className: "timesheet-grid"}, 
-          hours
+      React.createElement("div", null, 
+        React.createElement("div", {ref: "mainDiv", className: "timesheet"}, 
+          React.createElement("div", {className: "timesheet-grid"}, 
+            hours
+          ), 
+          React.createElement("ul", {className: "data"}, 
+            React.createElement("li", null, " "), 
+            slots
+          )
         ), 
-        React.createElement("ul", {className: "data"}, 
-          React.createElement("li", null, " "), 
-          slots
+        React.createElement("div", {className: "right"}, 
+          React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.addClick}, "Add")
+        ), 
+        React.createElement("div", {className: "modal fade", tabindex: "-1", role: "dialog", ref: "popup"}, 
+          React.createElement("div", {className: "modal-dialog"}, 
+            React.createElement("div", {className: "modal-content"}, 
+              React.createElement("div", {className: "modal-header"}, 
+                React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
+                React.createElement("h4", {className: "modal-title"}, "Slot")
+              ), 
+              React.createElement("div", {className: "modal-body"}, 
+                React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Title"), 
+                  React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title"})
+                ), 
+                React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, "Description"), 
+                  React.createElement("input", {type: "text", className: "form-control", placeholder: "Description", ref: "description"})
+                )
+              ), 
+              React.createElement("div", {className: "modal-footer"}, 
+                React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, "Close"), 
+                React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.cmdSave}, "Save changes")
+              )
+            )
+          )
         )
       )
     );
   },
 
   setupEditor: function() {
-
     var mainDiv = this.refs.mainDiv.getDOMNode();
     var childDiv = mainDiv.getElementsByTagName('ul')[0];
     $(mainDiv).css({
       'height': (($(childDiv).height() + 30) + 'px')
     });
+  },
 
+  addClick: function() {
+    this.slotBeingEdited = null;
+    $(this.refs.popup.getDOMNode()).modal();
+    return false;
+  },
+
+  editSlot: function(slot) {
+    this.refs.title.getDOMNode().value = slot.Title;
+    this.refs.description.getDOMNode().value = slot.Description;
+    this.slotBeingEdited = slot;
+    $(this.refs.popup.getDOMNode()).modal();
+  },
+
+  cmdSave: function(e) {
+    var slot = this.slotBeingEdited,
+      that = this;
+    if (slot == null) {
+      slot = {
+        SlotId: -1,
+        ConferenceId: this.props.conferenceId,
+        SlotType: this.props.slottype,
+        DurationMins: 60,
+        NewStartMinutes: 0
+      }
+    }
+    slot.Title = this.refs.title.getDOMNode().value;
+    slot.Description = this.refs.description.getDOMNode().value;
+    this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
+      var newSlots = [];
+      this.refs.title.getDOMNode().value = '';
+      this.refs.description.getDOMNode().value = '';
+      $(that.refs.popup.getDOMNode()).modal('hide');
+      if (that.slotBeingEdited == null) {
+        newSlots = that.state.slots;
+        newSlots.push(data);
+      } else {
+        for (var i = 0; i < that.state.slots.length; i++) {
+          if (that.state.slots[i].SlotId == data.SlotId) {
+            newSlots.push(data);
+          } else {
+            newSlots.push(that.state.slots[i]);
+          }
+        }
+      }
+      that.setState({
+        slots: newSlots
+      });
+    }, function() {});
   }
 
 
@@ -152,6 +238,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
                "data-length": this.state.lastLength, 
                style: barStyle, 
                title: this.state.slot.Title, 
+               onDoubleClick: this.doubleClicked, 
                ref: "timeBar"}, 
            React.createElement("strong", null, this.state.slot.DayNr), " ", this.state.slot.Title
         ), 
@@ -256,6 +343,10 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
       timeBar.style.width = lenPixels + 'px';
     });
     return false;
+  },
+
+  doubleClicked: function() {
+    this.props.editSlot(this.state.slot);
   }
 
 });
@@ -289,7 +380,10 @@ var ConferenceService = require('./ConferenceService'),
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var slots = $(el).data('slots');
-        React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots}), el);
+        var slotType = $(el).data('slottype');
+        var conferenceId = $(el).data('conference');
+        React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, 
+           slottype: slotType, conferenceId: conferenceId}), el);
       });
     },
 

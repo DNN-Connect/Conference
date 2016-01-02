@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(slotId, conferenceId);
             }
         }
-        public int AddSlot(SlotBase slot, int userId)
+        public int AddSlot(ref SlotBase slot, int userId)
         {
             Requires.NotNull(slot);
             Requires.PropertyNotNegative(slot, "ConferenceId");
@@ -85,7 +85,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Slot> GetSlots(int conferenceId);
         Slot GetSlot(int conferenceId, int slotId);
-        int AddSlot(SlotBase slot, int userId);
+        int AddSlot(ref SlotBase slot, int userId);
         void DeleteSlot(SlotBase slot);
         void DeleteSlot(int conferenceId, int slotId);
         void UpdateSlot(SlotBase slot, int userId);

@@ -23,7 +23,10 @@ var ConferenceService = require('./ConferenceService'),
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var slots = $(el).data('slots');
-        React.render(<TimesheetEditor moduleId={moduleId} slots={slots} />, el);
+        var slotType = $(el).data('slottype');
+        var conferenceId = $(el).data('conference');
+        React.render(<TimesheetEditor moduleId={moduleId} slots={slots} 
+           slottype={slotType} conferenceId={conferenceId} />, el);
       });
     },
 

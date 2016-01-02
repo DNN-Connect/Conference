@@ -24,8 +24,15 @@ namespace Connect.DNN.Modules.Conference.Api
         {
             var bslot = slot.GetSlotBase();
             bslot.Start = new System.TimeSpan(0, slot.NewStartMinutes, 0);
-            SlotRepository.Instance.UpdateSlot(bslot, UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, slot);
+            if (bslot.SlotId < 0)
+            {
+                SlotRepository.Instance.AddSlot(ref bslot, UserInfo.UserID);
+            }
+            else
+            {
+                SlotRepository.Instance.UpdateSlot(bslot, UserInfo.UserID);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, SlotRepository.Instance.GetSlot(bslot.ConferenceId, bslot.SlotId));
         }
 
     }

@@ -60,12 +60,14 @@
 
 <h3>@Dnn.LocalizeString("GeneralSlots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 1).OrderBy(s => s.Start)))">
+     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 1).OrderBy(s => s.Start)))"
+     data-slottype="1" data-conference="@Model.ConferenceId">
 </div>
 
 <h3>@Dnn.LocalizeString("SessionSlots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 0).OrderBy(s => s.Start)))">
+     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).Where(s => s.SlotType == 0).OrderBy(s => s.Start)))"
+     data-slottype="0" data-conference="@Model.ConferenceId">
 </div>
 
 
@@ -77,6 +79,7 @@
 @{
     ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddScript("interact.min.js", "interact", "1.2.6");
+    ConferenceModuleContext.AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
     ConferenceModuleContext.AddScript("react.min.js");
     ConferenceModuleContext.AddScript("Conference.js");
 }
