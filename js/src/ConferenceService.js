@@ -1,4 +1,4 @@
-var ConferenceService = function($, mid) {
+window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
@@ -53,5 +53,3 @@ var ConferenceService = function($, mid) {
   }
 
 }
-
-module.exports = ConferenceService;

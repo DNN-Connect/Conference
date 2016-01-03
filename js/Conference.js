@@ -1,64 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var ConferenceService = function($, mid) {
-  var moduleId = mid;
-  var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
-
-  this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
-    //showLoading();
-    var path = baseServicepath;
-    if (conferenceId != null) {
-      path += 'Conference/' + conferenceId + '/'
-    }
-    path = path + controller + '/' + action;
-    if (id != null) {
-      path += '/' + id
-    }
-    $.ajax({
-      type: method,
-      url: path,
-      beforeSend: $.dnnSF(moduleId).setModuleHeaders,
-      data: data
-    }).done(function(data) {
-      //hideLoading();
-      if (success != undefined) {
-        success(data);
-      }
-    }).fail(function(xhr, status) {
-      //showError(xhr.responseText);
-      if (fail != undefined) {
-        fail(xhr.responseText);
-      }
-    });
-  }
-
-  this.orderTracks = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderLocations = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.deleteTrack = function(conferenceId, trackId, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
-  }
-  this.deleteLocation = function(conferenceId, locationId, success, fail) {
-    this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
-  }
-  this.getConferenceSlots = function(conferenceId, success, fail) {
-    this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
-  }
-  this.updateSlot = function(conferenceId, slot, success, fail) {
-    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
-  }
-  this.deleteSlot = function(conferenceId, slotId, success, fail) {
-    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
-  }
-
-}
-
-module.exports = ConferenceService;
-
-
-},{}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
@@ -296,7 +236,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":3}],3:[function(require,module,exports){
+},{"./TimesheetEditorSlot":2}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -455,10 +395,9 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /** @jsx React.DOM */
-var ConferenceService = require('./ConferenceService'),
-  TimesheetEditor = require('./TimesheetEditor');
+var TimesheetEditor = require('./TimesheetEditor');
 
 ;
 (function($, window, document, undefined) {
@@ -504,4 +443,112 @@ var ConferenceService = require('./ConferenceService'),
 })(jQuery, window, document);
 
 
-},{"./ConferenceService":1,"./TimesheetEditor":2}]},{},[4])
+},{"./TimesheetEditor":1}]},{},[3])
+window.ConferenceService = function($, mid) {
+  var moduleId = mid;
+  var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
+
+  this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
+    //showLoading();
+    var path = baseServicepath;
+    if (conferenceId != null) {
+      path += 'Conference/' + conferenceId + '/'
+    }
+    path = path + controller + '/' + action;
+    if (id != null) {
+      path += '/' + id
+    }
+    $.ajax({
+      type: method,
+      url: path,
+      beforeSend: $.dnnSF(moduleId).setModuleHeaders,
+      data: data
+    }).done(function(data) {
+      //hideLoading();
+      if (success != undefined) {
+        success(data);
+      }
+    }).fail(function(xhr, status) {
+      //showError(xhr.responseText);
+      if (fail != undefined) {
+        fail(xhr.responseText);
+      }
+    });
+  }
+
+  this.orderTracks = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderLocations = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.deleteTrack = function(conferenceId, trackId, success, fail) {
+    this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
+  }
+  this.deleteLocation = function(conferenceId, locationId, success, fail) {
+    this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
+  }
+  this.getConferenceSlots = function(conferenceId, success, fail) {
+    this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+  }
+  this.updateSlot = function(conferenceId, slot, success, fail) {
+    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
+  }
+  this.deleteSlot = function(conferenceId, slotId, success, fail) {
+    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+  }
+
+}
+
+// Common functions for the module
+function showLoading() {
+ if ($('#serviceStatus').length) {
+  $('#serviceStatus div:first-child').show();
+  $('#serviceStatus div:nth-child(2)').hide();
+  $('#serviceStatus').css('background', '#2FC1F3').show();
+ }
+}
+
+function hideLoading() {
+ if ($('#serviceStatus').length) {
+  $('#serviceStatus').hide();
+ }
+}
+
+function showError(message) {
+ if ($('#serviceStatus').length) {
+  $('#serviceStatus div:first-child').hide();
+  $('#serviceStatus div:nth-child(2)').html(message).show();
+  $('#serviceStatus').css('background', '#F33B2F').show();
+  setTimeout(function () { $('#serviceStatus').hide(); }, 3000);
+ }
+}
+
+function isInt(value) {
+ return !isNaN(value) &&
+        parseInt(Number(value)) == value &&
+        !isNaN(parseInt(value, 10));
+}
+
+function validateForm(form, submitButton, formErrorDiv) {
+ submitButton.click(function () {
+  var hasErrors = false;
+  formErrorDiv.empty().hide();
+  form.find('input[data-validator="integer"]').each(function (i, el) {
+   if (!isInt($(el).val())) {
+    hasErrors = true;
+    $(el).parent().addClass('error');
+    formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+   }
+  });
+  return !hasErrors;
+ });
+}
+
+function getTableOrder(tableId) {
+ var res = [];
+ $('#' + tableId + ' tbody:first tr').each(function (i, el) {
+  res.push({ id: $(el).data('id'), order: i });
+ });
+ return res;
+}

@@ -83,37 +83,39 @@
  <script type="text/javascript">
   $(function () {
 
-   var moduleConferenceService = ConnectConference.modules[@Dnn.ModuleContext.ModuleId].service;
+   $(document).ready(function() {
 
-   $('#tblTracks tbody:first').sortable({
-    update: function (event, ui) {
-     moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
-    }
+    var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+
+    $('#tblTracks tbody:first').sortable({
+     update: function (event, ui) {
+      moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
+     }
+    });
+    $('#tblLocations tbody:first').sortable({
+     update: function (event, ui) {
+      moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
+     }
+    });
+    $('.deleteTrack').click(function() {
+     if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
+      var that = this;
+      moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+       $(that).parent().parent().remove();
+      });
+     }
+     return false;
+    });
+    $('.deleteLocation').click(function() {
+     if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
+      var that = this;
+      moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+       $(that).parent().parent().remove();
+      });
+     }
+     return false;
+    });
    });
-   $('#tblLocations tbody:first').sortable({
-    update: function (event, ui) {
-     moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
-    }
-   });
-   $('.deleteTrack').click(function() {
-    if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
-     var that = this;
-     moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-      $(that).parent().parent().remove();
-     });
-    }
-    return false;
-   });
-   $('.deleteLocation').click(function() {
-    if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
-     var that = this;
-     moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-      $(that).parent().parent().remove();
-     });
-    }
-    return false;
-   });
-  
 
   });
  </script>

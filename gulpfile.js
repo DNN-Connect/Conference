@@ -17,7 +17,9 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   less = require('gulp-less'),
   lessPluginCleanCSS = require('less-plugin-clean-css'),
-  cleancss = new lessPluginCleanCSS({ advanced: true });
+  cleancss = new lessPluginCleanCSS({
+    advanced: true
+  });
 
 gulp.task('less', function() {
   return gulp.src('css/src/less/module.less')
@@ -47,22 +49,27 @@ gulp.task('css', ['less'], function() {
 
 gulp.task('js', function() {
   return gulp.src([
-    'node_modules/react/dist/react.min.js',
-    'bower_components/moment/min/moment.min.js',
-    'bower_components/interact/dist/interact.min.js',
-    'node_modules/bootstrap/dist/js/bootstrap.min.js',
-    'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+      'node_modules/react/dist/react.min.js',
+      'bower_components/moment/min/moment.min.js',
+      'bower_components/interact/dist/interact.min.js',
+      'node_modules/bootstrap/dist/js/bootstrap.min.js',
+      'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
     ])
-  .pipe(gulp.dest('js'));
+    .pipe(gulp.dest('js'));
 });
 
 gulp.task('browserify', function() {
-  gulp.src('js/src/Conference.js')
-    .pipe(plumber())
-    .pipe(browserify({
-      transform: 'reactify',
-      ignore: 'react'
-    }))
+  var react = gulp.src('js/src/Conference.js')
+      .pipe(plumber())
+      .pipe(browserify({
+        transform: 'reactify',
+        ignore: 'react'
+      }))
+      .pipe(rename('a.js'));
+  var service = gulp.src('js/src/ConferenceService.js');
+  var common = gulp.src('js/src/Common.js');
+  return merge(react, service, common)
+    .pipe(concat('Conference.js'))
     .pipe(gulp.dest('js/'));
 });
 
@@ -70,4 +77,3 @@ gulp.task('watch', function() {
   gulp.watch('js/src/**/*.js', ['browserify']);
   gulp.watch('css/src/**/*.less', ['css']);
 });
-

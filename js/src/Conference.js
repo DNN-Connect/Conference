@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
-var ConferenceService = require('./ConferenceService'),
-  TimesheetEditor = require('./TimesheetEditor');
+var TimesheetEditor = require('./TimesheetEditor');
 
 ;
 (function($, window, document, undefined) {
