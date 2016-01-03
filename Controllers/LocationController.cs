@@ -48,7 +48,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var previousRecord = _repository.GetLocation(location.ConferenceId, location.LocationId);
             if (previousRecord == null)
             {
-                _repository.AddLocation(location, User.UserID);
+                _repository.AddLocation(ref location, User.UserID);
             }
             else
             {

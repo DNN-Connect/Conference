@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(conferenceId, portalId);
             }
         }
-        public int AddConference(ConferenceBase conference, int userId)
+        public int AddConference(ref ConferenceBase conference, int userId)
         {
             Requires.NotNull(conference);
             Requires.PropertyNotNegative(conference, "PortalId");
@@ -85,7 +85,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Connect.Conference.Core.Models.Conferences.Conference> GetConferences(int portalId);
         Connect.Conference.Core.Models.Conferences.Conference GetConference(int portalId, int conferenceId);
-        int AddConference(ConferenceBase conference, int userId);
+        int AddConference(ref ConferenceBase conference, int userId);
         void DeleteConference(ConferenceBase conference);
         void DeleteConference(int portalId, int conferenceId);
         void UpdateConference(ConferenceBase conference, int userId);

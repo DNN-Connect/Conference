@@ -48,7 +48,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var previousRecord = _repository.GetTrack(track.ConferenceId, track.TrackId);
             if (previousRecord == null)
             {
-                _repository.AddTrack(track, User.UserID);
+                _repository.AddTrack(ref track, User.UserID);
             }
             else
             {

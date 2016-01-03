@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(sessionId, conferenceId);
             }
         }
-        public int AddSession(SessionBase session, int userId)
+        public int AddSession(ref SessionBase session, int userId)
         {
             Requires.NotNull(session);
             Requires.PropertyNotNegative(session, "ConferenceId");
@@ -85,7 +85,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Session> GetSessions(int conferenceId);
         Session GetSession(int conferenceId, int sessionId);
-        int AddSession(SessionBase session, int userId);
+        int AddSession(ref SessionBase session, int userId);
         void DeleteSession(SessionBase session);
         void DeleteSession(int conferenceId, int sessionId);
         void UpdateSession(SessionBase session, int userId);

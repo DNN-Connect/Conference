@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(trackId, conferenceId);
             }
         }
-        public int AddTrack(TrackBase track, int userId)
+        public int AddTrack(ref TrackBase track, int userId)
         {
             Requires.NotNull(track);
             Requires.PropertyNotNegative(track, "ConferenceId");
@@ -85,7 +85,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Track> GetTracks(int conferenceId);
         Track GetTrack(int conferenceId, int trackId);
-        int AddTrack(TrackBase track, int userId);
+        int AddTrack(ref TrackBase track, int userId);
         void DeleteTrack(TrackBase track);
         void DeleteTrack(int conferenceId, int trackId);
         void UpdateTrack(TrackBase track, int userId);

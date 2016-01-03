@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(locationId, conferenceId);
             }
         }
-        public int AddLocation(LocationBase location, int userId)
+        public int AddLocation(ref LocationBase location, int userId)
         {
             Requires.NotNull(location);
             Requires.PropertyNotNegative(location, "ConferenceId");
@@ -85,7 +85,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Location> GetLocations(int conferenceId);
         Location GetLocation(int conferenceId, int locationId);
-        int AddLocation(LocationBase location, int userId);
+        int AddLocation(ref LocationBase location, int userId);
         void DeleteLocation(LocationBase location);
         void DeleteLocation(int conferenceId, int locationId);
         void UpdateLocation(LocationBase location, int userId);
