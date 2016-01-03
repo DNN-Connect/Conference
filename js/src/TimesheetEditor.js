@@ -4,12 +4,14 @@ var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 var TimesheetEditor = React.createClass({
 
   slotBeingEdited: null,
+  resources: null,
 
   getInitialState: function() {
     var crtSlots = this.props.slots;
     crtSlots.sort(function(a, b) {
       return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
     });
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
     return {
       moduleId: this.props.moduleId,
       slots: crtSlots,
@@ -58,37 +60,37 @@ var TimesheetEditor = React.createClass({
           </ul>
         </div>
         <div className="buttons-right">
-          <a href="#" className="btn btn-default" onClick={this.addClick}>Add</a>
+          <a href="#" className="btn btn-default" onClick={this.addClick}>{this.resources.Add}</a>
         </div>
         <div className="modal fade" tabindex="-1" role="dialog" ref="popup">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title">Slot</h4>
+                <h4 className="modal-title">{this.resources.Slot}</h4>
               </div>
               <div className="modal-body">
                 <div className="form-group">
-                  <label>Type</label>
+                  <label>{this.resources.Type}</label>
                   <select className="form-control" ref="slotType">
-                    <option value="0">Session</option>
-                    <option value="1">General</option>
+                    <option value="0">{this.resources.Session}</option>
+                    <option value="1">{this.resources.General}</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Title</label>
-                  <input type="text" className="form-control" placeholder="Title" ref="title" />
+                  <label>{this.resources.Title}</label>
+                  <input type="text" className="form-control" placeholder={this.resources.Title} ref="title" />
                 </div>
                 <div className="form-group">
-                  <label>Description</label>
-                  <textarea className="form-control" placeholder="Description" ref="description" />
+                  <label>{this.resources.Description}</label>
+                  <textarea className="form-control" placeholder={this.resources.Description} ref="description" />
                 </div>
                 <div className="form-group">
-                  <label>Days</label>
+                  <label>{this.resources.Day}</label>
                   <div ref="dayNrButtons">
                     <div className="btn-group" data-toggle="buttons">
                       <label className="btn btn-primary">
-                        <input type="radio" name="daynr" autocomplete="off" value="-1" id="dnOpt0" /> All
+                        <input type="radio" name="daynr" autocomplete="off" value="-1" id="dnOpt0" /> {this.resources.All}
                       </label>
                       { daySelector }
                     </div>
@@ -96,9 +98,9 @@ var TimesheetEditor = React.createClass({
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-warning" onClick={this.cmdDelete} ref="cmdDelete">Delete</button>
-                <button type="button" className="btn btn-primary" onClick={this.cmdSave}>Save changes</button>
+                <button type="button" className="btn btn-default" data-dismiss="modal">{this.resources.Close}</button>
+                <button type="button" className="btn btn-warning" onClick={this.cmdDelete} ref="cmdDelete">{this.resources.Delete}</button>
+                <button type="button" className="btn btn-primary" onClick={this.cmdSave}>{this.resources.SaveChanges}</button>
               </div>
             </div>
           </div>
@@ -205,7 +207,7 @@ var TimesheetEditor = React.createClass({
   },
 
   cmdDelete: function(e) {
-    if (confirm('Do you wish to delete this slot?')) {
+    if (confirm(this.resources.SlotDeleteConfirm)) {
       $(this.refs.popup.getDOMNode()).modal('hide');
       var slot = this.slotBeingEdited,
         that = this;

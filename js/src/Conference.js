@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var ConferenceService = require('./ConferenceService'),
-    TimesheetEditor = require('./TimesheetEditor');
+  TimesheetEditor = require('./TimesheetEditor');
 
 ;
 (function($, window, document, undefined) {
@@ -15,10 +15,12 @@ var ConferenceService = require('./ConferenceService'),
     loadData: function() {
       $('.connectConference').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
+        var resources = $(el).data('resources');
         var newModule = {
           service: new ConferenceService($, moduleId)
         };
         ConnectConference.modules[moduleId] = newModule;
+        ConnectConference.modules[moduleId].resources = resources;
       });
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');

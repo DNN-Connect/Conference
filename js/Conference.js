@@ -65,12 +65,14 @@ var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 
   slotBeingEdited: null,
+  resources: null,
 
   getInitialState: function() {
     var crtSlots = this.props.slots;
     crtSlots.sort(function(a, b) {
       return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
     });
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
     return {
       moduleId: this.props.moduleId,
       slots: crtSlots,
@@ -119,37 +121,37 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
           )
         ), 
         React.createElement("div", {className: "buttons-right"}, 
-          React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.addClick}, "Add")
+          React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.addClick}, this.resources.Add)
         ), 
         React.createElement("div", {className: "modal fade", tabindex: "-1", role: "dialog", ref: "popup"}, 
           React.createElement("div", {className: "modal-dialog"}, 
             React.createElement("div", {className: "modal-content"}, 
               React.createElement("div", {className: "modal-header"}, 
                 React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                React.createElement("h4", {className: "modal-title"}, "Slot")
+                React.createElement("h4", {className: "modal-title"}, this.resources.Slot)
               ), 
               React.createElement("div", {className: "modal-body"}, 
                 React.createElement("div", {className: "form-group"}, 
-                  React.createElement("label", null, "Type"), 
+                  React.createElement("label", null, this.resources.Type), 
                   React.createElement("select", {className: "form-control", ref: "slotType"}, 
-                    React.createElement("option", {value: "0"}, "Session"), 
-                    React.createElement("option", {value: "1"}, "General")
+                    React.createElement("option", {value: "0"}, this.resources.Session), 
+                    React.createElement("option", {value: "1"}, this.resources.General)
                   )
                 ), 
                 React.createElement("div", {className: "form-group"}, 
-                  React.createElement("label", null, "Title"), 
-                  React.createElement("input", {type: "text", className: "form-control", placeholder: "Title", ref: "title"})
+                  React.createElement("label", null, this.resources.Title), 
+                  React.createElement("input", {type: "text", className: "form-control", placeholder: this.resources.Title, ref: "title"})
                 ), 
                 React.createElement("div", {className: "form-group"}, 
-                  React.createElement("label", null, "Description"), 
-                  React.createElement("textarea", {className: "form-control", placeholder: "Description", ref: "description"})
+                  React.createElement("label", null, this.resources.Description), 
+                  React.createElement("textarea", {className: "form-control", placeholder: this.resources.Description, ref: "description"})
                 ), 
                 React.createElement("div", {className: "form-group"}, 
-                  React.createElement("label", null, "Days"), 
+                  React.createElement("label", null, this.resources.Day), 
                   React.createElement("div", {ref: "dayNrButtons"}, 
                     React.createElement("div", {className: "btn-group", "data-toggle": "buttons"}, 
                       React.createElement("label", {className: "btn btn-primary"}, 
-                        React.createElement("input", {type: "radio", name: "daynr", autocomplete: "off", value: "-1", id: "dnOpt0"}), " All"
+                        React.createElement("input", {type: "radio", name: "daynr", autocomplete: "off", value: "-1", id: "dnOpt0"}), " ", this.resources.All
                       ), 
                        daySelector 
                     )
@@ -157,9 +159,9 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
                 )
               ), 
               React.createElement("div", {className: "modal-footer"}, 
-                React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, "Close"), 
-                React.createElement("button", {type: "button", className: "btn btn-warning", onClick: this.cmdDelete, ref: "cmdDelete"}, "Delete"), 
-                React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.cmdSave}, "Save changes")
+                React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, this.resources.Close), 
+                React.createElement("button", {type: "button", className: "btn btn-warning", onClick: this.cmdDelete, ref: "cmdDelete"}, this.resources.Delete), 
+                React.createElement("button", {type: "button", className: "btn btn-primary", onClick: this.cmdSave}, this.resources.SaveChanges)
               )
             )
           )
@@ -266,7 +268,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
   },
 
   cmdDelete: function(e) {
-    if (confirm('Do you wish to delete this slot?')) {
+    if (confirm(this.resources.SlotDeleteConfirm)) {
       $(this.refs.popup.getDOMNode()).modal('hide');
       var slot = this.slotBeingEdited,
         that = this;
@@ -456,7 +458,7 @@ module.exports = TimesheetEditorSlot;
 },{}],4:[function(require,module,exports){
 /** @jsx React.DOM */
 var ConferenceService = require('./ConferenceService'),
-    TimesheetEditor = require('./TimesheetEditor');
+  TimesheetEditor = require('./TimesheetEditor');
 
 ;
 (function($, window, document, undefined) {
@@ -471,10 +473,12 @@ var ConferenceService = require('./ConferenceService'),
     loadData: function() {
       $('.connectConference').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
+        var resources = $(el).data('resources');
         var newModule = {
           service: new ConferenceService($, moduleId)
         };
         ConnectConference.modules[moduleId] = newModule;
+        ConnectConference.modules[moduleId].resources = resources;
       });
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');

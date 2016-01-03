@@ -17,6 +17,11 @@ namespace Connect.DNN.Modules.Conference.Common
             Dnn = new DnnHelper<object>(ViewContext, this);
             ConferenceModuleContext = new ContextHelper(ViewContext);
         }
+
+        public string SerializedResources() {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(DotNetNuke.Services.Localization.LocalizationProvider.Instance.GetCompiledResourceFile(Dnn.PortalSettings, "/DesktopModules/MVC/Connect/Conference/App_LocalResources/ClientResources.resx",
+                    System.Threading.Thread.CurrentThread.CurrentCulture.Name));
+        }
     
     }
 }
