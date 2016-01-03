@@ -67,9 +67,13 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
   slotBeingEdited: null,
 
   getInitialState: function() {
+    var crtSlots = this.props.slots;
+    crtSlots.sort(function(a, b) {
+      return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
+    });
     return {
       moduleId: this.props.moduleId,
-      slots: this.props.slots,
+      slots: crtSlots,
       nrDays: this.props.nrDays,
       service: ConnectConference.modules[this.props.moduleId].service
     }
@@ -84,17 +88,14 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     for (var i = 0; i < 24; i++) {
       hours.push(React.createElement("section", null, i, ":00"));
     }
-    var crtSlots = this.state.slots;
-    crtSlots.sort(function(a, b) {
-      return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
-    });
     var slots = [];
-    for (var i = 0; i < crtSlots.length; i++) {
+    for (var i = 0; i < this.state.slots.length; i++) {
       slots.push(
         React.createElement(TimesheetEditorSlot, {moduleId: this.state.moduleId, 
-           key: crtSlots[i].SlotId, 
-           slot: crtSlots[i], 
-           editSlot: this.editSlot})
+           key: this.state.slots[i].SlotId, 
+           slot: this.state.slots[i], 
+           editSlot: this.editSlot, 
+           onSlotUpdate: this.onSlotUpdate})
       );
     }
     var daySelector = [];
@@ -209,9 +210,38 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     $(this.refs.cmdDelete.getDOMNode()).show();
   },
 
+  onSlotUpdate: function(slot, fail) {
+    this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
+      var newSlots = [];
+      $(this.refs.popup.getDOMNode()).modal('hide');
+      if (this.slotBeingEdited == null) {
+        newSlots = this.state.slots;
+        newSlots.push(data);
+      } else {
+        for (var i = 0; i < this.state.slots.length; i++) {
+          if (this.state.slots[i].SlotId == data.SlotId) {
+            newSlots.push(data);
+          } else {
+            newSlots.push(this.state.slots[i]);
+          }
+        }
+      }
+      newSlots.sort(function(a, b) {
+        return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
+      });
+      this.setState({
+        slots: newSlots
+      });
+      this.setupEditor();
+    }.bind(this), function() {
+      if (fail != undefined) {
+        fail();
+      }
+    });
+  },
+
   cmdSave: function(e) {
-    var slot = this.slotBeingEdited,
-      that = this;
+    var slot = this.slotBeingEdited;
     if (slot == null) {
       slot = {
         SlotId: -1,
@@ -232,26 +262,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     } else {
       slot.DayNr = dayNr;
     }
-    this.state.service.updateSlot(slot.ConferenceId, slot, function(data) {
-      var newSlots = [];
-      $(that.refs.popup.getDOMNode()).modal('hide');
-      if (that.slotBeingEdited == null) {
-        newSlots = that.state.slots;
-        newSlots.push(data);
-      } else {
-        for (var i = 0; i < that.state.slots.length; i++) {
-          if (that.state.slots[i].SlotId == data.SlotId) {
-            newSlots.push(data);
-          } else {
-            newSlots.push(that.state.slots[i]);
-          }
-        }
-      }
-      that.setState({
-        slots: newSlots
-      });
-      that.setupEditor();
-    }, function() {});
+    this.onSlotUpdate(slot);
   },
 
   cmdDelete: function(e) {
@@ -266,6 +277,9 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
             newSlots.push(that.state.slots[i]);
           }
         }
+        newSlots.sort(function(a, b) {
+          return parseFloat(a.StartMinutes) - parseFloat(b.StartMinutes);
+        });
         that.setState({
           slots: newSlots
         });
@@ -419,15 +433,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
       that = this;
     slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
     slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
-    this.state.service.updateSlot(slot.ConferenceId, slot, function() {
-      timeBar.style.webkitTransform =
-        timeBar.style.transform = null;
-      timeText.style.transform = null;
-      that.setState({
-        lastStart: slot.NewStartMinutes,
-        lastLength: slot.DurationMins
-      });
-    }, function() {
+    this.props.onSlotUpdate(slot, function() {
       timeBar.style.webkitTransform =
         timeBar.style.transform = null;
       timeText.style.transform = null;

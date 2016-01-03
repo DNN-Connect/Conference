@@ -136,15 +136,7 @@ var TimesheetEditorSlot = React.createClass({
       that = this;
     slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
     slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
-    this.state.service.updateSlot(slot.ConferenceId, slot, function() {
-      timeBar.style.webkitTransform =
-        timeBar.style.transform = null;
-      timeText.style.transform = null;
-      that.setState({
-        lastStart: slot.NewStartMinutes,
-        lastLength: slot.DurationMins
-      });
-    }, function() {
+    this.props.onSlotUpdate(slot, function() {
       timeBar.style.webkitTransform =
         timeBar.style.transform = null;
       timeText.style.transform = null;
