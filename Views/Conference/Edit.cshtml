@@ -21,6 +21,12 @@
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Url")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Url)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Description")</label>
   </div>
   @Html.TextAreaFor(m => m.Description)

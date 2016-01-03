@@ -50,6 +50,7 @@ namespace Connect.Conference.Core.Models.Conferences
              res.AttendeeRole = AttendeeRole;
              res.SpeakerRole = SpeakerRole;
              res.Location = Location;
+             res.Url = Url;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

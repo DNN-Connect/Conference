@@ -28,6 +28,7 @@ namespace Connect.Conference.Core.Models.Conferences
    AttendeeRole = Convert.ToInt32(Null.SetNull(dr["AttendeeRole"], AttendeeRole));
    SpeakerRole = Convert.ToInt32(Null.SetNull(dr["SpeakerRole"], SpeakerRole));
    Location = Convert.ToString(Null.SetNull(dr["Location"], Location));
+   Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
         }
 
         [IgnoreColumn()]
@@ -93,6 +94,12 @@ namespace Connect.Conference.Core.Models.Conferences
          return "";
      };
      return PropertyAccess.FormatString(Location, strFormat);
+    case "url": // NVarChar
+     if (Url == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Url, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

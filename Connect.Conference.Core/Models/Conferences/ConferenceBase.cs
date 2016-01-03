@@ -46,6 +46,8 @@ namespace Connect.Conference.Core.Models.Conferences
         public int SpeakerRole { get; set; }
         [DataMember]
         public string Location { get; set; }
+        [DataMember]
+        public string Url { get; set; }
         #endregion
 
         #region Methods
@@ -82,6 +84,9 @@ namespace Connect.Conference.Core.Models.Conferences
 
             if (!String.IsNullOrEmpty(conference.Location))
                 Location = conference.Location;
+
+            if (!String.IsNullOrEmpty(conference.Url))
+                Url = conference.Url;
 
         }
         #endregion
