@@ -28,6 +28,8 @@ namespace Connect.Conference.Core.Models.Conferences
         [DataMember]
         public int? NrTracks { get; set; }
         [DataMember]
+        public int? NrSessions { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }

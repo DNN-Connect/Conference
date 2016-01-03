@@ -48,8 +48,6 @@ namespace Connect.Conference.Core.Models.Speakers
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
-        [DataMember]
-        public int? NrPresentations { get; set; }
         #endregion
 
         #region Methods

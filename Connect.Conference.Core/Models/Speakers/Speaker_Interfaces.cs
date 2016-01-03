@@ -32,7 +32,6 @@ namespace Connect.Conference.Core.Models.Speakers
    Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
-   NrPresentations = Convert.ToInt32(Null.SetNull(dr["NrPresentations"], NrPresentations));
   }
   #endregion
 
@@ -114,12 +113,6 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(LastModifiedByUser, strFormat);
-    case "nrpresentations": // Int
-     if (NrPresentations == null);
-     {
-         return "";
-     };
-     return ((int)NrPresentations).ToString(strFormat, formatProvider);
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
