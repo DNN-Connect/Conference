@@ -2,6 +2,9 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Locations;
 @using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+}
 
 <h3>@Dnn.LocalizeString("Location")</h3>
 <h3>@Model.Name</h3>

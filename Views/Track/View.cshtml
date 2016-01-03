@@ -2,6 +2,9 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Tracks;
 @using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+}
 
 <h3>@Dnn.LocalizeString("Track")</h3>
 <h3>@Model.Title</h3>

@@ -71,11 +71,8 @@
 
 
 @{
-    ConferenceModuleContext.AddJqueryUi();
-    ConferenceModuleContext.AddScript("interact.min.js", "interact", "1.2.6");
-    ConferenceModuleContext.AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
-    ConferenceModuleContext.AddScript("react.min.js");
-    ConferenceModuleContext.AddScript("Conference.js");
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 @if (ConferenceModuleContext.Security.CanEdit)

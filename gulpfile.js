@@ -60,13 +60,14 @@ gulp.task('js', function() {
 
 gulp.task('browserify', function() {
   var react = gulp.src('js/src/Conference.js')
-      .pipe(plumber())
-      .pipe(browserify({
-        transform: 'reactify',
-        ignore: 'react'
-      }))
-      .pipe(rename('a.js'));
-  var service = gulp.src('js/src/ConferenceService.js');
+    .pipe(plumber())
+    .pipe(browserify({
+      transform: 'reactify',
+      ignore: 'react'
+    }))
+    .pipe(rename('a.js'));
+  var service = gulp.src('js/src/ConferenceService.js')
+    .pipe(gulp.dest('js/'));
   var common = gulp.src('js/src/Common.js');
   return merge(react, service, common)
     .pipe(concat('Conference.js'))

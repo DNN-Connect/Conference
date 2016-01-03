@@ -84,19 +84,25 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddModuleService()
         {
-            AddScript("Connect.Conference.js");
-            string script = "(function($){$(document).ready(function(){ moduleConferenceService = new ModuleConferenceService($, {}, " + ModuleContext.ModuleID.ToString() + ") })})(jQuery);";
-            Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "ModuleConferenceService", script, true);
+            AddScript("ConnectService.js");
         }
         public void AddBootstrapJs()
         {
-            AddScript("bootstrap.min.js", "bootstrap", "3.3.5");
+            AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
+        }
+        public void AddReactJs()
+        {
+            AddScript("react.min.js", "react", "0.13.3");
         }
         public void AddEditScripts()
         {
+            AddJqueryUi();
             AddBootstrapJs();
+            AddReactJs();
+            AddScript("interact.min.js", "interact", "1.2.6");
             AddScript("moment.min.js", "moment", "2.10.6");
             AddScript("bootstrap-datetimepicker.min.js", "bootstrap-datetimepicker", "4.17.37");
+            AddScript("Conference.js");
         }
         #endregion
 

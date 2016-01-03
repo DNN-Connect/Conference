@@ -4,6 +4,7 @@
 @using Connect.Conference.Core.Repositories;
 @{
     var conferences = ConferenceRepository.Instance.GetConferences(Dnn.PortalSettings.PortalId);
+    ConferenceModuleContext.AddBootstrapCss();
 }
 
 @foreach (Conference c in conferences.OrderBy(x => x.StartDate))

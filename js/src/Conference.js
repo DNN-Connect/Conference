@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor');
 
-;
 (function($, window, document, undefined) {
 
   $(document).ready(function() {

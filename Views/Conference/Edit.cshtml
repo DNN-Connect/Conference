@@ -10,6 +10,9 @@
     {
      roles.Add(new System.Web.Mvc.SelectListItem { Text = r.RoleName, Value = r.RoleID.ToString() });
     }
+
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 <fieldset id="editConference">

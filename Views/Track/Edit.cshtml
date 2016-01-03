@@ -2,6 +2,10 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Tracks;
 @using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+}
 
 <fieldset id="editTrack">
  <div class="dnnFormItem">
