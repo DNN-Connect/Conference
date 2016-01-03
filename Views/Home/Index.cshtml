@@ -12,12 +12,15 @@
  <div class="panel panel-primary">
   <div class="panel-heading">
    <h3 class="panel-title"><a href="@Url.Action("View", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")">@c.Name</a></h3>
+@if (c.StartDate != null)
+{
    <h6>
      @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("d MMMM") : "")
      - @((c.EndDate != null) ? ((System.DateTime)c.EndDate).ToString("d MMMM") : "")
      @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("yyyy") : "")
      @c.Location
    </h6>
+}
   </div>
   <div class="panel-body">
    <div>
@@ -31,6 +34,9 @@
     </span>
     <span>
      @Dnn.LocalizeString("NrAttendees"): @c.NrAttendees
+    </span>
+    <span>
+     @Dnn.LocalizeString("NrSessions"): @c.NrSessions
     </span>
     @if (ConferenceModuleContext.Security.CanEdit)
     {
