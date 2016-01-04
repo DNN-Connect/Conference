@@ -153,6 +153,12 @@
   <data name="Save.Text" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Session.Text" xml:space="preserve">
+    <value>Session</value>
+  </data>
+  <data name="Sessions.Text" xml:space="preserve">
+    <value>Sessions</value>
+  </data>
   <data name="SessionSlots.Text" xml:space="preserve">
     <value>Session Slots</value>
   </data>
@@ -176,5 +182,14 @@
   </data>
   <data name="Url.Text" xml:space="preserve">
     <value>Url</value>
+  </data>
+  <data name="View.Text" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Level.Text" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="SubTitle.Text" xml:space="preserve">
+    <value>Subtitle</value>
   </data>
 </root>

@@ -23,7 +23,7 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Capacity")</label>
   </div>
-  @Html.TextBoxFor(m => m.Capacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("CapacityInteger.Error") })
+  @Html.TextBoxFor(m => m.Capacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("CapacityInteger.Error"), data_required="true" })
  </div>
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>

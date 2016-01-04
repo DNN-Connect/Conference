@@ -534,7 +534,14 @@ function validateForm(form, submitButton, formErrorDiv) {
   var hasErrors = false;
   formErrorDiv.empty().hide();
   form.find('input[data-validator="integer"]').each(function (i, el) {
-   if (!isInt($(el).val())) {
+   if (!isInt($(el).val()) & $(el).val() != '') {
+    hasErrors = true;
+    $(el).parent().addClass('error');
+    formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+   }
+  });
+  form.find('input[data-required="true"]').each(function (i, el) {
+   if ($(el).val() == '') {
     hasErrors = true;
     $(el).parent().addClass('error');
     formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();

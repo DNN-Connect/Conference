@@ -6,57 +6,112 @@
 <h3>@Model.Name</h3>
 <p>@Model.Description</p>
 
-<h3>@Dnn.LocalizeString("Tracks")</h3>
-<table class="table" id="tblTracks">
- <tbody>
-  @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort))
-  {
-  <tr data-id="@t.TrackId" class="sortable">
-   <td>@t.Title</td>
-   <td>@t.Description</td>
-   <td>@t.NrSessions</td>
+<div class="row">
+ <div class="col-sm-6">
+  <table class="table" id="tblTracks">
+   <thead>
+    <tr>
+     <th>@Dnn.LocalizeString("Tracks")</th>
+     <th class="nrcol">@Dnn.LocalizeString("NrSessions")</th>
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <th colspan="2" />
+     }
+    </tr>
+   </thead>
+   <tbody>
+    @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort))
+    {
+    <tr data-id="@t.TrackId" class="sortable">
+     <td>@t.Title</td>
+     <td class="nrcol">@t.NrSessions</td>
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     <td class="btncol"><a href="#" class="deleteTrack btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
+     }
+    </tr>
+    }
+   </tbody>
    @if (ConferenceModuleContext.Security.CanEdit)
    {
-   <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
-   <td><a href="#" class="deleteTrack">@Dnn.LocalizeString("Delete")</a></td>
+   <tr>
+    <td colspan="3"></td>
+    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
+   </tr>
    }
-  </tr>
-  }
- </tbody>
- @if (ConferenceModuleContext.Security.CanEdit)
- {
- <tr>
-  <td colspan="4"></td>
-  <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
- </tr>
- }
-</table>
+  </table>
 
-<h3>@Dnn.LocalizeString("Locations")</h3>
-<table class="table" id="tblLocations">
- <tbody>
-  @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort))
-  {
-  <tr data-id="@l.LocationId" class="sortable">
-   <td>@l.Name</td>
-   <td>@l.Description</td>
-   <td>@l.Capacity</td>
+  <table class="table" id="tblLocations">
+   <thead>
+    <tr>
+     <th>@Dnn.LocalizeString("Locations")</th>
+     <th class="nrcol">@Dnn.LocalizeString("Capacity")</th>
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <th colspan="2" />
+     }
+    </tr>
+   </thead>
+   <tbody>
+    @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort))
+    {
+    <tr data-id="@l.LocationId" class="sortable">
+     <td>@l.Name</td>
+     <td class="nrcol">@l.Capacity</td>
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     <td class="btncol"><a href="#" class="deleteLocation btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
+     }
+    </tr>
+    }
+   </tbody>
    @if (ConferenceModuleContext.Security.CanEdit)
    {
-   <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })">@Dnn.LocalizeString("Edit")</a></td>
-   <td><a href="#" class="deleteLocation">@Dnn.LocalizeString("Delete")</a></td>
+   <tr>
+    <td colspan="3"></td>
+    <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
+   </tr>
    }
-  </tr>
-  }
- </tbody>
- @if (ConferenceModuleContext.Security.CanEdit)
- {
- <tr>
-  <td colspan="4"></td>
-  <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })">@Dnn.LocalizeString("Add")</a></td>
- </tr>
- }
-</table>
+  </table>
+ </div>
+ <div class="col-sm-6">
+  <table class="table" id="tblSessions">
+   <thead>
+    <tr>
+     <th>@Dnn.LocalizeString("Sessions")</th>
+     <th />
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <th />
+     }
+    </tr>
+   </thead>
+   <tbody>
+    @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).OrderBy(s => s.Sort))
+    {
+    <tr data-id="@s.SessionId" class="sortable">
+     <td>@s.Title</td>
+     <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
+     @if (ConferenceModuleContext.Security.CanEdit)
+     {
+     <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     }
+    </tr>
+    }
+   </tbody>
+   @if (ConferenceModuleContext.Security.CanEdit)
+   {
+   <tr>
+    <td colspan="2"></td>
+    <td><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
+   </tr>
+   }
+  </table>
+ </div>
+</div>
+
 
 <h3>@Dnn.LocalizeString("Slots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"

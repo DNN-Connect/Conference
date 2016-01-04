@@ -1,0 +1,56 @@
+﻿@inherits ConferenceWebPage<SessionBase>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Sessions;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+}
+
+<fieldset id="editTrack">
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Title")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Title)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("SubTitle")</label>
+  </div>
+  @Html.TextBoxFor(m => m.SubTitle)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Description")</label>
+  </div>
+  @Html.TextAreaFor(m => m.Description)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Level")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Level)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Capacity")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Capacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("CapacityInteger.Error"), data_required = "false" })
+ </div>
+ <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
+ </div>
+ <div class="right">
+  <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
+  <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
+ </div>
+</fieldset>
+
+<script type="text/javascript">
+ $(function () {
+  $('input[data-editor="date"]').datetimepicker({
+   format: 'MM/DD/YYYY'
+  });
+  validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
+ });
+</script>

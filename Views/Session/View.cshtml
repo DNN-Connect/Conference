@@ -1,0 +1,16 @@
+﻿@inherits ConferenceWebPage<Session>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Sessions;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+}
+
+<h3>@Dnn.LocalizeString("Session")</h3>
+<h3>@Model.Title</h3>
+<p>@Model.Description</p>
+
+
+<div class="right">
+ <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
+</div>

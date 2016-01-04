@@ -57,7 +57,7 @@
    <label>@Dnn.LocalizeString("MaxCapacity")</label>
   </div>
   <div>
-   @Html.TextBoxFor(m => m.MaxCapacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("MaxCapacityInteger.Error") })
+   @Html.TextBoxFor(m => m.MaxCapacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("MaxCapacityInteger.Error"), data_required = "false" })
   </div>
  </div>
  <div class="dnnFormItem">
