@@ -1,12 +1,8 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
-using DotNetNuke.Collections;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
-using Connect.Conference.Core.Data;
 using Connect.Conference.Core.Models.Attendees;
 
 namespace Connect.Conference.Core.Repositories
@@ -18,12 +14,13 @@ namespace Connect.Conference.Core.Repositories
         {
             return () => new AttendeeRepository();
         }
-        public IEnumerable<Attendee> GetAttendees(int conferenceId)
+        public IEnumerable<Attendee> GetAttendeesByConference(int conferenceId)
         {
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<Attendee>();
-                return rep.Get(conferenceId);
+                return context.ExecuteQuery<Attendee>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0",
+                    conferenceId);
             }
         }
         public IEnumerable<Attendee> GetAttendeesByUser(int userId)
@@ -47,7 +44,8 @@ namespace Connect.Conference.Core.Repositories
         public void AddAttendee(AttendeeBase attendee, int userId)
         {
             Requires.NotNull(attendee);
-            Requires.PropertyNotNegative(attendee, "PortalId");
+            Requires.NotNull(attendee.ConferenceId);
+            Requires.NotNull(attendee.UserId);
             attendee.CreatedByUserID = userId;
             attendee.CreatedOnDate = DateTime.Now;
             attendee.LastModifiedByUserID = userId;
@@ -60,35 +58,63 @@ namespace Connect.Conference.Core.Repositories
         }
         public void DeleteAttendee(AttendeeBase attendee)
         {
-            Requires.NotNull(attendee);
-            Requires.PropertyNotNegative(attendee, "AttendeeId");
+            DeleteAttendee(attendee.ConferenceId, attendee.UserId);
+        }
+        public void DeleteAttendee(int conferenceId, int userId)
+        {
+             Requires.NotNull(conferenceId);
+             Requires.NotNull(userId);
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<AttendeeBase>();
-                rep.Delete(attendee);
+                context.Execute(System.Data.CommandType.Text,
+                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0 AND UserId=@1",
+                    conferenceId,userId);
+            }
+        }
+        public void DeleteAttendeesByConference(int conferenceId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                context.Execute(System.Data.CommandType.Text,
+                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0",
+                    conferenceId);
+            }
+        }
+        public void DeleteAttendeesByUser(int userId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                context.Execute(System.Data.CommandType.Text,
+                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE UserId=@0",
+                    userId);
             }
         }
         public void UpdateAttendee(AttendeeBase attendee, int userId)
         {
             Requires.NotNull(attendee);
-            Requires.PropertyNotNegative(attendee, "AttendeeId");
+            Requires.NotNull(attendee.ConferenceId);
+            Requires.NotNull(attendee.UserId);
             attendee.LastModifiedByUserID = userId;
             attendee.LastModifiedOnDate = DateTime.Now;
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<AttendeeBase>();
-                rep.Update(attendee);
+                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5 WHERE ConferenceId=@6 AND UserId=@7",
+                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate, attendee.ConferenceId,attendee.UserId);
             }
         } 
  }
 
     public interface IAttendeeRepository
     {
-        IEnumerable<Attendee> GetAttendees(int conferenceId);
+        IEnumerable<Attendee> GetAttendeesByConference(int conferenceId);
         IEnumerable<Attendee> GetAttendeesByUser(int userId);
         Attendee GetAttendee(int conferenceId, int userId);
         void AddAttendee(AttendeeBase attendee, int userId);
         void DeleteAttendee(AttendeeBase attendee);
+        void DeleteAttendee(int conferenceId, int userId);
+        void DeleteAttendeesByConference(int conferenceId);
+        void DeleteAttendeesByUser(int userId);
         void UpdateAttendee(AttendeeBase attendee, int userId);
     }
 }

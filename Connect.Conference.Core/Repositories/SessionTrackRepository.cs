@@ -18,12 +18,13 @@ namespace Connect.Conference.Core.Repositories
         {
             return () => new SessionTrackRepository();
         }
-        public IEnumerable<SessionTrack> GetSessionTracks(int sessionId)
+        public IEnumerable<SessionTrack> GetSessionTracksBySession(int sessionId)
         {
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionTrack>();
-                return rep.Get(sessionId);
+                return context.ExecuteQuery<SessionTrack>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks WHERE SessionId=@0",
+                    sessionId);
             }
         }
         public IEnumerable<SessionTrack> GetSessionTracksByTrack(int trackId)
@@ -83,14 +84,14 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<SessionTrackBase>();
-                rep.Delete("WHERE TrackId = @0", trackId);
+                rep.Delete("WHERE TrackId=@0", trackId);
             }
         }
-    }
+ }
 
     public interface ISessionTrackRepository
     {
-        IEnumerable<SessionTrack> GetSessionTracks(int sessionId);
+        IEnumerable<SessionTrack> GetSessionTracksBySession(int sessionId);
         IEnumerable<SessionTrack> GetSessionTracksByTrack(int trackId);
         void SetSessionTrack(int trackId, int sessionId);
         void SetSessionTracks(int trackId, List<int> sessionTracks);

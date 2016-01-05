@@ -18,12 +18,13 @@ namespace Connect.Conference.Core.Repositories
         {
             return () => new SessionAttendeeRepository();
         }
-        public IEnumerable<SessionAttendee> GetSessionAttendees(int sessionId)
+        public IEnumerable<SessionAttendee> GetSessionAttendeesBySession(int sessionId)
         {
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionAttendee>();
-                return rep.Get(sessionId);
+                return context.ExecuteQuery<SessionAttendee>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees WHERE SessionId=@0",
+                    sessionId);
             }
         }
         public IEnumerable<SessionAttendee> GetSessionAttendeesByUser(int userId)
@@ -90,7 +91,7 @@ namespace Connect.Conference.Core.Repositories
 
     public interface ISessionAttendeeRepository
     {
-        IEnumerable<SessionAttendee> GetSessionAttendees(int sessionId);
+        IEnumerable<SessionAttendee> GetSessionAttendeesBySession(int sessionId);
         IEnumerable<SessionAttendee> GetSessionAttendeesByUser(int userId);
         void SetSessionAttendee(int sessionId, int userId);
         void SetSessionAttendees(int sessionId, List<int> sessionAttendees);

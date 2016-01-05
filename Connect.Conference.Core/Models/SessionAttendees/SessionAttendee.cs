@@ -7,7 +7,6 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 
     [TableName("vw_Connect_Conference_SessionAttendees")]
     [DataContract]
-    [Scope("SessionId")]                
     public partial class SessionAttendee  : SessionAttendeeBase 
     {
 

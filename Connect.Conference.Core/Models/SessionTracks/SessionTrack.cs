@@ -7,7 +7,6 @@ namespace Connect.Conference.Core.Models.SessionTracks
 
     [TableName("vw_Connect_Conference_SessionTracks")]
     [DataContract]
-    [Scope("SessionId")]                
     public partial class SessionTrack  : SessionTrackBase 
     {
 

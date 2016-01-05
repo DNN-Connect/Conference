@@ -11,7 +11,7 @@
 {
  <div class="panel panel-primary">
   <div class="panel-heading">
-   <h3 class="panel-title"><a href="@Url.Action("View", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")">@c.Name</a></h3>
+   <h3 class="panel-title">@c.Name</h3>
 @if (c.StartDate != null)
 {
    <h6>
@@ -26,6 +26,20 @@
    <div>
     @c.Description
    </div>
+   @if (ConferenceModuleContext.Security.CanEdit)
+   {
+   <div>
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
+     @Dnn.LocalizeString("Edit")
+    </a>
+    <a href="@Url.Action("SessionsSpeakers", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
+     @Dnn.LocalizeString("SessionsSpeakers")
+    </a>
+    <a href="@Url.Action("TracksLocationsSlots", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
+     @Dnn.LocalizeString("TracksLocationsSlots")
+    </a>
+   </div>
+   }
   </div>
   <div class="panel-footer">
    <div>

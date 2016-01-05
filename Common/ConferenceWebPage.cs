@@ -18,10 +18,18 @@ namespace Connect.DNN.Modules.Conference.Common
             ConferenceModuleContext = new ContextHelper(ViewContext);
         }
 
-        public string SerializedResources() {
+        public string SerializedResources()
+        {
             return Newtonsoft.Json.JsonConvert.SerializeObject(DotNetNuke.Services.Localization.LocalizationProvider.Instance.GetCompiledResourceFile(Dnn.PortalSettings, "/DesktopModules/MVC/Connect/Conference/App_LocalResources/ClientResources.resx",
                     System.Threading.Thread.CurrentThread.CurrentCulture.Name));
         }
-    
+
+        public void RequirePermissionLevel(bool level)
+        {
+            if (!level)
+            {
+                throw new System.Exception("You do not have adequate permissions to view this resource. Please check your login status.");
+            }
+        }
     }
 }

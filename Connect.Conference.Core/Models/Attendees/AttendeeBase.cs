@@ -9,7 +9,6 @@ namespace Connect.Conference.Core.Models.Attendees
 {
     [TableName("Connect_Conference_Attendees")]
     [DataContract]
-    [Scope("ConferenceId")]
     public partial class AttendeeBase  : AuditableEntity 
     {
 

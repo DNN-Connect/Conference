@@ -2,9 +2,11 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
+@{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanEdit);
+}
 
 <h3>@Model.Name</h3>
-<p>@Model.Description</p>
 
 <div class="row">
  <div class="col-sm-6">
@@ -12,11 +14,8 @@
    <thead>
     <tr>
      <th>@Dnn.LocalizeString("Tracks")</th>
-     <th class="nrcol">@Dnn.LocalizeString("NrSessions")</th>
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
+     <th class="nrcol">@Dnn.LocalizeString("Sessions")</th>
      <th colspan="2" />
-     }
     </tr>
    </thead>
    <tbody>
@@ -25,32 +24,24 @@
     <tr data-id="@t.TrackId" class="sortable">
      <td>@t.Title</td>
      <td class="nrcol">@t.NrSessions</td>
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
      <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      <td class="btncol"><a href="#" class="deleteTrack btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
-     }
     </tr>
     }
    </tbody>
-   @if (ConferenceModuleContext.Security.CanEdit)
-   {
    <tr>
     <td colspan="3"></td>
     <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
    </tr>
-   }
   </table>
-
+ </div>
+ <div class="col-sm-6">
   <table class="table" id="tblLocations">
    <thead>
     <tr>
      <th>@Dnn.LocalizeString("Locations")</th>
      <th class="nrcol">@Dnn.LocalizeString("Capacity")</th>
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
      <th colspan="2" />
-     }
     </tr>
    </thead>
    <tbody>
@@ -59,59 +50,18 @@
     <tr data-id="@l.LocationId" class="sortable">
      <td>@l.Name</td>
      <td class="nrcol">@l.Capacity</td>
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
      <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      <td class="btncol"><a href="#" class="deleteLocation btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
-     }
     </tr>
     }
    </tbody>
-   @if (ConferenceModuleContext.Security.CanEdit)
-   {
    <tr>
     <td colspan="3"></td>
     <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
    </tr>
-   }
-  </table>
- </div>
- <div class="col-sm-6">
-  <table class="table" id="tblSessions">
-   <thead>
-    <tr>
-     <th>@Dnn.LocalizeString("Sessions")</th>
-     <th />
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
-     <th />
-     }
-    </tr>
-   </thead>
-   <tbody>
-    @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).OrderBy(s => s.Sort))
-    {
-    <tr data-id="@s.SessionId" class="sortable">
-     <td>@s.Title</td>
-     <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
-     @if (ConferenceModuleContext.Security.CanEdit)
-     {
-     <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-     }
-    </tr>
-    }
-   </tbody>
-   @if (ConferenceModuleContext.Security.CanEdit)
-   {
-   <tr>
-    <td colspan="2"></td>
-    <td><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
-   </tr>
-   }
   </table>
  </div>
 </div>
-
 
 <h3>@Dnn.LocalizeString("Slots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -130,45 +80,42 @@
     ConferenceModuleContext.AddEditScripts();
 }
 
-@if (ConferenceModuleContext.Security.CanEdit)
-{
- <script type="text/javascript">
-  $(function () {
+<script type="text/javascript">
+ $(function () {
 
-   $(document).ready(function() {
+  $(document).ready(function() {
 
-    var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+   var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
 
-    $('#tblTracks tbody:first').sortable({
-     update: function (event, ui) {
-      moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
-     }
-    });
-    $('#tblLocations tbody:first').sortable({
-     update: function (event, ui) {
-      moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
-     }
-    });
-    $('.deleteTrack').click(function() {
-     if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
-      var that = this;
-      moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-       $(that).parent().parent().remove();
-      });
-     }
-     return false;
-    });
-    $('.deleteLocation').click(function() {
-     if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
-      var that = this;
-      moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
-       $(that).parent().parent().remove();
-      });
-     }
-     return false;
-    });
+   $('#tblTracks tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
+    }
    });
-
+   $('#tblLocations tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
+    }
+   });
+   $('.deleteTrack').click(function() {
+    if (confirm('@Dnn.LocalizeString("DeleteTrack.Confirm")')) {
+     var that = this;
+     moduleConferenceService.deleteTrack(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+      $(that).parent().parent().remove();
+     });
+    }
+    return false;
+   });
+   $('.deleteLocation').click(function() {
+    if (confirm('@Dnn.LocalizeString("DeleteLocation.Confirm")')) {
+     var that = this;
+     moduleConferenceService.deleteLocation(@Model.ConferenceId, $(that).parent().parent().data("id"), function (data) {
+      $(that).parent().parent().remove();
+     });
+    }
+    return false;
+   });
   });
- </script>
-}
+
+ });
+</script>

@@ -9,7 +9,6 @@ namespace Connect.Conference.Core.Models.Speakers
 {
     [TableName("Connect_Conference_Speakers")]
     [DataContract]
-    [Scope("ConferenceId")]
     public partial class SpeakerBase  : AuditableEntity 
     {
 

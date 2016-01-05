@@ -175,7 +175,7 @@
     <Content Include="Views\Conference\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Conference\View.cshtml" />
+    <Content Include="Views\Conference\SessionsSpeakers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Session\Edit.cshtml" />
@@ -195,7 +195,9 @@
   <ItemGroup>
     <Content Include="App_LocalResources\ClientResources.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Conference\TracksLocationsSlots.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Track\Edit.cshtml" />
   </ItemGroup>

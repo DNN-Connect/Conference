@@ -20,7 +20,15 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
-        public ActionResult View(int conferenceId)
+        public ActionResult TracksLocationsSlots(int conferenceId)
+        {
+            var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
+            if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            return View(conference);
+        }
+
+        [HttpGet]
+        public ActionResult SessionsSpeakers(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }

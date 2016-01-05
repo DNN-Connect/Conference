@@ -7,12 +7,11 @@ namespace Connect.Conference.Core.Models.Speakers
 
     [TableName("vw_Connect_Conference_Speakers")]
     [DataContract]
-    [Scope("ConferenceId")]                
-    public partial class Speaker  : SpeakerBase 
+    public partial class Speaker : SpeakerBase
     {
 
         #region .ctor
-        public Speaker()  : base() 
+        public Speaker() : base()
         {
         }
         #endregion
@@ -54,16 +53,16 @@ namespace Connect.Conference.Core.Models.Speakers
         public SpeakerBase GetSpeakerBase()
         {
             SpeakerBase res = new SpeakerBase();
-             res.ConferenceId = ConferenceId;
-             res.UserId = UserId;
-             res.Sort = Sort;
-             res.Url = Url;
-             res.Description = Description;
-             res.DescriptionShort = DescriptionShort;
-  res.CreatedByUserID = CreatedByUserID;
-  res.CreatedOnDate = CreatedOnDate;
-  res.LastModifiedByUserID = LastModifiedByUserID;
-  res.LastModifiedOnDate = LastModifiedOnDate;
+            res.ConferenceId = ConferenceId;
+            res.UserId = UserId;
+            res.Sort = Sort;
+            res.Url = Url;
+            res.Description = Description;
+            res.DescriptionShort = DescriptionShort;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

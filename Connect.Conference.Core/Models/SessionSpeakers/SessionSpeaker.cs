@@ -7,7 +7,6 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
 
     [TableName("vw_Connect_Conference_SessionSpeakers")]
     [DataContract]
-    [Scope("SessionId")]                
     public partial class SessionSpeaker  : SessionSpeakerBase 
     {
 

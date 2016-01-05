@@ -24,5 +24,12 @@ namespace Connect.DNN.Modules.Conference.Common
                     System.Threading.Thread.CurrentThread.CurrentCulture.Name));
         }
 
+        public void RequirePermissionLevel(bool level)
+        {
+            if (!level)
+            {
+                throw new System.Exception("You do not have adequate permissions to view this resource. Please check your login status.");
+            }
+        }
     }
 }

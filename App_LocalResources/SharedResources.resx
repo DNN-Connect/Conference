@@ -192,4 +192,10 @@
   <data name="SubTitle.Text" xml:space="preserve">
     <value>Subtitle</value>
   </data>
+  <data name="Speakers.Text" xml:space="preserve">
+    <value>Speakers</value>
+  </data>
+  <data name="AcceptedSessions.Text" xml:space="preserve">
+    <value>Accepted Sessions</value>
+  </data>
 </root>

@@ -36,6 +36,12 @@ window.ConferenceService = function($, mid) {
   this.orderLocations = function(conferenceId, newOrder, success, fail) {
     this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
   }
+  this.orderSessions = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderSpeakers = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
   this.deleteTrack = function(conferenceId, trackId, success, fail) {
     this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
   }
