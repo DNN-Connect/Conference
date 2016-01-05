@@ -38,13 +38,33 @@
   </div>
   @Html.TextBoxFor(m => m.Capacity, new { data_validator = "integer", data_message = Dnn.LocalizeString("CapacityInteger.Error"), data_required = "false" })
  </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Status")</label>
+  </div>
+  @Html.DropDownListFor(m => m.Status, Globals.StatusDropdownList(Locale))
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("IsPlenary")</label>
+  </div>
+  <div>
+  @Html.CheckBoxFor(m => m.IsPlenary)
+  </div>
+ </div>
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>
  <div class="right">
-  <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
+  <a href="@Url.Action("SessionsSpeakers", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
   <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>
+
+@Html.HiddenFor(m => m.LocationId)
+@Html.HiddenFor(m => m.Votes)
+@Html.HiddenFor(m => m.Sort)
+@Html.HiddenFor(m => m.SlotId)
+@Html.HiddenFor(m => m.DayNr)
 
 <script type="text/javascript">
  $(function () {

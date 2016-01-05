@@ -31,5 +31,13 @@ namespace Connect.DNN.Modules.Conference.Common
                 throw new System.Exception("You do not have adequate permissions to view this resource. Please check your login status.");
             }
         }
+
+        public string Locale
+        {
+            get
+            {
+                return System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            }
+        }
     }
 }

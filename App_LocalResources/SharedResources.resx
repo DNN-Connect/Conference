@@ -198,4 +198,31 @@
   <data name="AcceptedSessions.Text" xml:space="preserve">
     <value>Accepted Sessions</value>
   </data>
+  <data name="IsPlenary.Text" xml:space="preserve">
+    <value>Is Plenary</value>
+  </data>
+  <data name="Accepted.Text" xml:space="preserve">
+    <value>Accepted</value>
+  </data>
+  <data name="NotSubmitted.Text" xml:space="preserve">
+    <value>Not Submitted</value>
+  </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Rejected.Text" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="Revising.Text" xml:space="preserve">
+    <value>Revising</value>
+  </data>
+  <data name="Status.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Submitted.Text" xml:space="preserve">
+    <value>Submitted</value>
+  </data>
+  <data name="WrappedUp.Text" xml:space="preserve">
+    <value>Wrapped Up</value>
+  </data>
 </root>

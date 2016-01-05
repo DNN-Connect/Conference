@@ -54,9 +54,9 @@ namespace Connect.DNN.Modules.Conference.Controllers
             RouteValueDictionary routeValues = new RouteValueDictionary();
             switch (GetRouteParameter())
             {
-                case "c":
+                case "c-ss":
                     routeValues["controller"] = "Conference";
-                    routeValues["action"] = "View";
+                    routeValues["action"] = "SessionsSpeakers";
                     routeValues.Add("conferenceId", session.ConferenceId);
                     return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
                 default:

@@ -34,6 +34,9 @@
  </div>
 </fieldset>
 
+@Html.HiddenFor(m => m.Sort)
+@Html.HiddenFor(m => m.BackgroundColor)
+
 <script type="text/javascript">
  $(function () {
   $('input[data-editor="date"]').datetimepicker({

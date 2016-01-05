@@ -24,14 +24,14 @@
     <tr data-id="@t.TrackId" class="sortable">
      <td>@t.Title</td>
      <td class="nrcol">@t.NrSessions</td>
-     <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      <td class="btncol"><a href="#" class="deleteTrack btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
     </tr>
     }
    </tbody>
    <tr>
     <td colspan="3"></td>
-    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
+    <td><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = -1, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
    </tr>
   </table>
  </div>
@@ -50,14 +50,14 @@
     <tr data-id="@l.LocationId" class="sortable">
      <td>@l.Name</td>
      <td class="nrcol">@l.Capacity</td>
-     <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      <td class="btncol"><a href="#" class="deleteLocation btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
     </tr>
     }
    </tbody>
    <tr>
     <td colspan="3"></td>
-    <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
+    <td><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = -1, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
    </tr>
   </table>
  </div>
