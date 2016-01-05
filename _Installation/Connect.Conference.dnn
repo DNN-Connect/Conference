@@ -50,7 +50,7 @@
          <permission code="Connect_Conference_MODULE" key="SESSIONSUBMIT" name="Submit Sessions"/>
          <permission code="Connect_Conference_MODULE" key="SESSIONAPPROVE" name="Approve Sessions"/>
          <permission code="Connect_Conference_MODULE" key="CANATTEND" name="Can Attend"/>
-         <permission code="Connect_Conference_MODULE" key="MANAGEATTENDEES" name="Manage Attendees"/>
+         <permission code="Connect_Conference_MODULE" key="MANAGE" name="Manage Conference"/>
         </permissions>
        </moduleDefinition>
       </moduleDefinitions>

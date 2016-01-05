@@ -3,6 +3,7 @@
 @using Connect.Conference.Core.Models.Locations;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddEditScripts();
 }
 

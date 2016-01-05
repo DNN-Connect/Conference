@@ -3,7 +3,7 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanEdit);
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
 }
 
 <h3>@Model.Name</h3>

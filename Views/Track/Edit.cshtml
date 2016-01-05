@@ -3,6 +3,7 @@
 @using Connect.Conference.Core.Models.Tracks;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
 }
