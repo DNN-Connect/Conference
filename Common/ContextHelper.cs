@@ -104,6 +104,17 @@ namespace Connect.DNN.Modules.Conference.Common
             AddScript("bootstrap-datetimepicker.min.js", "bootstrap-datetimepicker", "4.17.37");
             AddScript("Conference.js");
         }
+        public void RequirePermissionLevel(bool level)
+        {
+            if (!level)
+            {
+                ThrowAccessViolation();
+            }
+        }
+        public void ThrowAccessViolation()
+        {
+            throw new Exception("You do not have adequate permissions to view this resource. Please check your login status.");
+        }
         #endregion
 
     }

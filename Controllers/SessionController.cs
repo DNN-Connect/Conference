@@ -64,5 +64,47 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Submit(int conferenceId, int sessionId)
+        {
+            var session = _repository.GetSession(conferenceId, sessionId);
+            if (session == null)
+            {
+                session = new Session() { ConferenceId = conferenceId };
+            }
+            else
+            {
+                if (!session.UserIsAuthor(User.UserID))
+                {
+                    ConferenceModuleContext.ThrowAccessViolation();
+                }
+            }
+            return View(session.GetSessionBase());
+        }
+
+        [HttpPost]
+        public ActionResult Submit(SessionBase session)
+        {
+            var recordToUpdate = (_repository.GetSession(session.ConferenceId, session.SessionId) ?? new Session() { ConferenceId = session.ConferenceId}).GetSessionBase();
+            recordToUpdate.Title = session.Title;
+            recordToUpdate.SubTitle = session.SubTitle;
+            recordToUpdate.Description = session.Description;
+            recordToUpdate.Level = session.Level;
+            recordToUpdate.Capacity = session.Capacity;
+            if (recordToUpdate.SessionId == -1)
+            {
+                _repository.AddSession(ref recordToUpdate, User.UserID);
+            }
+            else
+            {
+                _repository.UpdateSession(recordToUpdate, User.UserID);
+            }
+            if (SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(recordToUpdate.SessionId).Count() == 0)
+            {
+                SessionSpeakerRepository.Instance.AddSessionSpeaker(new Connect.Conference.Core.Models.SessionSpeakers.SessionSpeakerBase() { SessionId = recordToUpdate.SessionId, SpeakerId = User.UserID, Sort = 0 }, User.UserID);
+            }
+            return RedirectToDefaultRoute();
+        }
+
     }
 }

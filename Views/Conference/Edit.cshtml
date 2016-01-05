@@ -3,6 +3,8 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+
     var roles = new List<System.Web.Mvc.SelectListItem>();
     roles.Add(new System.Web.Mvc.SelectListItem { Text = Dnn.LocalizeString("SelectRole"), Value = "-1" });
     var rc = new DotNetNuke.Security.Roles.RoleController();

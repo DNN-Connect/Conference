@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MaxCapacity.Text" xml:space="preserve">
-    <value>Max Capacity</value>
+  <data name="EditSession.Text" xml:space="preserve">
+    <value>Edit Session</value>
   </data>
-  <data name="New.Text" xml:space="preserve">
-    <value>New Conference</value>
-  </data>
-  <data name="NrAttendees.Text" xml:space="preserve">
-    <value>Nr Attendees</value>
-  </data>
-  <data name="SessionsSpeakers.Text" xml:space="preserve">
-    <value>Sessions &amp; Speakers</value>
-  </data>
-  <data name="TracksLocationsSlots.Text" xml:space="preserve">
-    <value>Tracks, Locations &amp; Slots</value>
+  <data name="TitleRequired.Error" xml:space="preserve">
+    <value>A session requires a title</value>
   </data>
 </root>

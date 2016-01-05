@@ -52,8 +52,11 @@ namespace Connect.Conference.Core.Repositories
             attendee.LastModifiedOnDate = DateTime.Now;
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<AttendeeBase>();
-                rep.Insert(attendee);
+                context.Execute(System.Data.CommandType.Text,
+                    "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees " +
+                    "WHERE ConferenceId=@0 AND UserId=@1) " +
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Attendees (ConferenceId, UserId, Status, ReceiveNotifications, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7", attendee.ConferenceId, attendee.UserId, attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate);
             }
         }
         public void DeleteAttendee(AttendeeBase attendee)

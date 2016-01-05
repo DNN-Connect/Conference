@@ -52,8 +52,11 @@ namespace Connect.Conference.Core.Repositories
             sessionSpeaker.LastModifiedOnDate = DateTime.Now;
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionSpeakerBase>();
-                rep.Insert(sessionSpeaker);
+                context.Execute(System.Data.CommandType.Text,
+                    "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers " +
+                    "WHERE SpeakerId=@0 AND SessionId=@1) " +
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers (SpeakerId, SessionId, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Sort) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6", sessionSpeaker.SpeakerId, sessionSpeaker.SessionId, sessionSpeaker.CreatedByUserID, sessionSpeaker.CreatedOnDate, sessionSpeaker.LastModifiedByUserID, sessionSpeaker.LastModifiedOnDate, sessionSpeaker.Sort);
             }
         }
         public void DeleteSessionSpeaker(SessionSpeakerBase sessionSpeaker)

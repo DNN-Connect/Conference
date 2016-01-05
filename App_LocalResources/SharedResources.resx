@@ -225,4 +225,10 @@
   <data name="WrappedUp.Text" xml:space="preserve">
     <value>Wrapped Up</value>
   </data>
+  <data name="SubmitSession.Text" xml:space="preserve">
+    <value>Submit Session</value>
+  </data>
+  <data name="Edit.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

@@ -26,6 +26,15 @@ namespace Connect.Conference.Core.Repositories
                 return rep.Get(conferenceId);
             }
         }
+        public IEnumerable<Session> GetSessionsBySpeaker(int conferenceId, int userId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<Session>(System.Data.CommandType.Text,
+                    "SELECT s.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss ON ss.SessionId = s.SessionId WHERE s.ConferenceId=@0 AND ss.SpeakerId=@1",
+                    conferenceId, userId);
+            }
+        }
         public Session GetSession(int conferenceId, int sessionId)
         {
             using (var context = DataContext.Instance())
@@ -84,6 +93,7 @@ namespace Connect.Conference.Core.Repositories
     public interface ISessionRepository
     {
         IEnumerable<Session> GetSessions(int conferenceId);
+        IEnumerable<Session> GetSessionsBySpeaker(int conferenceId, int userId);
         Session GetSession(int conferenceId, int sessionId);
         int AddSession(ref SessionBase session, int userId);
         void DeleteSession(SessionBase session);

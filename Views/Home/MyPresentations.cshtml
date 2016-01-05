@@ -1,0 +1,44 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Models.Sessions;
+@using Connect.Conference.Core.Repositories;
+@{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
+
+    IEnumerable<Session> mySessions = SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, Dnn.User.UserID);
+    ConferenceModuleContext.AddBootstrapCss();
+}
+
+@foreach (Session s in mySessions)
+{
+ <div class="panel panel-primary">
+  <div class="panel-heading">
+   <h3 class="panel-title">@s.Title</h3>
+   <p>@s.SubTitle</p>
+  </div>
+  <div class="panel-body">
+   <div>
+    @s.Description
+   </div>
+   <div>
+    <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = s.SessionId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
+     @Dnn.LocalizeString("Edit")
+    </a>
+   </div>
+  </div>
+  <div class="panel-footer">
+   <div>
+    <span>
+     @Dnn.LocalizeString("MaxCapacity"): @s.Capacity
+    </span>
+   </div>
+  </div>
+ </div>
+}
+
+<div class="right">
+ <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = -1})" title="@Dnn.LocalizeString("SubmitSession")" class="btn btn-default">
+  @Dnn.LocalizeString("SubmitSession")
+ </a>
+</div>

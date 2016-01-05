@@ -18,6 +18,7 @@ namespace Connect.Conference.Core.Models.Sessions
         public SessionBase()
         {
             SessionId = -1;
+            Status = 0;
         }
         #endregion
 

@@ -43,6 +43,19 @@ namespace Connect.Conference.Core.Models.Sessions
                 }
             }
         }
+
+        public bool UserIsAuthor(int userId)
+        {
+            if (CreatedByUserID == userId) { return true; }
+            foreach (var ss in Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId))
+            {
+                if (ss.SpeakerId == userId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region Properties

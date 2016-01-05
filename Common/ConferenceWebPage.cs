@@ -26,10 +26,7 @@ namespace Connect.DNN.Modules.Conference.Common
 
         public void RequirePermissionLevel(bool level)
         {
-            if (!level)
-            {
-                throw new System.Exception("You do not have adequate permissions to view this resource. Please check your login status.");
-            }
+            ConferenceModuleContext.RequirePermissionLevel(level);
         }
 
         public string Locale
