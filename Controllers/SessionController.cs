@@ -85,7 +85,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpPost]
         public ActionResult Submit(SessionBase session)
         {
-            var recordToUpdate = (_repository.GetSession(session.ConferenceId, session.SessionId) ?? new Session() { ConferenceId = session.ConferenceId}).GetSessionBase();
+            var recordToUpdate = (_repository.GetSession(session.ConferenceId, session.SessionId) ?? new Session() { ConferenceId = session.ConferenceId }).GetSessionBase();
             recordToUpdate.Title = session.Title;
             recordToUpdate.SubTitle = session.SubTitle;
             recordToUpdate.Description = session.Description;
@@ -101,6 +101,10 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
             if (SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(recordToUpdate.SessionId).Count() == 0)
             {
+                if (SpeakerRepository.Instance.GetSpeaker(session.ConferenceId, User.UserID) == null)
+                {
+                    SpeakerRepository.Instance.AddSpeaker(new Connect.Conference.Core.Models.Speakers.SpeakerBase() { ConferenceId = session.ConferenceId, UserId = User.UserID, Sort = 999 }, User.UserID);
+                }
                 SessionSpeakerRepository.Instance.AddSessionSpeaker(new Connect.Conference.Core.Models.SessionSpeakers.SessionSpeakerBase() { SessionId = recordToUpdate.SessionId, SpeakerId = User.UserID, Sort = 0 }, User.UserID);
             }
             return RedirectToDefaultRoute();

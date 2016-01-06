@@ -231,4 +231,7 @@
   <data name="Edit.Text" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="Photo.Text" xml:space="preserve">
+    <value>Photo</value>
+  </data>
 </root>

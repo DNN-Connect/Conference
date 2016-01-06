@@ -19,6 +19,7 @@
   "devDependencies": {
     "bootstrap": "^3.3.5",
     "browserify": "^12.0.1",
+    "croppie": "^1.0.3",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.0",
@@ -40,6 +41,7 @@
     "path": "^0.12.7",
     "react": "^0.13.3",
     "react-tools": "^0.13.3",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "simple-ajax-uploader": "^2.2.4"
   }
 }

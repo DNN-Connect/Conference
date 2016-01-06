@@ -40,6 +40,8 @@ gulp.task('css', ['less'], function() {
     .pipe(gulp.dest('css'));
   gulp.src('node_modules/bootstrap/dist/fonts/*.*')
     .pipe(gulp.dest('fonts'));
+  gulp.src('node_modules/croppie/croppie.css')
+    .pipe(gulp.dest('css'));
   return gulp.src(['css/src/module.css',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
     ])
@@ -53,7 +55,9 @@ gulp.task('js', function() {
       'bower_components/moment/min/moment.min.js',
       'bower_components/interact/dist/interact.min.js',
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
-      'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+      'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+      'node_modules/croppie/croppie.min.js',
+      'node_modules/simple-ajax-uploader/SimpleAjaxUploader.min.js'
     ])
     .pipe(gulp.dest('js'));
 });

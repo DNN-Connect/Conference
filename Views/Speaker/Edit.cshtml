@@ -1,0 +1,152 @@
+﻿@inherits ConferenceWebPage<SpeakerController.SpeakerDTO>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.DNN.Modules.Conference.Controllers;
+@using Connect.Conference.Core.Models.Speakers;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+    ConferenceModuleContext.AddCss("croppie.css", "croppie", "1.0.3");
+    ConferenceModuleContext.AddScript("croppie.min.js", "croppie", "1.0.3");
+    ConferenceModuleContext.AddScript("SimpleAjaxUploader.min.js", "SimpleAjaxUploader", "2.2.4");
+
+    var user = Dnn.User;
+    if (user.UserID != Model.UserId) {
+     user = DotNetNuke.Entities.Users.UserController.GetUserById(Dnn.PortalSettings.PortalId, Model.UserId);
+    }
+    var userFolder = DotNetNuke.Services.FileSystem.FolderManager.Instance.GetUserFolder(user).FolderPath;
+
+}
+
+<fieldset id="editProfile">
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Photo")</label>
+  </div>
+  <span id="spanPhoto">
+   <img src="@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)@(Model.PhotoFilename)" alt="@Model.DisplayName" height="64" width="64" />
+   <a href="#" id="cmdChangePhoto" class="btn btn-default">Change</a>
+  </span>
+  <span id="spanPhotoEdit">
+   <span id="photoCrop"></span>
+   <a href="#" id="cmdUpdatePicture" class="btn btn-primary">Save</a>
+   <a href="#" id="cmdCancelPicture" class="btn btn-default">Cancel</a>
+   <a href="#" id="cmdUpload" class="btn btn-default">Upload</a>
+   <span id="msgBox"></span>
+  </span>
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Url")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Url)
+ </div>
+ <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
+ </div>
+ <div class="right">
+  <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
+  <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
+ </div>
+</fieldset>
+
+@Html.HiddenFor(m => m.ProfilePicDTO)
+
+<script type="text/javascript">
+ $(function () {
+
+  var currentImageSettings = JSON.parse($('#ProfilePicDTO').val());
+  currentImageSettings.smallestSide = Math.min(currentImageSettings.width, currentImageSettings.height);
+  var cs = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+
+  $('#spanPhotoEdit').hide();
+  $('input[data-editor="date"]').datetimepicker({
+   format: 'MM/DD/YYYY'
+  });
+  validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
+
+  $('#cmdSave').click(function() {
+   $('#ProfilePicDTO').val(JSON.stringify(currentImageSettings));
+  });
+
+  $('#cmdChangePhoto').click(function () {
+   $('#spanPhoto').hide();
+   $('#spanPhotoEdit').show();
+   var crop = $('#photoCrop').croppie({
+    viewport: {
+     width: 200,
+     height: 200
+    },
+    boundary: {
+     width: 300,
+     height: 300
+    },
+    update: function (cropper) {
+     currentImageSettings.crop = cropper;
+     currentImageSettings.width = Math.floor(cropper.points[2] - cropper.points[0]);
+     currentImageSettings.height = Math.floor(cropper.points[3] - cropper.points[1]);
+     currentImageSettings.smallestSide = Math.min(currentImageSettings.width, currentImageSettings.height);
+    }
+   });
+   if (currentImageSettings.filename != '') {
+    crop.croppie('bind', {
+     url: '@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)' + currentImageSettings.filename,
+     points: [0, 0, currentImageSettings.smallestSide, currentImageSettings.smallestSide]
+    });
+   }
+   var uploader = new ss.SimpleUpload({
+    button: 'cmdUpload',
+    dropzone: 'photoCrop',
+    url: cs.ServicePath() + 'Conference/@(Model.ConferenceId)/Speakers/UploadPicture/@(Model.UserId)',
+    customHeaders: { ModuleId: @Dnn.ModuleContext.ModuleId, TabId: @Dnn.PortalSettings.ActiveTab.TabID, RequestVerificationToken: $('[name="__RequestVerificationToken"]').val() },
+    name: 'profilepic',
+    multipart: true,
+    hoverClass: 'hover',
+    focusClass: 'focus',
+    responseType: 'json',
+    startXHR: function () {
+    },
+    onSubmit: function () {
+     document.getElementById('msgBox').innerHTML = '';
+    },
+    onComplete: function (filename, response) {
+     if (response === '') {
+      currentImageSettings.filename = filename;
+      crop.croppie('bind', {
+       url: '@(Dnn.PortalSettings.HomeDirectory)@(userFolder)' + filename
+      });
+     }
+     else
+     {
+      document.getElementById('msgBox').innerHTML = 'Error uploading file: ' + response;
+     }
+    },
+    onError: function (filename, errorType, status, statusText, response, uploadBtn, fileSize) {
+     document.getElementById('msgBox').innerHTML = 'Error uploading file: ' + response;
+    }
+   });
+   $('#cmdUpdatePicture').click(function() {
+    crop.croppie('destroy');
+    uploader.destroy();
+    $('#cmdUpdatePicture').unbind('click');
+    $('#cmdCancelPicture').unbind('click');
+    $('#spanPhotoEdit').hide();
+    $('#spanPhoto').show();
+    return false;
+   });
+   $('#cmdCancelPicture').click(function() {
+    crop.croppie('destroy');
+    uploader.destroy();
+    $('#cmdUpdatePicture').unbind('click');
+    $('#cmdCancelPicture').unbind('click');
+    $('#spanPhotoEdit').hide();
+    $('#spanPhoto').show();
+    return false;
+   });
+   return false;
+  });
+
+
+ });
+</script>

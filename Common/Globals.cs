@@ -4,6 +4,7 @@ using DotNetNuke.Services.Localization;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -34,6 +35,10 @@ namespace Connect.DNN.Modules.Conference.Common
                 });
             }
             return res.OrderBy(i => i.Value).ToList();
+        }
+
+        public static string RemoveIllegalCharacters(this string filename) {
+            return Regex.Replace(filename, "[\\:;,\\?]", "");
         }
     }
 }

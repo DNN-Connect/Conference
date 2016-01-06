@@ -2,6 +2,10 @@ window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
+  this.ServicePath = function() {
+    return baseServicepath;
+  },
+
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
     //showLoading();
     var path = baseServicepath;

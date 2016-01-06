@@ -38,7 +38,13 @@
 }
 
 <div class="right">
- <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = -1})" title="@Dnn.LocalizeString("SubmitSession")" class="btn btn-default">
-  @Dnn.LocalizeString("SubmitSession")
+ <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = -1})" title="@Dnn.LocalizeString("AddSession")" class="btn btn-default">
+  @Dnn.LocalizeString("AddSession")
  </a>
+ @if (mySessions.Count() > 0)
+ {
+ <a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = Dnn.User.UserID })" title="@Dnn.LocalizeString("EditProfile")" class="btn btn-default">
+  @Dnn.LocalizeString("EditProfile")
+ </a>
+ }
 </div>
