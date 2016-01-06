@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNetNuke.Services.FileSystem;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -8,6 +9,33 @@ namespace Connect.DNN.Modules.Conference.Common
 {
     public class ImageUtils
     {
+        public static void CreateThumbnails(int fileId)
+        {
+            CreateThumbnail(fileId, "l", 64, 64);
+            CreateThumbnail(fileId, "s", 50, 50);
+            CreateThumbnail(fileId, "xs", 32, 32);
+        }
+
+        public static void CreateThumbnail(int fileId, string type, int width, int height)
+        {
+            var file = FileManager.Instance.GetFile(fileId);
+            if (file != null)
+            {
+                var folder = FolderManager.Instance.GetFolder(file.FolderId);
+                var extension = "." + file.Extension;
+                var sizedPhoto = file.FileName.Replace(extension, "_" + type + extension);
+                if (!FileManager.Instance.FileExists(folder, sizedPhoto))
+                {
+                    using (var content = FileManager.Instance.GetFileContent(file))
+                    {
+                        var sizedContent = DotNetNuke.Common.Utilities.ImageUtils.CreateImage(content, height, width, extension);
+
+                        FileManager.Instance.AddFile(folder, sizedPhoto, sizedContent);
+                    }
+                }
+            }
+        }
+
         public static MemoryStream CreateImage(Stream stream, float[] crop, string extension)
         {
             var original = new Bitmap(stream);

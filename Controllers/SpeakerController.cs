@@ -99,6 +99,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     }
                     FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
                     sizedContent.Dispose();
+                    ImageUtils.CreateThumbnails(file.FileId);
                 }
             }
             DotNetNuke.Entities.Users.UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
