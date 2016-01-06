@@ -7,6 +7,7 @@ using Connect.Conference.Core.Models.Speakers;
 using System.Web.Routing;
 using DotNetNuke.Web.Mvc.Routing;
 using System;
+using DotNetNuke.Services.FileSystem;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -40,34 +41,74 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpPost]
         public ActionResult Edit(int conferenceId, int speakerId, SpeakerDTO speaker)
         {
-            //var previousRecord = _repository.GetTrack(track.ConferenceId, track.TrackId);
-            //if (previousRecord == null)
-            //{
-            //    _repository.AddTrack(ref track, User.UserID);
-            //}
-            //else
-            //{
-            //    track.CreatedOnDate = previousRecord.CreatedOnDate;
-            //    track.CreatedByUserID = previousRecord.CreatedByUserID;
-            //    _repository.UpdateTrack(track, User.UserID);
-            //}
-            //RouteValueDictionary routeValues = new RouteValueDictionary();
-            //switch (GetRouteParameter())
-            //{
-            //    case "c-tls":
-            //        routeValues["controller"] = "Conference";
-            //        routeValues["action"] = "TracksLocationsSlots";
-            //        routeValues.Add("conferenceId", track.ConferenceId);
-            //        return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
-            //    default:
-            //        return View("View", _repository.GetTrack(track.ConferenceId, track.TrackId));
-            //}
+            if (!ConferenceModuleContext.Security.CanManage)
+            {
+                if (User.UserID != speakerId)
+                {
+                    ConferenceModuleContext.ThrowAccessViolation();
+                }
+            }
+            SpeakerBase recordToUpdate = null;
+            var existingRecord = _repository.GetSpeaker(conferenceId, speakerId);
+            var modeAdd = false;
+            if (existingRecord == null)
+            {
+                recordToUpdate = new SpeakerBase() { ConferenceId = conferenceId, UserId = speakerId };
+                modeAdd = true;
+            }
+            else
+            {
+                recordToUpdate = existingRecord.GetSpeakerBase();
+            }
+            recordToUpdate.Description = speaker.Description;
+            recordToUpdate.DescriptionShort = speaker.DescriptionShort;
+            recordToUpdate.Url = speaker.Url;
+            if (modeAdd)
+            {
+                _repository.AddSpeaker(recordToUpdate, User.UserID);
+            }
+            else
+            {
+                _repository.UpdateSpeaker(recordToUpdate, User.UserID);
+            }
+            // Now the DNN side of things
+            var dnnUser = DotNetNuke.Entities.Users.UserController.GetUserById(PortalSettings.PortalId, speakerId);
+            if (dnnUser == null)
+            {
+                // create the user
+            }
+            dnnUser.FirstName = speaker.FirstName.Trim();
+            dnnUser.LastName = speaker.LastName.Trim();
+            dnnUser.DisplayName = speaker.DisplayName.Trim();
+            dnnUser.Email = speaker.Email.Trim();
+            if (speaker.Company != null) { dnnUser.Profile.SetProfileProperty("Company", speaker.Company.Trim()); }
+            // Handle the picture
+            if (speaker.ProfilePic.filename != "")
+            {
+                IFileInfo file = null;
+                var userFolder = FolderManager.Instance.GetUserFolder(dnnUser);
+                var folderManager = FolderManager.Instance;
+                file = FileManager.Instance.GetFile(userFolder, speaker.ProfilePic.filename);
+                dnnUser.Profile.Photo = file.FileId.ToString();
+                if (file != null & speaker.ProfilePic.crop.points != null)
+                {
+                    System.IO.MemoryStream sizedContent = null;
+                    using (var content = FileManager.Instance.GetFileContent(file))
+                    {
+                        sizedContent = ImageUtils.CreateImage(content, speaker.ProfilePic.crop.points, file.Extension);
+                    }
+                    FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
+                    sizedContent.Dispose();
+                }
+            }
+            DotNetNuke.Entities.Users.UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
+            DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);
             return RedirectToDefaultRoute();
         }
 
         public class SpeakerDTO : Speaker
         {
-            private ImageDTO ProfilePic { get; set; }
+            public ImageDTO ProfilePic { get; set; }
             public string ProfilePicDTO
             {
                 get

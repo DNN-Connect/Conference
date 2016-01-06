@@ -117,142 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AttendeeRole.Text" xml:space="preserve">
-    <value>Attendee Role</value>
+  <data name="DisplayNameRequired.Error" xml:space="preserve">
+    <value>A display name is required</value>
   </data>
-  <data name="Capacity.Text" xml:space="preserve">
-    <value>Capacity</value>
+  <data name="EmailRequired.Error" xml:space="preserve">
+    <value>An email address is required</value>
   </data>
-  <data name="Description.Text" xml:space="preserve">
-    <value>Description</value>
+  <data name="FirstNameRequired.Error" xml:space="preserve">
+    <value>A first name is required</value>
   </data>
-  <data name="EndDate.Text" xml:space="preserve">
-    <value>End Date</value>
-  </data>
-  <data name="GeneralSlots.Text" xml:space="preserve">
-    <value>General Slots</value>
-  </data>
-  <data name="Location.Text" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="Locations.Text" xml:space="preserve">
-    <value>Locations</value>
-  </data>
-  <data name="MaxCapacity.Text" xml:space="preserve">
-    <value>Max Capacity</value>
-  </data>
-  <data name="Name.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="NrSessions.Text" xml:space="preserve">
-    <value>Nr Sessions</value>
-  </data>
-  <data name="Return.Text" xml:space="preserve">
-    <value>Return</value>
-  </data>
-  <data name="Save.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Session.Text" xml:space="preserve">
-    <value>Session</value>
-  </data>
-  <data name="Sessions.Text" xml:space="preserve">
-    <value>Sessions</value>
-  </data>
-  <data name="SessionSlots.Text" xml:space="preserve">
-    <value>Session Slots</value>
-  </data>
-  <data name="SessionVoting.Text" xml:space="preserve">
-    <value>Session Voting</value>
-  </data>
-  <data name="SpeakerRole.Text" xml:space="preserve">
-    <value>Speaker Role</value>
-  </data>
-  <data name="StartDate.Text" xml:space="preserve">
-    <value>Start Date</value>
-  </data>
-  <data name="Title.Text" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="Track.Text" xml:space="preserve">
-    <value>Track</value>
-  </data>
-  <data name="Tracks.Text" xml:space="preserve">
-    <value>Tracks</value>
-  </data>
-  <data name="Url.Text" xml:space="preserve">
-    <value>Url</value>
-  </data>
-  <data name="View.Text" xml:space="preserve">
-    <value>View</value>
-  </data>
-  <data name="Level.Text" xml:space="preserve">
-    <value>Level</value>
-  </data>
-  <data name="SubTitle.Text" xml:space="preserve">
-    <value>Subtitle</value>
-  </data>
-  <data name="Speakers.Text" xml:space="preserve">
-    <value>Speakers</value>
-  </data>
-  <data name="AcceptedSessions.Text" xml:space="preserve">
-    <value>Accepted Sessions</value>
-  </data>
-  <data name="IsPlenary.Text" xml:space="preserve">
-    <value>Is Plenary</value>
-  </data>
-  <data name="Accepted.Text" xml:space="preserve">
-    <value>Accepted</value>
-  </data>
-  <data name="NotSubmitted.Text" xml:space="preserve">
-    <value>Not Submitted</value>
-  </data>
-  <data name="Ready.Text" xml:space="preserve">
-    <value>Ready</value>
-  </data>
-  <data name="Rejected.Text" xml:space="preserve">
-    <value>Rejected</value>
-  </data>
-  <data name="Revising.Text" xml:space="preserve">
-    <value>Revising</value>
-  </data>
-  <data name="Status.Text" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="Submitted.Text" xml:space="preserve">
-    <value>Submitted</value>
-  </data>
-  <data name="WrappedUp.Text" xml:space="preserve">
-    <value>Wrapped Up</value>
-  </data>
-  <data name="SubmitSession.Text" xml:space="preserve">
-    <value>Submit Session</value>
-  </data>
-  <data name="Edit.Text" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Photo.Text" xml:space="preserve">
-    <value>Photo</value>
-  </data>
-  <data name="Biography.Text" xml:space="preserve">
-    <value>Biography</value>
-  </data>
-  <data name="Company.Text" xml:space="preserve">
-    <value>Company</value>
-  </data>
-  <data name="DisplayName.Text" xml:space="preserve">
-    <value>Display Name</value>
-  </data>
-  <data name="Email.Text" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="ShortBiography.Text" xml:space="preserve">
-    <value>Short Biography</value>
-  </data>
-  <data name="FirstName.Text" xml:space="preserve">
-    <value>FirstName</value>
-  </data>
-  <data name="LastName.Text" xml:space="preserve">
-    <value>LastName</value>
+  <data name="LastNameRequired.Error" xml:space="preserve">
+    <value>A last name is required</value>
   </data>
 </root>
