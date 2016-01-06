@@ -57,9 +57,12 @@
   </div>
   <div style="display:inline;position:relative;">
    <div id="spanPhoto" style="padding-bottom:20px;">
+    @if (Model.PhotoFilename != null)
+    {
     <div style="display:inline;">
-     <img src="@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)@(Model.PhotoFilename)" alt="@Model.DisplayName" height="64" width="64" />
+     <img src="@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)@(Model.PhotoFilename)?@DateTime.Now.Ticks" alt="@Model.DisplayName" height="64" width="64" />
     </div>
+    }
     <div style="display:inline;">
      <a href="#" id="cmdChangePhoto" class="btn btn-default">Change</a>
     </div>
@@ -146,7 +149,7 @@
    });
    if (currentImageSettings.filename != '') {
     crop.croppie('bind', {
-     url: '@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)' + currentImageSettings.filename,
+     url: '@(Dnn.PortalSettings.HomeDirectory)@(Model.PhotoFolder)' + currentImageSettings.filename + '?@DateTime.Now.Ticks',
      points: [0, 0, currentImageSettings.smallestSide, currentImageSettings.smallestSide]
     });
    }
@@ -169,7 +172,7 @@
      if (response === '') {
       currentImageSettings.filename = filename;
       crop.croppie('bind', {
-       url: '@(Dnn.PortalSettings.HomeDirectory)@(userFolder)' + filename
+       url: '@(Dnn.PortalSettings.HomeDirectory)@(userFolder)' + filename + '?@DateTime.Now.Ticks'
       });
      }
      else

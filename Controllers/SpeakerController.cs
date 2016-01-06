@@ -139,7 +139,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 CreatedByUser = speaker.CreatedByUser;
                 LastModifiedByUser = speaker.LastModifiedByUser;
                 ProfilePic = new ImageDTO();
-                if (speaker.PhotoFilename != "")
+                if (speaker.PhotoFilename != null)
                 {
                     ProfilePic.filename = speaker.PhotoFilename;
                     ProfilePic.width = (int)speaker.PhotoWidth;
