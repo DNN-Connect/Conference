@@ -6,25 +6,58 @@
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
     var commentsPageSize = 5;
-    var firstCommentsPage = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, commentsPageSize);
-    var totalComments = firstCommentsPage.TotalCount;
+    var colWidth = 12;
+    var isPresenter = ConferenceModuleContext.Security.IsPresenter(Model.SessionId);
 }
 
 <h3>@Dnn.LocalizeString("Session")</h3>
 <h3>@Model.Title</h3>
 <p>@Model.Description</p>
 
-@if (ConferenceModuleContext.Security.IsPresenter(Model.SessionId))
-{
- <div class="connectConference commentsComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" 
-      data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())"
-      data-resources="@SerializedResources()"
-      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
-      data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
-      data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(firstCommentsPage.FillStampLines()))"
-      data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+        data-resources="@SerializedResources()"
+        data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
+
+<div class="container">
+ <div class="row">
+  @if (isPresenter)
+  {
+   colWidth = 4;
+   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, commentsPageSize);
+   var totalComments = commentList.TotalCount;
+   <div class="commentsComponent col-xs-4" data-moduleid="@Dnn.ModuleContext.ModuleId"
+        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())"
+        data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
+        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+   </div>
+  }
+  @if (ConferenceModuleContext.Security.CanManage | isPresenter)
+  {
+   if (colWidth == 12) { colWidth = 6; }
+   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 1, 0, commentsPageSize);
+   var totalComments = commentList.TotalCount;
+   <div class="commentsComponent col-xs-4" data-moduleid="@Dnn.ModuleContext.ModuleId"
+        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())"
+        data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="1" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
+        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+   </div>
+  }
+  @{
+      var publicCommentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 2, 0, commentsPageSize);
+      var publicTotalComments = publicCommentList.TotalCount;
+  }
+  <div class="commentsComponent col-xs-4" data-moduleid="@Dnn.ModuleContext.ModuleId"
+       data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())"
+       data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="2" data-pagesize="@commentsPageSize" 
+       data-totalcomments="@publicTotalComments"
+       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(publicCommentList.FillStampLines()))"
+       data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+  </div>
  </div>
-}
+</div>
 
 <div class="right">
  <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>

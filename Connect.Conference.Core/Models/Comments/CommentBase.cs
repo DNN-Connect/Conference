@@ -34,7 +34,7 @@ namespace Connect.Conference.Core.Models.Comments
         [DataMember]
         public string Remarks { get; set; }
         [DataMember]
-        public int Visiblity { get; set; }
+        public int Visibility { get; set; }
         #endregion
 
         #region Methods
@@ -57,8 +57,8 @@ namespace Connect.Conference.Core.Models.Comments
             if (!String.IsNullOrEmpty(comment.Remarks))
                 Remarks = comment.Remarks;
 
-            if (comment.Visiblity > -1)
-                Visiblity = comment.Visiblity;
+            if (comment.Visibility > -1)
+                Visibility = comment.Visibility;
 
         }
         #endregion

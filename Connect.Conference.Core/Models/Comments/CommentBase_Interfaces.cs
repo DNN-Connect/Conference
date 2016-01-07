@@ -22,7 +22,7 @@ namespace Connect.Conference.Core.Models.Comments
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
    Datime = (DateTime)(Null.SetNull(dr["Datime"], Datime));
    Remarks = Convert.ToString(Null.SetNull(dr["Remarks"], Remarks));
-   Visiblity = Convert.ToInt32(Null.SetNull(dr["Visiblity"], Visiblity));
+   Visibility = Convert.ToInt32(Null.SetNull(dr["Visibility"], Visibility));
         }
 
         [IgnoreColumn()]
@@ -50,8 +50,8 @@ namespace Connect.Conference.Core.Models.Comments
      return Datime.ToString(strFormat, formatProvider);
     case "remarks": // NVarCharMax
      return PropertyAccess.FormatString(Remarks, strFormat);
-    case "visiblity": // Int
-     return Visiblity.ToString(strFormat, formatProvider);
+    case "visibility": // Int
+     return Visibility.ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

@@ -43,7 +43,7 @@ namespace Connect.Conference.Core.Models.Comments
              res.SessionId = SessionId;
              res.Datime = Datime;
              res.Remarks = Remarks;
-             res.Visiblity = Visiblity;
+             res.Visibility = Visibility;
             return res;
         }
         #endregion

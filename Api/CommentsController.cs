@@ -5,6 +5,7 @@ using DotNetNuke.Web.Api;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Models.Comments;
 using Connect.Conference.Core.Repositories;
+using System.Collections.Generic;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -31,16 +32,24 @@ namespace Connect.DNN.Modules.Conference.Api
                     }
                     break;
             }
-            var list = CommentRepository.Instance.GetCommentsBySession(sessionId, visibility, pageIndex, pageSize);
-            var res = list.FillStampLines();
-            return Request.CreateResponse(HttpStatusCode.OK, res);
+            try
+            {
+                var list = CommentRepository.Instance.GetCommentsBySession(sessionId, visibility, pageIndex, pageSize);
+                var res = list.FillStampLines();
+                return Request.CreateResponse(HttpStatusCode.OK, res);
+            }
+            catch
+            {
+                var res = new List<Comment>();
+                return Request.CreateResponse(HttpStatusCode.OK, res);
+            }
         }
 
         [HttpPost]
         [DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]
         public HttpResponseMessage Add(int conferenceId, [FromBody]CommentBase comment)
         {
-            switch (comment.Visiblity)
+            switch (comment.Visibility)
             {
                 case 0: // just the authors
                     if (!ConferenceModuleContext.Security.IsPresenter(comment.SessionId))

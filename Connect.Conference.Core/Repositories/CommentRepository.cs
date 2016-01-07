@@ -26,12 +26,12 @@ namespace Connect.Conference.Core.Repositories
                 return rep.Get(conferenceId);
             }
         }
-        public IPagedList<Comment> GetCommentsBySession(int sessionId, int visiblity, int pageIndex, int pageSize)
+        public IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize)
         {
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<Comment>();
-                return rep.Find(pageIndex, pageSize, "WHERE SessionId=@0 AND Visiblity=@1 ORDER BY Datime DESC", sessionId, visiblity);
+                return rep.Find(pageIndex, pageSize, "WHERE SessionId=@0 AND Visibility=@1 ORDER BY Datime DESC", sessionId, visibility);
             }
         }
         public IEnumerable<Comment> GetCommentsByUser(int userId)
@@ -95,7 +95,7 @@ namespace Connect.Conference.Core.Repositories
     public interface ICommentRepository
     {
         IEnumerable<Comment> GetComments(int conferenceId);
-        IPagedList<Comment> GetCommentsBySession(int sessionId, int visiblity, int pageIndex, int pageSize);
+        IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize);
         IEnumerable<Comment> GetCommentsByUser(int userId);
         Comment GetComment(int conferenceId, int commentId);
         int AddComment(ref CommentBase comment);

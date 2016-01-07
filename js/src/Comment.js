@@ -27,9 +27,9 @@ var Comment = React.createClass({
     return (
       <li className="list-group-item">
           <div className="row">
-              <div className="col-xs-2 col-md-1">
+              <div className="img-col">
                   <img src={imgUrl} className="img-circle img-responsive" alt="" /></div>
-              <div className="col-xs-10 col-md-11">
+              <div className="comment-col">
                   <div className="comment-details">{this.props.comment.StampLine}</div>
                   <div className="comment-text">{this.props.comment.Remarks}</div>
                   {actionBar}

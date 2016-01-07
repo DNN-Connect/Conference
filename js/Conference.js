@@ -28,9 +28,9 @@ var Comment = React.createClass({displayName: "Comment",
     return (
       React.createElement("li", {className: "list-group-item"}, 
           React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col-xs-2 col-md-1"}, 
+              React.createElement("div", {className: "img-col"}, 
                   React.createElement("img", {src: imgUrl, className: "img-circle img-responsive", alt: ""})), 
-              React.createElement("div", {className: "col-xs-10 col-md-11"}, 
+              React.createElement("div", {className: "comment-col"}, 
                   React.createElement("div", {className: "comment-details"}, this.props.comment.StampLine), 
                   React.createElement("div", {className: "comment-text"}, this.props.comment.Remarks), 
                   actionBar
@@ -110,13 +110,23 @@ var Comments = React.createClass({displayName: "Comments",
          )
       );
     }
+    var title = this.resources.Comments;
+    switch (this.props.visibility) {
+      case 0:
+        title = this.resources.PrivateComments;
+        break;
+      case 1:
+        title = this.resources.InternalComments;
+        break;
+      default:
+        title = this.resources.PublicComments;
+    }
     return (
-      React.createElement("div", {className: "container"}, 
-       React.createElement("div", {className: "row"}, 
+      React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "panel panel-default widget"}, 
          React.createElement("div", {className: "panel-heading"}, 
           React.createElement("span", {className: "glyphicon glyphicon-comment"}), 
-          React.createElement("h3", {className: "panel-title"}, this.resources.Comments), 
+          React.createElement("h3", {className: "panel-title"}, title), 
           React.createElement("span", {className: "label label-info"}, this.state.commentCount)
          ), 
          submitPanel, 
@@ -130,7 +140,6 @@ var Comments = React.createClass({displayName: "Comments",
          )
         )
        )
-      )
     );
   },
 
