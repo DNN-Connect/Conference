@@ -27,13 +27,13 @@ namespace Connect.Conference.Core.Models.Slots
   {
    switch (strPropertyName.ToLower()) {
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
@@ -41,8 +41,6 @@ namespace Connect.Conference.Core.Models.Slots
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

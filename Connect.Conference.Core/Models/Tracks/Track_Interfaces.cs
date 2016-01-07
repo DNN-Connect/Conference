@@ -28,19 +28,19 @@ namespace Connect.Conference.Core.Models.Tracks
   {
    switch (strPropertyName.ToLower()) {
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(LastModifiedByUser, strFormat);
     case "nrsessions": // Int
-     if (NrSessions == null);
+     if (NrSessions == null)
      {
          return "";
      };
@@ -48,8 +48,6 @@ namespace Connect.Conference.Core.Models.Tracks
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

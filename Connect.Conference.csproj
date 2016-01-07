@@ -110,9 +110,11 @@
     <Compile Include="Api\SessionAttendeesController.cs" />
     <Compile Include="Api\SessionsController.cs" />
     <Compile Include="Api\SessionSpeakersController.cs" />
+    <Compile Include="Api\SessionTagsController.cs" />
     <Compile Include="Api\SessionTracksController.cs" />
     <Compile Include="Api\SlotsController.cs" />
     <Compile Include="Api\SpeakersController.cs" />
+    <Compile Include="Api\TagsController.cs" />
     <Compile Include="Api\TracksController.cs" />
     <Compile Include="Common\ConferenceApiController.cs" />
     <Compile Include="Common\ConferenceAuthorizeAttribute.cs" />

@@ -7,9 +7,9 @@ using DotNetNuke.ComponentModel.DataAnnotations;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Tokens;
 
-namespace Connect.Conference.Core.Models.SessionSpeakers
+namespace Connect.Conference.Core.Models.Tags
 {
-    public partial class SessionSpeakerBase : IHydratable, IPropertyAccess
+    public partial class TagBase : IHydratable, IPropertyAccess
     {
 
         #region IHydratable
@@ -17,16 +17,17 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         public virtual void Fill(IDataReader dr)
         {
             FillAuditFields(dr);
-   SpeakerId = Convert.ToInt32(Null.SetNull(dr["SpeakerId"], SpeakerId));
-   SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
-   Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
+   TagId = Convert.ToInt32(Null.SetNull(dr["TagId"], TagId));
+   ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
+   TagName = Convert.ToString(Null.SetNull(dr["TagName"], TagName));
+   Votes = Convert.ToInt32(Null.SetNull(dr["Votes"], Votes));
         }
 
         [IgnoreColumn()]
         public int KeyID
         {
-            get { return Null.NullInteger; }
-            set { }
+            get { return TagId; }
+            set { TagId = value; }
         }
         #endregion
 
@@ -35,16 +36,18 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         {
             switch (strPropertyName.ToLower())
             {
-    case "speakerid": // Int
-     return SpeakerId.ToString(strFormat, formatProvider);
-    case "sessionid": // Int
-     return SessionId.ToString(strFormat, formatProvider);
-    case "sort": // Int
-     if (Sort == null)
+    case "tagid": // Int
+     return TagId.ToString(strFormat, formatProvider);
+    case "conferenceid": // Int
+     return ConferenceId.ToString(strFormat, formatProvider);
+    case "tagname": // NVarChar
+     return PropertyAccess.FormatString(TagName, strFormat);
+    case "votes": // Int
+     if (Votes == null)
      {
          return "";
      };
-     return ((int)Sort).ToString(strFormat, formatProvider);
+     return ((int)Votes).ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

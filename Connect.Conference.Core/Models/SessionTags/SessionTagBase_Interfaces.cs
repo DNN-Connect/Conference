@@ -7,19 +7,17 @@ using DotNetNuke.ComponentModel.DataAnnotations;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Tokens;
 
-namespace Connect.Conference.Core.Models.SessionSpeakers
+namespace Connect.Conference.Core.Models.SessionTags
 {
-    public partial class SessionSpeakerBase : IHydratable, IPropertyAccess
+    public partial class SessionTagBase : IHydratable, IPropertyAccess
     {
 
         #region IHydratable
 
         public virtual void Fill(IDataReader dr)
         {
-            FillAuditFields(dr);
-   SpeakerId = Convert.ToInt32(Null.SetNull(dr["SpeakerId"], SpeakerId));
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
-   Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
+   TagId = Convert.ToInt32(Null.SetNull(dr["TagId"], TagId));
         }
 
         [IgnoreColumn()]
@@ -35,16 +33,10 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         {
             switch (strPropertyName.ToLower())
             {
-    case "speakerid": // Int
-     return SpeakerId.ToString(strFormat, formatProvider);
     case "sessionid": // Int
      return SessionId.ToString(strFormat, formatProvider);
-    case "sort": // Int
-     if (Sort == null)
-     {
-         return "";
-     };
-     return ((int)Sort).ToString(strFormat, formatProvider);
+    case "tagid": // Int
+     return TagId.ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

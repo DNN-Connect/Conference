@@ -6,11 +6,11 @@ using System.Xml.Serialization;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Services.Tokens;
 
-namespace Connect.Conference.Core.Models.SessionAttendees
+namespace Connect.Conference.Core.Models.SessionTags
 {
 
- [Serializable(), XmlRoot("SessionAttendee")]
- public partial class SessionAttendee
+ [Serializable(), XmlRoot("SessionTag")]
+ public partial class SessionTag
  {
 
   #region IHydratable
@@ -18,9 +18,9 @@ namespace Connect.Conference.Core.Models.SessionAttendees
   {
    base.Fill(dr);
    Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
-   SessionAttendeeName = Convert.ToString(Null.SetNull(dr["SessionAttendeeName"], SessionAttendeeName));
-   CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
-   LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
+   TagName = Convert.ToString(Null.SetNull(dr["TagName"], TagName));
+   Votes = Convert.ToInt32(Null.SetNull(dr["Votes"], Votes));
+   ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
   }
   #endregion
 
@@ -34,20 +34,16 @@ namespace Connect.Conference.Core.Models.SessionAttendees
          return "";
      };
      return PropertyAccess.FormatString(Title, strFormat);
-    case "sessionattendeename": // NVarChar
-     return PropertyAccess.FormatString(SessionAttendeeName, strFormat);
-    case "createdbyuser": // NVarChar
-     if (CreatedByUser == null)
+    case "tagname": // NVarChar
+     return PropertyAccess.FormatString(TagName, strFormat);
+    case "votes": // Int
+     if (Votes == null)
      {
          return "";
      };
-     return PropertyAccess.FormatString(CreatedByUser, strFormat);
-    case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null)
-     {
-         return "";
-     };
-     return PropertyAccess.FormatString(LastModifiedByUser, strFormat);
+     return ((int)Votes).ToString(strFormat, formatProvider);
+    case "conferenceid": // Int
+     return ConferenceId.ToString(strFormat, formatProvider);
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }

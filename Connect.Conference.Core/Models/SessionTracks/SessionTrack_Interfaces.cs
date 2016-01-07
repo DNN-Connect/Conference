@@ -30,31 +30,31 @@ namespace Connect.Conference.Core.Models.SessionTracks
   {
    switch (strPropertyName.ToLower()) {
     case "sessiontitle": // NVarChar
-     if (SessionTitle == null);
+     if (SessionTitle == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(SessionTitle, strFormat);
     case "tracktitle": // NVarChar
-     if (TrackTitle == null);
+     if (TrackTitle == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(TrackTitle, strFormat);
     case "sort": // Int
-     if (Sort == null);
+     if (Sort == null)
      {
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
@@ -62,8 +62,6 @@ namespace Connect.Conference.Core.Models.SessionTracks
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

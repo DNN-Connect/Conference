@@ -51,25 +51,25 @@ namespace Connect.Conference.Core.Models.Conferences
     case "name": // NVarChar
      return PropertyAccess.FormatString(Name, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Description, strFormat);
     case "startdate": // DateTime
-     if (StartDate == null);
+     if (StartDate == null)
      {
          return "";
      };
      return ((DateTime)StartDate).ToString(strFormat, formatProvider);
     case "enddate": // DateTime
-     if (EndDate == null);
+     if (EndDate == null)
      {
          return "";
      };
      return ((DateTime)EndDate).ToString(strFormat, formatProvider);
     case "maxcapacity": // Int
-     if (MaxCapacity == null);
+     if (MaxCapacity == null)
      {
          return "";
      };
@@ -89,13 +89,13 @@ namespace Connect.Conference.Core.Models.Conferences
      };
      return ((int)SpeakerRole).ToString(strFormat, formatProvider);
     case "location": // NVarChar
-     if (Location == null);
+     if (Location == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Location, strFormat);
     case "url": // NVarChar
-     if (Url == null);
+     if (Url == null)
      {
          return "";
      };

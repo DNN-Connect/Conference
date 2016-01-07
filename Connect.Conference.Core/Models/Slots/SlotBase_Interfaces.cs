@@ -51,19 +51,19 @@ namespace Connect.Conference.Core.Models.Slots
     case "slottype": // Int
      return SlotType.ToString(strFormat, formatProvider);
     case "title": // NVarChar
-     if (Title == null);
+     if (Title == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Title, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Description, strFormat);
     case "daynr": // Int
-     if (DayNr == null);
+     if (DayNr == null)
      {
          return "";
      };

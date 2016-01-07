@@ -94,6 +94,10 @@
     <Compile Include="Models\Sessions\SessionBase.cs" />
     <Compile Include="Models\Sessions\SessionBase_Interfaces.cs" />
     <Compile Include="Models\Sessions\Session_Interfaces.cs" />
+    <Compile Include="Models\SessionTags\SessionTag.cs" />
+    <Compile Include="Models\SessionTags\SessionTagBase.cs" />
+    <Compile Include="Models\SessionTags\SessionTagBase_Interfaces.cs" />
+    <Compile Include="Models\SessionTags\SessionTag_Interfaces.cs" />
     <Compile Include="Models\SessionTracks\SessionTrack.cs" />
     <Compile Include="Models\SessionTracks\SessionTrackBase.cs" />
     <Compile Include="Models\SessionTracks\SessionTrackBase_Interfaces.cs" />
@@ -106,6 +110,10 @@
     <Compile Include="Models\Speakers\SpeakerBase.cs" />
     <Compile Include="Models\Speakers\SpeakerBase_Interfaces.cs" />
     <Compile Include="Models\Speakers\Speaker_Interfaces.cs" />
+    <Compile Include="Models\Tags\Tag.cs" />
+    <Compile Include="Models\Tags\TagBase.cs" />
+    <Compile Include="Models\Tags\TagBase_Interfaces.cs" />
+    <Compile Include="Models\Tags\Tag_Interfaces.cs" />
     <Compile Include="Models\Tracks\Track.cs" />
     <Compile Include="Models\Tracks\TrackBase.cs" />
     <Compile Include="Models\Tracks\TrackBase_Interfaces.cs" />
@@ -118,9 +126,11 @@
     <Compile Include="Repositories\SessionRepository.cs" />
     <Compile Include="Repositories\SessionResourceRepository.cs" />
     <Compile Include="Repositories\SessionSpeakerRepository.cs" />
+    <Compile Include="Repositories\SessionTagRepository.cs" />
     <Compile Include="Repositories\SessionTrackRepository.cs" />
     <Compile Include="Repositories\SlotRepository.cs" />
     <Compile Include="Repositories\SpeakerRepository.cs" />
+    <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
   </ItemGroup>
   <ItemGroup>

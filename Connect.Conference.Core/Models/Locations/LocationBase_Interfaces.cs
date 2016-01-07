@@ -44,31 +44,31 @@ namespace Connect.Conference.Core.Models.Locations
     case "conferenceid": // Int
      return ConferenceId.ToString(strFormat, formatProvider);
     case "name": // NVarChar
-     if (Name == null);
+     if (Name == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Name, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Description, strFormat);
     case "capacity": // Int
-     if (Capacity == null);
+     if (Capacity == null)
      {
          return "";
      };
      return ((int)Capacity).ToString(strFormat, formatProvider);
     case "sort": // Int
-     if (Sort == null);
+     if (Sort == null)
      {
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
     case "backgroundcolor": // NVarChar
-     if (BackgroundColor == null);
+     if (BackgroundColor == null)
      {
          return "";
      };

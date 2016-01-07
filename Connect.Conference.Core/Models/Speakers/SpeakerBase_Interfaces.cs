@@ -44,31 +44,31 @@ namespace Connect.Conference.Core.Models.Speakers
     case "userid": // Int
      return UserId.ToString(strFormat, formatProvider);
     case "sort": // Int
-     if (Sort == null);
+     if (Sort == null)
      {
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
     case "url": // NVarChar
-     if (Url == null);
+     if (Url == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Url, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Description, strFormat);
     case "descriptionshort": // NVarCharMax
-     if (DescriptionShort == null);
+     if (DescriptionShort == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(DescriptionShort, strFormat);
     case "company": // NVarChar
-     if (Company == null);
+     if (Company == null)
      {
          return "";
      };

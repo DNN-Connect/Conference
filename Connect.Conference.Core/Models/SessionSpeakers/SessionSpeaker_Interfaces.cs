@@ -38,7 +38,7 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
     case "lastname": // NVarChar
      return PropertyAccess.FormatString(LastName, strFormat);
     case "email": // NVarChar
-     if (Email == null);
+     if (Email == null)
      {
          return "";
      };
@@ -46,13 +46,13 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
     case "username": // NVarChar
      return PropertyAccess.FormatString(Username, strFormat);
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
@@ -60,8 +60,6 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

@@ -46,25 +46,25 @@ namespace Connect.Conference.Core.Models.Tracks
     case "sessionvoting": // Bit
      return SessionVoting.ToString();
     case "backgroundcolor": // NVarChar
-     if (BackgroundColor == null);
+     if (BackgroundColor == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(BackgroundColor, strFormat);
     case "sort": // Int
-     if (Sort == null);
+     if (Sort == null)
      {
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
     case "title": // NVarChar
-     if (Title == null);
+     if (Title == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Title, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };

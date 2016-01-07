@@ -45,7 +45,7 @@ namespace Connect.Conference.Core.Models.Speakers
     case "lastname": // NVarChar
      return PropertyAccess.FormatString(LastName, strFormat);
     case "email": // NVarChar
-     if (Email == null);
+     if (Email == null)
      {
          return "";
      };
@@ -53,55 +53,55 @@ namespace Connect.Conference.Core.Models.Speakers
     case "username": // NVarChar
      return PropertyAccess.FormatString(Username, strFormat);
     case "photovisibility": // Int
-     if (PhotoVisibility == null);
+     if (PhotoVisibility == null)
      {
          return "";
      };
      return ((int)PhotoVisibility).ToString(strFormat, formatProvider);
     case "photofilename": // NVarChar
-     if (PhotoFilename == null);
+     if (PhotoFilename == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(PhotoFilename, strFormat);
     case "photofolder": // NVarChar
-     if (PhotoFolder == null);
+     if (PhotoFolder == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(PhotoFolder, strFormat);
     case "photowidth": // Int
-     if (PhotoWidth == null);
+     if (PhotoWidth == null)
      {
          return "";
      };
      return ((int)PhotoWidth).ToString(strFormat, formatProvider);
     case "photoheight": // Int
-     if (PhotoHeight == null);
+     if (PhotoHeight == null)
      {
          return "";
      };
      return ((int)PhotoHeight).ToString(strFormat, formatProvider);
     case "photocontenttype": // NVarChar
-     if (PhotoContentType == null);
+     if (PhotoContentType == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(PhotoContentType, strFormat);
     case "biography": // NVarChar
-     if (Biography == null);
+     if (Biography == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Biography, strFormat);
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
@@ -109,8 +109,6 @@ namespace Connect.Conference.Core.Models.Speakers
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

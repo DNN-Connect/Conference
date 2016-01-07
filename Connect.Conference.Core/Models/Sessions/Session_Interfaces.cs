@@ -32,43 +32,43 @@ namespace Connect.Conference.Core.Models.Sessions
   {
    switch (strPropertyName.ToLower()) {
     case "sessiondate": // DateTime
-     if (SessionDate == null);
+     if (SessionDate == null)
      {
          return "";
      };
      return ((DateTime)SessionDate).ToString(strFormat, formatProvider);
     case "locationname": // NVarChar
-     if (LocationName == null);
+     if (LocationName == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(LocationName, strFormat);
     case "slottitle": // NVarChar
-     if (SlotTitle == null);
+     if (SlotTitle == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(SlotTitle, strFormat);
     case "nrattendees": // Int
-     if (NrAttendees == null);
+     if (NrAttendees == null)
      {
          return "";
      };
      return ((int)NrAttendees).ToString(strFormat, formatProvider);
     case "nrspeakers": // Int
-     if (NrSpeakers == null);
+     if (NrSpeakers == null)
      {
          return "";
      };
      return ((int)NrSpeakers).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
-     if (CreatedByUser == null);
+     if (CreatedByUser == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(CreatedByUser, strFormat);
     case "lastmodifiedbyuser": // NVarChar
-     if (LastModifiedByUser == null);
+     if (LastModifiedByUser == null)
      {
          return "";
      };
@@ -76,8 +76,6 @@ namespace Connect.Conference.Core.Models.Sessions
     default:
        return base.GetProperty(strPropertyName, strFormat, formatProvider, accessingUser, accessLevel, ref propertyNotFound);
    }
-
-         return Null.NullString;
   }
   #endregion
 

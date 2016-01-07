@@ -51,31 +51,31 @@ namespace Connect.Conference.Core.Models.Sessions
     case "conferenceid": // Int
      return ConferenceId.ToString(strFormat, formatProvider);
     case "locationid": // Int
-     if (LocationId == null);
+     if (LocationId == null)
      {
          return "";
      };
      return ((int)LocationId).ToString(strFormat, formatProvider);
     case "level": // NVarChar
-     if (Level == null);
+     if (Level == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Level, strFormat);
     case "votes": // Int
-     if (Votes == null);
+     if (Votes == null)
      {
          return "";
      };
      return ((int)Votes).ToString(strFormat, formatProvider);
     case "sort": // Int
-     if (Sort == null);
+     if (Sort == null)
      {
          return "";
      };
      return ((int)Sort).ToString(strFormat, formatProvider);
     case "capacity": // Int
-     if (Capacity == null);
+     if (Capacity == null)
      {
          return "";
      };
@@ -83,25 +83,25 @@ namespace Connect.Conference.Core.Models.Sessions
     case "slotid": // Int
      return SlotId.ToString(strFormat, formatProvider);
     case "title": // NVarChar
-     if (Title == null);
+     if (Title == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Title, strFormat);
     case "subtitle": // NVarChar
-     if (SubTitle == null);
+     if (SubTitle == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(SubTitle, strFormat);
     case "description": // NVarCharMax
-     if (Description == null);
+     if (Description == null)
      {
          return "";
      };
      return PropertyAccess.FormatString(Description, strFormat);
     case "status": // Int
-     if (Status == null);
+     if (Status == null)
      {
          return "";
      };
