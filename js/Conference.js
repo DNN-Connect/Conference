@@ -1,26 +1,39 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /** @jsx React.DOM */
 var Comment = React.createClass({displayName: "Comment",
+
+  resources: null,
+  security: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.security = ConnectConference.modules[this.props.moduleId].security;
+    return {};
+  },
+
   render: function() {
+    var imgUrl = this.props.appPath + '/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=' + this.props.comment.UserId;
+    var actionBar = null;
+    if (this.security.CanManage | this.security.UserId == this.props.comment.UserId) {
+      actionBar = (
+                  React.createElement("div", {className: "action"}, 
+                      React.createElement("button", {type: "button", className: "btn btn-danger btn-xs", 
+                              title: this.resources.Delete, onClick: this.props.onDelete.bind(null, this.props.comment.CommentId), 
+                              "data-id": this.props.comment.CommentId}, 
+                          React.createElement("span", {className: "glyphicon glyphicon-trash"})
+                      )
+                  )
+        );
+    }
     return (
       React.createElement("li", {className: "list-group-item"}, 
           React.createElement("div", {className: "row"}, 
               React.createElement("div", {className: "col-xs-2 col-md-1"}, 
-                  React.createElement("img", {src: "http://placehold.it/80", className: "img-circle img-responsive", alt: ""})), 
+                  React.createElement("img", {src: imgUrl, className: "img-circle img-responsive", alt: ""})), 
               React.createElement("div", {className: "col-xs-10 col-md-11"}, 
                   React.createElement("div", {className: "comment-details"}, this.props.comment.StampLine), 
                   React.createElement("div", {className: "comment-text"}, this.props.comment.Remarks), 
-                  React.createElement("div", {className: "action"}, 
-                      React.createElement("button", {type: "button", className: "btn btn-primary btn-xs", title: "Edit"}, 
-                          React.createElement("span", {className: "glyphicon glyphicon-pencil"})
-                      ), 
-                      React.createElement("button", {type: "button", className: "btn btn-success btn-xs", title: "Approved"}, 
-                          React.createElement("span", {className: "glyphicon glyphicon-ok"})
-                      ), 
-                      React.createElement("button", {type: "button", className: "btn btn-danger btn-xs", title: "Delete"}, 
-                          React.createElement("span", {className: "glyphicon glyphicon-trash"})
-                      )
-                  )
+                  actionBar
               )
           )
       )
@@ -48,7 +61,8 @@ var CommentList = React.createClass({displayName: "CommentList",
 
   render: function() {
     var commentItems = this.props.comments.map(function(item) {
-      return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId})
+      return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId, 
+                      appPath: this.props.appPath, onDelete: this.props.onCommentDelete})
     }.bind(this));
     return (
       React.createElement("ul", {className: "list-group"}, 
@@ -76,11 +90,26 @@ var Comments = React.createClass({displayName: "Comments",
     this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
       comments: this.props.comments,
-      commentCount: 0
+      commentCount: this.props.totalComments,
+      canLoadMore: (this.props.totalComments > this.props.comments.length) ? true : false,
+      lastPage: 0
     }
   },
 
   render: function() {
+    var submitPanel = React.createElement("div", null);
+    if (this.props.loggedIn) {
+      submitPanel = (
+        React.createElement("div", {className: "panel-form"}, 
+          React.createElement("div", null, 
+           React.createElement("textarea", {className: "form-control", ref: "txtComment"})
+          ), 
+          React.createElement("div", {className: "panel-form-button"}, 
+           React.createElement("button", {className: "btn btn-primary", ref: "cmdAdd", onClick: this.addComment}, this.resources.AddComment)
+          )
+         )
+      );
+    }
     return (
       React.createElement("div", {className: "container"}, 
        React.createElement("div", {className: "row"}, 
@@ -90,23 +119,22 @@ var Comments = React.createClass({displayName: "Comments",
           React.createElement("h3", {className: "panel-title"}, this.resources.Comments), 
           React.createElement("span", {className: "label label-info"}, this.state.commentCount)
          ), 
-         React.createElement("div", {className: "panel-form"}, 
-          React.createElement("div", null, 
-           React.createElement("textarea", {className: "form-control", ref: "txtComment"})
-          ), 
-          React.createElement("div", {className: "panel-form-button"}, 
-           React.createElement("button", {className: "btn btn-primary", ref: "cmdAdd", onClick: this.addComment}, "Add")
-          )
-         ), 
+         submitPanel, 
          React.createElement("div", {className: "panel-body"}, 
-          React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments}), 
-          React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button"}, React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " More")
+          React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments, 
+                       appPath: this.props.appPath, onCommentDelete: this.onCommentDelete}), 
+          React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button", 
+             onClick: this.loadMoreComments, ref: "cmdMore", disabled: !this.state.canLoadMore}, 
+             React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " ", this.resources.More
+          )
          )
         )
        )
       )
     );
   },
+
+  componentDidMount: function() {},
 
   addComment: function(e) {
     e.preventDefault();
@@ -121,6 +149,39 @@ var Comments = React.createClass({displayName: "Comments",
       });
     }.bind(this));
     return false;
+  },
+
+  loadMoreComments: function(e) {
+    e.preventDefault();
+    if (this.state.canLoadMore) {
+      this.service.loadComments(this.props.conferenceId, this.props.sessionId, this.props.visibility, this.state.lastPage + 1, this.props.pageSize, function(data) {
+        var newCommentList = this.state.comments;
+        newCommentList = newCommentList.concat(data);
+        this.setState({
+          comments: newCommentList,
+          lastPage: this.state.lastPage + 1,
+          canLoadMore: (data.length < this.props.pageSize) ? false : true
+        });
+      }.bind(this));
+    }
+  },
+
+  onCommentDelete: function(commentId, e) {
+    e.preventDefault();
+    if (confirm(this.resources.CommentDeleteConfirm)) {
+      this.service.deleteComment(this.props.conferenceId, commentId, function() {
+        var newCommentList = [];
+        for (i = 0; i < this.state.comments.length; i++) {
+          if (this.state.comments[i].CommentId != commentId) {
+            newCommentList.push(this.state.comments[i]);
+          }
+        }
+        this.setState({
+          comments: newCommentList,
+          commentCount: this.state.commentCount - 1
+        });
+      }.bind(this));
+    }
   }
 
 
@@ -544,11 +605,12 @@ var TimesheetEditor = require('./TimesheetEditor'),
       $('.connectConference').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var resources = $(el).data('resources');
-        var newModule = {
-          service: new ConferenceService($, moduleId)
+        var security = $(el).data('security');
+        ConnectConference.modules[moduleId] = {
+          service: new ConferenceService($, moduleId),
+          resources: resources,
+          security: security
         };
-        ConnectConference.modules[moduleId] = newModule;
-        ConnectConference.modules[moduleId].resources = resources;
       });
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
@@ -562,12 +624,16 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var moduleId = $(el).data('moduleid');
         var conferenceId = $(el).data('conference');
         var sessionId = $(el).data('session');
-        var visiblity = $(el).data('visiblity');
-        var pageSize = $(el).data('pageSize');
+        var visibility = $(el).data('visibility');
+        var pageSize = $(el).data('pagesize');
         var comments = $(el).data('comments');
+        var appPath = $(el).data('apppath');
+        var totalComments = $(el).data('totalcomments');
+        var loggedIn = $(el).data('loggedin');
         React.render(React.createElement(Comments, {moduleId: moduleId, 
-           conferenceId: conferenceId, sessionId: sessionId, 
-           visiblity: visiblity, pageSize: pageSize, comments: comments}), el);
+           conferenceId: conferenceId, sessionId: sessionId, appPath: appPath, 
+           totalComments: totalComments, loggedIn: loggedIn, 
+           visibility: visibility, pageSize: pageSize, comments: comments}), el);
       });
     },
 
@@ -596,6 +662,7 @@ window.ConferenceService = function($, mid) {
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
     //showLoading();
+    console.log(data);
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -651,6 +718,12 @@ window.ConferenceService = function($, mid) {
   }
   this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
     this.apiCall('POST', 'Comments', 'Add', conferenceId, null, { SessionId: sessionId, Visibility: visibility, Remarks: comment}, success, fail);
+  }
+  this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
+    this.apiCall('GET', 'Comments', 'List', conferenceId, null, { SessionId: sessionId, Visibility: visibility, PageIndex: pageIndex, PageSize: pageSize}, success, fail);
+  }
+  this.deleteComment = function(conferenceId, commentId, success, fail) {
+    this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
   }
 
 }

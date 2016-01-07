@@ -120,11 +120,17 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="AddComment" xml:space="preserve">
+    <value>Add Comment</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="CommentDeleteConfirm" xml:space="preserve">
+    <value>Do you wish to delete this comment?</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Comments</value>
@@ -140,6 +146,9 @@
   </data>
   <data name="General" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>More</value>
   </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save changes</value>

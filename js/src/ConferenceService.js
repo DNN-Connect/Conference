@@ -8,6 +8,7 @@ window.ConferenceService = function($, mid) {
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
     //showLoading();
+    console.log(data);
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -63,6 +64,12 @@ window.ConferenceService = function($, mid) {
   }
   this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
     this.apiCall('POST', 'Comments', 'Add', conferenceId, null, { SessionId: sessionId, Visibility: visibility, Remarks: comment}, success, fail);
+  }
+  this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
+    this.apiCall('GET', 'Comments', 'List', conferenceId, null, { SessionId: sessionId, Visibility: visibility, PageIndex: pageIndex, PageSize: pageSize}, success, fail);
+  }
+  this.deleteComment = function(conferenceId, commentId, success, fail) {
+    this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
   }
 
 }

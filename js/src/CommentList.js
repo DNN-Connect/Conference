@@ -14,7 +14,8 @@ var CommentList = React.createClass({
 
   render: function() {
     var commentItems = this.props.comments.map(function(item) {
-      return <Comment moduleId={this.props.moduleId} comment={item} key={item.CommentId} />
+      return <Comment moduleId={this.props.moduleId} comment={item} key={item.CommentId} 
+                      appPath={this.props.appPath} onDelete={this.props.onCommentDelete} />
     }.bind(this));
     return (
       <ul className="list-group">

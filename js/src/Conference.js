@@ -15,11 +15,12 @@ var TimesheetEditor = require('./TimesheetEditor'),
       $('.connectConference').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var resources = $(el).data('resources');
-        var newModule = {
-          service: new ConferenceService($, moduleId)
+        var security = $(el).data('security');
+        ConnectConference.modules[moduleId] = {
+          service: new ConferenceService($, moduleId),
+          resources: resources,
+          security: security
         };
-        ConnectConference.modules[moduleId] = newModule;
-        ConnectConference.modules[moduleId].resources = resources;
       });
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
@@ -33,12 +34,16 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var moduleId = $(el).data('moduleid');
         var conferenceId = $(el).data('conference');
         var sessionId = $(el).data('session');
-        var visiblity = $(el).data('visiblity');
-        var pageSize = $(el).data('pageSize');
+        var visibility = $(el).data('visibility');
+        var pageSize = $(el).data('pagesize');
         var comments = $(el).data('comments');
+        var appPath = $(el).data('apppath');
+        var totalComments = $(el).data('totalcomments');
+        var loggedIn = $(el).data('loggedin');
         React.render(<Comments moduleId={moduleId} 
-           conferenceId={conferenceId} sessionId={sessionId} 
-           visiblity={visiblity} pageSize={pageSize} comments={comments} />, el);
+           conferenceId={conferenceId} sessionId={sessionId} appPath={appPath}
+           totalComments={totalComments} loggedIn={loggedIn}
+           visibility={visibility} pageSize={pageSize} comments={comments} />, el);
       });
     },
 

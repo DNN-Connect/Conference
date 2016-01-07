@@ -5,16 +5,26 @@
 @{
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
+    var commentsPageSize = 5;
+    var firstCommentsPage = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, commentsPageSize);
+    var totalComments = firstCommentsPage.TotalCount;
 }
 
 <h3>@Dnn.LocalizeString("Session")</h3>
 <h3>@Model.Title</h3>
 <p>@Model.Description</p>
 
-<div class="connectConference commentsComponent" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="20"
-     data-resources="@SerializedResources()" data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, 20).FillStampLines()))">
-</div>
+@if (ConferenceModuleContext.Security.IsPresenter(Model.SessionId))
+{
+ <div class="connectConference commentsComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" 
+      data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())"
+      data-resources="@SerializedResources()"
+      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
+      data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
+      data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(firstCommentsPage.FillStampLines()))"
+      data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+ </div>
+}
 
 <div class="right">
  <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>

@@ -1,3 +1,4 @@
+using System.Linq;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Users;
@@ -15,11 +16,20 @@ namespace Connect.DNN.Modules.Conference.Common
         public bool CanAttend { get; set; }
         public bool CanManage { get; set; }
         public bool IsAdmin { get; set; }
+        private UserInfo user { get; set; }
+        public int UserId
+        {
+            get
+            {
+                return user.UserID;
+            }
+        }
 
         #region ctor
         public ContextSecurity(ModuleInfo objModule)
         {
-            if (UserController.Instance.GetCurrentUserInfo().IsSuperUser)
+            user = UserController.Instance.GetCurrentUserInfo();
+            if (user.IsSuperUser)
             {
                 CanView = CanEdit = CanSubmitSessions = CanApproveSessions = CanAttend = CanManage = IsAdmin = true;
             }
@@ -42,6 +52,12 @@ namespace Connect.DNN.Modules.Conference.Common
             }
         }
         #endregion
+
+        public bool IsPresenter(int sessionId)
+        {
+            var presenters = Connect.Conference.Core.Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(sessionId);
+            return presenters.Where(p => p.SpeakerId == user.UserID).Count() > 0;
+        }
 
     }
 }

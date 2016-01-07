@@ -16,5 +16,10 @@ namespace Connect.DNN.Modules.Conference.Common
             return Request.CreateResponse(HttpStatusCode.InternalServerError, message);
         }
 
+        public HttpResponseMessage AccessViolation(string message)
+        {
+            return Request.CreateResponse(HttpStatusCode.Unauthorized, message);
+        }
+
     }
 }
