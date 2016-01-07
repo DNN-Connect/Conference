@@ -31,6 +31,8 @@ namespace Connect.Conference.Core.Models.Speakers
         public string Description { get; set; }
         [DataMember]
         public string DescriptionShort { get; set; }
+        [DataMember]
+        public string Company { get; set; }
         #endregion
 
         #region Methods
@@ -53,6 +55,9 @@ namespace Connect.Conference.Core.Models.Speakers
 
             if (!String.IsNullOrEmpty(speaker.DescriptionShort))
                 DescriptionShort = speaker.DescriptionShort;
+
+            if (!String.IsNullOrEmpty(speaker.Company))
+                Company = speaker.Company;
 
         }
         #endregion

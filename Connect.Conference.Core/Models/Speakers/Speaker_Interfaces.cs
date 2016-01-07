@@ -29,7 +29,6 @@ namespace Connect.Conference.Core.Models.Speakers
    PhotoHeight = Convert.ToInt32(Null.SetNull(dr["PhotoHeight"], PhotoHeight));
    PhotoContentType = Convert.ToString(Null.SetNull(dr["PhotoContentType"], PhotoContentType));
    Biography = Convert.ToString(Null.SetNull(dr["Biography"], Biography));
-   Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
@@ -95,12 +94,6 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(Biography, strFormat);
-    case "company": // NVarChar
-     if (Company == null);
-     {
-         return "";
-     };
-     return PropertyAccess.FormatString(Company, strFormat);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null);
      {

@@ -63,6 +63,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             recordToUpdate.Description = speaker.Description;
             recordToUpdate.DescriptionShort = speaker.DescriptionShort;
             recordToUpdate.Url = speaker.Url;
+            recordToUpdate.Company = speaker.Company;
             if (modeAdd)
             {
                 _repository.AddSpeaker(recordToUpdate, User.UserID);
@@ -81,7 +82,6 @@ namespace Connect.DNN.Modules.Conference.Controllers
             dnnUser.LastName = speaker.LastName.Trim();
             dnnUser.DisplayName = speaker.DisplayName.Trim();
             dnnUser.Email = speaker.Email.Trim();
-            if (speaker.Company != null) { dnnUser.Profile.SetProfileProperty("Company", speaker.Company.Trim()); }
             // Handle the picture
             if (speaker.ProfilePic.filename != "")
             {

@@ -23,6 +23,7 @@ namespace Connect.Conference.Core.Models.Speakers
    Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
    Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
    DescriptionShort = Convert.ToString(Null.SetNull(dr["DescriptionShort"], DescriptionShort));
+   Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
         }
 
         [IgnoreColumn()]
@@ -66,6 +67,12 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(DescriptionShort, strFormat);
+    case "company": // NVarChar
+     if (Company == null);
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Company, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

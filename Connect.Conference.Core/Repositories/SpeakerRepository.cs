@@ -55,8 +55,8 @@ namespace Connect.Conference.Core.Repositories
                 context.Execute(System.Data.CommandType.Text,
                     "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers " +
                     "WHERE ConferenceId=@0 AND UserId=@1) " +
-                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Speakers (ConferenceId, UserId, Sort, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Url, Description, DescriptionShort) " +
-                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7, @8, @9", speaker.ConferenceId, speaker.UserId, speaker.Sort, speaker.CreatedByUserID, speaker.CreatedOnDate, speaker.LastModifiedByUserID, speaker.LastModifiedOnDate, speaker.Url, speaker.Description, speaker.DescriptionShort);
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Speakers (ConferenceId, UserId, Sort, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Url, Description, DescriptionShort, Company) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10", speaker.ConferenceId, speaker.UserId, speaker.Sort, speaker.CreatedByUserID, speaker.CreatedOnDate, speaker.LastModifiedByUserID, speaker.LastModifiedOnDate, speaker.Url, speaker.Description, speaker.DescriptionShort, speaker.Company);
             }
         }
         public void DeleteSpeaker(SpeakerBase speaker)
@@ -102,8 +102,8 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<SpeakerBase>();
-                rep.Update("SET Sort=@0, CreatedByUserID=@1, CreatedOnDate=@2, LastModifiedByUserID=@3, LastModifiedOnDate=@4, Url=@5, Description=@6, DescriptionShort=@7 WHERE ConferenceId=@8 AND UserId=@9",
-                          speaker.Sort,speaker.CreatedByUserID,speaker.CreatedOnDate,speaker.LastModifiedByUserID,speaker.LastModifiedOnDate,speaker.Url,speaker.Description,speaker.DescriptionShort, speaker.ConferenceId,speaker.UserId);
+                rep.Update("SET Sort=@0, CreatedByUserID=@1, CreatedOnDate=@2, LastModifiedByUserID=@3, LastModifiedOnDate=@4, Url=@5, Description=@6, DescriptionShort=@7, Company=@8 WHERE ConferenceId=@9 AND UserId=@10",
+                          speaker.Sort,speaker.CreatedByUserID,speaker.CreatedOnDate,speaker.LastModifiedByUserID,speaker.LastModifiedOnDate,speaker.Url,speaker.Description,speaker.DescriptionShort,speaker.Company, speaker.ConferenceId,speaker.UserId);
             }
         } 
  }
