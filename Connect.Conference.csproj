@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\AttendeesController.cs" />
+    <Compile Include="Api\CommentsController.cs" />
     <Compile Include="Api\ConferencesController.cs" />
     <Compile Include="Api\LocationsController.cs" />
     <Compile Include="Api\SessionAttendeesController.cs" />

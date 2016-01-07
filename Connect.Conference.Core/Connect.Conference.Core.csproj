@@ -70,6 +70,10 @@
     <Compile Include="Models\Attendees\AttendeeBase.cs" />
     <Compile Include="Models\Attendees\AttendeeBase_Interfaces.cs" />
     <Compile Include="Models\Attendees\Attendee_Interfaces.cs" />
+    <Compile Include="Models\Comments\Comment.cs" />
+    <Compile Include="Models\Comments\CommentBase.cs" />
+    <Compile Include="Models\Comments\CommentBase_Interfaces.cs" />
+    <Compile Include="Models\Comments\Comment_Interfaces.cs" />
     <Compile Include="Models\Conferences\Conference.cs" />
     <Compile Include="Models\Conferences\ConferenceBase.cs" />
     <Compile Include="Models\Conferences\ConferenceBase_Interfaces.cs" />
@@ -121,6 +125,7 @@
     <Compile Include="Models\Tracks\Track_Interfaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AttendeeRepository.cs" />
+    <Compile Include="Repositories\CommentRepository.cs" />
     <Compile Include="Repositories\ConferenceRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\SessionAttendeeRepository.cs" />
