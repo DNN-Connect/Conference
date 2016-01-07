@@ -1,35 +1,58 @@
-    .commentList {
-        padding: 0;
-        list-style: none;
-        max-height: 200px;
-        overflow: auto;
+.commentsComponent {
+    .panel-body {
+        padding: 0px;
     }
-    .commentList li {
-        margin: 0;
-        margin-top: 10px;
+    .panel-form {
+        padding: 10px;
+        textarea {
+            height: 100px;
+        }
     }
-    .commentList li > div {
-        display: table-cell;
+    .panel-form-button {
+        padding-top: 10px;
+        text-align: right;
     }
-    .commenterImage {
-        width: 30px;
-        margin-right: 5px;
-        height: 100%;
-        float: left;
+    .list-group {
+        margin-bottom: 0;
     }
-    .commenterImage img {
-        width: 100%;
-        border-radius: 50%;
+    .panel-heading {
+        span {
+            margin-right: 10px;
+        }
     }
-    .commentText p {
-        margin: 0;
+    .panel-title {
+        display: inline
     }
-    .sub-text {
-        color: #aaa;
-        font-family: verdana;
+    .label-info {
+        float: right;
+    }
+    li.list-group-item {
+        border-radius: 0;
+        border: 0;
+        border-top: 1px solid #ddd;
+    }
+    li.list-group-item:hover {
+        background-color: rgba(86, 61, 124, .1);
+    }
+    .mic-info {
+        color: #666666;
         font-size: 11px;
     }
-    .actionBox {
-        border-top: 1px dotted #bbb;
-        padding: 10px;
+    .action {
+        margin-top: 5px;
+        button {
+            margin-right: 10px;
+        }
     }
+    .comment-text {
+        padding-bottom: 20px;
+    }
+    .comment-details {
+        font-size: smaller;
+        color: #999;
+    }
+    .btn-block {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+}

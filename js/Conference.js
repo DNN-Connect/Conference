@@ -3,15 +3,27 @@
 var Comment = React.createClass({displayName: "Comment",
   render: function() {
     return (
-            React.createElement("li", null, 
-                React.createElement("div", {className: "commenterImage"}, 
-                  React.createElement("img", {src: "http://lorempixel.com/50/50/people/6"})
-                ), 
-                React.createElement("div", {className: "commentText"}, 
-                    React.createElement("p", {className: ""}, this.props.comment.Remarks), 
-                    React.createElement("span", {className: "date sub-text"}, this.props.comment.StampLine)
-                )
-            )
+      React.createElement("li", {className: "list-group-item"}, 
+          React.createElement("div", {className: "row"}, 
+              React.createElement("div", {className: "col-xs-2 col-md-1"}, 
+                  React.createElement("img", {src: "http://placehold.it/80", className: "img-circle img-responsive", alt: ""})), 
+              React.createElement("div", {className: "col-xs-10 col-md-11"}, 
+                  React.createElement("div", {className: "comment-details"}, this.props.comment.StampLine), 
+                  React.createElement("div", {className: "comment-text"}, this.props.comment.Remarks), 
+                  React.createElement("div", {className: "action"}, 
+                      React.createElement("button", {type: "button", className: "btn btn-primary btn-xs", title: "Edit"}, 
+                          React.createElement("span", {className: "glyphicon glyphicon-pencil"})
+                      ), 
+                      React.createElement("button", {type: "button", className: "btn btn-success btn-xs", title: "Approved"}, 
+                          React.createElement("span", {className: "glyphicon glyphicon-ok"})
+                      ), 
+                      React.createElement("button", {type: "button", className: "btn btn-danger btn-xs", title: "Delete"}, 
+                          React.createElement("span", {className: "glyphicon glyphicon-trash"})
+                      )
+                  )
+              )
+          )
+      )
     );
   }
 });
@@ -39,7 +51,7 @@ var CommentList = React.createClass({displayName: "CommentList",
       return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId})
     }.bind(this));
     return (
-      React.createElement("ul", {className: "commentList"}, 
+      React.createElement("ul", {className: "list-group"}, 
        commentItems
       )
     );
@@ -63,31 +75,36 @@ var Comments = React.createClass({displayName: "Comments",
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
-      comments: this.props.comments
+      comments: this.props.comments,
+      commentCount: 0
     }
   },
 
   render: function() {
     return (
-      React.createElement("div", {className: "detailBox"}, 
-          React.createElement("div", {className: "titleBox"}, 
-            React.createElement("label", null, this.resources.Comments)
+      React.createElement("div", {className: "container"}, 
+       React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "panel panel-default widget"}, 
+         React.createElement("div", {className: "panel-heading"}, 
+          React.createElement("span", {className: "glyphicon glyphicon-comment"}), 
+          React.createElement("h3", {className: "panel-title"}, this.resources.Comments), 
+          React.createElement("span", {className: "label label-info"}, this.state.commentCount)
+         ), 
+         React.createElement("div", {className: "panel-form"}, 
+          React.createElement("div", null, 
+           React.createElement("textarea", {className: "form-control", ref: "txtComment"})
           ), 
-          React.createElement("div", {className: "commentBox"}, 
-            React.createElement("p", {className: "taskDescription"}, "Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
-          ), 
-          React.createElement("div", {className: "actionBox"}, 
-            React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments}), 
-            React.createElement("div", {className: "form-inline", role: "form"}, 
-              React.createElement("div", {className: "form-group"}, 
-                React.createElement("input", {className: "form-control", type: "text", placeholder: "Your comments", ref: "txtComment"})
-              ), 
-              React.createElement("div", {className: "form-group"}, 
-                React.createElement("button", {className: "btn btn-default", ref: "cmdAdd", onClick: this.addComment}, "Add")
-              )
-            )
+          React.createElement("div", {className: "panel-form-button"}, 
+           React.createElement("button", {className: "btn btn-primary", ref: "cmdAdd", onClick: this.addComment}, "Add")
           )
+         ), 
+         React.createElement("div", {className: "panel-body"}, 
+          React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments}), 
+          React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button"}, React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " More")
+         )
         )
+       )
+      )
     );
   },
 
@@ -99,7 +116,8 @@ var Comments = React.createClass({displayName: "Comments",
       var newComments = this.state.comments;
       newComments.unshift(data);
       this.setState({
-        comments: newComments
+        comments: newComments,
+        commentCount: this.state.commentCount + 1
       });
     }.bind(this));
     return false;

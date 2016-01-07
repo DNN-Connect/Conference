@@ -2,15 +2,27 @@
 var Comment = React.createClass({
   render: function() {
     return (
-            <li>
-                <div className="commenterImage">
-                  <img src="http://lorempixel.com/50/50/people/6" />
-                </div>
-                <div className="commentText">
-                    <p className="">{this.props.comment.Remarks}</p> 
-                    <span className="date sub-text">{this.props.comment.StampLine}</span>
-                </div>
-            </li>
+      <li className="list-group-item">
+          <div className="row">
+              <div className="col-xs-2 col-md-1">
+                  <img src="http://placehold.it/80" className="img-circle img-responsive" alt="" /></div>
+              <div className="col-xs-10 col-md-11">
+                  <div className="comment-details">{this.props.comment.StampLine}</div>
+                  <div className="comment-text">{this.props.comment.Remarks}</div>
+                  <div className="action">
+                      <button type="button" className="btn btn-primary btn-xs" title="Edit">
+                          <span className="glyphicon glyphicon-pencil"></span>
+                      </button>
+                      <button type="button" className="btn btn-success btn-xs" title="Approved">
+                          <span className="glyphicon glyphicon-ok"></span>
+                      </button>
+                      <button type="button" className="btn btn-danger btn-xs" title="Delete">
+                          <span className="glyphicon glyphicon-trash"></span>
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </li>
     );
   }
 });

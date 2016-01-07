@@ -10,31 +10,36 @@ var Comments = React.createClass({
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
-      comments: this.props.comments
+      comments: this.props.comments,
+      commentCount: 0
     }
   },
 
   render: function() {
     return (
-      <div className="detailBox">
-          <div className="titleBox">
-            <label>{this.resources.Comments}</label>
+      <div className="container">
+       <div className="row">
+        <div className="panel panel-default widget">
+         <div className="panel-heading">
+          <span className="glyphicon glyphicon-comment"></span>
+          <h3 className="panel-title">{this.resources.Comments}</h3>
+          <span className="label label-info">{this.state.commentCount}</span>
+         </div>
+         <div className="panel-form">
+          <div>
+           <textarea className="form-control" ref="txtComment" />
           </div>
-          <div className="commentBox">        
-            <p className="taskDescription">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+          <div className="panel-form-button">
+           <button className="btn btn-primary" ref="cmdAdd" onClick={this.addComment}>Add</button>
           </div>
-          <div className="actionBox">
-            <CommentList moduleId={this.props.moduleId} comments={this.state.comments} />
-            <div className="form-inline" role="form">
-              <div className="form-group">
-                <input className="form-control" type="text" placeholder="Your comments" ref="txtComment" />
-              </div>
-              <div className="form-group">
-                <button className="btn btn-default" ref="cmdAdd" onClick={this.addComment}>Add</button>
-              </div>
-            </div>
-          </div>
+         </div>
+         <div className="panel-body">
+          <CommentList moduleId={this.props.moduleId} comments={this.state.comments} />
+          <a href="#" className="btn btn-primary btn-sm btn-block" role="button"><span className="glyphicon glyphicon-refresh"></span> More</a>
+         </div>
         </div>
+       </div>
+      </div>
     );
   },
 
@@ -46,7 +51,8 @@ var Comments = React.createClass({
       var newComments = this.state.comments;
       newComments.unshift(data);
       this.setState({
-        comments: newComments
+        comments: newComments,
+        commentCount: this.state.commentCount + 1
       });
     }.bind(this));
     return false;

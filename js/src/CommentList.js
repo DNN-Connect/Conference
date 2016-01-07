@@ -17,7 +17,7 @@ var CommentList = React.createClass({
       return <Comment moduleId={this.props.moduleId} comment={item} key={item.CommentId} />
     }.bind(this));
     return (
-      <ul className="commentList">
+      <ul className="list-group">
        {commentItems}
       </ul>
     );
