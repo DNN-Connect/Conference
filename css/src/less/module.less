@@ -1,3 +1,4 @@
+@import "comments.less";
 .ModConnectConferenceC {
     a.btn-primary {
         color: #fff;
@@ -80,5 +81,37 @@
     }
     .btncol {
         width: 32px;
+    }
+    .detailBox {
+        width: 320px;
+        border: 1px solid #bbb;
+        margin: 50px;
+    }
+    .titleBox {
+        background-color: #fdfdfd;
+        padding: 10px;
+    }
+    .titleBox label {
+        color: #444;
+        margin: 0;
+        display: inline-block;
+    }
+    .commentBox {
+        padding: 10px;
+        border-top: 1px dotted #bbb;
+    }
+    .commentBox .form-group:first-child,
+    .actionBox .form-group:first-child {
+        width: 80%;
+    }
+    .commentBox .form-group:nth-child(2),
+    .actionBox .form-group:nth-child(2) {
+        width: 18%;
+    }
+    .actionBox .form-group * {
+        width: 100%;
+    }
+    .taskDescription {
+        margin-top: 10px 0;
     }
 }

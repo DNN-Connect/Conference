@@ -61,5 +61,8 @@ window.ConferenceService = function($, mid) {
   this.deleteSlot = function(conferenceId, slotId, success, fail) {
     this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
   }
+  this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
+    this.apiCall('POST', 'Comments', 'Add', conferenceId, null, { SessionId: sessionId, Visibility: visibility, Remarks: comment}, success, fail);
+  }
 
 }

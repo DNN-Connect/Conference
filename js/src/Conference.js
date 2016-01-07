@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
-var TimesheetEditor = require('./TimesheetEditor');
+var TimesheetEditor = require('./TimesheetEditor'),
+    Comments = require('./Comments');
 
 (function($, window, document, undefined) {
 
@@ -27,6 +28,17 @@ var TimesheetEditor = require('./TimesheetEditor');
         var nrDays = $(el).data('nrdays');
         React.render(<TimesheetEditor moduleId={moduleId} slots={slots} 
            conferenceId={conferenceId} nrDays={nrDays} />, el);
+      });
+      $('.commentsComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var sessionId = $(el).data('session');
+        var visiblity = $(el).data('visiblity');
+        var pageSize = $(el).data('pageSize');
+        var comments = $(el).data('comments');
+        React.render(<Comments moduleId={moduleId} 
+           conferenceId={conferenceId} sessionId={sessionId} 
+           visiblity={visiblity} pageSize={pageSize} comments={comments} />, el);
       });
     },
 

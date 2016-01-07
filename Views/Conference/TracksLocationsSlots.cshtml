@@ -4,6 +4,8 @@
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 <h3>@Model.Name</h3>
@@ -74,11 +76,6 @@
  @Html.ActionLink(Dnn.LocalizeString("Return"), "Index", "Home", null, new { @class = "btn btn-primary" })
 </div>
 
-
-@{
-    ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddEditScripts();
-}
 
 <script type="text/javascript">
  $(function () {

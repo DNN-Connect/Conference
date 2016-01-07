@@ -70,6 +70,7 @@
     <Compile Include="Models\Attendees\AttendeeBase.cs" />
     <Compile Include="Models\Attendees\AttendeeBase_Interfaces.cs" />
     <Compile Include="Models\Attendees\Attendee_Interfaces.cs" />
+    <Compile Include="Models\Comments\Comment_Custom.cs" />
     <Compile Include="Models\Comments\Comment.cs" />
     <Compile Include="Models\Comments\CommentBase.cs" />
     <Compile Include="Models\Comments\CommentBase_Interfaces.cs" />

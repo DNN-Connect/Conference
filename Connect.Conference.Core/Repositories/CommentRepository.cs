@@ -12,8 +12,8 @@ using Connect.Conference.Core.Models.Comments;
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class CommentRepository : ServiceLocator<ICommentRepository, CommentRepository>, ICommentRepository
- {
+    public class CommentRepository : ServiceLocator<ICommentRepository, CommentRepository>, ICommentRepository
+    {
         protected override Func<ICommentRepository> GetFactory()
         {
             return () => new CommentRepository();
@@ -26,13 +26,12 @@ namespace Connect.Conference.Core.Repositories
                 return rep.Get(conferenceId);
             }
         }
-        public IEnumerable<Comment> GetCommentsBySession(int sessionId, int visiblity)
+        public IPagedList<Comment> GetCommentsBySession(int sessionId, int visiblity, int pageIndex, int pageSize)
         {
             using (var context = DataContext.Instance())
             {
-                return context.ExecuteQuery<Comment>(System.Data.CommandType.Text,
-                    "SELECT * FROM vw_Connect_Conference_Comments WHERE SessionId=@0 AND Visiblity=@1",
-                    sessionId, visiblity);
+                var rep = context.GetRepository<Comment>();
+                return rep.Find(pageIndex, pageSize, "WHERE SessionId=@0 AND Visiblity=@1 ORDER BY Datime DESC", sessionId, visiblity);
             }
         }
         public IEnumerable<Comment> GetCommentsByUser(int userId)
@@ -90,12 +89,13 @@ namespace Connect.Conference.Core.Repositories
                 var rep = context.GetRepository<CommentBase>();
                 rep.Update(comment);
             }
-        } 
- }
+        }
+    }
 
     public interface ICommentRepository
     {
         IEnumerable<Comment> GetComments(int conferenceId);
+        IPagedList<Comment> GetCommentsBySession(int sessionId, int visiblity, int pageIndex, int pageSize);
         IEnumerable<Comment> GetCommentsByUser(int userId);
         Comment GetComment(int conferenceId, int commentId);
         int AddComment(ref CommentBase comment);

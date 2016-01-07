@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Connect.Conference.Core.Models.Comments;
+using DotNetNuke.Collections;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -37,8 +39,30 @@ namespace Connect.DNN.Modules.Conference.Common
             return res.OrderBy(i => i.Value).ToList();
         }
 
-        public static string RemoveIllegalCharacters(this string filename) {
+        public static string RemoveIllegalCharacters(this string filename)
+        {
             return Regex.Replace(filename, "[\\:;,\\?]", "");
+        }
+
+        public static IEnumerable<Comment> FillStampLines(this IPagedList<Comment> commentList)
+        {
+            var res = new List<Comment>();
+            foreach (var comment in commentList)
+            {
+                res.Add(comment.FillStampLine());
+            }
+            return res;
+        }
+
+        public static Comment FillStampLine(this Comment comment)
+        {
+            var res = comment;
+            try
+            {
+                res.StampLine = string.Format(Localization.GetString("StampLine.Text", SharedResourceFileName), comment.Datime, comment.DisplayName);
+            }
+            catch { }
+            return res;
         }
     }
 }

@@ -1,5 +1,118 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /** @jsx React.DOM */
+var Comment = React.createClass({displayName: "Comment",
+  render: function() {
+    return (
+            React.createElement("li", null, 
+                React.createElement("div", {className: "commenterImage"}, 
+                  React.createElement("img", {src: "http://lorempixel.com/50/50/people/6"})
+                ), 
+                React.createElement("div", {className: "commentText"}, 
+                    React.createElement("p", {className: ""}, this.props.comment.Remarks), 
+                    React.createElement("span", {className: "date sub-text"}, this.props.comment.StampLine)
+                )
+            )
+    );
+  }
+});
+
+module.exports = Comment;
+
+
+},{}],2:[function(require,module,exports){
+/** @jsx React.DOM */
+var Comment = require('./Comment');
+
+var CommentList = React.createClass({displayName: "CommentList",
+
+  resources: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    return {
+      comments: this.props.comments
+    }
+  },
+
+  render: function() {
+    var commentItems = this.props.comments.map(function(item) {
+      return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId})
+    }.bind(this));
+    return (
+      React.createElement("ul", {className: "commentList"}, 
+       commentItems
+      )
+    );
+  }
+
+});
+
+module.exports = CommentList;
+
+
+},{"./Comment":1}],3:[function(require,module,exports){
+/** @jsx React.DOM */
+var CommentList = require('./CommentList');
+
+var Comments = React.createClass({displayName: "Comments",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    return {
+      comments: this.props.comments
+    }
+  },
+
+  render: function() {
+    return (
+      React.createElement("div", {className: "detailBox"}, 
+          React.createElement("div", {className: "titleBox"}, 
+            React.createElement("label", null, this.resources.Comments)
+          ), 
+          React.createElement("div", {className: "commentBox"}, 
+            React.createElement("p", {className: "taskDescription"}, "Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+          ), 
+          React.createElement("div", {className: "actionBox"}, 
+            React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments}), 
+            React.createElement("div", {className: "form-inline", role: "form"}, 
+              React.createElement("div", {className: "form-group"}, 
+                React.createElement("input", {className: "form-control", type: "text", placeholder: "Your comments", ref: "txtComment"})
+              ), 
+              React.createElement("div", {className: "form-group"}, 
+                React.createElement("button", {className: "btn btn-default", ref: "cmdAdd", onClick: this.addComment}, "Add")
+              )
+            )
+          )
+        )
+    );
+  },
+
+  addComment: function(e) {
+    e.preventDefault();
+    var comment = this.refs.txtComment.getDOMNode().value;
+    this.service.addComment(this.props.conferenceId, this.props.sessionId, this.props.visibility, comment, function(data) {
+      this.refs.txtComment.getDOMNode().value = '';
+      var newComments = this.state.comments;
+      newComments.unshift(data);
+      this.setState({
+        comments: newComments
+      });
+    }.bind(this));
+    return false;
+  }
+
+
+});
+
+module.exports = Comments;
+
+
+},{"./CommentList":2}],4:[function(require,module,exports){
+/** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
 var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
@@ -236,7 +349,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":2}],2:[function(require,module,exports){
+},{"./TimesheetEditorSlot":5}],5:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -395,9 +508,10 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],3:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /** @jsx React.DOM */
-var TimesheetEditor = require('./TimesheetEditor');
+var TimesheetEditor = require('./TimesheetEditor'),
+    Comments = require('./Comments');
 
 (function($, window, document, undefined) {
 
@@ -426,6 +540,17 @@ var TimesheetEditor = require('./TimesheetEditor');
         React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, 
            conferenceId: conferenceId, nrDays: nrDays}), el);
       });
+      $('.commentsComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var sessionId = $(el).data('session');
+        var visiblity = $(el).data('visiblity');
+        var pageSize = $(el).data('pageSize');
+        var comments = $(el).data('comments');
+        React.render(React.createElement(Comments, {moduleId: moduleId, 
+           conferenceId: conferenceId, sessionId: sessionId, 
+           visiblity: visiblity, pageSize: pageSize, comments: comments}), el);
+      });
     },
 
     formatString: function(format) {
@@ -442,7 +567,7 @@ var TimesheetEditor = require('./TimesheetEditor');
 })(jQuery, window, document);
 
 
-},{"./TimesheetEditor":1}]},{},[3])
+},{"./Comments":3,"./TimesheetEditor":4}]},{},[6])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -505,6 +630,9 @@ window.ConferenceService = function($, mid) {
   }
   this.deleteSlot = function(conferenceId, slotId, success, fail) {
     this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+  }
+  this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
+    this.apiCall('POST', 'Comments', 'Add', conferenceId, null, { SessionId: sessionId, Visibility: visibility, Remarks: comment}, success, fail);
   }
 
 }

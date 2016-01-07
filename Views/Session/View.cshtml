@@ -4,12 +4,17 @@
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 <h3>@Dnn.LocalizeString("Session")</h3>
 <h3>@Model.Title</h3>
 <p>@Model.Description</p>
 
+<div class="connectConference commentsComponent" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="20"
+     data-resources="@SerializedResources()" data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, 20).FillStampLines()))">
+</div>
 
 <div class="right">
  <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>

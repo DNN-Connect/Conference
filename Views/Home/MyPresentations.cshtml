@@ -25,6 +25,9 @@
     <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = s.SessionId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
      @Dnn.LocalizeString("Edit")
     </a>
+    <a href="@Url.Action("View", "Session", new {conferenceId = Model.ConferenceId, sessionId = s.SessionId})" title="@Dnn.LocalizeString("View")" class="btn btn-default">
+     @Dnn.LocalizeString("View")
+    </a>
    </div>
   </div>
   <div class="panel-footer">
