@@ -255,4 +255,10 @@
   <data name="LastName.Text" xml:space="preserve">
     <value>LastName</value>
   </data>
+  <data name="Abstract.Text" xml:space="preserve">
+    <value>Abstract</value>
+  </data>
+  <data name="Notes.Text" xml:space="preserve">
+    <value>Notes</value>
+  </data>
 </root>

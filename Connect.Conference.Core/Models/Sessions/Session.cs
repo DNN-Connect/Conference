@@ -18,46 +18,6 @@ namespace Connect.Conference.Core.Models.Sessions
         }
         #endregion
 
-        #region Custom Properties
-        [IgnoreColumn]
-        public string StatusGlyphicon
-        {
-            get
-            {
-                switch (Status)
-                {
-                    case -1:
-                        return "remove";
-                    case 0:
-                        return "floppy-disk";
-                    case 1:
-                        return "send";
-                    case 2:
-                        return "repeat";
-                    case 4:
-                        return "education";
-                    case 5:
-                        return "lock";
-                    default:
-                        return "ok";
-                }
-            }
-        }
-
-        public bool UserIsAuthor(int userId)
-        {
-            if (CreatedByUserID == userId) { return true; }
-            foreach (var ss in Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId))
-            {
-                if (ss.SpeakerId == userId)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        #endregion
-
         #region Properties
         [DataMember]
         public System.DateTime? SessionDate { get; set; }
@@ -93,6 +53,7 @@ namespace Connect.Conference.Core.Models.Sessions
             res.Status = Status;
             res.IsPlenary = IsPlenary;
             res.DayNr = DayNr;
+             res.Notes = Notes;
             res.CreatedByUserID = CreatedByUserID;
             res.CreatedOnDate = CreatedOnDate;
             res.LastModifiedByUserID = LastModifiedByUserID;

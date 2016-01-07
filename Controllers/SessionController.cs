@@ -89,6 +89,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             recordToUpdate.Title = session.Title;
             recordToUpdate.SubTitle = session.SubTitle;
             recordToUpdate.Description = session.Description;
+            recordToUpdate.Notes = session.Notes;
             recordToUpdate.Level = session.Level;
             recordToUpdate.Capacity = session.Capacity;
             if (recordToUpdate.SessionId == -1)

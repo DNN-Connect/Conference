@@ -31,6 +31,7 @@ namespace Connect.Conference.Core.Models.Sessions
    Status = Convert.ToInt32(Null.SetNull(dr["Status"], Status));
    IsPlenary = Convert.ToBoolean(Null.SetNull(dr["IsPlenary"], IsPlenary));
    DayNr = Convert.ToInt32(Null.SetNull(dr["DayNr"], DayNr));
+   Notes = Convert.ToString(Null.SetNull(dr["Notes"], Notes));
         }
 
         [IgnoreColumn()]
@@ -110,6 +111,12 @@ namespace Connect.Conference.Core.Models.Sessions
      return IsPlenary.ToString();
     case "daynr": // Int
      return DayNr.ToString(strFormat, formatProvider);
+    case "notes": // NVarCharMax
+     if (Notes == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Notes, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

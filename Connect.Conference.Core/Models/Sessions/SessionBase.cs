@@ -51,6 +51,8 @@ namespace Connect.Conference.Core.Models.Sessions
         public bool IsPlenary { get; set; }
         [DataMember]
         public int DayNr { get; set; }
+        [DataMember]
+        public string Notes { get; set; }
         #endregion
 
         #region Methods
@@ -96,6 +98,9 @@ namespace Connect.Conference.Core.Models.Sessions
 
             if (session.DayNr > -1)
                 DayNr = session.DayNr;
+
+            if (!String.IsNullOrEmpty(session.Notes))
+                Notes = session.Notes;
 
         }
         #endregion
