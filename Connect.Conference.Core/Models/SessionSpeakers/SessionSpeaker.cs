@@ -18,6 +18,14 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
 
         #region Properties
         [DataMember]
+        public string Company { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+        [DataMember]
+        public string DescriptionShort { get; set; }
+        [DataMember]
+        public string Url { get; set; }
+        [DataMember]
         public string DisplayName { get; set; }
         [DataMember]
         public string FirstName { get; set; }
