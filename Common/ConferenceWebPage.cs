@@ -38,24 +38,5 @@ namespace Connect.DNN.Modules.Conference.Common
             }
         }
 
-        public MvcHtmlString ReturnLink(string linkText, string defaultController, string defaultActionName, object defaultRouteValues, object htmlAttributes, int? id)
-        {
-            var ret = "";
-            if (HttpContext.Current.Request.Params["ret"] != null)
-            {
-                ret = HttpContext.Current.Request.Params["ret"];
-            }
-            switch (ret)
-            {
-                case "c-tls":
-                    return Html.ActionLink(linkText, "TracksLocationsSlots", "Conference", new { ConferenceId = id }, htmlAttributes);
-                case "c-ss":
-                    return Html.ActionLink(linkText, "SessionsSpeakers", "Conference", new { ConferenceId = id }, htmlAttributes);
-                case "c-m":
-                    return Html.ActionLink(linkText, "Manage", "Conference", new { ConferenceId = id }, htmlAttributes);
-            }
-            return Html.ActionLink(linkText, defaultActionName, defaultController, defaultRouteValues, htmlAttributes);
-        }
-
     }
 }

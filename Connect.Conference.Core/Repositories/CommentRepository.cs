@@ -80,6 +80,14 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete("WHERE ConferenceId = @0 AND CommentId = @1", conferenceId, commentId);
             }
         }
+        public void DeleteCommentsBySession(int sessionId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<CommentBase>();
+                rep.Delete("WHERE SessionId = @0", sessionId);
+            }
+        }
         public void UpdateComment(CommentBase comment)
         {
             Requires.NotNull(comment);
@@ -101,6 +109,7 @@ namespace Connect.Conference.Core.Repositories
         int AddComment(ref CommentBase comment);
         void DeleteComment(CommentBase comment);
         void DeleteComment(int conferenceId, int commentId);
+        void DeleteCommentsBySession(int sessionId);
         void UpdateComment(CommentBase comment);
     }
 }

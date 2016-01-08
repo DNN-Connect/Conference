@@ -62,6 +62,7 @@ namespace Connect.Conference.Core.Repositories
         {
             Requires.NotNull(session);
             Requires.PropertyNotNegative(session, "SessionId");
+            CommentRepository.Instance.DeleteCommentsBySession(session.SessionId);
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<SessionBase>();

@@ -120,6 +120,9 @@
   <data name="AboutTheSpeakers.Text" xml:space="preserve">
     <value>About the speakers</value>
   </data>
+  <data name="Delete.Confirm" xml:space="preserve">
+    <value>Do you wish to delete your session? Note this cannot be undone and all related data (conversations, documents, etc) will be lost!</value>
+  </data>
   <data name="EditSession.Text" xml:space="preserve">
     <value>Edit Session</value>
   </data>
@@ -140,6 +143,18 @@
   </data>
   <data name="PublicComments.Text" xml:space="preserve">
     <value>Public Comments</value>
+  </data>
+  <data name="Retract.Confirm" xml:space="preserve">
+    <value>Do you wish to retract your presentation?</value>
+  </data>
+  <data name="Retract.Text" xml:space="preserve">
+    <value>Retract</value>
+  </data>
+  <data name="Submit.Confirm" xml:space="preserve">
+    <value>Do you wish to submit this session?</value>
+  </data>
+  <data name="Submit.Text" xml:space="preserve">
+    <value>Submit</value>
   </data>
   <data name="TitleRequired.Error" xml:space="preserve">
     <value>A session requires a title</value>

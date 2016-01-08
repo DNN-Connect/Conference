@@ -46,6 +46,12 @@ namespace Connect.DNN.Modules.Conference.Common
                     routeValues["action"] = "Manage";
                     routeValues.Add("conferenceId", id);
                     return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+                case "s-v":
+                    routeValues["controller"] = "Session";
+                    routeValues["action"] = "View";
+                    routeValues.Add("conferenceId", ControllerContext.HttpContext.Request.Params["ConferenceId"]);
+                    routeValues.Add("SessionId", id);
+                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
             }
             return defaultRoute;
         }

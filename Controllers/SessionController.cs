@@ -28,6 +28,42 @@ namespace Connect.DNN.Modules.Conference.Controllers
             if (session == null) { session = new Session() { ConferenceId = conferenceId }; }
             return View(session);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public new ActionResult View()
+        {
+            var session = _repository.GetSession(int.Parse(HttpContext.Request.Params["ConferenceId"]), int.Parse(HttpContext.Request.Params["SessionId"]));
+            if (HttpContext.Request.Params["workflow"] != null)
+            {
+                var newStatus = int.Parse(HttpContext.Request.Params["workflow"]);
+                if (session.Status == 0 && newStatus == 1 && ConferenceModuleContext.Security.IsPresenter(session.SessionId))
+                {
+                    session.Status = 1;
+                    _repository.UpdateSession(session.GetSessionBase(), User.UserID);
+                }
+                else if (session.Status > 0 && newStatus == 0 && ConferenceModuleContext.Security.IsPresenter(session.SessionId))
+                {
+                    session.Status = 0;
+                    _repository.UpdateSession(session.GetSessionBase(), User.UserID);
+                }
+
+            }
+            else if (HttpContext.Request.Params["command"] != null)
+            {
+                var command = HttpContext.Request.Params["command"];
+                switch (command.ToLower())
+                {
+                    case "delete":
+                        if (ConferenceModuleContext.Security.CanManage || ConferenceModuleContext.Security.IsPresenter(session.SessionId))
+                        {
+                            _repository.DeleteSession(session.GetSessionBase());
+                            return RedirectToDefaultRoute();
+                        }
+                        break;
+                }
+            }
+            return View(session);
+        }
 
         [HttpGet]
         public ActionResult Edit(int conferenceId, int sessionId)

@@ -53,6 +53,8 @@ namespace Connect.DNN.Modules.Conference.Common
                     return Html.ActionLink(linkText, "SessionsSpeakers", "Conference", new { ConferenceId = id }, htmlAttributes);
                 case "c-m":
                     return Html.ActionLink(linkText, "Manage", "Conference", new { ConferenceId = id }, htmlAttributes);
+                case "s-v":
+                    return Html.ActionLink(linkText, "View", "Session", new { ConferenceId = HttpContext.Current.Request.Params["ConferenceId"], SessionId = id }, htmlAttributes);
             }
             return Html.ActionLink(linkText, defaultActionName, defaultController, defaultRouteValues, htmlAttributes);
         }

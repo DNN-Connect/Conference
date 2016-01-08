@@ -68,11 +68,11 @@
       <hr />
       <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
       <dl>
-      @foreach (var speaker in speakers)
-      {
-      <dt>@speaker.DisplayName</dt>
-      <dd>todo: bio</dd>
-      }
+       @foreach (var speaker in speakers)
+       {
+       <dt>@speaker.DisplayName</dt>
+       <dd>todo: bio</dd>
+       }
       </dl>
      </div>
     </div>
@@ -83,6 +83,18 @@
  {
  <div class="row">
   <div class="well">@Model.Notes</div>
+  <div class="buttons-right">
+   @if (Model.Status > 0)
+   {
+    <button type="submit" class="btn btn-warning" id="cmdRetract" name="workflow" value="0">@Dnn.LocalizeString("Retract")</button>
+   }
+   @if (Model.Status == 0)
+   {
+    <button type="submit" class="btn btn-primary" id="cmdSubmit" name="workflow" value="1">@Dnn.LocalizeString("Submit")</button>
+    <button type="submit" class="btn btn-warning" id="cmdDelete" name="command" value="delete">@Dnn.LocalizeString("Delete")</button>
+   }
+   @Html.ActionLink(Dnn.LocalizeString("Edit"), "Submit", "Session", new { ConferenceId = Model.ConferenceId, SessionId = Model.SessionId, ret = "s-v" }, new { @class = "btn btn-default" })
+  </div>
  </div>
  }
  <div class="row">
@@ -125,6 +137,21 @@
 </div>
 
 <div class="right">
- <a href="@Url.Action("View", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-primary">@Dnn.LocalizeString("Return")</a>
+ @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
 </div>
 
+<script type="text/javascript">
+ $(function () {
+  $(document).ready(function() {
+   $('#cmdSubmit').click(function () {
+    return confirm('@Dnn.LocalizeString("Submit.Confirm")');
+   });
+   $('#cmdRetract').click(function () {
+    return confirm('@Dnn.LocalizeString("Retract.Confirm")');
+   });
+   $('#cmdDelete').click(function () {
+    return confirm('@Dnn.LocalizeString("Delete.Confirm")');
+   });
+  });
+ });
+</script>

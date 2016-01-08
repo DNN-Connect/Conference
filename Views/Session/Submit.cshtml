@@ -25,13 +25,13 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Abstract")</label>
   </div>
-  @Html.TextAreaFor(m => m.Description)
+  @Html.TextAreaFor(m => m.Description, 10, 20, null)
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Notes")</label>
   </div>
-  @Html.TextAreaFor(m => m.Notes)
+  @Html.TextAreaFor(m => m.Notes, 10, 20, null)
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
@@ -48,7 +48,7 @@
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>
  <div class="right">
-  <a href="@Url.Action("SessionsSpeakers", "Conference", new {conferenceId = Model.ConferenceId})" class="btn btn-default">@Dnn.LocalizeString("Cancel")</a>
+  @ReturnLink(Dnn.LocalizeString("Cancel"), "Home", "Index", null, new { @class = "btn btn-default" }, Model.SessionId)
   <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>
