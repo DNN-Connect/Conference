@@ -1,5 +1,7 @@
 ﻿using DotNetNuke.Web.Mvc.Framework.Controllers;
+using DotNetNuke.Web.Mvc.Routing;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -12,12 +14,40 @@ namespace Connect.DNN.Modules.Conference.Common
             get { return _conferenceModuleContext ?? (_conferenceModuleContext = new ContextHelper(this)); }
         }
 
-        public string GetRouteParameter() {
-            if (ControllerContext.HttpContext.Request.Params["ret"] == null) {
+        public string GetRouteParameter()
+        {
+            if (ControllerContext.HttpContext.Request.Params["ret"] == null)
+            {
                 return "";
-            } else {
+            }
+            else
+            {
                 return ControllerContext.HttpContext.Request.Params["ret"];
             }
+        }
+
+        public ActionResult ReturnRoute(int? id, ActionResult defaultRoute)
+        {
+            RouteValueDictionary routeValues = new RouteValueDictionary();
+            switch (GetRouteParameter())
+            {
+                case "c-tls":
+                    routeValues["controller"] = "Conference";
+                    routeValues["action"] = "TracksLocationsSlots";
+                    routeValues.Add("conferenceId", id);
+                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+                case "c-ss":
+                    routeValues["controller"] = "Conference";
+                    routeValues["action"] = "SessionsSpeakers";
+                    routeValues.Add("conferenceId", id);
+                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+                case "c-m":
+                    routeValues["controller"] = "Conference";
+                    routeValues["action"] = "Manage";
+                    routeValues.Add("conferenceId", id);
+                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+            }
+            return defaultRoute;
         }
 
     }

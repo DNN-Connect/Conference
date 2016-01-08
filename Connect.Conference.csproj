@@ -225,6 +225,9 @@
   <ItemGroup>
     <Content Include="App_LocalResources\Speaker.resx" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\Manage.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -51,17 +51,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 session.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateSession(session, User.UserID);
             }
-            RouteValueDictionary routeValues = new RouteValueDictionary();
-            switch (GetRouteParameter())
-            {
-                case "c-ss":
-                    routeValues["controller"] = "Conference";
-                    routeValues["action"] = "SessionsSpeakers";
-                    routeValues.Add("conferenceId", session.ConferenceId);
-                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
-                default:
-                    return View("View", _repository.GetSession(session.ConferenceId, session.SessionId));
-            }
+            return ReturnRoute(session.ConferenceId, View("View", _repository.GetSession(session.ConferenceId, session.SessionId)));
         }
 
         [HttpGet]

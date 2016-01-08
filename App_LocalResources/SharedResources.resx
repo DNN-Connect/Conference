@@ -267,4 +267,19 @@
   <data name="DateAndTime.Text" xml:space="preserve">
     <value>Date and Time</value>
   </data>
+  <data name="Manage.Text" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="NrAttendees.Text" xml:space="preserve">
+    <value>Nr Attendees</value>
+  </data>
+  <data name="NrLocations.Text" xml:space="preserve">
+    <value>Nr Locations</value>
+  </data>
+  <data name="NrSpeakers.Text" xml:space="preserve">
+    <value>Nr Speakers</value>
+  </data>
+  <data name="NrTracks.Text" xml:space="preserve">
+    <value>Nr Tracks</value>
+  </data>
 </root>

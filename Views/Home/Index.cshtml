@@ -9,52 +9,50 @@
 
 @foreach (Conference c in conferences.OrderBy(x => x.StartDate))
 {
- <div class="panel panel-primary">
+ <div class="panel panel-info">
   <div class="panel-heading">
    <h3 class="panel-title">@c.Name</h3>
+  </div>
+  <div class="panel-body">
 @if (c.StartDate != null)
 {
-   <h6>
+   <h5>
      @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("d MMMM") : "")
      - @((c.EndDate != null) ? ((System.DateTime)c.EndDate).ToString("d MMMM") : "")
      @((c.StartDate != null) ? ((System.DateTime)c.StartDate).ToString("yyyy") : "")
      @c.Location
-   </h6>
+   </h5>
 }
-  </div>
-  <div class="panel-body">
    <div>
     @c.Description
    </div>
-   @if (ConferenceModuleContext.Security.CanManage)
-   {
-   <div>
-    <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
-     @Dnn.LocalizeString("Edit")
-    </a>
-    <a href="@Url.Action("SessionsSpeakers", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
-     @Dnn.LocalizeString("SessionsSpeakers")
-    </a>
-    <a href="@Url.Action("TracksLocationsSlots", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
-     @Dnn.LocalizeString("TracksLocationsSlots")
-    </a>
-   </div>
-   }
   </div>
   <div class="panel-footer">
    <div>
+    @if (c.MaxCapacity != null && c.MaxCapacity > 0)
+    {
     <span>
      @Dnn.LocalizeString("MaxCapacity"): @c.MaxCapacity
     </span>
+    }
+    @if (c.NrAttendees != null && c.NrAttendees > 0)
+    {
     <span>
      @Dnn.LocalizeString("NrAttendees"): @c.NrAttendees
     </span>
+    }
+    @if (c.NrSessions != null && c.NrSessions > 0)
+    {
     <span>
      @Dnn.LocalizeString("NrSessions"): @c.NrSessions
     </span>
+    }
     @if (ConferenceModuleContext.Security.CanManage)
     {
-    <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right">
+    <a href="@Url.Action("Manage", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Manage")" class="pull-right">
+     @Dnn.LocalizeString("Manage")
+    </a>
+    <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right" style="padding-right:10px;">
      @Dnn.LocalizeString("Edit")
     </a>
     }

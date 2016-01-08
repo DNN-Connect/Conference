@@ -51,17 +51,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 track.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateTrack(track, User.UserID);
             }
-            RouteValueDictionary routeValues = new RouteValueDictionary();
-            switch (GetRouteParameter())
-            {
-                case "c-tls":
-                    routeValues["controller"] = "Conference";
-                    routeValues["action"] = "TracksLocationsSlots";
-                    routeValues.Add("conferenceId", track.ConferenceId);
-                    return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
-                default:
-                    return View("View", _repository.GetTrack(track.ConferenceId, track.TrackId));
-            }
+            return ReturnRoute(track.ConferenceId, View("View", _repository.GetTrack(track.ConferenceId, track.TrackId)));
         }
 
     }

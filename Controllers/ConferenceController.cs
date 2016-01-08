@@ -36,6 +36,17 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        public ActionResult View(int conferenceId)
+        {
+            return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
+        }
+        [HttpGet]
+        public ActionResult Manage(int conferenceId)
+        {
+            return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
+        }
+
+        [HttpGet]
         public ActionResult Edit(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);

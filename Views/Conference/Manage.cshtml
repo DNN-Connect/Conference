@@ -1,0 +1,86 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+}
+
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+   <div class="panel panel-info">
+    <div class="panel-heading">@Model.Name</div>
+    <div class="panel-body">
+     <dl class="dl-horizontal">
+      <dt>@Dnn.LocalizeString("StartDate")</dt>
+      <dd>@Model.StartDate.TryFormatDate("d")</dd>
+      <dt>@Dnn.LocalizeString("EndDate")</dt>
+      <dd>@Model.EndDate.TryFormatDate("d")</dd>
+      <dt>@Dnn.LocalizeString("Location")</dt>
+      <dd>@Model.Location</dd>
+      <dt>@Dnn.LocalizeString("MaxCapacity")</dt>
+      <dd>@Model.MaxCapacity</dd>
+      <dt>@Dnn.LocalizeString("Url")</dt>
+      <dd>@Model.Url</dd>
+      <dt>@Dnn.LocalizeString("Description")</dt>
+      <dd>@Model.Description</dd>
+      <dt>@Dnn.LocalizeString("NrAttendees")</dt>
+      <dd>@Model.NrAttendees</dd>
+      <dt>@Dnn.LocalizeString("NrLocations")</dt>
+      <dd>@Model.NrLocations</dd>
+      <dt>@Dnn.LocalizeString("NrSessions")</dt>
+      <dd>@Model.NrSessions</dd>
+      <dt>@Dnn.LocalizeString("NrSpeakers")</dt>
+      <dd>@Model.NrSpeakers</dd>
+      <dt>@Dnn.LocalizeString("NrTracks")</dt>
+      <dd>@Model.NrTracks</dd>
+     </dl>
+     <div>
+      <a href="@Url.Action("Edit", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
+       @Dnn.LocalizeString("Edit")
+      </a>
+      <a href="@Url.Action("SessionsSpeakers", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("SessionsSpeakers")" class="btn btn-default">
+       @Dnn.LocalizeString("SessionsSpeakers")
+      </a>
+      <a href="@Url.Action("TracksLocationsSlots", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("TracksLocationsSlots")" class="btn btn-default">
+       @Dnn.LocalizeString("TracksLocationsSlots")
+      </a>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="right">
+ @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+</div>
+
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+}
+
+<script type="text/javascript">
+ $(function () {
+
+  $(document).ready(function() {
+
+   var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+
+   $('#tblSessions tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderSessions(@Model.ConferenceId, getTableOrder('tblSessions'));
+    }
+   });
+   $('#tblSpeakers tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderSpeakers(@Model.ConferenceId, getTableOrder('tblSpeakers'));
+    }
+   });
+
+  });
+
+ });
+</script>

@@ -129,4 +129,10 @@
   <data name="SelectRole.Text" xml:space="preserve">
     <value>-- Select Role --</value>
   </data>
+  <data name="SessionsSpeakers.Text" xml:space="preserve">
+    <value>Sessions &amp; Speakers</value>
+  </data>
+  <data name="TracksLocationsSlots.Text" xml:space="preserve">
+    <value>Tracks, Locations &amp; Slots</value>
+  </data>
 </root>

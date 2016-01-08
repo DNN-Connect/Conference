@@ -84,7 +84,7 @@
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>
  <div class="right">
-  @Html.ActionLink(Dnn.LocalizeString("Cancel"), "Index", "Home", null, new { @class = "btn btn-default" })
+  @ReturnLink(Dnn.LocalizeString("Cancel"), "Home", "Index", null, new { @class = "btn btn-default" }, Model.ConferenceId)
   <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>

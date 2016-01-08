@@ -69,5 +69,11 @@ namespace Connect.DNN.Modules.Conference.Common
         {
             return Localization.GetString(status.ToString(), SharedResourceFileName);
         }
+
+        public static string TryFormatDate(this System.DateTime? theDate, string format)
+        {
+            if (theDate == null) { return ""; }
+            return ((System.DateTime)theDate).ToString(format);
+        }
     }
 }

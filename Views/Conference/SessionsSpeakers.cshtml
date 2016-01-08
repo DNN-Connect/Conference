@@ -64,7 +64,7 @@
 </div>
 
 <div class="right">
- @Html.ActionLink(Dnn.LocalizeString("Return"), "Index", "Home", null, new { @class = "btn btn-primary" })
+ @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
 </div>
 
 @{
