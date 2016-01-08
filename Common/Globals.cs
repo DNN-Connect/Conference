@@ -64,5 +64,10 @@ namespace Connect.DNN.Modules.Conference.Common
             catch { }
             return res;
         }
+
+        public static string ToStatusString(this Connect.Conference.Core.Common.SessionStatus status)
+        {
+            return Localization.GetString(status.ToString(), SharedResourceFileName);
+        }
     }
 }

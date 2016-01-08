@@ -117,8 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutTheSpeakers.Text" xml:space="preserve">
+    <value>About the speakers</value>
+  </data>
   <data name="EditSession.Text" xml:space="preserve">
     <value>Edit Session</value>
+  </data>
+  <data name="InternalComments.Help" xml:space="preserve">
+    <value>These comments can only be seen by the speakers of this session and the conference managers</value>
+  </data>
+  <data name="InternalComments.Text" xml:space="preserve">
+    <value>Internal Comments</value>
+  </data>
+  <data name="PrivateComments.Help" xml:space="preserve">
+    <value>These comments can only be seen by the speakers of this session</value>
+  </data>
+  <data name="PrivateComments.Text" xml:space="preserve">
+    <value>Private Comments</value>
+  </data>
+  <data name="PublicComments.Help" xml:space="preserve">
+    <value>These comments are visible by everyone</value>
+  </data>
+  <data name="PublicComments.Text" xml:space="preserve">
+    <value>Public Comments</value>
   </data>
   <data name="TitleRequired.Error" xml:space="preserve">
     <value>A session requires a title</value>

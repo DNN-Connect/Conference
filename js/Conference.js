@@ -102,7 +102,7 @@ var Comments = React.createClass({displayName: "Comments",
       submitPanel = (
         React.createElement("div", {className: "panel-form"}, 
           React.createElement("div", null, 
-           React.createElement("textarea", {className: "form-control", ref: "txtComment"})
+           React.createElement("textarea", {className: "form-control", ref: "txtComment", placeholder: this.props.help})
           ), 
           React.createElement("div", {className: "panel-form-button"}, 
            React.createElement("button", {className: "btn btn-primary", ref: "cmdAdd", onClick: this.addComment}, this.resources.AddComment)
@@ -110,23 +110,12 @@ var Comments = React.createClass({displayName: "Comments",
          )
       );
     }
-    var title = this.resources.Comments;
-    switch (this.props.visibility) {
-      case 0:
-        title = this.resources.PrivateComments;
-        break;
-      case 1:
-        title = this.resources.InternalComments;
-        break;
-      default:
-        title = this.resources.PublicComments;
-    }
     return (
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "panel panel-default widget"}, 
          React.createElement("div", {className: "panel-heading"}, 
           React.createElement("span", {className: "glyphicon glyphicon-comment"}), 
-          React.createElement("h3", {className: "panel-title"}, title), 
+          React.createElement("h3", {className: "panel-title"}, this.props.title), 
           React.createElement("span", {className: "label label-info"}, this.state.commentCount)
          ), 
          submitPanel, 
@@ -639,9 +628,11 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var appPath = $(el).data('apppath');
         var totalComments = $(el).data('totalcomments');
         var loggedIn = $(el).data('loggedin');
+        var title = $(el).data('title');
+        var help = $(el).data('help');
         React.render(React.createElement(Comments, {moduleId: moduleId, 
            conferenceId: conferenceId, sessionId: sessionId, appPath: appPath, 
-           totalComments: totalComments, loggedIn: loggedIn, 
+           totalComments: totalComments, loggedIn: loggedIn, title: title, help: help, 
            visibility: visibility, pageSize: pageSize, comments: comments}), el);
       });
     },

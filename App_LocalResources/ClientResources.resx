@@ -147,17 +147,8 @@
   <data name="General" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="InternalComments" xml:space="preserve">
-    <value>Internal Comments</value>
-  </data>
   <data name="More" xml:space="preserve">
     <value>More</value>
-  </data>
-  <data name="PrivateComments" xml:space="preserve">
-    <value>Private Comments</value>
-  </data>
-  <data name="PublicComments" xml:space="preserve">
-    <value>PublicComments</value>
   </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save changes</value>

@@ -1,4 +1,6 @@
+using System.Linq;
 using DotNetNuke.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Connect.Conference.Core.Models.Sessions
 {
@@ -42,6 +44,10 @@ namespace Connect.Conference.Core.Models.Sessions
                 }
             }
             return false;
+        }
+
+        public IOrderedEnumerable<SessionSpeakers.SessionSpeaker> GetSpeakers() {
+            return Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId).OrderBy(p => p.Sort);
         }
     }
 }

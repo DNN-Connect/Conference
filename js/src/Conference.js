@@ -40,9 +40,11 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var appPath = $(el).data('apppath');
         var totalComments = $(el).data('totalcomments');
         var loggedIn = $(el).data('loggedin');
+        var title = $(el).data('title');
+        var help = $(el).data('help');
         React.render(<Comments moduleId={moduleId} 
            conferenceId={conferenceId} sessionId={sessionId} appPath={appPath}
-           totalComments={totalComments} loggedIn={loggedIn}
+           totalComments={totalComments} loggedIn={loggedIn} title={title} help={help}
            visibility={visibility} pageSize={pageSize} comments={comments} />, el);
       });
     },

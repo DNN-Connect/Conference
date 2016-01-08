@@ -20,7 +20,7 @@ namespace Connect.Conference.Core.Models.Sessions
 
         #region Properties
         [DataMember]
-        public System.DateTime? SessionDate { get; set; }
+        public System.DateTime? SessionDateAndTime { get; set; }
         [DataMember]
         public string LocationName { get; set; }
         [DataMember]

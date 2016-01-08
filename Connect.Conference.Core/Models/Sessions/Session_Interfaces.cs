@@ -17,7 +17,7 @@ namespace Connect.Conference.Core.Models.Sessions
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
-   SessionDate = (DateTime)(Null.SetNull(dr["SessionDate"], SessionDate));
+   SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
    LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
    SlotTitle = Convert.ToString(Null.SetNull(dr["SlotTitle"], SlotTitle));
    NrAttendees = Convert.ToInt32(Null.SetNull(dr["NrAttendees"], NrAttendees));
@@ -31,12 +31,12 @@ namespace Connect.Conference.Core.Models.Sessions
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
-    case "sessiondate": // DateTime
-     if (SessionDate == null)
+    case "sessiondateandtime": // DateTime
+     if (SessionDateAndTime == null)
      {
          return "";
      };
-     return ((DateTime)SessionDate).ToString(strFormat, formatProvider);
+     return ((DateTime)SessionDateAndTime).ToString(strFormat, formatProvider);
     case "locationname": // NVarChar
      if (LocationName == null)
      {

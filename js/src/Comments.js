@@ -23,7 +23,7 @@ var Comments = React.createClass({
       submitPanel = (
         <div className="panel-form">
           <div>
-           <textarea className="form-control" ref="txtComment" />
+           <textarea className="form-control" ref="txtComment" placeholder={this.props.help} />
           </div>
           <div className="panel-form-button">
            <button className="btn btn-primary" ref="cmdAdd" onClick={this.addComment}>{this.resources.AddComment}</button>
@@ -31,23 +31,12 @@ var Comments = React.createClass({
          </div>
       );
     }
-    var title = this.resources.Comments;
-    switch (this.props.visibility) {
-      case 0:
-        title = this.resources.PrivateComments;
-        break;
-      case 1:
-        title = this.resources.InternalComments;
-        break;
-      default:
-        title = this.resources.PublicComments;
-    }
     return (
       <div className="row">
         <div className="panel panel-default widget">
          <div className="panel-heading">
           <span className="glyphicon glyphicon-comment"></span>
-          <h3 className="panel-title">{title}</h3>
+          <h3 className="panel-title">{this.props.title}</h3>
           <span className="label label-info">{this.state.commentCount}</span>
          </div>
          {submitPanel}
