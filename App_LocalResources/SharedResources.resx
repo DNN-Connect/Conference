@@ -282,4 +282,7 @@
   <data name="NrTracks.Text" xml:space="preserve">
     <value>Nr Tracks</value>
   </data>
+  <data name="Tags.Text" xml:space="preserve">
+    <value>Tags</value>
+  </data>
 </root>

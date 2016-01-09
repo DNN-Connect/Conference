@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Globals.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\SessionStatus.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />
@@ -95,6 +95,7 @@
     <Compile Include="Models\SessionSpeakers\SessionSpeakerBase.cs" />
     <Compile Include="Models\SessionSpeakers\SessionSpeakerBase_Interfaces.cs" />
     <Compile Include="Models\SessionSpeakers\SessionSpeaker_Interfaces.cs" />
+    <Compile Include="Models\Sessions\SessionBase_Custom.cs" />
     <Compile Include="Models\Sessions\Session_Custom.cs" />
     <Compile Include="Models\Sessions\Session.cs" />
     <Compile Include="Models\Sessions\SessionBase.cs" />

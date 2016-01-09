@@ -71,5 +71,8 @@ window.ConferenceService = function($, mid) {
   this.deleteComment = function(conferenceId, commentId, success, fail) {
     this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
   }
+  this.searchTags = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Tags', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
+  }
 
 }

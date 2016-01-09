@@ -1,12 +1,19 @@
 ﻿@inherits ConferenceWebPage<SessionBase>
 @using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Sessions;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddEditScripts();
 }
+
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
 
 <fieldset id="editTrack">
  <div class="dnnFormItem">
@@ -20,6 +27,13 @@
    <label>@Dnn.LocalizeString("SubTitle")</label>
   </div>
   @Html.TextBoxFor(m => m.SubTitle)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Tags")</label>
+  </div>
+  <div class="tagsComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-name="EditTags" data-tags="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetTags()))">
+  </div>
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">

@@ -117,6 +117,7 @@
     <Compile Include="Api\SpeakersController.cs" />
     <Compile Include="Api\TagsController.cs" />
     <Compile Include="Api\TracksController.cs" />
+    <Compile Include="Common\AutoCompletePair.cs" />
     <Compile Include="Common\ConferenceApiController.cs" />
     <Compile Include="Common\ConferenceAuthorizeAttribute.cs" />
     <Compile Include="Common\ConferenceMvcController.cs" />

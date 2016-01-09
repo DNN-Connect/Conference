@@ -75,5 +75,11 @@ namespace Connect.DNN.Modules.Conference.Common
             if (theDate == null) { return ""; }
             return ((System.DateTime)theDate).ToString(format);
         }
+
+        public static IEnumerable<AutoCompletePair> ToAutoCompleteList(this IEnumerable<Connect.Conference.Core.Models.Tags.Tag> tagList)
+        {
+            return tagList.Select(t => new AutoCompletePair() { label = t.TagName, value = t.TagId.ToString() });
+        }
+
     }
 }

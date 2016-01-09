@@ -6,6 +6,8 @@ using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Sessions;
 using System.Web.Routing;
 using DotNetNuke.Web.Mvc.Routing;
+using System.Collections.Generic;
+using Connect.Conference.Core.Models.Tags;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -87,6 +89,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 session.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateSession(session, User.UserID);
             }
+            HandleTags(session);
             return ReturnRoute(session.ConferenceId, View("View", _repository.GetSession(session.ConferenceId, session.SessionId)));
         }
 
@@ -134,8 +137,36 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 }
                 SessionSpeakerRepository.Instance.AddSessionSpeaker(new Connect.Conference.Core.Models.SessionSpeakers.SessionSpeakerBase() { SessionId = recordToUpdate.SessionId, SpeakerId = User.UserID, Sort = 0 }, User.UserID);
             }
+            HandleTags(session);
             return RedirectToDefaultRoute();
         }
+
+
+        #region " Helper Methods "
+        private void HandleTags(SessionBase session)
+        {
+            if (session.EditTags != null)
+            {
+                IEnumerable<Tag> tags = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Tag>>(session.EditTags);
+                var tagsToAdd = new List<TagBase>();
+                foreach (Tag tag in tags)
+                {
+                    var tagToAdd = tag.GetTagBase();
+                    if (tag.TagId < 0)
+                    {
+                        tagToAdd.TagName = tagToAdd.TagName.Substring(0, 1).ToUpper() + tagToAdd.TagName.Substring(1);
+                        tagToAdd.ConferenceId = session.ConferenceId;
+                        TagRepository.Instance.AddTag(ref tagToAdd, User.UserID);
+                    }
+                    if (tagsToAdd.SingleOrDefault(t => t.TagId == tagToAdd.TagId) == null)
+                    {
+                        tagsToAdd.Add(tagToAdd);
+                    }
+                }
+                SessionTagRepository.Instance.SetSessionTags(session.SessionId, tagsToAdd.Select(t => t.TagId).ToList());
+            }
+        }
+        #endregion
 
     }
 }

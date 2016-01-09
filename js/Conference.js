@@ -190,6 +190,122 @@ module.exports = Comments;
 
 },{"./CommentList":2}],4:[function(require,module,exports){
 /** @jsx React.DOM */
+var Tag = React.createClass({displayName: "Tag",
+  render: function() {
+    return (
+      React.createElement("span", {className: "tag label label-info"}, this.props.tag.TagName, 
+       React.createElement("span", {"data-role": "remove", onClick: this.props.onRemoveTag.bind(null, this.props.tag.TagId)})
+      )
+    );
+  }
+});
+
+module.exports = Tag;
+
+},{}],5:[function(require,module,exports){
+/** @jsx React.DOM */
+var Tag = require('./Tag');
+
+var Tags = React.createClass({displayName: "Tags",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    return {
+      tags: this.props.tags,
+      newTagId: -1
+    }
+  },
+
+  render: function() {
+    var tagList = this.state.tags.map(function(item) {
+      return React.createElement(Tag, {tag: item, key: item.TagId, onRemoveTag: this.onRemoveTag})
+    }.bind(this));
+    return (
+      React.createElement("div", {className: "bootstrap-tagsinput"}, 
+        tagList, 
+        React.createElement("input", {type: "text", placeholder: "here", className: "taginput", ref: "newTag", 
+               onKeyPress: this.onNewTagKeyPress}), 
+        React.createElement("input", {type: "hidden", name: this.props.name, value: JSON.stringify(this.state.tags)})
+      )
+    );
+  },
+
+  componentDidMount: function() {
+    console.log('mounted');
+    $(document).ready(function() {
+      $(this.refs.newTag.getDOMNode()).autocomplete({
+        minLength: 1,
+        source: function(request, response) {
+          this.service.searchTags(this.props.conferenceId, request.term, function(data) {
+            response(data);
+          });
+        }.bind(this),
+        select: function(e, ui) {
+          e.preventDefault();
+          this.addTag(ui.item.label, ui.item.value);
+          this.refs.newTag.getDOMNode().value = '';
+        }.bind(this)
+      });
+    }.bind(this));
+
+  },
+
+  onRemoveTag: function(tagId, e) {
+    e.preventDefault();
+    var newTagList = [];
+    for (i = 0; i < this.state.tags.length; i++) {
+      if (this.state.tags[i].TagId != tagId) {
+        newTagList.push(this.state.tags[i]);
+      }
+    }
+    this.setState({
+      tags: newTagList
+    });
+  },
+
+  onNewTagKeyPress: function(e) {
+    switch (e.charCode) {
+      case 13:
+      case 44:
+        e.preventDefault();
+        var newTag = this.refs.newTag.getDOMNode().value;
+        this.addTag(newTag);
+        this.refs.newTag.getDOMNode().value = '';
+    }
+  },
+
+  addTag: function(tagName, tagId) {
+    var newTagList = this.state.tags;
+    var shouldAdd = true;
+    for (i = 0; i < this.state.tags.length; i++) {
+      if (this.state.tags[i].TagName == tagName) {
+        shouldAdd = false;
+      }
+    }
+    if (shouldAdd) {
+      var newTag = {
+        TagId: (tagId == undefined) ? this.state.newTagId : tagId,
+        TagName: tagName
+      };
+      newTagList.push(newTag)
+    }
+    this.setState({
+      tags: newTagList,
+      newTagId: (tagId == undefined) ? this.state.newTagId - 1 : this.state.newTagId
+    });
+  }
+
+});
+
+module.exports = Tags;
+
+
+},{"./Tag":4}],6:[function(require,module,exports){
+/** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
 var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
@@ -426,7 +542,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":5}],5:[function(require,module,exports){
+},{"./TimesheetEditorSlot":7}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -585,10 +701,11 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
-    Comments = require('./Comments');
+    Comments = require('./Comments'),
+    Tags = require('./Tags');
 
 (function($, window, document, undefined) {
 
@@ -635,6 +752,14 @@ var TimesheetEditor = require('./TimesheetEditor'),
            totalComments: totalComments, loggedIn: loggedIn, title: title, help: help, 
            visibility: visibility, pageSize: pageSize, comments: comments}), el);
       });
+      $('.tagsComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var fieldName = $(el).data('name');
+        var tags = $(el).data('tags');
+        React.render(React.createElement(Tags, {moduleId: moduleId, name: fieldName, tags: tags, 
+           conferenceId: conferenceId}), el);
+      });
     },
 
     formatString: function(format) {
@@ -651,7 +776,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./TimesheetEditor":4}]},{},[6])
+},{"./Comments":3,"./Tags":5,"./TimesheetEditor":6}]},{},[8])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -724,6 +849,9 @@ window.ConferenceService = function($, mid) {
   }
   this.deleteComment = function(conferenceId, commentId, success, fail) {
     this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
+  }
+  this.searchTags = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Tags', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
   }
 
 }

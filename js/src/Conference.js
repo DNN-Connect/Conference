@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
-    Comments = require('./Comments');
+    Comments = require('./Comments'),
+    Tags = require('./Tags');
 
 (function($, window, document, undefined) {
 
@@ -46,6 +47,14 @@ var TimesheetEditor = require('./TimesheetEditor'),
            conferenceId={conferenceId} sessionId={sessionId} appPath={appPath}
            totalComments={totalComments} loggedIn={loggedIn} title={title} help={help}
            visibility={visibility} pageSize={pageSize} comments={comments} />, el);
+      });
+      $('.tagsComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var fieldName = $(el).data('name');
+        var tags = $(el).data('tags');
+        React.render(<Tags moduleId={moduleId} name={fieldName} tags={tags}
+           conferenceId={conferenceId} />, el);
       });
     },
 
