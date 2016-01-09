@@ -30,7 +30,6 @@ var Tags = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log('mounted');
     $(document).ready(function() {
       $(this.refs.newTag.getDOMNode()).autocomplete({
         minLength: 1,

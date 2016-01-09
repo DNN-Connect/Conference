@@ -22,6 +22,8 @@ namespace Connect.Conference.Core.Models.Tags
         [DataMember]
         public int? NrSessions { get; set; }
         [DataMember]
+        public int? NrVotes { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
@@ -34,7 +36,6 @@ namespace Connect.Conference.Core.Models.Tags
              res.TagId = TagId;
              res.ConferenceId = ConferenceId;
              res.TagName = TagName;
-             res.Votes = Votes;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

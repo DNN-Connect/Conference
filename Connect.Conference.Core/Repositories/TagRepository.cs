@@ -43,6 +43,15 @@ namespace Connect.Conference.Core.Repositories
                     conferenceId, tagName);
             }
         }
+        public IEnumerable<TagWithVote> GetTagsWithVote(int conferenceId,int userId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<TagWithVote>(System.Data.CommandType.Text,
+                    "SELECT t.*, ISNULL(tv.UserId, 0) Voted FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Tags t LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_TagVotes tv ON tv.TagId=t.TagId AND tv.UserId=@1 WHERE ConferenceId=@0",
+                    conferenceId, userId);
+            }
+        }
         public IEnumerable<Tag> SearchTags(int conferenceId, string search)
         {
             using (var context = DataContext.Instance())
@@ -112,6 +121,7 @@ namespace Connect.Conference.Core.Repositories
         IEnumerable<Tag> GetTags(int conferenceId);
         Tag GetTag(int conferenceId, int tagId);
         Tag GetTagByName(int conferenceId, string tagName);
+        IEnumerable<TagWithVote> GetTagsWithVote(int conferenceId, int userId);
         IEnumerable<Tag> SearchTags(int conferenceId, string search);
         int AddTag(ref TagBase tag, int userId);
         void DeleteTag(TagBase tag);

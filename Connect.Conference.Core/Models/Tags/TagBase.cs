@@ -28,8 +28,6 @@ namespace Connect.Conference.Core.Models.Tags
         public int ConferenceId { get; set; }
         [DataMember]
         public string TagName { get; set; }
-        [DataMember]
-        public int? Votes { get; set; }
         #endregion
 
         #region Methods
@@ -43,9 +41,6 @@ namespace Connect.Conference.Core.Models.Tags
 
             if (!String.IsNullOrEmpty(tag.TagName))
                 TagName = tag.TagName;
-
-            if (tag.Votes > -1)
-                Votes = tag.Votes;
 
         }
         #endregion

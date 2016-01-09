@@ -21,7 +21,6 @@ namespace Connect.Conference.Core.Models.Sessions
    ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
    LocationId = Convert.ToInt32(Null.SetNull(dr["LocationId"], LocationId));
    Level = Convert.ToString(Null.SetNull(dr["Level"], Level));
-   Votes = Convert.ToInt32(Null.SetNull(dr["Votes"], Votes));
    Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
    Capacity = Convert.ToInt32(Null.SetNull(dr["Capacity"], Capacity));
    SlotId = Convert.ToInt32(Null.SetNull(dr["SlotId"], SlotId));
@@ -63,12 +62,6 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return PropertyAccess.FormatString(Level, strFormat);
-    case "votes": // Int
-     if (Votes == null)
-     {
-         return "";
-     };
-     return ((int)Votes).ToString(strFormat, formatProvider);
     case "sort": // Int
      if (Sort == null)
      {

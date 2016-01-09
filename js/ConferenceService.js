@@ -74,5 +74,11 @@ window.ConferenceService = function($, mid) {
   this.searchTags = function(conferenceId, searchTerm, success, fail) {
     this.apiCall('GET', 'Tags', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
   }
+  this.tagVote = function(conferenceId, tagId, vote, success, fail) {
+    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, { vote: vote }, success, fail);
+  }
+  this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, { vote: vote }, success, fail);
+  }
 
 }

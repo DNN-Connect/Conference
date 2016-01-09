@@ -285,4 +285,13 @@
   <data name="Tags.Text" xml:space="preserve">
     <value>Tags</value>
   </data>
+  <data name="NrVotes.Text" xml:space="preserve">
+    <value>Nr Votes</value>
+  </data>
+  <data name="Theme.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Votes.Text" xml:space="preserve">
+    <value>Votes</value>
+  </data>
 </root>

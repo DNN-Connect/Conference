@@ -18,6 +18,7 @@ namespace Connect.Conference.Core.Models.Tags
   {
    base.Fill(dr);
    NrSessions = Convert.ToInt32(Null.SetNull(dr["NrSessions"], NrSessions));
+   NrVotes = Convert.ToInt32(Null.SetNull(dr["NrVotes"], NrVotes));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
@@ -33,6 +34,12 @@ namespace Connect.Conference.Core.Models.Tags
          return "";
      };
      return ((int)NrSessions).ToString(strFormat, formatProvider);
+    case "nrvotes": // Int
+     if (NrVotes == null)
+     {
+         return "";
+     };
+     return ((int)NrVotes).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null)
      {

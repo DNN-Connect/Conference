@@ -30,6 +30,8 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int? NrSpeakers { get; set; }
         [DataMember]
+        public int? NrVotes { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
@@ -43,7 +45,6 @@ namespace Connect.Conference.Core.Models.Sessions
             res.ConferenceId = ConferenceId;
             res.LocationId = LocationId;
             res.Level = Level;
-            res.Votes = Votes;
             res.Sort = Sort;
             res.Capacity = Capacity;
             res.SlotId = SlotId;

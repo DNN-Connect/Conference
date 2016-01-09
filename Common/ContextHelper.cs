@@ -84,7 +84,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddModuleService()
         {
-            AddScript("ConnectService.js");
+            AddScript("ConferenceService.js");
         }
         public void AddBootstrapJs()
         {

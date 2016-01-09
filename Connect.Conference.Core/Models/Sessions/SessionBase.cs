@@ -32,8 +32,6 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public string Level { get; set; }
         [DataMember]
-        public int? Votes { get; set; }
-        [DataMember]
         public int? Sort { get; set; }
         [DataMember]
         public int? Capacity { get; set; }
@@ -69,9 +67,6 @@ namespace Connect.Conference.Core.Models.Sessions
 
             if (!String.IsNullOrEmpty(session.Level))
                 Level = session.Level;
-
-            if (session.Votes > -1)
-                Votes = session.Votes;
 
             if (session.Sort > -1)
                 Sort = session.Sort;

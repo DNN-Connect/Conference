@@ -22,6 +22,7 @@ namespace Connect.Conference.Core.Models.Sessions
    SlotTitle = Convert.ToString(Null.SetNull(dr["SlotTitle"], SlotTitle));
    NrAttendees = Convert.ToInt32(Null.SetNull(dr["NrAttendees"], NrAttendees));
    NrSpeakers = Convert.ToInt32(Null.SetNull(dr["NrSpeakers"], NrSpeakers));
+   NrVotes = Convert.ToInt32(Null.SetNull(dr["NrVotes"], NrVotes));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
@@ -61,6 +62,12 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return ((int)NrSpeakers).ToString(strFormat, formatProvider);
+    case "nrvotes": // Int
+     if (NrVotes == null)
+     {
+         return "";
+     };
+     return ((int)NrVotes).ToString(strFormat, formatProvider);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null)
      {

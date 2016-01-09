@@ -117,6 +117,7 @@
     <Compile Include="Models\Speakers\SpeakerBase.cs" />
     <Compile Include="Models\Speakers\SpeakerBase_Interfaces.cs" />
     <Compile Include="Models\Speakers\Speaker_Interfaces.cs" />
+    <Compile Include="Models\Tags\TagWithVote.cs" />
     <Compile Include="Models\Tags\Tag.cs" />
     <Compile Include="Models\Tags\TagBase.cs" />
     <Compile Include="Models\Tags\TagBase_Interfaces.cs" />
@@ -136,9 +137,11 @@
     <Compile Include="Repositories\SessionSpeakerRepository.cs" />
     <Compile Include="Repositories\SessionTagRepository.cs" />
     <Compile Include="Repositories\SessionTrackRepository.cs" />
+    <Compile Include="Repositories\SessionVoteRepository.cs" />
     <Compile Include="Repositories\SlotRepository.cs" />
     <Compile Include="Repositories\SpeakerRepository.cs" />
     <Compile Include="Repositories\TagRepository.cs" />
+    <Compile Include="Repositories\TagVoteRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
   </ItemGroup>
   <ItemGroup>

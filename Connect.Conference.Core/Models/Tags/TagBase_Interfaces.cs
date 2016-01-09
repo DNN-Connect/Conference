@@ -20,7 +20,6 @@ namespace Connect.Conference.Core.Models.Tags
    TagId = Convert.ToInt32(Null.SetNull(dr["TagId"], TagId));
    ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
    TagName = Convert.ToString(Null.SetNull(dr["TagName"], TagName));
-   Votes = Convert.ToInt32(Null.SetNull(dr["Votes"], Votes));
         }
 
         [IgnoreColumn()]
@@ -42,12 +41,6 @@ namespace Connect.Conference.Core.Models.Tags
      return ConferenceId.ToString(strFormat, formatProvider);
     case "tagname": // NVarChar
      return PropertyAccess.FormatString(TagName, strFormat);
-    case "votes": // Int
-     if (Votes == null)
-     {
-         return "";
-     };
-     return ((int)Votes).ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

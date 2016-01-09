@@ -34,6 +34,26 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        public class voteDTO
+        {
+            public int vote { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Authenticated)]
+        public HttpResponseMessage Vote(int conferenceId, int id, [FromBody]voteDTO vote)
+        {
+            if (vote.vote == 1)
+            {
+                SessionVoteRepository.Instance.SetSessionVote(id, UserInfo.UserID);
+            }
+            else
+            {
+                SessionVoteRepository.Instance.DeleteSessionVote(id, UserInfo.UserID);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
     }
 }
 

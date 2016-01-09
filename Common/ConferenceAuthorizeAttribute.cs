@@ -7,14 +7,15 @@ namespace Connect.DNN.Modules.Conference.Common
     public enum SecurityAccessLevel
     {
         Anonymous = 0,
-        View = 1,
-        Edit = 2,
-        Admin = 3,
-        Host = 4,
-        SessionSubmit = 5,
-        SessionApprove = 6,
-        AttendConference = 7,
-        ManageConference = 8
+        Authenticated = 1,
+        View = 2,
+        Edit = 3,
+        Admin = 4,
+        Host = 5,
+        SessionSubmit = 6,
+        SessionApprove = 7,
+        AttendConference = 8,
+        ManageConference = 9
     }
 
     public class ConferenceAuthorizeAttribute : AuthorizeAttributeBase, IOverrideDefaultAuthLevel
@@ -42,6 +43,8 @@ namespace Connect.DNN.Modules.Conference.Common
             ContextSecurity security = new ContextSecurity(context.ActionContext.Request.FindModuleInfo());
             switch (SecurityLevel)
             {
+                case SecurityAccessLevel.Authenticated:
+                    return User.UserID != -1;
                 case SecurityAccessLevel.Host:
                     return User.IsSuperUser;
                 case SecurityAccessLevel.Admin:
