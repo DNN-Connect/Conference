@@ -27,9 +27,9 @@ var TagVotes = React.createClass({
       <table className="table">
        <thead>
          <tr>
-          <th>Tag</th>
-          <th>Sessions</th>
-          <th>Votes</th>
+          <th>{this.resources.Theme}</th>
+          <th>{this.resources.Sessions}</th>
+          <th>{this.resources.Votes}</th>
           {voteCol}
          </tr>
        </thead>

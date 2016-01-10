@@ -211,7 +211,6 @@ var TagVote = React.createClass({displayName: "TagVote",
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
-    this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
     }
   },
@@ -227,7 +226,8 @@ var TagVote = React.createClass({displayName: "TagVote",
       }
       voteCol = (
    React.createElement("td", {className: "btncol"}, 
-    React.createElement("a", {href: "#", className: btnClasses, onClick: this.props.onVote.bind(null, this.props.item)}, 
+    React.createElement("a", {href: "#", className: btnClasses, onClick: this.props.onVote.bind(null, this.props.item), 
+       title: this.resources.Vote}, 
      React.createElement("span", {className: "glyphicon glyphicon-thumbs-up"})
     )
    )
@@ -280,9 +280,9 @@ var TagVotes = React.createClass({displayName: "TagVotes",
       React.createElement("table", {className: "table"}, 
        React.createElement("thead", null, 
          React.createElement("tr", null, 
-          React.createElement("th", null, "Tag"), 
-          React.createElement("th", null, "Sessions"), 
-          React.createElement("th", null, "Votes"), 
+          React.createElement("th", null, this.resources.Theme), 
+          React.createElement("th", null, this.resources.Sessions), 
+          React.createElement("th", null, this.resources.Votes), 
           voteCol
          )
        ), 

@@ -6,7 +6,6 @@ var TagVote = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
-    this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
     }
   },
@@ -22,7 +21,8 @@ var TagVote = React.createClass({
       }
       voteCol = (
    <td className="btncol">
-    <a href="#" className={btnClasses} onClick={this.props.onVote.bind(null, this.props.item)}>
+    <a href="#" className={btnClasses} onClick={this.props.onVote.bind(null, this.props.item)}
+       title={this.resources.Vote}>
      <span className="glyphicon glyphicon-thumbs-up"></span>
     </a>
    </td>
