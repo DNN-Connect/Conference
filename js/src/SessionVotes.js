@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
-var TagVote = require('./TagVote');
+var SessionVote = require('./SessionVote');
 
-var TagVotes = React.createClass({
+var SessionVotes = React.createClass({
 
   resources: null,
   service: null,
@@ -17,7 +17,7 @@ var TagVotes = React.createClass({
 
   render: function() {
     var votes = this.state.votes.map(function(item) {
-      return <TagVote moduleId={this.props.moduleId} item={item} key={item.TagId} allowVote={this.props.allowVote} onVote={this.onVote} />
+      return <SessionVote moduleId={this.props.moduleId} item={item} key={item.SessionId} allowVote={this.props.allowVote} onVote={this.onVote} />
     }.bind(this));
     var voteCol = null;
     if (this.props.allowVote) {
@@ -27,8 +27,7 @@ var TagVotes = React.createClass({
       <table className="table">
        <thead>
          <tr>
-          <th>{this.resources.Theme}</th>
-          <th className="nrcol">{this.resources.Sessions}</th>
+          <th>{this.resources.Session}</th>
           <th className="nrcol">{this.resources.Votes}</th>
           {voteCol}
          </tr>
@@ -40,19 +39,19 @@ var TagVotes = React.createClass({
 
   componentDidMount: function() {},
 
-  onVote: function(tagVote, e) {
+  onVote: function(sessionVote, e) {
     e.preventDefault();
-    if (tagVote.Voted == 0) {
-      this.service.tagVote(this.props.conferenceId, tagVote.TagId, 1, function() {
-        tagVote.Voted = 1;
-        tagVote.NrVotes += 1;
-        this.voteChanged(tagVote);
+    if (sessionVote.Voted == 0) {
+      this.service.sessionVote(this.props.conferenceId, sessionVote.SessionId, 1, function() {
+        sessionVote.Voted = 1;
+        sessionVote.NrVotes += 1;
+        this.voteChanged(sessionVote);
       }.bind(this));
     } else {
-      this.service.tagVote(this.props.conferenceId, tagVote.TagId, 0, function() {
-        tagVote.Voted = 0;
-        tagVote.NrVotes -= 1;
-        this.voteChanged(tagVote);
+      this.service.sessionVote(this.props.conferenceId, sessionVote.SessionId, 0, function() {
+        sessionVote.Voted = 0;
+        sessionVote.NrVotes -= 1;
+        this.voteChanged(sessionVote);
       }.bind(this));
     }
   },
@@ -60,7 +59,7 @@ var TagVotes = React.createClass({
   voteChanged: function(vote) {
     var newList = [];
     for (i = 0; i < this.state.votes.length; i++) {
-      if (this.state.votes[i].TagId == vote.TagId) {
+      if (this.state.votes[i].SessionId == vote.SessionId) {
         newList.push(vote);
       } else {
         newList.push(this.state.votes[i]);
@@ -74,9 +73,9 @@ var TagVotes = React.createClass({
 
   votesSort: function(a, b) {
     if (b.NrVotes - a.NrVotes == 0) {
-      if (a.TagName < b.TagName) {
+      if (a.Title < b.Title) {
         return -1;
-      } else if (a.TagName > b.TagName) {
+      } else if (a.Title > b.Title) {
         return 1;
       } else {
         return 0;
@@ -88,4 +87,4 @@ var TagVotes = React.createClass({
 
 });
 
-module.exports = TagVotes;
+module.exports = SessionVotes;

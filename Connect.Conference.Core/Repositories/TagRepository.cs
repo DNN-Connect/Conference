@@ -43,7 +43,7 @@ namespace Connect.Conference.Core.Repositories
                     conferenceId, tagName);
             }
         }
-        public IEnumerable<TagWithVote> GetTagsWithVote(int conferenceId,int userId)
+        public IEnumerable<TagWithVote> GetTagsWithVote(int conferenceId, int userId)
         {
             using (var context = DataContext.Instance())
             {

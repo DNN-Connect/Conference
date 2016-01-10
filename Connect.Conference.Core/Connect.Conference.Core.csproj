@@ -96,6 +96,7 @@
     <Compile Include="Models\SessionSpeakers\SessionSpeakerBase_Interfaces.cs" />
     <Compile Include="Models\SessionSpeakers\SessionSpeaker_Interfaces.cs" />
     <Compile Include="Models\Sessions\SessionBase_Custom.cs" />
+    <Compile Include="Models\Sessions\SessionWithVote.cs" />
     <Compile Include="Models\Sessions\Session_Custom.cs" />
     <Compile Include="Models\Sessions\Session.cs" />
     <Compile Include="Models\Sessions\SessionBase.cs" />

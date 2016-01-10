@@ -1,6 +1,4 @@
-
 using System.Runtime.Serialization;
-using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.Tags
 {

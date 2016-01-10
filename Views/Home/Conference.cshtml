@@ -19,6 +19,10 @@
      data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(TagRepository.Instance.GetTagsWithVote(Model.ConferenceId, Dnn.User.UserID)))">
 </div>
 
+<div class="sessionVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@((ConferenceModuleContext.Security.UserId != -1).ToString().ToLower())"
+     data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsWithVote(Model.ConferenceId, Dnn.User.UserID, 3)))">
+</div>
+
 <script type="text/javascript">
  $(function () {
   $(document).ready(function() {

@@ -12,8 +12,8 @@ using Connect.Conference.Core.Models.Sessions;
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class SessionRepository : ServiceLocator<ISessionRepository, SessionRepository>, ISessionRepository
- {
+    public class SessionRepository : ServiceLocator<ISessionRepository, SessionRepository>, ISessionRepository
+    {
         protected override Func<ISessionRepository> GetFactory()
         {
             return () => new SessionRepository();
@@ -24,6 +24,15 @@ namespace Connect.Conference.Core.Repositories
             {
                 var rep = context.GetRepository<Session>();
                 return rep.Get(conferenceId);
+            }
+        }
+        public IEnumerable<SessionWithVote> GetSessionsWithVote(int conferenceId, int userId, int statusThreshold)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<SessionWithVote>(System.Data.CommandType.Text,
+                    "SELECT s.*, ISNULL(sv.UserId, 0) Voted FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes sv ON sv.SessionId = s.SessionId AND sv.UserId=@1 WHERE s.ConferenceId=@0 AND s.Status>=@2",
+                    conferenceId, userId, statusThreshold);
             }
         }
         public IEnumerable<Session> GetSessionsBySpeaker(int conferenceId, int userId)
@@ -88,12 +97,13 @@ namespace Connect.Conference.Core.Repositories
                 var rep = context.GetRepository<SessionBase>();
                 rep.Update(session);
             }
-        } 
- }
+        }
+    }
 
     public interface ISessionRepository
     {
         IEnumerable<Session> GetSessions(int conferenceId);
+        IEnumerable<SessionWithVote> GetSessionsWithVote(int conferenceId, int userId, int statusThreshold);
         IEnumerable<Session> GetSessionsBySpeaker(int conferenceId, int userId);
         Session GetSession(int conferenceId, int sessionId);
         int AddSession(ref SessionBase session, int userId);

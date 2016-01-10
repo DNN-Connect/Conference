@@ -2,7 +2,8 @@
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
     Tags = require('./Tags'),
-    TagVotes = require('./TagVotes');
+    TagVotes = require('./TagVotes'),
+    SessionVotes = require('./SessionVotes');
 
 (function($, window, document, undefined) {
 
@@ -63,6 +64,14 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var voteList = $(el).data('votelist');
         var allowVote = $(el).data('allowvote');
         React.render(<TagVotes moduleId={moduleId} voteList={voteList} allowVote={allowVote}
+           conferenceId={conferenceId} />, el);
+      });
+      $('.sessionVoteComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var voteList = $(el).data('votelist');
+        var allowVote = $(el).data('allowvote');
+        React.render(<SessionVotes moduleId={moduleId} voteList={voteList} allowVote={allowVote}
            conferenceId={conferenceId} />, el);
       });
     },
