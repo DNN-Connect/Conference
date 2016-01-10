@@ -5,61 +5,23 @@
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddModuleService();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 <h2>@Model.Name</h2>
 
-<table class="table">
- <thead>
-  <tr>
-   <th>@Dnn.LocalizeString("Theme")</th>
-   <th>@Dnn.LocalizeString("Sessions")</th>
-   <th>@Dnn.LocalizeString("Votes")</th>
-   <th></th>
-  </tr>
- </thead>
- <tbody>
-  @foreach (var t in TagRepository.Instance.GetTagsWithVote(Model.ConferenceId, Dnn.User.UserID).OrderByDescending(t => t.NrVotes))
-  {
-  <tr>
-   <td>@t.TagName</td>
-   <td class="nrcol">@t.NrSessions</td>
-   <td class="nrcol">@t.NrVotes</td>
-   <td class="btncol">
-    <a href="#" class="cmdVote btn @(t.Voted > 0 ? "btn-primary" : "btn-default")" data-tag="@t.TagId">
-     <span class="glyphicon glyphicon-thumbs-up"></span>
-    </a>
-   </td>
-  </tr>
-  }
- </tbody>
-</table>
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
+
+<div class="tagVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@((ConferenceModuleContext.Security.UserId != -1).ToString().ToLower())"
+     data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(TagRepository.Instance.GetTagsWithVote(Model.ConferenceId, Dnn.User.UserID)))">
+</div>
 
 <script type="text/javascript">
  $(function () {
-
   $(document).ready(function() {
-
-   var service = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
-   $('.cmdVote').click(function(e) {
-    e.preventDefault();
-    var el = $(this);
-    var tagId = el.data('tag');
-    if (el.hasClass('btn-primary')) {
-     service.tagVote(@Model.ConferenceId, tagId, 0, function() {
-      el.toggleClass('btn-primary');
-     });
-    } else {
-     service.tagVote(@Model.ConferenceId, tagId, 1, function() {
-      el.toggleClass('btn-primary');
-     });
-    }
-    return false;
-   });
-
-
   });
-
  });
 </script>

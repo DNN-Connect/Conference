@@ -204,6 +204,148 @@ module.exports = Tag;
 
 },{}],5:[function(require,module,exports){
 /** @jsx React.DOM */
+var TagVote = React.createClass({displayName: "TagVote",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    return {
+    }
+  },
+
+  render: function() {
+    var voteCol = null;
+    if (this.props.allowVote) {
+      var btnClasses = 'btn';
+      if (this.props.item.Voted == 0) {
+        btnClasses += ' btn-default';
+      } else {
+        btnClasses += ' btn-primary';         
+      }
+      voteCol = (
+   React.createElement("td", {className: "btncol"}, 
+    React.createElement("a", {href: "#", className: btnClasses, onClick: this.props.onVote.bind(null, this.props.item)}, 
+     React.createElement("span", {className: "glyphicon glyphicon-thumbs-up"})
+    )
+   )
+        )
+    }
+    return (
+      React.createElement("tr", null, 
+       React.createElement("td", null, this.props.item.TagName), 
+       React.createElement("td", {className: "nrcol"}, this.props.item.NrSessions), 
+       React.createElement("td", {className: "nrcol"}, this.props.item.NrVotes), 
+       voteCol
+      )
+    );
+  },
+
+  componentDidMount: function() {
+  }
+
+});
+
+module.exports = TagVote;
+
+},{}],6:[function(require,module,exports){
+/** @jsx React.DOM */
+var TagVote = require('./TagVote');
+
+var TagVotes = React.createClass({displayName: "TagVotes",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    this.props.voteList.sort(this.votesSort);
+    return {
+      votes: this.props.voteList
+    }
+  },
+
+  render: function() {
+    var votes = this.state.votes.map(function(item) {
+      return React.createElement(TagVote, {moduleId: this.props.moduleId, item: item, key: item.TagId, allowVote: this.props.allowVote, onVote: this.onVote})
+    }.bind(this));
+    var voteCol = null;
+    if (this.props.allowVote) {
+      voteCol = React.createElement("th", null)
+    }
+    return (
+      React.createElement("table", {className: "table"}, 
+       React.createElement("thead", null, 
+         React.createElement("tr", null, 
+          React.createElement("th", null, "Tag"), 
+          React.createElement("th", null, "Sessions"), 
+          React.createElement("th", null, "Votes"), 
+          voteCol
+         )
+       ), 
+       React.createElement("tbody", null, votes)
+      )
+    );
+  },
+
+  componentDidMount: function() {},
+
+  onVote: function(tagVote, e) {
+    e.preventDefault();
+    if (tagVote.Voted == 0) {
+      this.service.tagVote(this.props.conferenceId, tagVote.TagId, 1, function() {
+        tagVote.Voted = 1;
+        tagVote.NrVotes += 1;
+        this.voteChanged(tagVote);
+      }.bind(this));
+    } else {
+      this.service.tagVote(this.props.conferenceId, tagVote.TagId, 0, function() {
+        tagVote.Voted = 0;
+        tagVote.NrVotes -= 1;
+        this.voteChanged(tagVote);
+      }.bind(this));
+    }
+  },
+
+  voteChanged: function(vote) {
+    var newList = [];
+    for (i = 0; i < this.state.votes.length; i++) {
+      if (this.state.votes[i].TagId == vote.TagId) {
+        newList.push(vote);
+      } else {
+        newList.push(this.state.votes[i]);
+      }
+    }
+    newList.sort(this.votesSort);
+    this.setState({
+      votes: newList
+    });
+  },
+
+  votesSort: function(a, b) {
+    if (b.NrVotes - a.NrVotes == 0) {
+      if (a.TagName < b.TagName) {
+        return -1;
+      } else if (a.TagName > b.TagName) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      return (b.NrVotes - a.NrVotes);
+    }
+  }
+
+});
+
+module.exports = TagVotes;
+
+
+},{"./TagVote":5}],7:[function(require,module,exports){
+/** @jsx React.DOM */
 var Tag = require('./Tag');
 
 var Tags = React.createClass({displayName: "Tags",
@@ -303,7 +445,7 @@ var Tags = React.createClass({displayName: "Tags",
 module.exports = Tags;
 
 
-},{"./Tag":4}],6:[function(require,module,exports){
+},{"./Tag":4}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
@@ -541,7 +683,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":7}],7:[function(require,module,exports){
+},{"./TimesheetEditorSlot":9}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -700,11 +842,12 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
-    Tags = require('./Tags');
+    Tags = require('./Tags'),
+    TagVotes = require('./TagVotes');
 
 (function($, window, document, undefined) {
 
@@ -759,6 +902,14 @@ var TimesheetEditor = require('./TimesheetEditor'),
         React.render(React.createElement(Tags, {moduleId: moduleId, name: fieldName, tags: tags, 
            conferenceId: conferenceId}), el);
       });
+      $('.tagVoteComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var voteList = $(el).data('votelist');
+        var allowVote = $(el).data('allowvote');
+        React.render(React.createElement(TagVotes, {moduleId: moduleId, voteList: voteList, allowVote: allowVote, 
+           conferenceId: conferenceId}), el);
+      });
     },
 
     formatString: function(format) {
@@ -775,7 +926,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./Tags":5,"./TimesheetEditor":6}]},{},[8])
+},{"./Comments":3,"./TagVotes":6,"./Tags":7,"./TimesheetEditor":8}]},{},[10])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
