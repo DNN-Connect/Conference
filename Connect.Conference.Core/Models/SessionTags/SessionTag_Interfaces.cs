@@ -19,7 +19,6 @@ namespace Connect.Conference.Core.Models.SessionTags
    base.Fill(dr);
    Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
    TagName = Convert.ToString(Null.SetNull(dr["TagName"], TagName));
-   Votes = Convert.ToInt32(Null.SetNull(dr["Votes"], Votes));
    ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
   }
   #endregion
@@ -36,12 +35,6 @@ namespace Connect.Conference.Core.Models.SessionTags
      return PropertyAccess.FormatString(Title, strFormat);
     case "tagname": // NVarChar
      return PropertyAccess.FormatString(TagName, strFormat);
-    case "votes": // Int
-     if (Votes == null)
-     {
-         return "";
-     };
-     return ((int)Votes).ToString(strFormat, formatProvider);
     case "conferenceid": // Int
      return ConferenceId.ToString(strFormat, formatProvider);
     default:

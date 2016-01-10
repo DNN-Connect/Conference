@@ -1,5 +1,6 @@
 ﻿@inherits ConferenceWebPage<Session>
 @using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Sessions;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
@@ -20,7 +21,7 @@
  <div class="row">
   <div class="panel panel-info">
    <div class="panel-heading">
-    <h3 class="panel-title">@Model.Title</h3>
+    <h2 class="panel-title">@Model.Title</h2>
     @if (!string.IsNullOrEmpty(Model.SubTitle))
     {
     <p><em>@Model.SubTitle</em></p>
@@ -31,7 +32,7 @@
      <div class="col-xs-6 col-sm-2">
       @foreach (var speaker in speakers)
       {
-      <div>
+      <div class="speaker">
        <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@speaker.SpeakerId" class="img-circle img-responsive" /><br />
        @speaker.DisplayName
       </div>
@@ -71,7 +72,7 @@
        @foreach (var speaker in speakers)
        {
        <dt>@speaker.DisplayName</dt>
-       <dd>@speaker.Description</dd>
+       <dd class="speaker">@speaker.Description</dd>
        }
       </dl>
      </div>

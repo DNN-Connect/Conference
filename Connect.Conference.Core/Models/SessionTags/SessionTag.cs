@@ -22,8 +22,6 @@ namespace Connect.Conference.Core.Models.SessionTags
         [DataMember]
         public string TagName { get; set; }
         [DataMember]
-        public int? Votes { get; set; }
-        [DataMember]
         public int ConferenceId { get; set; }
         #endregion
 

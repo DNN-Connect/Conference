@@ -117,6 +117,7 @@
     <Compile Include="Models\Speakers\Speaker.cs" />
     <Compile Include="Models\Speakers\SpeakerBase.cs" />
     <Compile Include="Models\Speakers\SpeakerBase_Interfaces.cs" />
+    <Compile Include="Models\Speakers\SpeakerWithNrSessions.cs" />
     <Compile Include="Models\Speakers\Speaker_Interfaces.cs" />
     <Compile Include="Models\Tags\TagWithVote.cs" />
     <Compile Include="Models\Tags\Tag.cs" />

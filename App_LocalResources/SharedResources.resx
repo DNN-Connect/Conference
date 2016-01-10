@@ -294,4 +294,7 @@
   <data name="Votes.Text" xml:space="preserve">
     <value>Votes</value>
   </data>
+  <data name="Themes.Text" xml:space="preserve">
+    <value>Themes</value>
+  </data>
 </root>

@@ -1,31 +1,65 @@
 ﻿@inherits ConferenceWebPage<Conference>
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Conferences;
-@using Connect.Conference.Core.Models.Sessions;
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
+    var canVote = (ConferenceModuleContext.Security.UserId != -1);
+    canVote = canVote & (Model.StartDate != null && Model.StartDate > DateTime.Now);
 }
-
-<h2>@Model.Name</h2>
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
 </div>
 
-<div class="tagVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@((ConferenceModuleContext.Security.UserId != -1).ToString().ToLower())"
-     data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(TagRepository.Instance.GetTagsWithVote(Model.ConferenceId, Dnn.User.UserID)))">
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+<h2>@Model.Name</h2>
+@if (Model.StartDate != null)
+{
+   <div class="panel panel-info">
+    <div class="panel-body">
+     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("d MMMM") : "")
+     - @((Model.EndDate != null) ? ((System.DateTime)Model.EndDate).ToString("d MMMM") : "")
+     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("yyyy") : "")
+     @Model.Location
+    </div>
+   </div>
+}
+<p class="lead">@Model.Description</p>
+  </div>
+ </div>
+ <div class="row">
+  <div class="col-xs-12 col-md-6">
+   <h3>@Dnn.LocalizeString("AcceptedSessions")</h3>
+   <div class="sessionVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@(canVote.ToString().ToLower())"
+        data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsWithVote(Model.ConferenceId, Dnn.User.UserID, 3)))">
+   </div>
+  </div>
+  <div class="col-xs-12 col-md-6">
+   <h3>@Dnn.LocalizeString("Themes")</h3>
+   <div class="tagVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@(canVote.ToString().ToLower())"
+        data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(TagRepository.Instance.GetTagsWithVote(Model.ConferenceId, Dnn.User.UserID)))">
+   </div>
+   <h3>@Dnn.LocalizeString("Speakers")</h3>
+   <table class="table">
+    <thead>
+     <tr>
+      <th>@Dnn.LocalizeString("Name")</th>
+      <th class="nrcol">@Dnn.LocalizeString("Sessions")</th>
+     </tr>
+    </thead>
+    @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
+    {
+    <tr>
+     <td>@s.DisplayName</td>
+     <td class="nrcol">@s.NrSessions</td>
+    </tr>
+    }
+   </table>
+  </div>
+ </div>
 </div>
-
-<div class="sessionVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@((ConferenceModuleContext.Security.UserId != -1).ToString().ToLower())"
-     data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsWithVote(Model.ConferenceId, Dnn.User.UserID, 3)))">
-</div>
-
-<script type="text/javascript">
- $(function () {
-  $(document).ready(function() {
-  });
- });
-</script>
