@@ -219,9 +219,24 @@ var SessionVote = React.createClass({displayName: "SessionVote",
    )
         )
     }
+    var speakers = this.props.item.Speakers.map(function (item) {
+      return (
+        React.createElement("span", {className: "detailItem bg-info"}, item.Value)
+        )
+    });
+    var tags = this.props.item.Tags.map(function (item) {
+      return (
+        React.createElement("span", {className: "detailItem bg-info"}, item.Value)
+        )
+    });
     return (
       React.createElement("tr", null, 
-       React.createElement("td", null, this.props.item.Title), 
+       React.createElement("td", null, React.createElement("p", null, this.props.item.Title), 
+        React.createElement("p", {className: "itemDetails"}, 
+        React.createElement("span", {className: "glyphicon glyphicon-user"}), speakers, 
+        React.createElement("span", {className: "glyphicon glyphicon-tags"}), tags
+        )
+       ), 
        React.createElement("td", {className: "nrcol"}, this.props.item.NrVotes), 
        voteCol
       )

@@ -28,9 +28,24 @@ var SessionVote = React.createClass({
    </td>
         )
     }
+    var speakers = this.props.item.Speakers.map(function (item) {
+      return (
+        <span className="detailItem bg-info">{item.Value}</span>
+        )
+    });
+    var tags = this.props.item.Tags.map(function (item) {
+      return (
+        <span className="detailItem bg-info">{item.Value}</span>
+        )
+    });
     return (
       <tr>
-       <td>{this.props.item.Title}</td>
+       <td><p>{this.props.item.Title}</p>
+        <p className="itemDetails">
+        <span className="glyphicon glyphicon-user"></span>{speakers}
+        <span className="glyphicon glyphicon-tags"></span>{tags}
+        </p>
+       </td>
        <td className="nrcol">{this.props.item.NrVotes}</td>
        {voteCol}
       </tr>

@@ -1,6 +1,7 @@
 using System.Linq;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Connect.Conference.Core.Models.Sessions
 {
@@ -30,6 +31,36 @@ namespace Connect.Conference.Core.Models.Sessions
                     default:
                         return "ok";
                 }
+            }
+        }
+
+        [IgnoreColumn]
+        [DataMember]
+        public List<KeyValuePair<int, string>> Speakers
+        {
+            get
+            {
+                return Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId).OrderBy(s => s.Sort).Select(s => new KeyValuePair<int,string>(s.SpeakerId, s.DisplayName)).ToList();
+            }
+        }
+
+        [IgnoreColumn]
+        [DataMember]
+        public List<KeyValuePair<int, string>> Tags
+        {
+            get
+            {
+                return Repositories.SessionTagRepository.Instance.GetSessionTagsBySession(SessionId).OrderBy(t => t.TagName).Select(t => new KeyValuePair<int, string>(t.TagId, t.TagName)).ToList();
+            }
+        }
+
+        [IgnoreColumn]
+        [DataMember]
+        public List<KeyValuePair<int, string>> Tracks
+        {
+            get
+            {
+                return Repositories.SessionTrackRepository.Instance.GetSessionTracksBySession(SessionId).OrderBy(t => t.Sort).Select(t => new KeyValuePair<int, string>(t.TrackId, t.TrackTitle)).ToList();
             }
         }
 
