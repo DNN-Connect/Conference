@@ -297,4 +297,13 @@
   <data name="Themes.Text" xml:space="preserve">
     <value>Themes</value>
   </data>
+  <data name="UnacceptedSessions.Text" xml:space="preserve">
+    <value>Unaccepted Sessions</value>
+  </data>
+  <data name="SubmittedSessions.Text" xml:space="preserve">
+    <value>Submitted Sessions</value>
+  </data>
+  <data name="RejectedSessions.Text" xml:space="preserve">
+    <value>Rejected Sessions</value>
+  </data>
 </root>

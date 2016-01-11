@@ -47,10 +47,50 @@
      </tr>
      }
     </tbody>
-    <tr>
-     <td colspan="2"></td>
-     <td><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = -1, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
-    </tr>
+   </table>
+   <table class="table" id="tblSessions">
+    <thead>
+     <tr>
+      <th>@Dnn.LocalizeString("SubmittedSessions")</th>
+      <th />
+      <th />
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status > 0 & s.Status < 3).OrderBy(s => s.Sort))
+     {
+     <tr data-id="@s.SessionId" class="sortable">
+      <td>@s.Title</td>
+      <td class="btncol">
+       <span class="glyphicon glyphicon-@s.StatusGlyphicon"></span>
+      </td>
+      <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
+      <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     </tr>
+     }
+    </tbody>
+   </table>
+   <table class="table" id="tblSessions">
+    <thead>
+     <tr>
+      <th>@Dnn.LocalizeString("RejectedSessions")</th>
+      <th />
+      <th />
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status < 0).OrderBy(s => s.Sort))
+     {
+     <tr data-id="@s.SessionId" class="sortable">
+      <td>@s.Title</td>
+      <td class="btncol">
+       <span class="glyphicon glyphicon-@s.StatusGlyphicon"></span>
+      </td>
+      <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
+      <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+     </tr>
+     }
+    </tbody>
    </table>
   </div>
   <div class="col-sm-6">
@@ -58,22 +98,20 @@
     <thead>
      <tr>
       <th>@Dnn.LocalizeString("Speakers")</th>
+      <th class="nrcol">@Dnn.LocalizeString("Sessions")</th>
       <th />
      </tr>
     </thead>
     <tbody>
-     @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.Sort))
+     @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.Sort))
      {
      <tr data-id="@s.UserId" class="sortable">
       <td>@s.DisplayName</td>
+      <td class="nrcol">@s.NrSessions</td>
       <td class="btncol"><a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      </tr>
      }
     </tbody>
-    <tr>
-     <td colspan="1"></td>
-     <td><a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = -1, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-plus" title="@Dnn.LocalizeString("Add")"></a></td>
-    </tr>
    </table>
   </div>
  </div>
