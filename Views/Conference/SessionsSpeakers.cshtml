@@ -97,7 +97,7 @@
    <table class="table" id="tblSpeakers">
     <thead>
      <tr>
-      <th>@Dnn.LocalizeString("Speakers")</th>
+      <th colspan="2">@Dnn.LocalizeString("Speakers")</th>
       <th class="nrcol">@Dnn.LocalizeString("Sessions")</th>
       <th />
      </tr>
@@ -106,6 +106,7 @@
      @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.Sort))
      {
      <tr data-id="@s.UserId" class="sortable">
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@s.UserId&stamp=@DateTime.Now.Ticks" width="32" height="32" class="img-circle img-responsive" /></td>
       <td>@s.DisplayName</td>
       <td class="nrcol">@s.NrSessions</td>
       <td class="btncol"><a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
