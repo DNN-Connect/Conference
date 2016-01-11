@@ -119,7 +119,7 @@
 </div>
 
 <div class="right">
- @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+ @ReturnLink(Dnn.LocalizeString("Return"), "Conference", "Manage", new { ConferenceId = Model.ConferenceId}, new { @class = "btn btn-primary" }, Model.ConferenceId)
 </div>
 
 @{

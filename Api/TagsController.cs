@@ -62,6 +62,28 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, tag);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Delete(int conferenceId, int id)
+        {
+            TagRepository.Instance.DeleteTag(conferenceId, id);
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Edit(int conferenceId, int id, [FromBody]newTagDTO editedTag)
+        {
+            var tag = TagRepository.Instance.GetTag(conferenceId, id).GetTagBase();
+            var newTagName = editedTag.tagName.Trim();
+            newTagName = newTagName.Substring(0, 1).ToUpper() + newTagName.Substring(1);
+            tag.TagName = newTagName;
+            TagRepository.Instance.UpdateTag(tag, UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, TagRepository.Instance.GetTag(conferenceId, tag.TagId));
+        }
+
     }
 }
 

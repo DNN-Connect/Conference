@@ -306,4 +306,7 @@
   <data name="RejectedSessions.Text" xml:space="preserve">
     <value>Rejected Sessions</value>
   </data>
+  <data name="EditTag.Text" xml:space="preserve">
+    <value>Edit Tag</value>
+  </data>
 </root>

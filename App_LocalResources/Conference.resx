@@ -120,6 +120,9 @@
   <data name="DeleteLocation.Confirm" xml:space="preserve">
     <value>Do you wish to delete this location?</value>
   </data>
+  <data name="DeleteTag.Confirm" xml:space="preserve">
+    <value>Do you wish to delete this tag?</value>
+  </data>
   <data name="DeleteTrack.Confirm" xml:space="preserve">
     <value>Do you wish to delete this track?</value>
   </data>

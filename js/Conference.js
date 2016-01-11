@@ -1193,6 +1193,12 @@ window.ConferenceService = function($, mid) {
   this.addTag = function(conferenceId, tagName, success, fail) {
     this.apiCall('POST', 'Tags', 'Add', conferenceId, null, { tagName: tagName }, success, fail);
   }
+  this.editTag = function(conferenceId, tagId, tagName, success, fail) {
+    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, { tagName: tagName }, success, fail);
+  }
+  this.deleteTag = function(conferenceId, tagId, success, fail) {
+    this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
+  }
 
 }
 
