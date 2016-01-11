@@ -23,6 +23,23 @@ var TagVotes = React.createClass({
     if (this.props.allowVote) {
       voteCol = <th className="btncol" />
     }
+    var addRow = null;
+    if (this.props.allowAdd) {
+      addRow = (
+        <tr>
+          <td className="dnnFormItem">
+           <input type="text" className="fullwidth" ref="newTagName" />
+          </td>
+          <td /><td />
+          <td className="btncol">
+            <a href="#" className="btn btn-default" onClick={this.onAddTag}
+               title={this.resources.Add}>
+             <span className="glyphicon glyphicon-plus"></span>
+            </a>
+          </td>
+         </tr>
+      );
+    }
     return (
       <table className="table">
        <thead>
@@ -33,7 +50,7 @@ var TagVotes = React.createClass({
           {voteCol}
          </tr>
        </thead>
-       <tbody>{votes}</tbody>
+       <tbody>{votes}{addRow}</tbody>
       </table>
     );
   },
@@ -84,6 +101,20 @@ var TagVotes = React.createClass({
     } else {
       return (b.NrVotes - a.NrVotes);
     }
+  },
+
+  onAddTag: function(e) {
+    e.preventDefault();
+    this.service.addTag(this.props.conferenceId, this.refs.newTagName.getDOMNode().value, function(data) {
+      this.refs.newTagName.getDOMNode().value = '';
+      data.Voted = 0;
+      var newList = this.state.votes;
+      newList.push(data);
+      newList.sort(this.votesSort);
+      this.setState({
+        votes: newList
+      });
+    }.bind(this));
   }
 
 });

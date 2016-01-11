@@ -39,6 +39,29 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        public class newTagDTO
+        {
+            public string tagName { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Authenticated)]
+        public HttpResponseMessage Add(int conferenceId, [FromBody]newTagDTO newTag)
+        {
+            var newTagName = newTag.tagName.Trim();
+            newTagName = newTagName.Substring(0, 1).ToUpper() + newTagName.Substring(1);
+            var tag = TagRepository.Instance.GetTagByName(conferenceId, newTagName);
+            if (tag != null)
+            {
+                return ServiceError("Tag exists");
+            }
+            var tagToAdd = new Connect.Conference.Core.Models.Tags.TagBase() { ConferenceId = conferenceId, TagName = newTagName };
+            TagRepository.Instance.AddTag(ref tagToAdd, UserInfo.UserID);
+            tag = TagRepository.Instance.GetTag(conferenceId, tagToAdd.TagId);
+            return Request.CreateResponse(HttpStatusCode.OK, tag);
+        }
+
     }
 }
 

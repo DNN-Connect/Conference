@@ -63,7 +63,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var conferenceId = $(el).data('conference');
         var voteList = $(el).data('votelist');
         var allowVote = $(el).data('allowvote');
-        React.render(<TagVotes moduleId={moduleId} voteList={voteList} allowVote={allowVote}
+        var allowAdd = $(el).data('allowadd');
+        React.render(<TagVotes moduleId={moduleId} voteList={voteList} allowVote={allowVote} allowAdd={allowAdd}
            conferenceId={conferenceId} />, el);
       });
       $('.sessionVoteComponent').each(function(i, el) {

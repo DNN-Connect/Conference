@@ -80,5 +80,8 @@ window.ConferenceService = function($, mid) {
   this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
     this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, { vote: vote }, success, fail);
   }
+  this.addTag = function(conferenceId, tagName, success, fail) {
+    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, { tagName: tagName }, success, fail);
+  }
 
 }

@@ -416,6 +416,23 @@ var TagVotes = React.createClass({displayName: "TagVotes",
     if (this.props.allowVote) {
       voteCol = React.createElement("th", {className: "btncol"})
     }
+    var addRow = null;
+    if (this.props.allowAdd) {
+      addRow = (
+        React.createElement("tr", null, 
+          React.createElement("td", {className: "dnnFormItem"}, 
+           React.createElement("input", {type: "text", className: "fullwidth", ref: "newTagName"})
+          ), 
+          React.createElement("td", null), React.createElement("td", null), 
+          React.createElement("td", {className: "btncol"}, 
+            React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.onAddTag, 
+               title: this.resources.Add}, 
+             React.createElement("span", {className: "glyphicon glyphicon-plus"})
+            )
+          )
+         )
+      );
+    }
     return (
       React.createElement("table", {className: "table"}, 
        React.createElement("thead", null, 
@@ -426,7 +443,7 @@ var TagVotes = React.createClass({displayName: "TagVotes",
           voteCol
          )
        ), 
-       React.createElement("tbody", null, votes)
+       React.createElement("tbody", null, votes, addRow)
       )
     );
   },
@@ -477,6 +494,20 @@ var TagVotes = React.createClass({displayName: "TagVotes",
     } else {
       return (b.NrVotes - a.NrVotes);
     }
+  },
+
+  onAddTag: function(e) {
+    e.preventDefault();
+    this.service.addTag(this.props.conferenceId, this.refs.newTagName.getDOMNode().value, function(data) {
+      this.refs.newTagName.getDOMNode().value = '';
+      data.Voted = 0;
+      var newList = this.state.votes;
+      newList.push(data);
+      newList.sort(this.votesSort);
+      this.setState({
+        votes: newList
+      });
+    }.bind(this));
   }
 
 });
@@ -1048,7 +1079,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var conferenceId = $(el).data('conference');
         var voteList = $(el).data('votelist');
         var allowVote = $(el).data('allowvote');
-        React.render(React.createElement(TagVotes, {moduleId: moduleId, voteList: voteList, allowVote: allowVote, 
+        var allowAdd = $(el).data('allowadd');
+        React.render(React.createElement(TagVotes, {moduleId: moduleId, voteList: voteList, allowVote: allowVote, allowAdd: allowAdd, 
            conferenceId: conferenceId}), el);
       });
       $('.sessionVoteComponent').each(function(i, el) {
@@ -1157,6 +1189,9 @@ window.ConferenceService = function($, mid) {
   }
   this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
     this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, { vote: vote }, success, fail);
+  }
+  this.addTag = function(conferenceId, tagName, success, fail) {
+    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, { tagName: tagName }, success, fail);
   }
 
 }
