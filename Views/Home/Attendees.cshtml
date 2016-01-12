@@ -4,8 +4,9 @@
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddModuleService();
+    ConferenceModuleContext.AddEditScripts();
     var isInFuture = (Model.StartDate != null && Model.StartDate > DateTime.Now);
+    var commentsPageSize = 5;
 }
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -89,6 +90,17 @@
     </tbody>
    </table>
   </div>
+  @{ 
+      var commentList = CommentRepository.Instance.GetCommentsBySession(-1, 2, 0, commentsPageSize);
+      var totalComments = commentList.TotalCount;
+  }
+     <div class="commentsComponent col-xs-12" data-moduleid="@Dnn.ModuleContext.ModuleId"
+        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("Comments")" data-help=""
+        data-conference="@Model.ConferenceId" data-session="-1" data-visibility="2" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
+        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+   </div>
+
   @if (isInFuture & ConferenceModuleContext.Security.CanAttend)
   {
   <div class="col-xs-12">
@@ -113,7 +125,7 @@
 
 <script type="text/javascript">
  $(function () {
-  var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  var moduleConferenceService = window.ConnectConference.modules[@Dnn.ModuleContext.ModuleId].service;
   $(document).ready(function () {
    $('.cmdStatusChange').click(function (e) {
     e.preventDefault()

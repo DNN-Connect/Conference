@@ -327,4 +327,7 @@
   <data name="Intend.Text" xml:space="preserve">
     <value>Intends to attend</value>
   </data>
+  <data name="Comments.Text" xml:space="preserve">
+    <value>Comments</value>
+  </data>
 </root>
