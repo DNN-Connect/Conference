@@ -44,6 +44,13 @@
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Tracks")</label>
+  </div>
+  <div class="tracksComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-name="EditTracks" data-tracks="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort)))" data-placeholder="@Dnn.LocalizeString("NewTrack")" data-initial="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetTracks().Select(t => t.TrackId)))">
+  </div>
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Abstract")</label>
   </div>
   @Html.TextAreaFor(m => m.Description)

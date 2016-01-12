@@ -1197,9 +1197,100 @@ module.exports = TimesheetEditorSlot;
 
 },{}],14:[function(require,module,exports){
 /** @jsx React.DOM */
+var Track = React.createClass({displayName: "Track",
+  render: function() {
+    var classes = "glyphicon";
+    if (this.props.track.Selected) {
+      classes += " glyphicon-check";
+    } else {
+      classes += " glyphicon-unchecked";
+    }
+    return (
+      React.createElement("li", {className: "list-group-item", onClick: this.props.onCheckClick.bind(null, this.props.track)}, 
+        React.createElement("input", {type: "checkbox", className: "hidden"}), 
+        React.createElement("span", {className: classes}), 
+        this.props.track.Title
+      )
+    );
+  }
+});
+
+module.exports = Track;
+
+},{}],15:[function(require,module,exports){
+/** @jsx React.DOM */
+var Track = require('./Track');
+
+var Tracks = React.createClass({displayName: "Tracks",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    var trackList = [];
+    for (i = 0; i < this.props.tracks.length; i++) {
+      var track = this.props.tracks[i];
+      track.Selected = (this.props.initialData.indexOf(track.TrackId) > -1);
+      trackList.push(track);
+    }
+    return {
+      tracks: this.props.tracks,
+      selection: this.props.initialData
+    }
+  },
+
+  render: function() {
+    var trackList = this.state.tracks.map(function(item) {
+      return React.createElement(Track, {track: item, key: item.TrackId, onCheckClick: this.onCheckClick})
+    }.bind(this));
+    return (
+      React.createElement("div", null, 
+        React.createElement("ul", {className: "list-group checked-list-box"}, 
+          trackList
+        ), 
+        React.createElement("input", {type: "hidden", name: this.props.name, value: JSON.stringify(this.state.selection)})
+      )
+    );
+  },
+
+  componentDidMount: function() {},
+
+  onCheckClick: function(track,e) {
+    e.preventDefault();
+    track.Selected = !track.Selected;
+    var newList=[];
+    for (i = 0; i < this.state.tracks.length; i++) {
+      if (this.state.tracks[i].TrackId == track.TrackId) {
+        newList.push(track);
+      } else {
+        newList.push(this.state.tracks[i]);
+      }
+    }
+    var newSelection=[];
+    for (i = 0; i < newList.length; i++) {
+      if (newList[i].Selected) {
+        newSelection.push(newList[i].TrackId);
+      }
+    }
+    this.setState({
+      tracks: newList,
+      selection: newSelection
+    });
+  }
+
+});
+
+module.exports = Tracks;
+
+
+},{"./Track":14}],16:[function(require,module,exports){
+/** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
     Tags = require('./Tags'),
+    Tracks = require('./Tracks'),
     Speakers = require('./Speakers'),
     TagVotes = require('./TagVotes'),
     SessionVotes = require('./SessionVotes');
@@ -1258,6 +1349,15 @@ var TimesheetEditor = require('./TimesheetEditor'),
         React.render(React.createElement(Tags, {moduleId: moduleId, name: fieldName, tags: tags, placeholder: placeholder, 
            conferenceId: conferenceId}), el);
       });
+      $('.tracksComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var fieldName = $(el).data('name');
+        var tracks = $(el).data('tracks');
+        var initialData = $(el).data('initial');
+        React.render(React.createElement(Tracks, {moduleId: moduleId, name: fieldName, tracks: tracks, initialData: initialData, 
+           conferenceId: conferenceId}), el);
+      });
       $('.speakersComponent').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var conferenceId = $(el).data('conference');
@@ -1300,7 +1400,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./SessionVotes":5,"./Speakers":7,"./TagVotes":10,"./Tags":11,"./TimesheetEditor":12}]},{},[14])
+},{"./Comments":3,"./SessionVotes":5,"./Speakers":7,"./TagVotes":10,"./Tags":11,"./TimesheetEditor":12,"./Tracks":15}]},{},[16])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -1403,6 +1503,9 @@ window.ConferenceService = function($, mid) {
   }
   this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
     this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
+  }
+  this.searchTracks = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
   }
 
 }

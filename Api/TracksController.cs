@@ -15,6 +15,13 @@ namespace Connect.DNN.Modules.Conference.Api
 
     public partial class TracksController : ConferenceApiController
     {
+        [HttpGet()]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Search(int conferenceId, string search)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, TrackRepository.Instance.SearchTracks(conferenceId, search).ToAutoCompleteList());
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

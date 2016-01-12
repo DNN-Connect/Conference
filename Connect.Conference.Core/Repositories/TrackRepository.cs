@@ -12,8 +12,8 @@ using Connect.Conference.Core.Models.Tracks;
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class TrackRepository : ServiceLocator<ITrackRepository, TrackRepository>, ITrackRepository
- {
+    public class TrackRepository : ServiceLocator<ITrackRepository, TrackRepository>, ITrackRepository
+    {
         protected override Func<ITrackRepository> GetFactory()
         {
             return () => new TrackRepository();
@@ -78,8 +78,17 @@ namespace Connect.Conference.Core.Repositories
                 var rep = context.GetRepository<TrackBase>();
                 rep.Update(track);
             }
-        } 
- }
+        }
+        public IEnumerable<Track> SearchTracks(int conferenceId, string search)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<Track>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Tracks WHERE ConferenceId=@0 AND Title LIKE '%' + @1 + '%'",
+                    conferenceId, search);
+            }
+        }
+    }
 
     public interface ITrackRepository
     {
@@ -89,6 +98,7 @@ namespace Connect.Conference.Core.Repositories
         void DeleteTrack(TrackBase track);
         void DeleteTrack(int conferenceId, int trackId);
         void UpdateTrack(TrackBase track, int userId);
+        IEnumerable<Track> SearchTracks(int conferenceId, string search);
     }
 }
 

@@ -312,4 +312,7 @@
   <data name="NewTag.Text" xml:space="preserve">
     <value>New Tag</value>
   </data>
+  <data name="NewTrack.Text" xml:space="preserve">
+    <value>New Track</value>
+  </data>
 </root>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Connect.Conference.Core.Repositories;
 
 namespace Connect.Conference.Core.Common
@@ -15,6 +13,11 @@ namespace Connect.Conference.Core.Common
         public static IOrderedEnumerable<Models.SessionTags.SessionTag> GetTags(this Models.Sessions.SessionBase session)
         {
             return SessionTagRepository.Instance.GetSessionTagsBySession(session.SessionId).OrderBy(t => t.TagName);
+        }
+
+        public static IOrderedEnumerable<Models.SessionTracks.SessionTrack> GetTracks(this Models.Sessions.SessionBase session)
+        {
+            return SessionTrackRepository.Instance.GetSessionTracksBySession(session.SessionId).OrderBy(t => t.Sort);
         }
 
     }

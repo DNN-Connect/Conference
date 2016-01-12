@@ -47,17 +47,17 @@ namespace Connect.Conference.Core.Repositories
                     "SELECT @0, @1", trackId, sessionId);
             }
         }
-        public void SetSessionTracks(int trackId, List<int> sessionTracks)
+        public void SetSessionTracks(int sessionId, List<int> trackIds)
         {
 
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks WHERE TrackId=@0", trackId);
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks WHERE SessionId=@0", sessionId);
                 context.Execute(System.Data.CommandType.Text,
-                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks (TrackId, SessionId) " +
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks (SessionId, TrackId) " +
                     "SELECT @0, s.RecordID " +
-                    "FROM {databaseOwner}{objectQualifier}SplitDelimitedIDs(@1, ',') s", trackId, string.Join(",", sessionTracks));
+                    "FROM {databaseOwner}{objectQualifier}SplitDelimitedIDs(@1, ',') s", sessionId, string.Join(",", trackIds));
             }
         }
         public void DeleteSessionTrack(SessionTrackBase sessionTrack)
@@ -94,7 +94,7 @@ namespace Connect.Conference.Core.Repositories
         IEnumerable<SessionTrack> GetSessionTracksBySession(int sessionId);
         IEnumerable<SessionTrack> GetSessionTracksByTrack(int trackId);
         void SetSessionTrack(int trackId, int sessionId);
-        void SetSessionTracks(int trackId, List<int> sessionTracks);
+        void SetSessionTracks(int sessionId, List<int> trackIds);
         void DeleteSessionTrack(SessionTrackBase sessionTrack);
         void DeleteSessionTracksBySession(int sessionId);
         void DeleteSessionTracksByTrack(int trackId);

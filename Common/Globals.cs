@@ -80,6 +80,10 @@ namespace Connect.DNN.Modules.Conference.Common
         {
             return tagList.Select(t => new AutoCompletePair() { label = t.TagName, value = t.TagId.ToString() });
         }
+        public static IEnumerable<AutoCompletePair> ToAutoCompleteList(this IEnumerable<Connect.Conference.Core.Models.Tracks.Track> trackList)
+        {
+            return trackList.Select(t => new AutoCompletePair() { label = t.Title, value = t.TrackId.ToString() });
+        }
 
     }
 }

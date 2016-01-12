@@ -1,4 +1,3 @@
-using System;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.Sessions
@@ -11,7 +10,7 @@ namespace Connect.Conference.Core.Models.Sessions
         public string EditTags { get; set; }
 
         [IgnoreColumn]
-        public string EditSpeakers { get; set; }
+        public string EditTracks { get; set; }
 
     }
 }

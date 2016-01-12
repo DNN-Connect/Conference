@@ -101,5 +101,8 @@ window.ConferenceService = function($, mid) {
   this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
     this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
   }
+  this.searchTracks = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
+  }
 
 }

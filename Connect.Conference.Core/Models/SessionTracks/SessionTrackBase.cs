@@ -9,8 +9,7 @@ namespace Connect.Conference.Core.Models.SessionTracks
 {
     [TableName("Connect_Conference_SessionTracks")]
     [DataContract]
-    public partial class SessionTrackBase  : AuditableEntity 
-    {
+    public partial class SessionTrackBase     {
 
         #region .ctor
         public SessionTrackBase()
