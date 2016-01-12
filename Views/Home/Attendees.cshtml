@@ -1,0 +1,128 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddModuleService();
+    var isInFuture = (Model.StartDate != null && Model.StartDate > DateTime.Now);
+}
+
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
+
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+   <h2>@Model.Name</h2>
+   @if (Model.StartDate != null)
+   {
+   <div class="panel panel-info">
+    <div class="panel-body">
+     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("d MMMM") : "")
+     - @((Model.EndDate != null) ? ((System.DateTime)Model.EndDate).ToString("d MMMM") : "")
+     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("yyyy") : "")
+     @Model.Location
+    </div>
+   </div>
+   }
+   <p class="lead">@Model.Description</p>
+  </div>
+ </div>
+ <div class="row">
+  <div class="col-xs-12 col-md-4">
+   <table class="table">
+    <thead>
+     <tr>
+      <th colspan="3">@Dnn.LocalizeString("Intend")</th>
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var a in AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status == 0).OrderBy(a => a.LastName))
+     {
+     <tr>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td>@a.LastName</td>
+      <td>@a.FirstName</td>
+     </tr>
+     }
+    </tbody>
+   </table>
+  </div>
+  <div class="col-xs-12 col-md-4">
+   <table class="table">
+    <thead>
+     <tr>
+      <th colspan="3">@Dnn.LocalizeString("Going")</th>
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var a in AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status == 1).OrderBy(a => a.LastName))
+     {
+     <tr>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td>@a.LastName</td>
+      <td>@a.FirstName</td>
+     </tr>
+     }
+    </tbody>
+   </table>
+  </div>
+  <div class="col-xs-12 col-md-4">
+   <table class="table">
+    <thead>
+     <tr>
+      <th colspan="3">@Dnn.LocalizeString("Confirmed")</th>
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var a in AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status > 1).OrderBy(a => a.LastName))
+     {
+     <tr>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td>@a.LastName</td>
+      <td>@a.FirstName</td>
+     </tr>
+     }
+    </tbody>
+   </table>
+  </div>
+  @if (isInFuture & ConferenceModuleContext.Security.CanAttend)
+  {
+  <div class="col-xs-12">
+   @switch (ConferenceModuleContext.Security.GoingToConferenceStatus(Model.ConferenceId))
+   {
+    case -1:
+    <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("IntendToGo.Confirm")" data-status="0">@Dnn.LocalizeString("IntendToGo")</a>
+     break;
+    case 0:
+    <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
+    <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImGoing.Confirm")" da data-status="1">@Dnn.LocalizeString("ImGoing")</a>
+     break;
+    case 1:
+    <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
+     break;
+   }
+  </div>
+  }
+ </div>
+</div>
+
+
+<script type="text/javascript">
+ $(function () {
+  var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  $(document).ready(function () {
+   $('.cmdStatusChange').click(function (e) {
+    e.preventDefault()
+    if (confirm($(this).data('confirm'))) {
+     moduleConferenceService.changeAttendeeStatus(@Model.ConferenceId, $(this).data('status'), function() {
+      location.reload();
+     });
+    }
+   });
+  });
+ });
+</script>

@@ -123,6 +123,24 @@
   <data name="EditProfile.Text" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
+  <data name="ImGoing.Confirm" xml:space="preserve">
+    <value>Please confirm that you're definitely going to attend this conference</value>
+  </data>
+  <data name="ImGoing.Text" xml:space="preserve">
+    <value>I'm going!</value>
+  </data>
+  <data name="ImNotGoing.Confirm" xml:space="preserve">
+    <value>Please confirm you apparently can't make it to this conference</value>
+  </data>
+  <data name="ImNotGoing.Text" xml:space="preserve">
+    <value>I'm not going :-(</value>
+  </data>
+  <data name="IntendToGo.Confirm" xml:space="preserve">
+    <value>Please confirm that you really intend to go to this conference</value>
+  </data>
+  <data name="IntendToGo.Text" xml:space="preserve">
+    <value>I intend to go to this conference!</value>
+  </data>
   <data name="New.Text" xml:space="preserve">
     <value>New Conference</value>
   </data>

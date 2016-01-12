@@ -104,5 +104,8 @@ window.ConferenceService = function($, mid) {
   this.searchTracks = function(conferenceId, searchTerm, success, fail) {
     this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
   }
+  this.changeAttendeeStatus = function(conferenceId, newStatus, success, fail) {
+    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, { Status: newStatus}, success, fail);
+  }
 
 }

@@ -70,7 +70,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0 AND UserId=@1",
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees WHERE ConferenceId=@0 AND UserId=@1",
                     conferenceId,userId);
             }
         }
@@ -79,7 +79,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0",
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees WHERE ConferenceId=@0",
                     conferenceId);
             }
         }
@@ -88,7 +88,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE UserId=@0",
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees WHERE UserId=@0",
                     userId);
             }
         }

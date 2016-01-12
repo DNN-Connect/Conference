@@ -59,5 +59,18 @@ namespace Connect.DNN.Modules.Conference.Common
             return presenters.Where(p => p.SpeakerId == user.UserID).Count() > 0;
         }
 
+        public int GoingToConferenceStatus(int conferenceId)
+        {
+            var a = Connect.Conference.Core.Repositories.AttendeeRepository.Instance.GetAttendee(conferenceId, UserId);
+            if (a == null)
+            {
+                return -1;
+            }
+            else
+            {
+                return a.Status;
+            }
+        }
+
     }
 }

@@ -315,4 +315,16 @@
   <data name="NewTrack.Text" xml:space="preserve">
     <value>New Track</value>
   </data>
+  <data name="Attended.Text" xml:space="preserve">
+    <value>Has attended</value>
+  </data>
+  <data name="Confirmed.Text" xml:space="preserve">
+    <value>Confirmed to attend</value>
+  </data>
+  <data name="Going.Text" xml:space="preserve">
+    <value>Going to attend</value>
+  </data>
+  <data name="Intend.Text" xml:space="preserve">
+    <value>Intends to attend</value>
+  </data>
 </root>
