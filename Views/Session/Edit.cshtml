@@ -30,9 +30,16 @@
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Speakers")</label>
+  </div>
+  <div class="speakersComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-name="EditSpeakers" data-speakers="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSpeakers()))">
+  </div>
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Tags")</label>
   </div>
-  <div class="tagsComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-name="EditTags" data-tags="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetTags()))">
+  <div class="tagsComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-name="EditTags" data-tags="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetTags()))" data-placeholder="@Dnn.LocalizeString("NewTag")">
   </div>
  </div>
  <div class="dnnFormItem">

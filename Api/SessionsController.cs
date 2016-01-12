@@ -54,6 +54,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
+
     }
 }
 

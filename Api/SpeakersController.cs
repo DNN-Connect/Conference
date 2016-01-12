@@ -71,6 +71,13 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage SearchUsers(int conferenceId, string search)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.SearchUsers(ActiveModule.PortalID, search));
+        }
+
     }
 }
 

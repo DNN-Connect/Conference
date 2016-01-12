@@ -165,6 +165,12 @@
   <data name="SlotDeleteConfirm" xml:space="preserve">
     <value>Do you wish to delete this slot?</value>
   </data>
+  <data name="SpeakerDeleteConfirm" xml:space="preserve">
+    <value>Do you wish to remove this speaker?</value>
+  </data>
+  <data name="Speakers" xml:space="preserve">
+    <value>Speakers</value>
+  </data>
   <data name="Theme" xml:space="preserve">
     <value>Theme</value>
   </data>

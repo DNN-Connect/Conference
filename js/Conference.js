@@ -345,6 +345,173 @@ module.exports = SessionVotes;
 
 },{"./SessionVote":4}],6:[function(require,module,exports){
 /** @jsx React.DOM */
+var Speaker = React.createClass({displayName: "Speaker",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    return {
+    }
+  },
+
+  render: function() {
+    return (
+      React.createElement("tr", {className: "sortable", "data-id": this.props.speaker.SpeakerId}, 
+        React.createElement("td", null, this.props.speaker.DisplayName), 
+        React.createElement("td", {className: "btncol"}, 
+          React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.props.onDelete.bind(null, this.props.speaker), 
+             title: this.resources.Delete}, 
+           React.createElement("span", {className: "glyphicon glyphicon-remove"})
+          )
+        )
+      )
+    );
+  },
+
+  componentDidMount: function() {
+  }
+
+});
+
+module.exports = Speaker;
+
+},{}],7:[function(require,module,exports){
+/** @jsx React.DOM */
+var Speaker = require('./Speaker');
+
+var Speakers = React.createClass({displayName: "Speakers",
+
+  resources: null,
+  service: null,
+  security: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    this.security = ConnectConference.modules[this.props.moduleId].security;
+    return {
+      speakers: this.props.speakers
+    }
+  },
+
+  render: function() {
+    var speakers = this.state.speakers.map(function(item) {
+      return React.createElement(Speaker, {moduleId: this.props.moduleId, speaker: item, key: item.SpeakerId, onDelete: this.onDelete})
+    }.bind(this));
+    var addRow = null;
+    if (this.security.CanManage) {
+      addRow = (
+        React.createElement("tr", null, 
+          React.createElement("td", {className: "dnnFormItem"}, 
+           React.createElement("input", {type: "text", className: "fullwidth", ref: "newSpeaker"}), 
+           React.createElement("input", {type: "hidden", ref: "newSpeakerId"})
+          ), 
+          React.createElement("td", {className: "btncol"}, 
+            React.createElement("a", {href: "#", className: "btn btn-default", onClick: this.onSpeakerAdd, 
+               title: this.resources.Add}, 
+             React.createElement("span", {className: "glyphicon glyphicon-plus"})
+            )
+          )
+        )
+      );
+    }
+    return (
+      React.createElement("table", {className: "table", id: "speakersTable"}, 
+        React.createElement("thead", null, 
+          React.createElement("tr", null, 
+            React.createElement("th", null, this.resources.Speakers), 
+            React.createElement("th", null)
+          )
+        ), 
+        React.createElement("tbody", {ref: "speakersTable"}, 
+          speakers
+        ), 
+        React.createElement("tbody", null, 
+          addRow
+        )
+      )
+    );
+  },
+
+  componentDidMount: function() {
+    $(document).ready(function() {
+      if (this.security.CanManage) {
+        $(this.refs.newSpeaker.getDOMNode()).autocomplete({
+          minLength: 1,
+          source: function(request, response) {
+            this.refs.newSpeakerId.getDOMNode().value = '';
+            this.service.searchUsers(this.props.conferenceId, request.term, function(data) {
+              response(data.map(function(item) {
+                return {
+                  label: item.DisplayName,
+                  value: item.UserId
+                }
+              }));
+            });
+          }.bind(this),
+          select: function(e, ui) {
+            e.preventDefault();
+            this.refs.newSpeakerId.getDOMNode().value = ui.item.value;
+            this.refs.newSpeaker.getDOMNode().value = ui.item.label;
+          }.bind(this)
+        });
+      }
+      $(this.refs.speakersTable.getDOMNode()).sortable({
+        update: function(event, ui) {
+          this.service.orderSessionSpeakers(this.props.conferenceId, this.props.sessionId, getTableOrder('speakersTable'));
+        }.bind(this)
+      });
+    }.bind(this));
+  },
+
+  onDelete: function(speaker, e) {
+    e.preventDefault();
+    if (confirm(this.resources.SpeakerDeleteConfirm)) {
+      this.service.deleteSessionSpeaker(this.props.conferenceId, this.props.sessionId, speaker.SpeakerId, function(data) {
+        var newList = [];
+        for (i = 0; i < this.state.speakers.length; i++) {
+          if (this.state.speakers[i].SpeakerId != speaker.SpeakerId) {
+            newList.push(this.state.speakers[i]);
+          }
+        }
+        this.setState({
+          speakers: newList
+        });
+      }.bind(this));
+    }
+  },
+
+  onSpeakerAdd: function(e) {
+    e.preventDefault();
+    var newUserId = this.refs.newSpeakerId.getDOMNode().value;
+    if (newUserId != '') {
+      for (i = 0; i < this.state.speakers.length; i++) {
+        if (this.state.speakers[i].UserId == newUserId) {
+          return;
+        }
+      }
+      this.service.addSessionSpeaker(this.props.conferenceId, this.props.sessionId, this.refs.newSpeakerId.getDOMNode().value, function(data) {
+        this.refs.newSpeakerId.getDOMNode().value = '';
+        this.refs.newSpeaker.getDOMNode().value = '';
+        var newList = this.state.speakers;
+        newList.push(data);
+        this.setState({
+          speakers: newList
+        });
+      }.bind(this));
+    }
+  }
+
+});
+
+module.exports = Speakers;
+
+
+},{"./Speaker":6}],8:[function(require,module,exports){
+/** @jsx React.DOM */
 var Tag = React.createClass({displayName: "Tag",
   render: function() {
     return (
@@ -357,7 +524,7 @@ var Tag = React.createClass({displayName: "Tag",
 
 module.exports = Tag;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = React.createClass({displayName: "TagVote",
 
@@ -405,7 +572,7 @@ var TagVote = React.createClass({displayName: "TagVote",
 
 module.exports = TagVote;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = require('./TagVote');
 
@@ -530,7 +697,7 @@ var TagVotes = React.createClass({displayName: "TagVotes",
 module.exports = TagVotes;
 
 
-},{"./TagVote":7}],9:[function(require,module,exports){
+},{"./TagVote":9}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 var Tag = require('./Tag');
 
@@ -555,7 +722,7 @@ var Tags = React.createClass({displayName: "Tags",
     return (
       React.createElement("div", {className: "bootstrap-tagsinput"}, 
         tagList, 
-        React.createElement("input", {type: "text", placeholder: "here", className: "taginput", ref: "newTag", 
+        React.createElement("input", {type: "text", placeholder: this.props.placeholder, className: "taginput", ref: "newTag", 
                onKeyPress: this.onNewTagKeyPress}), 
         React.createElement("input", {type: "hidden", name: this.props.name, value: JSON.stringify(this.state.tags)})
       )
@@ -631,7 +798,7 @@ var Tags = React.createClass({displayName: "Tags",
 module.exports = Tags;
 
 
-},{"./Tag":6}],10:[function(require,module,exports){
+},{"./Tag":8}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
@@ -869,7 +1036,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":11}],11:[function(require,module,exports){
+},{"./TimesheetEditorSlot":13}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -1028,11 +1195,12 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
     Tags = require('./Tags'),
+    Speakers = require('./Speakers'),
     TagVotes = require('./TagVotes'),
     SessionVotes = require('./SessionVotes');
 
@@ -1085,8 +1253,18 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var moduleId = $(el).data('moduleid');
         var conferenceId = $(el).data('conference');
         var fieldName = $(el).data('name');
+        var placeholder = $(el).data('placeholder');
         var tags = $(el).data('tags');
-        React.render(React.createElement(Tags, {moduleId: moduleId, name: fieldName, tags: tags, 
+        React.render(React.createElement(Tags, {moduleId: moduleId, name: fieldName, tags: tags, placeholder: placeholder, 
+           conferenceId: conferenceId}), el);
+      });
+      $('.speakersComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var sessionId = $(el).data('session');
+        var fieldName = $(el).data('name');
+        var speakers = $(el).data('speakers');
+        React.render(React.createElement(Speakers, {moduleId: moduleId, name: fieldName, speakers: speakers, sessionId: sessionId, 
            conferenceId: conferenceId}), el);
       });
       $('.tagVoteComponent').each(function(i, el) {
@@ -1122,7 +1300,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./SessionVotes":5,"./TagVotes":8,"./Tags":9,"./TimesheetEditor":10}]},{},[12])
+},{"./Comments":3,"./SessionVotes":5,"./Speakers":7,"./TagVotes":10,"./Tags":11,"./TimesheetEditor":12}]},{},[14])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -1133,7 +1311,7 @@ window.ConferenceService = function($, mid) {
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
     //showLoading();
-    console.log(data);
+    // console.log(data);
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -1213,6 +1391,18 @@ window.ConferenceService = function($, mid) {
   }
   this.deleteTag = function(conferenceId, tagId, success, fail) {
     this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
+  }
+  this.searchUsers = function(conferenceId, search, success, fail) {
+    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, { search: search }, success, fail);
+  }
+  this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, { UserId: userId }, success, fail);
+  }
+  this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, { UserId: userId }, success, fail);
+  }
+  this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
   }
 
 }

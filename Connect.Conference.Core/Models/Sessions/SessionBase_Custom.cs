@@ -10,5 +10,8 @@ namespace Connect.Conference.Core.Models.Sessions
         [IgnoreColumn]
         public string EditTags { get; set; }
 
+        [IgnoreColumn]
+        public string EditSpeakers { get; set; }
+
     }
 }

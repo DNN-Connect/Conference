@@ -141,7 +141,6 @@ namespace Connect.DNN.Modules.Conference.Controllers
             return RedirectToDefaultRoute();
         }
 
-
         #region " Helper Methods "
         private void HandleTags(SessionBase session)
         {

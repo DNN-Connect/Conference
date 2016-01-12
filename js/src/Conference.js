@@ -2,6 +2,7 @@
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
     Tags = require('./Tags'),
+    Speakers = require('./Speakers'),
     TagVotes = require('./TagVotes'),
     SessionVotes = require('./SessionVotes');
 
@@ -54,8 +55,18 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var moduleId = $(el).data('moduleid');
         var conferenceId = $(el).data('conference');
         var fieldName = $(el).data('name');
+        var placeholder = $(el).data('placeholder');
         var tags = $(el).data('tags');
-        React.render(<Tags moduleId={moduleId} name={fieldName} tags={tags}
+        React.render(<Tags moduleId={moduleId} name={fieldName} tags={tags} placeholder={placeholder}
+           conferenceId={conferenceId} />, el);
+      });
+      $('.speakersComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var sessionId = $(el).data('session');
+        var fieldName = $(el).data('name');
+        var speakers = $(el).data('speakers');
+        React.render(<Speakers moduleId={moduleId} name={fieldName} speakers={speakers} sessionId={sessionId}
            conferenceId={conferenceId} />, el);
       });
       $('.tagVoteComponent').each(function(i, el) {

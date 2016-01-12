@@ -8,8 +8,8 @@ using Connect.Conference.Core.Models.SessionSpeakers;
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class SessionSpeakerRepository : ServiceLocator<ISessionSpeakerRepository, SessionSpeakerRepository>, ISessionSpeakerRepository
- {
+    public class SessionSpeakerRepository : ServiceLocator<ISessionSpeakerRepository, SessionSpeakerRepository>, ISessionSpeakerRepository
+    {
         protected override Func<ISessionSpeakerRepository> GetFactory()
         {
             return () => new SessionSpeakerRepository();
@@ -38,7 +38,7 @@ namespace Connect.Conference.Core.Repositories
             {
                 return context.ExecuteSingleOrDefault<SessionSpeaker>(System.Data.CommandType.Text,
                     "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers WHERE SpeakerId=@0 AND SessionId=@1",
-                    speakerId,sessionId);
+                    speakerId, sessionId);
             }
         }
         public void AddSessionSpeaker(SessionSpeakerBase sessionSpeaker, int userId)
@@ -65,13 +65,13 @@ namespace Connect.Conference.Core.Repositories
         }
         public void DeleteSessionSpeaker(int speakerId, int sessionId)
         {
-             Requires.NotNull(sessionId);
-             Requires.NotNull(speakerId);
+            Requires.NotNull(sessionId);
+            Requires.NotNull(speakerId);
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers WHERE SpeakerId=@0 AND SessionId=@1",
-                    speakerId,sessionId);
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers WHERE SpeakerId=@0 AND SessionId=@1",
+                    speakerId, sessionId);
             }
         }
         public void DeleteSessionSpeakersBySession(int sessionId)
@@ -79,7 +79,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers WHERE SessionId=@0",
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers WHERE SessionId=@0",
                     sessionId);
             }
         }
@@ -88,7 +88,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
-                    "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers WHERE SpeakerId=@0",
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers WHERE SpeakerId=@0",
                     speakerId);
             }
         }
@@ -103,10 +103,10 @@ namespace Connect.Conference.Core.Repositories
             {
                 var rep = context.GetRepository<SessionSpeakerBase>();
                 rep.Update("SET CreatedByUserID=@0, CreatedOnDate=@1, LastModifiedByUserID=@2, LastModifiedOnDate=@3, Sort=@4 WHERE SpeakerId=@5 AND SessionId=@6",
-                          sessionSpeaker.CreatedByUserID,sessionSpeaker.CreatedOnDate,sessionSpeaker.LastModifiedByUserID,sessionSpeaker.LastModifiedOnDate,sessionSpeaker.Sort, sessionSpeaker.SpeakerId,sessionSpeaker.SessionId);
+                          sessionSpeaker.CreatedByUserID, sessionSpeaker.CreatedOnDate, sessionSpeaker.LastModifiedByUserID, sessionSpeaker.LastModifiedOnDate, sessionSpeaker.Sort, sessionSpeaker.SpeakerId, sessionSpeaker.SessionId);
             }
-        } 
- }
+        }
+    }
 
     public interface ISessionSpeakerRepository
     {

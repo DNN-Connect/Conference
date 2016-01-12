@@ -4,12 +4,13 @@ using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
 using Connect.Conference.Core.Models.Speakers;
+using DotNetNuke.Entities.Users;
 
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class SpeakerRepository : ServiceLocator<ISpeakerRepository, SpeakerRepository>, ISpeakerRepository
- {
+    public class SpeakerRepository : ServiceLocator<ISpeakerRepository, SpeakerRepository>, ISpeakerRepository
+    {
         protected override Func<ISpeakerRepository> GetFactory()
         {
             return () => new SpeakerRepository();
@@ -38,7 +39,7 @@ namespace Connect.Conference.Core.Repositories
             {
                 return context.ExecuteSingleOrDefault<Speaker>(System.Data.CommandType.Text,
                     "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers WHERE ConferenceId=@0 AND UserId=@1",
-                    conferenceId,userId);
+                    conferenceId, userId);
             }
         }
         public void AddSpeaker(SpeakerBase speaker, int userId)
@@ -65,13 +66,13 @@ namespace Connect.Conference.Core.Repositories
         }
         public void DeleteSpeaker(int conferenceId, int userId)
         {
-             Requires.NotNull(conferenceId);
-             Requires.NotNull(userId);
+            Requires.NotNull(conferenceId);
+            Requires.NotNull(userId);
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
                     "DELETE FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers WHERE ConferenceId=@0 AND UserId=@1",
-                    conferenceId,userId);
+                    conferenceId, userId);
             }
         }
         public void DeleteSpeakersByConference(int conferenceId)
@@ -103,10 +104,17 @@ namespace Connect.Conference.Core.Repositories
             {
                 var rep = context.GetRepository<SpeakerBase>();
                 rep.Update("SET Sort=@0, CreatedByUserID=@1, CreatedOnDate=@2, LastModifiedByUserID=@3, LastModifiedOnDate=@4, Url=@5, Description=@6, DescriptionShort=@7, Company=@8 WHERE ConferenceId=@9 AND UserId=@10",
-                          speaker.Sort,speaker.CreatedByUserID,speaker.CreatedOnDate,speaker.LastModifiedByUserID,speaker.LastModifiedOnDate,speaker.Url,speaker.Description,speaker.DescriptionShort,speaker.Company, speaker.ConferenceId,speaker.UserId);
+                          speaker.Sort, speaker.CreatedByUserID, speaker.CreatedOnDate, speaker.LastModifiedByUserID, speaker.LastModifiedOnDate, speaker.Url, speaker.Description, speaker.DescriptionShort, speaker.Company, speaker.ConferenceId, speaker.UserId);
             }
-        } 
- }
+        }
+        public IEnumerable<DnnUser> SearchUsers(int portalId, string search)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<DnnUser>(System.Data.CommandType.Text, "SELECT u.* FROM {databaseOwner}{objectQualifier}vw_Users u WHERE u.PortalId=@0 AND (u.FirstName LIKE '%' + @1 + '%' OR u.LastName LIKE '%' + @1 + '%' OR u.DisplayName LIKE '%' + @1 + '%') ORDER BY u.DisplayName", portalId, search);
+            }
+        }
+    }
 
     public interface ISpeakerRepository
     {
@@ -119,6 +127,7 @@ namespace Connect.Conference.Core.Repositories
         void DeleteSpeakersByConference(int conferenceId);
         void DeleteSpeakersByUser(int userId);
         void UpdateSpeaker(SpeakerBase speaker, int userId);
+        IEnumerable<DnnUser> SearchUsers(int portalId, string search);
     }
 }
 

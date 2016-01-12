@@ -309,4 +309,7 @@
   <data name="EditTag.Text" xml:space="preserve">
     <value>Edit Tag</value>
   </data>
+  <data name="NewTag.Text" xml:space="preserve">
+    <value>New Tag</value>
+  </data>
 </root>

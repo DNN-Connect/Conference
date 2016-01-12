@@ -22,7 +22,7 @@ var Tags = React.createClass({
     return (
       <div className="bootstrap-tagsinput">
         {tagList}
-        <input type="text" placeholder="here" className="taginput" ref="newTag" 
+        <input type="text" placeholder={this.props.placeholder} className="taginput" ref="newTag" 
                onKeyPress={this.onNewTagKeyPress} />
         <input type="hidden" name={this.props.name} value={JSON.stringify(this.state.tags)} />
       </div>

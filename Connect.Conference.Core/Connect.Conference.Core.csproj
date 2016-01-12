@@ -114,6 +114,7 @@
     <Compile Include="Models\Slots\SlotBase.cs" />
     <Compile Include="Models\Slots\SlotBase_Interfaces.cs" />
     <Compile Include="Models\Slots\Slot_Interfaces.cs" />
+    <Compile Include="Models\Speakers\DnnUser.cs" />
     <Compile Include="Models\Speakers\Speaker.cs" />
     <Compile Include="Models\Speakers\SpeakerBase.cs" />
     <Compile Include="Models\Speakers\SpeakerBase_Interfaces.cs" />

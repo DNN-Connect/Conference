@@ -8,7 +8,7 @@ window.ConferenceService = function($, mid) {
 
   this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
     //showLoading();
-    console.log(data);
+    // console.log(data);
     var path = baseServicepath;
     if (conferenceId != null) {
       path += 'Conference/' + conferenceId + '/'
@@ -88,6 +88,18 @@ window.ConferenceService = function($, mid) {
   }
   this.deleteTag = function(conferenceId, tagId, success, fail) {
     this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
+  }
+  this.searchUsers = function(conferenceId, search, success, fail) {
+    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, { search: search }, success, fail);
+  }
+  this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, { UserId: userId }, success, fail);
+  }
+  this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, { UserId: userId }, success, fail);
+  }
+  this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
   }
 
 }
