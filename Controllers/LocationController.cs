@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Locations;
-using System.Web.Routing;
-using DotNetNuke.Web.Mvc.Routing;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -30,6 +27,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(int conferenceId, int locationId)
         {
             var location = _repository.GetLocation(conferenceId, locationId);
@@ -38,6 +36,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(LocationBase location)
         {
             var previousRecord = _repository.GetLocation(location.ConferenceId, location.LocationId);

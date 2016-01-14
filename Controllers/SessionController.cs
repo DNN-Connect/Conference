@@ -4,8 +4,6 @@ using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Sessions;
-using System.Web.Routing;
-using DotNetNuke.Web.Mvc.Routing;
 using System.Collections.Generic;
 using Connect.Conference.Core.Models.Tags;
 
@@ -30,6 +28,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             if (session == null) { session = new Session() { ConferenceId = conferenceId }; }
             return View(session);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public new ActionResult View()
@@ -68,6 +67,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(int conferenceId, int sessionId)
         {
             var session = _repository.GetSession(conferenceId, sessionId);
@@ -76,6 +76,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(SessionBase session)
         {
             var previousRecord = _repository.GetSession(session.ConferenceId, session.SessionId);
@@ -95,6 +97,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.SessionSubmit)]
         public ActionResult Submit(int conferenceId, int sessionId)
         {
             var session = _repository.GetSession(conferenceId, sessionId);
@@ -113,6 +116,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.SessionSubmit)]
         public ActionResult Submit(SessionBase session)
         {
             var recordToUpdate = (_repository.GetSession(session.ConferenceId, session.SessionId) ?? new Session() { ConferenceId = session.ConferenceId }).GetSessionBase();

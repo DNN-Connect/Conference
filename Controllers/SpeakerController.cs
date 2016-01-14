@@ -1,12 +1,8 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Speakers;
-using System.Web.Routing;
-using DotNetNuke.Web.Mvc.Routing;
-using System;
 using DotNetNuke.Services.FileSystem;
 
 namespace Connect.DNN.Modules.Conference.Controllers
@@ -39,6 +35,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int conferenceId, int speakerId, SpeakerDTO speaker)
         {
             if (!ConferenceModuleContext.Security.CanManage)

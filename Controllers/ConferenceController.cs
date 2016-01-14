@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
@@ -20,6 +19,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult TracksLocationsSlots(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
@@ -28,6 +28,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult SessionsSpeakers(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
@@ -40,13 +41,16 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
         }
+
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Manage(int conferenceId)
         {
             return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
@@ -55,6 +59,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(ConferenceBase conference)
         {
             var previousRecord = _repository.GetConference(PortalSettings.PortalId, conference.ConferenceId);
