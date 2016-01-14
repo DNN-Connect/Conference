@@ -112,21 +112,23 @@ var Comments = React.createClass({displayName: "Comments",
     }
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "panel panel-default widget"}, 
-         React.createElement("div", {className: "panel-heading"}, 
-          React.createElement("span", {className: "glyphicon glyphicon-comment"}), 
-          React.createElement("h3", {className: "panel-title"}, this.props.title), 
-          React.createElement("span", {className: "label label-info"}, this.state.commentCount)
-         ), 
-         submitPanel, 
-         React.createElement("div", {className: "panel-body"}, 
-          React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments, 
-                       appPath: this.props.appPath, onCommentDelete: this.onCommentDelete}), 
-          React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button", 
-             onClick: this.loadMoreComments, ref: "cmdMore", disabled: !this.state.canLoadMore}, 
-             React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " ", this.resources.More
+        React.createElement("div", {className: "col-xs-12"}, 
+          React.createElement("div", {className: "panel panel-default widget"}, 
+           React.createElement("div", {className: "panel-heading"}, 
+            React.createElement("span", {className: "glyphicon glyphicon-comment"}), 
+            React.createElement("h3", {className: "panel-title"}, this.props.title), 
+            React.createElement("span", {className: "label label-info"}, this.state.commentCount)
+           ), 
+           submitPanel, 
+           React.createElement("div", {className: "panel-body"}, 
+            React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments, 
+                         appPath: this.props.appPath, onCommentDelete: this.onCommentDelete}), 
+            React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button", 
+               onClick: this.loadMoreComments, ref: "cmdMore", disabled: !this.state.canLoadMore}, 
+               React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " ", this.resources.More
+            )
+           )
           )
-         )
         )
        )
     );
@@ -1515,60 +1517,74 @@ window.ConferenceService = function($, mid) {
 
 // Common functions for the module
 function showLoading() {
- if ($('#serviceStatus').length) {
-  $('#serviceStatus div:first-child').show();
-  $('#serviceStatus div:nth-child(2)').hide();
-  $('#serviceStatus').css('background', '#2FC1F3').show();
- }
+  if ($('#serviceStatus').length) {
+    $('#serviceStatus div:first-child').show();
+    $('#serviceStatus div:nth-child(2)').hide();
+    $('#serviceStatus').css('background', '#2FC1F3').show();
+  }
 }
 
 function hideLoading() {
- if ($('#serviceStatus').length) {
-  $('#serviceStatus').hide();
- }
+  if ($('#serviceStatus').length) {
+    $('#serviceStatus').hide();
+  }
 }
 
 function showError(message) {
- if ($('#serviceStatus').length) {
-  $('#serviceStatus div:first-child').hide();
-  $('#serviceStatus div:nth-child(2)').html(message).show();
-  $('#serviceStatus').css('background', '#F33B2F').show();
-  setTimeout(function () { $('#serviceStatus').hide(); }, 3000);
- }
+  if ($('#serviceStatus').length) {
+    $('#serviceStatus div:first-child').hide();
+    $('#serviceStatus div:nth-child(2)').html(message).show();
+    $('#serviceStatus').css('background', '#F33B2F').show();
+    setTimeout(function() {
+      $('#serviceStatus').hide();
+    }, 3000);
+  }
 }
 
 function isInt(value) {
- return !isNaN(value) &&
-        parseInt(Number(value)) == value &&
-        !isNaN(parseInt(value, 10));
+  return !isNaN(value) &&
+    parseInt(Number(value)) == value &&
+    !isNaN(parseInt(value, 10));
 }
 
 function validateForm(form, submitButton, formErrorDiv) {
- submitButton.click(function () {
-  var hasErrors = false;
-  formErrorDiv.empty().hide();
-  form.find('input[data-validator="integer"]').each(function (i, el) {
-   if (!isInt($(el).val()) & $(el).val() != '') {
-    hasErrors = true;
-    $(el).parent().addClass('error');
-    formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
-   }
+  submitButton.click(function() {
+    var hasErrors = false;
+    formErrorDiv.empty().hide();
+    form.find('input[data-validator="integer"]').each(function(i, el) {
+      if (!isInt($(el).val()) & $(el).val() != '') {
+        hasErrors = true;
+        $(el).parent().addClass('error');
+        formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+      }
+    });
+    form.find('input[data-required="true"]').each(function(i, el) {
+      if ($(el).val() == '') {
+        hasErrors = true;
+        $(el).parent().addClass('error');
+        formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+      }
+    });
+    return !hasErrors;
   });
-  form.find('input[data-required="true"]').each(function (i, el) {
-   if ($(el).val() == '') {
-    hasErrors = true;
-    $(el).parent().addClass('error');
-    formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
-   }
-  });
-  return !hasErrors;
- });
 }
 
 function getTableOrder(tableId) {
- var res = [];
- $('#' + tableId + ' tbody:first tr').each(function (i, el) {
-  res.push({ id: $(el).data('id'), order: i });
- });
- return res;
+  var res = [];
+  $('#' + tableId + ' tbody:first tr').each(function(i, el) {
+    res.push({
+      id: $(el).data('id'),
+      order: i
+    });
+  });
+  return res;
 }
+
+$(document).ready(function() {
+  var el = $('.ModConnectConferenceC .container');
+  if (el != undefined) {
+    if (el.parent().closest('.container').length == 1) {
+      el.removeClass('container');
+    }
+  }
+})

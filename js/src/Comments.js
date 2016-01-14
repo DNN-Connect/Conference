@@ -33,21 +33,23 @@ var Comments = React.createClass({
     }
     return (
       <div className="row">
-        <div className="panel panel-default widget">
-         <div className="panel-heading">
-          <span className="glyphicon glyphicon-comment"></span>
-          <h3 className="panel-title">{this.props.title}</h3>
-          <span className="label label-info">{this.state.commentCount}</span>
-         </div>
-         {submitPanel}
-         <div className="panel-body">
-          <CommentList moduleId={this.props.moduleId} comments={this.state.comments} 
-                       appPath={this.props.appPath} onCommentDelete={this.onCommentDelete} />
-          <a href="#" className="btn btn-primary btn-sm btn-block" role="button" 
-             onClick={this.loadMoreComments} ref="cmdMore" disabled={!this.state.canLoadMore}>
-             <span className="glyphicon glyphicon-refresh"></span> {this.resources.More}
-          </a>
-         </div>
+        <div className="col-xs-12">
+          <div className="panel panel-default widget">
+           <div className="panel-heading">
+            <span className="glyphicon glyphicon-comment"></span>
+            <h3 className="panel-title">{this.props.title}</h3>
+            <span className="label label-info">{this.state.commentCount}</span>
+           </div>
+           {submitPanel}
+           <div className="panel-body">
+            <CommentList moduleId={this.props.moduleId} comments={this.state.comments} 
+                         appPath={this.props.appPath} onCommentDelete={this.onCommentDelete} />
+            <a href="#" className="btn btn-primary btn-sm btn-block" role="button" 
+               onClick={this.loadMoreComments} ref="cmdMore" disabled={!this.state.canLoadMore}>
+               <span className="glyphicon glyphicon-refresh"></span> {this.resources.More}
+            </a>
+           </div>
+          </div>
         </div>
        </div>
     );

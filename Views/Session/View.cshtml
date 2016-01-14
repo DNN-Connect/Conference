@@ -19,62 +19,64 @@
 
 <div class="container">
  <div class="row">
-  <div class="panel panel-info">
-   <div class="panel-heading">
-    <h2 class="panel-title">@Model.Title</h2>
-    @if (!string.IsNullOrEmpty(Model.SubTitle))
-    {
-    <p><em>@Model.SubTitle</em></p>
-    }
-   </div>
-   <div class="panel-body">
-    <div class="row">
-     <div class="col-xs-6 col-sm-2">
-      @foreach (var speaker in speakers)
-      {
-      <div class="speaker">
-       <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@speaker.SpeakerId" class="img-circle img-responsive" /><br />
-       @speaker.DisplayName
-      </div>
-      }
-
-     </div>
-     <div class="col-xs-6 col-sm-10">
-      <dl class="dl-horizontal">
-       <dt>@Dnn.LocalizeString("Status")</dt>
-       <dd>@(((Connect.Conference.Core.Common.SessionStatus)Model.Status).ToStatusString())</dd>
-       @if (!string.IsNullOrEmpty(Model.Level))
-       {
-       <dt>@Dnn.LocalizeString("Level")</dt>
-       <dd>@Model.Level</dd>
-       }
-       @if (Model.Capacity != null)
-       {
-       <dt>@Dnn.LocalizeString("Capacity")</dt>
-       <dd>@Model.Capacity</dd>
-       }
-       @if (Model.SlotId != 0)
-       {
-       <dt>@Dnn.LocalizeString("DateAndTime")</dt>
-       <dd>@(((System.DateTime)Model.SessionDateAndTime).ToString("G"))</dd>
-       }
-       @if (Model.LocationId != null)
-       {
-       <dt>@Dnn.LocalizeString("Location")</dt>
-       <dd>@Model.LocationName</dd>
-       }
-      </dl>
-      <hr />
-      <div>@Model.Description</div>
-      <hr />
-      <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
-      <dl>
+  <div class="col-xs-12">
+   <div class="panel panel-info">
+    <div class="panel-heading">
+     <h2 class="panel-title">@Model.Title</h2>
+     @if (!string.IsNullOrEmpty(Model.SubTitle))
+     {
+     <p><em>@Model.SubTitle</em></p>
+     }
+    </div>
+    <div class="panel-body">
+     <div class="row">
+      <div class="col-xs-6 col-sm-2">
        @foreach (var speaker in speakers)
        {
-       <dt>@speaker.DisplayName</dt>
-       <dd class="speaker">@speaker.Description</dd>
+       <div class="speaker">
+        <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@speaker.SpeakerId" class="img-circle img-responsive" /><br />
+        @speaker.DisplayName
+       </div>
        }
-      </dl>
+
+      </div>
+      <div class="col-xs-6 col-sm-10">
+       <dl class="dl-horizontal">
+        <dt>@Dnn.LocalizeString("Status")</dt>
+        <dd>@(((Connect.Conference.Core.Common.SessionStatus)Model.Status).ToStatusString())</dd>
+        @if (!string.IsNullOrEmpty(Model.Level))
+        {
+        <dt>@Dnn.LocalizeString("Level")</dt>
+        <dd>@Model.Level</dd>
+        }
+        @if (Model.Capacity != null)
+        {
+        <dt>@Dnn.LocalizeString("Capacity")</dt>
+        <dd>@Model.Capacity</dd>
+        }
+        @if (Model.SlotId != 0)
+        {
+        <dt>@Dnn.LocalizeString("DateAndTime")</dt>
+        <dd>@(((System.DateTime)Model.SessionDateAndTime).ToString("G"))</dd>
+        }
+        @if (Model.LocationId != null)
+        {
+        <dt>@Dnn.LocalizeString("Location")</dt>
+        <dd>@Model.LocationName</dd>
+        }
+       </dl>
+       <hr />
+       <div>@Model.Description</div>
+       <hr />
+       <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
+       <dl>
+        @foreach (var speaker in speakers)
+        {
+        <dt>@speaker.DisplayName</dt>
+        <dd class="speaker">@speaker.Description</dd>
+        }
+       </dl>
+      </div>
      </div>
     </div>
    </div>
@@ -87,11 +89,11 @@
   <div class="buttons-right">
    @if (Model.Status > 0)
    {
-    <button type="submit" class="btn btn-warning" id="cmdRetract" name="workflow" value="0">@Dnn.LocalizeString("Retract")</button>
+   <button type="submit" class="btn btn-warning" id="cmdRetract" name="workflow" value="0">@Dnn.LocalizeString("Retract")</button>
    }
    @if (Model.Status == 0)
    {
-    <button type="submit" class="btn btn-primary" id="cmdSubmit" name="workflow" value="1">@Dnn.LocalizeString("Submit")</button>
+   <button type="submit" class="btn btn-primary" id="cmdSubmit" name="workflow" value="1">@Dnn.LocalizeString("Submit")</button>
     <button type="submit" class="btn btn-warning" id="cmdDelete" name="command" value="delete">@Dnn.LocalizeString("Delete")</button>
    }
    @Html.ActionLink(Dnn.LocalizeString("Edit"), "Submit", "Session", new { ConferenceId = Model.ConferenceId, SessionId = Model.SessionId, ret = "s-v" }, new { @class = "btn btn-default" })
@@ -143,7 +145,7 @@
 
 <script type="text/javascript">
  $(function () {
-  $(document).ready(function() {
+  $(document).ready(function () {
    $('#cmdSubmit').click(function () {
     return confirm('@Dnn.LocalizeString("Submit.Confirm")');
    });

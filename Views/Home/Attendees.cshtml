@@ -15,6 +15,7 @@
 </div>
 
 <div class="container">
+
  <div class="row">
   <div class="col-xs-12">
    <h2>@Model.Name</h2>
@@ -32,6 +33,28 @@
    <p class="lead">@Model.Description</p>
   </div>
  </div>
+
+ <div class="row">
+  @if (isInFuture & ConferenceModuleContext.Security.CanAttend)
+  {
+  <div class="col-xs-12">
+   @switch (ConferenceModuleContext.Security.GoingToConferenceStatus(Model.ConferenceId))
+   {
+    case -1:
+    <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("IntendToGo.Confirm")" data-status="0">@Dnn.LocalizeString("IntendToGo")</a>
+     break;
+    case 0:
+    <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
+    <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImGoing.Confirm")" da data-status="1">@Dnn.LocalizeString("ImGoing")</a>
+     break;
+    case 1:
+    <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
+     break;
+   }
+  </div>
+  }
+ </div>
+
  <div class="row">
   <div class="col-xs-12 col-md-4">
    <table class="table">
@@ -90,16 +113,16 @@
     </tbody>
    </table>
   </div>
-  @{ 
+  @{
       var commentList = CommentRepository.Instance.GetCommentsBySession(-1, 2, 0, commentsPageSize);
       var totalComments = commentList.TotalCount;
   }
-     <div class="commentsComponent col-xs-12" data-moduleid="@Dnn.ModuleContext.ModuleId"
-        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("Comments")" data-help=""
-        data-conference="@Model.ConferenceId" data-session="-1" data-visibility="2" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
-        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
-        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
-   </div>
+  <div class="commentsComponent col-xs-12" data-moduleid="@Dnn.ModuleContext.ModuleId"
+       data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("Comments")" data-help=""
+       data-conference="@Model.ConferenceId" data-session="-1" data-visibility="2" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
+       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+       data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
+  </div>
 
   @if (isInFuture & ConferenceModuleContext.Security.CanAttend)
   {
