@@ -59,7 +59,7 @@ var Scheduler = React.createClass({
       interact('.canDrop')
         .dropzone({
           accept: '.session',
-          overlap: 0.75,
+          overlap: 0.5,
           ondropactivate: function(event) {
             hasReset = false;
           },
@@ -71,6 +71,11 @@ var Scheduler = React.createClass({
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
+            var sessionId = event.relatedTarget.getAttribute('data-sessionid');
+            var slotId = event.target.getAttribute('data-slotid');
+            var locationId = event.target.getAttribute('data-locationid');
+            var day = event.target.getAttribute('data-day');
+            var isPlenary = event.relatedTarget.getAttribute('data-plenary');
             if (event.relatedTarget.getAttribute('data-slotkey') != '') {
               $('[data-reactid="' + event.relatedTarget.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
             }

@@ -85,6 +85,13 @@ function moveObject(object, dx, dy)
   object.setAttribute('data-y', y);
 }
 
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
+
 $(document).ready(function() {
   var el = $('.ModConnectConferenceC .container');
   if (el != undefined) {

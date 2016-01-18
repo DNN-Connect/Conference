@@ -14,7 +14,7 @@ var SchedulerScheduledSession = React.createClass({
     return (
       <div className="panel panel-default session scheduled" data-slotid={this.props.session.SlotId} 
            data-locationid={this.props.session.LocationId} data-plenary={this.props.session.IsPlenary}
-           ref="Session">
+           ref="Session" data-sessionid={this.props.session.SessionId}>
        <div className="panel-body">
          {speakers}<br />
          {this.props.session.Title}          

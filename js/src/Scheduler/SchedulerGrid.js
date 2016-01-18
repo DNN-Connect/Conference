@@ -39,7 +39,9 @@ var SchedulerGrid = React.createClass({
       if (slot.SlotType == 0) {
         var refId = 'slot' + slot.SlotId.toString();
         slotBands.push(
-          <rect x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} width={this.props.width} height={slot.DurationMins} fill="url(#Pattern)" />
+          <rect x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} 
+                width={this.props.width} height={slot.DurationMins} 
+                fill="url(#Pattern)" ref={refId} />
         );
       } else if (slot.SlotType == 1) {
         slotBands.push(
@@ -71,7 +73,8 @@ var SchedulerGrid = React.createClass({
           var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
             <rect x={j * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} height={slot.DurationMins} width="100" className="sessionSlot canDrop"
-                   ref={refId} />
+                   ref={refId} data-slotid={slot.SlotId} data-locationid={this.props.locations[j].LocationId}
+                   data-day={this.props.day} />
           );
         }
       }
@@ -93,7 +96,16 @@ var SchedulerGrid = React.createClass({
   placeElement: function(el, key) {
     var sl = this.refs[key];
     if (sl != undefined) {
-      $(sl.getDOMNode()).attr('class', 'sessionSlot');
+      if (key.indexOf('x') == -1) {
+        for (var ref in this.refs) {
+          if (ref.startsWith(key + 'x')) {
+            this.refs[ref].getDOMNode().setAttribute('class', 'sessionSlot');
+          }
+        }
+      }
+      else {
+        $(sl.getDOMNode()).attr('class', 'sessionSlot');
+      }
       var box = sl.getDOMNode().getBoundingClientRect();
       var sessionBox = el.getBoundingClientRect();
       var session = $(el);

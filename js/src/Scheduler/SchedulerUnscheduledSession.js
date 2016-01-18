@@ -13,7 +13,9 @@ var SchedulerUnscheduledSession = React.createClass({
         );
     });
     return (
-      <div className="panel panel-default session" data-slotkey="">
+      <div className="panel panel-default session" data-slotkey="" 
+           data-sessionid={this.props.session.SessionId}
+           data-plenary={this.props.session.IsPlenary}>
         <div className="panel-body">
          {speakers}<br />
          {this.props.session.Title}          

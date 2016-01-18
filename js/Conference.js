@@ -252,7 +252,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
       interact('.canDrop')
         .dropzone({
           accept: '.session',
-          overlap: 0.75,
+          overlap: 0.5,
           ondropactivate: function(event) {
             hasReset = false;
           },
@@ -264,6 +264,11 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
+            var sessionId = event.relatedTarget.getAttribute('data-sessionid');
+            var slotId = event.target.getAttribute('data-slotid');
+            var locationId = event.target.getAttribute('data-locationid');
+            var day = event.target.getAttribute('data-day');
+            var isPlenary = event.relatedTarget.getAttribute('data-plenary');
             if (event.relatedTarget.getAttribute('data-slotkey') != '') {
               $('[data-reactid="' + event.relatedTarget.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
             }
@@ -374,7 +379,7 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
              React.createElement("rect", {x: "0", y: "0", height: this.state.height, width: this.state.width + this.state.leftMargin, className: "dayBackground"}), 
              React.createElement(SchedulerGrid, {width: this.state.width, height: this.state.height, leftMargin: this.state.leftMargin, 
                             start: this.state.start, ref: "Grid", locationList: this.state.locationList, 
-                            locations: this.props.locations, mySlots: this.state.mySlots})
+                            locations: this.props.locations, mySlots: this.state.mySlots, day: this.props.day})
         ), 
         scheduledSessions
       )
@@ -440,7 +445,9 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
       if (slot.SlotType == 0) {
         var refId = 'slot' + slot.SlotId.toString();
         slotBands.push(
-          React.createElement("rect", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: this.props.width, height: slot.DurationMins, fill: "url(#Pattern)"})
+          React.createElement("rect", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, 
+                width: this.props.width, height: slot.DurationMins, 
+                fill: "url(#Pattern)", ref: refId})
         );
       } else if (slot.SlotType == 1) {
         slotBands.push(
@@ -472,7 +479,8 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
           var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
             React.createElement("rect", {x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot canDrop", 
-                   ref: refId})
+                   ref: refId, "data-slotid": slot.SlotId, "data-locationid": this.props.locations[j].LocationId, 
+                   "data-day": this.props.day})
           );
         }
       }
@@ -494,7 +502,16 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
   placeElement: function(el, key) {
     var sl = this.refs[key];
     if (sl != undefined) {
-      $(sl.getDOMNode()).attr('class', 'sessionSlot');
+      if (key.indexOf('x') == -1) {
+        for (var ref in this.refs) {
+          if (ref.startsWith(key + 'x')) {
+            this.refs[ref].getDOMNode().setAttribute('class', 'sessionSlot');
+          }
+        }
+      }
+      else {
+        $(sl.getDOMNode()).attr('class', 'sessionSlot');
+      }
       var box = sl.getDOMNode().getBoundingClientRect();
       var sessionBox = el.getBoundingClientRect();
       var session = $(el);
@@ -531,7 +548,7 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
     return (
       React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
-           ref: "Session"}, 
+           ref: "Session", "data-sessionid": this.props.session.SessionId}, 
        React.createElement("div", {className: "panel-body"}, 
          speakers, React.createElement("br", null), 
          this.props.session.Title
@@ -567,7 +584,9 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
         );
     });
     return (
-      React.createElement("div", {className: "panel panel-default session", "data-slotkey": ""}, 
+      React.createElement("div", {className: "panel panel-default session", "data-slotkey": "", 
+           "data-sessionid": this.props.session.SessionId, 
+           "data-plenary": this.props.session.IsPlenary}, 
         React.createElement("div", {className: "panel-body"}, 
          speakers, React.createElement("br", null), 
          this.props.session.Title
@@ -2020,6 +2039,13 @@ function moveObject(object, dx, dy)
     'translate(' + x + 'px, ' + y + 'px)';
   object.setAttribute('data-x', x);
   object.setAttribute('data-y', y);
+}
+
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
 }
 
 $(document).ready(function() {
