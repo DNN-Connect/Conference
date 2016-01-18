@@ -236,6 +236,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
 
   componentDidMount: function() {
     $(document).ready(function() {
+      var hasReset = true;
       interact('.session')
         .draggable({
           inertia: false,
@@ -248,11 +249,12 @@ var Scheduler = React.createClass({displayName: "Scheduler",
         .on('dragmove', function(event) {
           moveObject(event.target, event.dx, event.dy);
         });
-      interact('.sessionSlot')
+      interact('.canDrop')
         .dropzone({
           accept: '.session',
           overlap: 0.75,
           ondropactivate: function(event) {
+            hasReset = false;
           },
           ondragenter: function(event) {
             var dropzoneElement = event.target;
@@ -262,6 +264,10 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
+            if (event.relatedTarget.getAttribute('data-slotkey') != '') {
+              $('[data-reactid="' + event.relatedTarget.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
+            }
+            hasReset = true;
             var session = $(event.relatedTarget);
             var dropBox = event.target.getBoundingClientRect();
             var sessionBox = event.relatedTarget.getBoundingClientRect();
@@ -270,8 +276,25 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             moveObject(event.relatedTarget, 
                        dropBox.left - sessionBox.left + 4,
                        dropBox.top - sessionBox.top + 4);
+            session.data('orig-x', session.data('x'));
+            session.data('orig-y', session.data('y'));
+            event.relatedTarget.setAttribute('data-slotkey', event.target.getAttribute('data-reactid'));
+            event.target.classList.remove('canDrop');
           },
           ondropdeactivate: function(event) {
+            if (!hasReset)
+            {
+              var s = event.relatedTarget;
+              var session = $(s);
+              var x = session.data('orig-x');
+              var y = session.data('orig-y');
+              s.style.webkitTransform =
+                s.style.transform =
+                'translate(' + x + 'px, ' + y + 'px)';
+              s.setAttribute('data-x', x);
+              s.setAttribute('data-y', y);
+              hasReset = true;
+            }
             event.target.classList.remove('drop-target');
           }
         });
@@ -448,7 +471,7 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
         for (j = 0; j < this.props.locations.length; j++) {
           var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
-            React.createElement("rect", {x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot", 
+            React.createElement("rect", {x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot canDrop", 
                    ref: refId})
           );
         }
@@ -471,6 +494,7 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
   placeElement: function(el, key) {
     var sl = this.refs[key];
     if (sl != undefined) {
+      $(sl.getDOMNode()).attr('class', 'sessionSlot');
       var box = sl.getDOMNode().getBoundingClientRect();
       var sessionBox = el.getBoundingClientRect();
       var session = $(el);
@@ -479,7 +503,9 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
       moveObject(el,
         box.left - sessionBox.left + 4,
         box.top - sessionBox.top + 4);
-
+      session.attr('data-orig-x', box.left - sessionBox.left + 4);
+      session.attr('data-orig-y', box.top - sessionBox.top + 4);
+      session.attr('data-slotkey', sl.getDOMNode().getAttribute('data-reactid'));
     }
   }
 
@@ -541,7 +567,7 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
         );
     });
     return (
-      React.createElement("div", {className: "panel panel-default session"}, 
+      React.createElement("div", {className: "panel panel-default session", "data-slotkey": ""}, 
         React.createElement("div", {className: "panel-body"}, 
          speakers, React.createElement("br", null), 
          this.props.session.Title

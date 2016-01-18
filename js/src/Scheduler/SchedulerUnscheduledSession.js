@@ -13,7 +13,7 @@ var SchedulerUnscheduledSession = React.createClass({
         );
     });
     return (
-      <div className="panel panel-default session">
+      <div className="panel panel-default session" data-slotkey="">
         <div className="panel-body">
          {speakers}<br />
          {this.props.session.Title}          

@@ -70,7 +70,7 @@ var SchedulerGrid = React.createClass({
         for (j = 0; j < this.props.locations.length; j++) {
           var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
-            <rect x={j * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} height={slot.DurationMins} width="100" className="sessionSlot"
+            <rect x={j * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} height={slot.DurationMins} width="100" className="sessionSlot canDrop"
                    ref={refId} />
           );
         }
@@ -93,6 +93,7 @@ var SchedulerGrid = React.createClass({
   placeElement: function(el, key) {
     var sl = this.refs[key];
     if (sl != undefined) {
+      $(sl.getDOMNode()).attr('class', 'sessionSlot');
       var box = sl.getDOMNode().getBoundingClientRect();
       var sessionBox = el.getBoundingClientRect();
       var session = $(el);
@@ -101,7 +102,9 @@ var SchedulerGrid = React.createClass({
       moveObject(el,
         box.left - sessionBox.left + 4,
         box.top - sessionBox.top + 4);
-
+      session.attr('data-orig-x', box.left - sessionBox.left + 4);
+      session.attr('data-orig-y', box.top - sessionBox.top + 4);
+      session.attr('data-slotkey', sl.getDOMNode().getAttribute('data-reactid'));
     }
   }
 
