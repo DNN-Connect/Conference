@@ -63,6 +63,28 @@ function getTableOrder(tableId) {
   return res;
 }
 
+function minutesToTime(mins) {
+  var hr = Math.floor(mins / 60);
+  var mn = mins - 60 * hr;
+  var res = mn.toString();
+  if (res.length == 1) {
+    res = "0" + res
+  }
+  res = hr.toString() + ":" + res;
+  return res;
+}
+
+function moveObject(object, dx, dy)
+{
+  var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
+    y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
+  object.style.webkitTransform =
+    object.style.transform =
+    'translate(' + x + 'px, ' + y + 'px)';
+  object.setAttribute('data-x', x);
+  object.setAttribute('data-y', y);
+}
+
 $(document).ready(function() {
   var el = $('.ModConnectConferenceC .container');
   if (el != undefined) {

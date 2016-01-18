@@ -330,4 +330,7 @@
   <data name="Comments.Text" xml:space="preserve">
     <value>Comments</value>
   </data>
+  <data name="Schedule.Text" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
 </root>

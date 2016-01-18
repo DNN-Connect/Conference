@@ -60,7 +60,7 @@ var CommentList = React.createClass({displayName: "CommentList",
   },
 
   render: function() {
-    var commentItems = this.props.comments.map(function(item) {
+    var commentItems = this.state.comments.map(function(item) {
       return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId, 
                       appPath: this.props.appPath, onDelete: this.props.onCommentDelete})
     }.bind(this));
@@ -192,6 +192,351 @@ module.exports = Comments;
 
 },{"./CommentList":2}],4:[function(require,module,exports){
 /** @jsx React.DOM */
+var SchedulerDay = require('./SchedulerDay'),
+  SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession');
+
+var Scheduler = React.createClass({displayName: "Scheduler",
+
+  resources: null,
+  service: null,
+
+  getInitialState: function() {
+    this.resources = ConnectConference.modules[this.props.moduleId].resources;
+    this.service = ConnectConference.modules[this.props.moduleId].service;
+    return {
+      sessionList: this.props.sessions
+    }
+  },
+
+  render: function() {
+    var unscheduledSessions = this.state.sessionList.map(function(item) {
+      if (item.SlotId == 0) {
+        return React.createElement(SchedulerUnscheduledSession, React.__spread({},  this.props, {session: item, key: item.SessionId}))
+      }
+      else
+      {
+        return null;        
+      }
+    });
+    var scheduleDays = [];
+    for (i = 1; i <= this.props.nrDays; i++) {
+      scheduleDays.push(React.createElement(SchedulerDay, React.__spread({},  this.props, {day: i, sessionList: this.state.sessionList})));
+    }
+    return (
+      React.createElement("div", {className: "row Scheduler"}, 
+        React.createElement("div", {className: "col-xs-12 col-md-2"}, 
+          unscheduledSessions
+        ), 
+        React.createElement("div", {className: "col-xs-12 col-md-10"}, 
+          scheduleDays
+        )
+      )
+    );
+  },
+
+  componentDidMount: function() {
+    $(document).ready(function() {
+      interact('.session')
+        .draggable({
+          inertia: false,
+          restrict: {
+            endOnly: true
+          },
+          autoScroll: false,
+          onend: function(event) {}
+        })
+        .on('dragmove', function(event) {
+          moveObject(event.target, event.dx, event.dy);
+        });
+      interact('.sessionSlot')
+        .dropzone({
+          accept: '.session',
+          overlap: 0.75,
+          ondropactivate: function(event) {
+          },
+          ondragenter: function(event) {
+            var dropzoneElement = event.target;
+            dropzoneElement.classList.add('drop-target');
+          },
+          ondragleave: function(event) {
+            event.target.classList.remove('drop-target');
+          },
+          ondrop: function(event) {
+            var session = $(event.relatedTarget);
+            var dropBox = event.target.getBoundingClientRect();
+            var sessionBox = event.relatedTarget.getBoundingClientRect();
+            session.width(dropBox.width - 12);
+            session.height(dropBox.height - 12);
+            moveObject(event.relatedTarget, 
+                       dropBox.left - sessionBox.left + 4,
+                       dropBox.top - sessionBox.top + 4);
+          },
+          ondropdeactivate: function(event) {
+            event.target.classList.remove('drop-target');
+          }
+        });
+    });
+  }
+
+});
+
+module.exports = Scheduler;
+
+
+},{"./SchedulerDay":5,"./SchedulerUnscheduledSession":8}],5:[function(require,module,exports){
+/** @jsx React.DOM */
+var SchedulerGrid = require('./SchedulerGrid'),
+    SchedulerScheduledSession = require('./SchedulerScheduledSession');
+
+var SchedulerDay = React.createClass({displayName: "SchedulerDay",
+
+  getInitialState: function() {
+    var mySlots = [];
+    for (i=0;i<this.props.slots.length;i++)
+    {
+      var slot = this.props.slots[i];
+      if (slot.DayNr == undefined | slot.DayNr == this.props.day)
+      {
+        mySlots.push(slot);
+      }
+    }
+    var start = Math.floor(mySlots[0].StartMinutes/60) * 60 - 60;
+    var finish = 120 + Math.floor(mySlots[mySlots.length - 1].StartMinutes / 60) * 60;
+    var height = finish - start;
+    var locationList = {};
+    for (i=0;i<this.props.locations.length;i++)
+    {
+      locationList[this.props.locations[i].LocationId] = i;
+    }
+    var slotList = {};
+    for (i=0;i<mySlots.length;i++)
+    {
+      slotList[mySlots[i].SlotId] = mySlots[i];
+    }
+    return {
+      mySlots: mySlots,
+      start: start,
+      finish: finish,
+      width: this.props.locations.length * 100,
+      height: height,
+      locationList: locationList,
+      slotList: slotList,
+      sessionList: this.props.sessionList,
+      leftMargin: 50
+    }
+  },
+
+  render: function() {
+    var viewBox = "0 0 " + (this.state.width + this.state.leftMargin).toString() + " " + this.state.height;
+    var scheduledSessions = [];
+    for (i=0;i<this.state.sessionList.length;i++)
+    {
+      var session = this.state.sessionList[i];
+      if (session.DayNr == this.props.day & session.SlotId > 0)
+      {
+        scheduledSessions.push(
+          React.createElement(SchedulerScheduledSession, {session: session, sessionPlace: this.sessionPlace})
+          );
+      }
+    }
+    return (
+      React.createElement("div", null, 
+        React.createElement("h2", null, this.props.day), 
+        React.createElement("svg", {xmlns: "http://www.w3.org/2000/svg", 
+             className: "schedulerDay", 
+             viewBox: viewBox}, 
+             React.createElement("pattern", {id: "Pattern", x: "10", y: "10", width: "8", height: "8", patternUnits: "userSpaceOnUse"}, 
+              React.createElement("path", {d: "M0 0L8 8ZM8 0L0 8Z", className: "hashLines"})
+             ), 
+             React.createElement("rect", {x: "0", y: "0", height: this.state.height, width: this.state.width + this.state.leftMargin, className: "dayBackground"}), 
+             React.createElement(SchedulerGrid, {width: this.state.width, height: this.state.height, leftMargin: this.state.leftMargin, 
+                            start: this.state.start, ref: "Grid", 
+                            locations: this.props.locations, mySlots: this.state.mySlots})
+        ), 
+        scheduledSessions
+      )
+    );
+  },
+
+  componentDidMount: function() {
+  },
+
+  sessionPlace: function(session) {
+    var el = session.getDOMNode();
+    var key = 'slot' + $(el).data('slotid');
+    if (!$(el).data('plenary')) {
+      key += 'x' + $(el).data('locationid');
+    }
+    this.refs.Grid.placeElement(el, key);
+  }
+
+});
+
+module.exports = SchedulerDay;
+
+
+},{"./SchedulerGrid":6,"./SchedulerScheduledSession":7}],6:[function(require,module,exports){
+/** @jsx React.DOM */
+var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
+
+  getInitialState: function() {
+    return {}
+  },
+
+  render: function() {
+    var vertLines = [];
+    for (i = this.props.leftMargin; i < this.props.width; i = i + 100) {
+      vertLines.push(
+        React.createElement("line", {x1: i, y1: "0", x2: i, y2: this.props.height, className: "gridline"})
+      );
+    }
+    var horLabels = [];
+    for (i = 0; i < this.props.locations.length; i++) {
+      horLabels.push(
+        React.createElement("text", {x: 6 + i*100 + this.props.leftMargin, y: "20", className: "gridLabel"}, this.props.locations[i].Name)
+      );
+    }
+    var horLines = [];
+    for (i = 0; i < this.props.height; i = i + 60) {
+      horLines.push(
+        React.createElement("line", {x1: this.props.leftMargin, y1: i, x2: this.props.width + this.props.leftMargin, y2: i, className: "gridline"})
+      );
+    }
+    var vertLabels = [];
+    for (i = 60; i < this.props.height; i = i + 60) {
+      vertLabels.push(
+        React.createElement("text", {x: "6", y: i + 12, className: "gridLabel"}, minutesToTime(i + this.props.start))
+      );
+      horLines.push(
+        React.createElement("line", {x1: "0", y1: i, x2: this.props.width, y2: i, className: "gridline"})
+      );
+    }
+    var slotBands = [];
+    for (i = 0; i < this.props.mySlots.length; i++) {
+      var slot = this.props.mySlots[i];
+      if (slot.SlotType == 0) {
+        var refId = 'slot' + slot.SlotId.toString();
+        slotBands.push(
+          React.createElement("rect", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: this.props.width, height: slot.DurationMins, fill: "url(#Pattern)"})
+        );
+      } else {
+        slotBands.push(
+          React.createElement("foreignObject", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: this.props.width, height: slot.DurationMins}, 
+            React.createElement("div", {className: "panel panel-default closedSlot"}, 
+              React.createElement("div", {className: "panel-body"}, 
+                slot.Title, " blabla"
+              )
+            )
+          )
+        );
+      }
+    }
+    var slots = [];
+    for (i = 0; i < this.props.mySlots.length; i++) {
+      var slot = this.props.mySlots[i];
+      if (slot.SlotType == 0) {
+        for (j = 0; j < this.props.locations.length; j++) {
+          var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
+          slots.push(
+            React.createElement("rect", {x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot", 
+                   ref: refId})
+          );
+        }
+      }
+    }
+    return (
+      React.createElement("g", null, 
+         vertLines, 
+         horLines, 
+         slotBands, 
+         horLabels, 
+         vertLabels, 
+         slots
+      )
+    );
+  },
+
+  componentDidMount: function() {},
+
+  placeElement: function(el, key) {
+    var sl = this.refs[key];
+    if (sl != undefined) {
+      var box = sl.getDOMNode().getBoundingClientRect();
+      var sessionBox = el.getBoundingClientRect();
+      var session = $(el);
+      session.width(box.width - 12);
+      session.height(box.height - 12);
+      moveObject(el,
+        box.left - sessionBox.left + 4,
+        box.top - sessionBox.top + 4);
+
+    }
+  }
+
+});
+
+module.exports = SchedulerGrid;
+
+
+},{}],7:[function(require,module,exports){
+/** @jsx React.DOM */
+var SchedulerScheduledSession = React.createClass({displayName: "SchedulerScheduledSession",
+
+  getInitialState: function() {
+    return {}
+  },
+
+  render: function() {
+    return (
+      React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
+           "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
+           ref: "Session"}, 
+       React.createElement("div", {className: "panel-body"}, 
+         this.props.session.Title
+       )
+      )
+    );
+  },
+
+  componentDidMount: function() {
+    $(document).ready(function() {
+      this.props.sessionPlace(this.refs.Session);
+    }.bind(this));
+  }
+
+});
+
+module.exports = SchedulerScheduledSession;
+
+
+},{}],8:[function(require,module,exports){
+/** @jsx React.DOM */
+var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnscheduledSession",
+
+  getInitialState: function() {
+    return {
+    }
+  },
+
+  render: function() {
+    return (
+      React.createElement("div", {className: "panel panel-default session"}, 
+        React.createElement("div", {className: "panel-body"}, 
+          this.props.session.Title
+        )
+      )
+    );
+  },
+
+  componentDidMount: function() {
+  }
+
+});
+
+module.exports = SchedulerUnscheduledSession;
+
+},{}],9:[function(require,module,exports){
+/** @jsx React.DOM */
 var SessionVote = React.createClass({displayName: "SessionVote",
 
   resources: null,
@@ -252,7 +597,7 @@ var SessionVote = React.createClass({displayName: "SessionVote",
 
 module.exports = SessionVote;
 
-},{}],5:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var SessionVote = require('./SessionVote');
 
@@ -345,7 +690,7 @@ var SessionVotes = React.createClass({displayName: "SessionVotes",
 module.exports = SessionVotes;
 
 
-},{"./SessionVote":4}],6:[function(require,module,exports){
+},{"./SessionVote":9}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 var Speaker = React.createClass({displayName: "Speaker",
 
@@ -380,7 +725,7 @@ var Speaker = React.createClass({displayName: "Speaker",
 
 module.exports = Speaker;
 
-},{}],7:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 var Speaker = require('./Speaker');
 
@@ -512,7 +857,7 @@ var Speakers = React.createClass({displayName: "Speakers",
 module.exports = Speakers;
 
 
-},{"./Speaker":6}],8:[function(require,module,exports){
+},{"./Speaker":11}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 var Tag = React.createClass({displayName: "Tag",
   render: function() {
@@ -526,7 +871,7 @@ var Tag = React.createClass({displayName: "Tag",
 
 module.exports = Tag;
 
-},{}],9:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = React.createClass({displayName: "TagVote",
 
@@ -574,7 +919,7 @@ var TagVote = React.createClass({displayName: "TagVote",
 
 module.exports = TagVote;
 
-},{}],10:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = require('./TagVote');
 
@@ -699,7 +1044,7 @@ var TagVotes = React.createClass({displayName: "TagVotes",
 module.exports = TagVotes;
 
 
-},{"./TagVote":9}],11:[function(require,module,exports){
+},{"./TagVote":14}],16:[function(require,module,exports){
 /** @jsx React.DOM */
 var Tag = require('./Tag');
 
@@ -800,7 +1145,7 @@ var Tags = React.createClass({displayName: "Tags",
 module.exports = Tags;
 
 
-},{"./Tag":8}],12:[function(require,module,exports){
+},{"./Tag":13}],17:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
@@ -1038,7 +1383,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":13}],13:[function(require,module,exports){
+},{"./TimesheetEditorSlot":18}],18:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -1197,7 +1542,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],14:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /** @jsx React.DOM */
 var Track = React.createClass({displayName: "Track",
   render: function() {
@@ -1219,7 +1564,7 @@ var Track = React.createClass({displayName: "Track",
 
 module.exports = Track;
 
-},{}],15:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 var Track = require('./Track');
 
@@ -1287,7 +1632,7 @@ var Tracks = React.createClass({displayName: "Tracks",
 module.exports = Tracks;
 
 
-},{"./Track":14}],16:[function(require,module,exports){
+},{"./Track":19}],21:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
@@ -1295,7 +1640,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
     Tracks = require('./Tracks'),
     Speakers = require('./Speakers'),
     TagVotes = require('./TagVotes'),
-    SessionVotes = require('./SessionVotes');
+    SessionVotes = require('./SessionVotes'),
+    Scheduler = require('./Scheduler/Scheduler');
 
 (function($, window, document, undefined) {
 
@@ -1386,6 +1732,17 @@ var TimesheetEditor = require('./TimesheetEditor'),
         React.render(React.createElement(SessionVotes, {moduleId: moduleId, voteList: voteList, allowVote: allowVote, 
            conferenceId: conferenceId}), el);
       });
+      $('.schedulerComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var nrDays = $(el).data('nrdays');
+        var slots = $(el).data('slots');
+        var sessions = $(el).data('sessions');
+        var gridHeight = $(el).data('gridheight');
+        var locations = $(el).data('locations');
+        React.render(React.createElement(Scheduler, {moduleId: moduleId, conferenceId: conferenceId, locations: locations, 
+                      nrDays: nrDays, slots: slots, sessions: sessions, gridHeight: gridHeight}), el);
+      });
     },
 
     formatString: function(format) {
@@ -1402,7 +1759,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./SessionVotes":5,"./Speakers":7,"./TagVotes":10,"./Tags":11,"./TimesheetEditor":12,"./Tracks":15}]},{},[16])
+},{"./Comments":3,"./Scheduler/Scheduler":4,"./SessionVotes":10,"./Speakers":12,"./TagVotes":15,"./Tags":16,"./TimesheetEditor":17,"./Tracks":20}]},{},[21])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -1578,6 +1935,28 @@ function getTableOrder(tableId) {
     });
   });
   return res;
+}
+
+function minutesToTime(mins) {
+  var hr = Math.floor(mins / 60);
+  var mn = mins - 60 * hr;
+  var res = mn.toString();
+  if (res.length == 1) {
+    res = "0" + res
+  }
+  res = hr.toString() + ":" + res;
+  return res;
+}
+
+function moveObject(object, dx, dy)
+{
+  var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
+    y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
+  object.style.webkitTransform =
+    object.style.transform =
+    'translate(' + x + 'px, ' + y + 'px)';
+  object.setAttribute('data-x', x);
+  object.setAttribute('data-y', y);
 }
 
 $(document).ready(function() {

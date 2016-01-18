@@ -1,0 +1,42 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+}
+
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
+
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+   <div class="schedulerComponent" data-moduleid="@Dnn.ModuleContext.ModuleId"
+        data-conference="@Model.ConferenceId" data-nrdays="@(Model.EndDate != null ? ((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays) : 1)"
+        data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).OrderBy(s => s.Start)))"
+        data-sessions="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort)))"
+        data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))"
+        data-gridheight="400"
+        />
+  </div>
+ </div>
+</div>
+
+<div class="right">
+ @ReturnLink(Dnn.LocalizeString("Return"), "Conference", "Manage", new { ConferenceId = Model.ConferenceId}, new { @class = "btn btn-primary" }, Model.ConferenceId)
+</div>
+
+@{
+}
+
+<script type="text/javascript">
+ $(function () {
+  $(document).ready(function() {
+  });
+ });
+</script>

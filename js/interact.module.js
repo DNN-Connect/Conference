@@ -55,6 +55,10 @@ $(function() {
     showTime(target);
   })
 
+  .('drop', function(event) {
+    console.log(event);
+  })
+
   ;
 
   function showTime(target) {

@@ -51,6 +51,13 @@ namespace Connect.DNN.Modules.Conference.Controllers
 
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public ActionResult Schedule(int conferenceId)
+        {
+            return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(int conferenceId)
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);

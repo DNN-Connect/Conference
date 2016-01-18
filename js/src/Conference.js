@@ -5,7 +5,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
     Tracks = require('./Tracks'),
     Speakers = require('./Speakers'),
     TagVotes = require('./TagVotes'),
-    SessionVotes = require('./SessionVotes');
+    SessionVotes = require('./SessionVotes'),
+    Scheduler = require('./Scheduler/Scheduler');
 
 (function($, window, document, undefined) {
 
@@ -95,6 +96,17 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var allowVote = $(el).data('allowvote');
         React.render(<SessionVotes moduleId={moduleId} voteList={voteList} allowVote={allowVote}
            conferenceId={conferenceId} />, el);
+      });
+      $('.schedulerComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var conferenceId = $(el).data('conference');
+        var nrDays = $(el).data('nrdays');
+        var slots = $(el).data('slots');
+        var sessions = $(el).data('sessions');
+        var gridHeight = $(el).data('gridheight');
+        var locations = $(el).data('locations');
+        React.render(<Scheduler moduleId={moduleId} conferenceId={conferenceId} locations={locations}
+                      nrDays={nrDays} slots={slots} sessions={sessions} gridHeight={gridHeight} />, el);
       });
     },
 

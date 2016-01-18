@@ -57,7 +57,8 @@ gulp.task('js', function() {
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'node_modules/croppie/croppie.min.js',
-      'node_modules/simple-ajax-uploader/SimpleAjaxUploader.min.js'
+      'node_modules/simple-ajax-uploader/SimpleAjaxUploader.min.js',
+      'node_modules/raphael/raphael-min.js'
     ])
     .pipe(gulp.dest('js'));
 });
