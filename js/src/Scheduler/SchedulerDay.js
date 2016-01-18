@@ -64,7 +64,7 @@ var SchedulerDay = React.createClass({
              </pattern>
              <rect x="0" y="0" height={this.state.height} width={this.state.width + this.state.leftMargin} className="dayBackground" />
              <SchedulerGrid width={this.state.width} height={this.state.height} leftMargin={this.state.leftMargin}
-                            start={this.state.start} ref="Grid"
+                            start={this.state.start} ref="Grid" locationList={this.state.locationList}
                             locations={this.props.locations} mySlots={this.state.mySlots} />
         </svg>
         {scheduledSessions}

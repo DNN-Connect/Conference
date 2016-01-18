@@ -41,12 +41,22 @@ var SchedulerGrid = React.createClass({
         slotBands.push(
           <rect x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} width={this.props.width} height={slot.DurationMins} fill="url(#Pattern)" />
         );
-      } else {
+      } else if (slot.SlotType == 1) {
         slotBands.push(
           <foreignObject x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} width={this.props.width} height={slot.DurationMins}>
             <div className="panel panel-default closedSlot">
-              <div className="panel-body">
-                {slot.Title} blabla
+              <div className="panel-body embedded">
+                {slot.Title}
+              </div>
+            </div>
+          </foreignObject>
+        );
+      } else if (slot.SlotType == 2) {
+        slotBands.push(
+          <foreignObject x={this.props.locationList[slot.LocationId] * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} width="100" height={slot.DurationMins}>
+            <div className="panel panel-default closedSlot">
+              <div className="panel-body embedded">
+                {slot.Title}
               </div>
             </div>
           </foreignObject>

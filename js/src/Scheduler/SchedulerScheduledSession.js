@@ -6,12 +6,18 @@ var SchedulerScheduledSession = React.createClass({
   },
 
   render: function() {
+    var speakers = this.props.session.Speakers.map(function(item) {
+      return (
+        <span className="speaker">{item.Value}</span>
+        );
+    });
     return (
       <div className="panel panel-default session scheduled" data-slotid={this.props.session.SlotId} 
            data-locationid={this.props.session.LocationId} data-plenary={this.props.session.IsPlenary}
            ref="Session">
        <div className="panel-body">
-         {this.props.session.Title}
+         {speakers}<br />
+         {this.props.session.Title}          
        </div>
       </div>
     );

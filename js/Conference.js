@@ -350,7 +350,7 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
              ), 
              React.createElement("rect", {x: "0", y: "0", height: this.state.height, width: this.state.width + this.state.leftMargin, className: "dayBackground"}), 
              React.createElement(SchedulerGrid, {width: this.state.width, height: this.state.height, leftMargin: this.state.leftMargin, 
-                            start: this.state.start, ref: "Grid", 
+                            start: this.state.start, ref: "Grid", locationList: this.state.locationList, 
                             locations: this.props.locations, mySlots: this.state.mySlots})
         ), 
         scheduledSessions
@@ -419,12 +419,22 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
         slotBands.push(
           React.createElement("rect", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: this.props.width, height: slot.DurationMins, fill: "url(#Pattern)"})
         );
-      } else {
+      } else if (slot.SlotType == 1) {
         slotBands.push(
           React.createElement("foreignObject", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: this.props.width, height: slot.DurationMins}, 
             React.createElement("div", {className: "panel panel-default closedSlot"}, 
-              React.createElement("div", {className: "panel-body"}, 
-                slot.Title, " blabla"
+              React.createElement("div", {className: "panel-body embedded"}, 
+                slot.Title
+              )
+            )
+          )
+        );
+      } else if (slot.SlotType == 2) {
+        slotBands.push(
+          React.createElement("foreignObject", {x: this.props.locationList[slot.LocationId] * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, width: "100", height: slot.DurationMins}, 
+            React.createElement("div", {className: "panel panel-default closedSlot"}, 
+              React.createElement("div", {className: "panel-body embedded"}, 
+                slot.Title
               )
             )
           )
@@ -487,11 +497,17 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
   },
 
   render: function() {
+    var speakers = this.props.session.Speakers.map(function(item) {
+      return (
+        React.createElement("span", {className: "speaker"}, item.Value)
+        );
+    });
     return (
       React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
            ref: "Session"}, 
        React.createElement("div", {className: "panel-body"}, 
+         speakers, React.createElement("br", null), 
          this.props.session.Title
        )
       )
@@ -519,10 +535,16 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
   },
 
   render: function() {
+    var speakers = this.props.session.Speakers.map(function(item) {
+      return (
+        React.createElement("span", {className: "speaker"}, item.Value)
+        );
+    });
     return (
       React.createElement("div", {className: "panel panel-default session"}, 
         React.createElement("div", {className: "panel-body"}, 
-          this.props.session.Title
+         speakers, React.createElement("br", null), 
+         this.props.session.Title
         )
       )
     );
