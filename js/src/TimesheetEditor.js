@@ -75,6 +75,7 @@ var TimesheetEditor = React.createClass({
                   <select className="form-control" ref="slotType">
                     <option value="0">{this.resources.Session}</option>
                     <option value="1">{this.resources.General}</option>
+                    <option value="2">{this.resources.LocationSpecific}</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -84,6 +85,11 @@ var TimesheetEditor = React.createClass({
                 <div className="form-group">
                   <label>{this.resources.Description}</label>
                   <textarea className="form-control" placeholder={this.resources.Description} ref="description" />
+                </div>
+                <div className="form-group">
+                  <label>{this.resources.Location}</label>
+                  <select className="form-control" ref="location">
+                  </select>
                 </div>
                 <div className="form-group">
                   <label>{this.resources.Day}</label>
@@ -121,6 +127,7 @@ var TimesheetEditor = React.createClass({
     this.refs.title.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
     this.refs.slotType.getDOMNode().value = '0';
+    this.refs.location.getDOMNode().value = '-1';
     this.setDayNr(null);
   },
 
@@ -147,6 +154,15 @@ var TimesheetEditor = React.createClass({
     this.refs.description.getDOMNode().value = slot.Description;
     this.refs.slotType.getDOMNode().value = slot.SlotType;
     this.setDayNr(slot.DayNr);
+    this.state.service.getLocations(this.props.conferenceId, function(data) {
+      var dd = $(this.refs.location.getDOMNode());
+      dd.empty();
+      dd.append($('<option/>').attr("value", -1).text(this.resources.ChooseLocation));
+      $.each(data, function(i,item) {
+        dd.append($('<option/>').attr("value", item.LocationId).text(item.Name));
+      });
+      this.refs.location.getDOMNode().value = slot.LocationId;
+    }.bind(this));
     $(this.refs.popup.getDOMNode()).modal();
     $(this.refs.cmdDelete.getDOMNode()).show();
   },
@@ -195,6 +211,8 @@ var TimesheetEditor = React.createClass({
     slot.Description = this.refs.description.getDOMNode().value;
     var e = this.refs.slotType.getDOMNode();
     slot.SlotType = parseInt(e.options[e.selectedIndex].value);
+    var l = this.refs.location.getDOMNode();
+    slot.LocationId = parseInt(l.options[l.selectedIndex].value);
     var dayNr = $(this.refs.dayNrButtons.getDOMNode())
       .children().first().children('label.active').first()
       .children().first().val();

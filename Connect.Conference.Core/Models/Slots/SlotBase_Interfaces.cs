@@ -25,6 +25,7 @@ namespace Connect.Conference.Core.Models.Slots
    Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
    Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
    DayNr = Convert.ToInt32(Null.SetNull(dr["DayNr"], DayNr));
+   LocationId = Convert.ToInt32(Null.SetNull(dr["LocationId"], LocationId));
         }
 
         [IgnoreColumn()]
@@ -68,6 +69,12 @@ namespace Connect.Conference.Core.Models.Slots
          return "";
      };
      return ((int)DayNr).ToString(strFormat, formatProvider);
+    case "locationid": // Int
+     if (LocationId == null)
+     {
+         return "";
+     };
+     return ((int)LocationId).ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

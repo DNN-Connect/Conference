@@ -126,6 +126,9 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="ChooseLocation" xml:space="preserve">
+    <value>&lt; Location &gt;</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="General" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="LocationSpecific" xml:space="preserve">
+    <value>Location Specific</value>
   </data>
   <data name="More" xml:space="preserve">
     <value>More</value>

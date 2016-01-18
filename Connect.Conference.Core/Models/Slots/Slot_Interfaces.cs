@@ -17,6 +17,7 @@ namespace Connect.Conference.Core.Models.Slots
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
+   LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
@@ -26,6 +27,12 @@ namespace Connect.Conference.Core.Models.Slots
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
+    case "locationname": // NVarChar
+     if (LocationName == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(LocationName, strFormat);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null)
      {

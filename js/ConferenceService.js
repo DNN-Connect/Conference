@@ -107,5 +107,8 @@ window.ConferenceService = function($, mid) {
   this.changeAttendeeStatus = function(conferenceId, newStatus, success, fail) {
     this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, { Status: newStatus}, success, fail);
   }
+  this.getLocations = function(conferenceId, success, fail) {
+    this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
+  }
 
 }

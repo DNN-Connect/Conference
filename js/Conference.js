@@ -1222,7 +1222,8 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
                   React.createElement("label", null, this.resources.Type), 
                   React.createElement("select", {className: "form-control", ref: "slotType"}, 
                     React.createElement("option", {value: "0"}, this.resources.Session), 
-                    React.createElement("option", {value: "1"}, this.resources.General)
+                    React.createElement("option", {value: "1"}, this.resources.General), 
+                    React.createElement("option", {value: "2"}, this.resources.LocationSpecific)
                   )
                 ), 
                 React.createElement("div", {className: "form-group"}, 
@@ -1232,6 +1233,11 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
                 React.createElement("div", {className: "form-group"}, 
                   React.createElement("label", null, this.resources.Description), 
                   React.createElement("textarea", {className: "form-control", placeholder: this.resources.Description, ref: "description"})
+                ), 
+                React.createElement("div", {className: "form-group"}, 
+                  React.createElement("label", null, this.resources.Location), 
+                  React.createElement("select", {className: "form-control", ref: "location"}
+                  )
                 ), 
                 React.createElement("div", {className: "form-group"}, 
                   React.createElement("label", null, this.resources.Day), 
@@ -1269,6 +1275,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     this.refs.title.getDOMNode().value = '';
     this.refs.description.getDOMNode().value = '';
     this.refs.slotType.getDOMNode().value = '0';
+    this.refs.location.getDOMNode().value = '-1';
     this.setDayNr(null);
   },
 
@@ -1295,6 +1302,15 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     this.refs.description.getDOMNode().value = slot.Description;
     this.refs.slotType.getDOMNode().value = slot.SlotType;
     this.setDayNr(slot.DayNr);
+    this.state.service.getLocations(this.props.conferenceId, function(data) {
+      var dd = $(this.refs.location.getDOMNode());
+      dd.empty();
+      dd.append($('<option/>').attr("value", -1).text(this.resources.ChooseLocation));
+      $.each(data, function(i,item) {
+        dd.append($('<option/>').attr("value", item.LocationId).text(item.Name));
+      });
+      this.refs.location.getDOMNode().value = slot.LocationId;
+    }.bind(this));
     $(this.refs.popup.getDOMNode()).modal();
     $(this.refs.cmdDelete.getDOMNode()).show();
   },
@@ -1343,6 +1359,8 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
     slot.Description = this.refs.description.getDOMNode().value;
     var e = this.refs.slotType.getDOMNode();
     slot.SlotType = parseInt(e.options[e.selectedIndex].value);
+    var l = this.refs.location.getDOMNode();
+    slot.LocationId = parseInt(l.options[l.selectedIndex].value);
     var dayNr = $(this.refs.dayNrButtons.getDOMNode())
       .children().first().children('label.active').first()
       .children().first().val();
@@ -1389,18 +1407,13 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
   getInitialState: function() {
     return {
-      moduleId: this.props.moduleId,
-      slot: this.props.slot,
-      service: ConnectConference.modules[this.props.moduleId].service,
-      lastStart: this.props.slot.StartMinutes,
-      lastLength: this.props.slot.DurationMins
     }
   },
 
   render: function() {
-    var start = this.state.lastStart,
+    var start = this.props.slot.StartMinutes,
       startPixels = start * 1152 / 1440,
-      len = this.state.lastLength,
+      len = this.props.slot.DurationMins,
       lenPixels = len * 1152 / 1440,
       timeString = this.getTimestring(start, len);
     var barStyle = {
@@ -1412,7 +1425,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
       marginLeft: lenPixels + 'px'
     };
     var classes = "timesheet-box";
-    switch (this.state.slot.SlotType) {
+    switch (this.props.slot.SlotType) {
       case 0:
         classes += ' timesheet-box-sessions';
         break;
@@ -1423,17 +1436,17 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
     return (
       React.createElement("li", null, 
         React.createElement("span", {className: classes, 
-               "data-id": this.state.slot.SlotId, 
-               "data-oldstart": this.state.lastStart, 
-               "data-oldlength": this.state.lastLength, 
-               "data-start": this.state.lastStart, 
+               "data-id": this.props.slot.SlotId, 
+               "data-oldstart": this.props.slot.StartMinutes, 
+               "data-oldlength": this.props.slot.DurationMins, 
+               "data-start": this.props.slot.StartMinutes, 
                "data-scale": "48", 
-               "data-length": this.state.lastLength, 
+               "data-length": this.props.slot.DurationMins, 
                style: barStyle, 
-               title: this.state.slot.Title, 
+               title: this.props.slot.Title, 
                onDoubleClick: this.doubleClicked, 
                ref: "timeBar"}, 
-           React.createElement("strong", null, this.state.slot.DayNr), " ", this.state.slot.Title
+           React.createElement("strong", null, this.props.slot.DayNr), " ", React.createElement("strong", null, this.props.slot.LocationName), " ", this.props.slot.Title
         ), 
         React.createElement("span", {className: "timesheet-time", style: txtStyle, ref: "timeText"}, timeString)
       )
@@ -1518,23 +1531,22 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
   updateSlot: function(event) {
     var timeBar = this.refs.timeBar.getDOMNode(),
       timeText = this.refs.timeText.getDOMNode(),
-      slot = this.state.slot,
-      that = this;
+      slot = this.props.slot;
     slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
     slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
     this.props.onSlotUpdate(slot, function() {
       timeBar.style.webkitTransform =
         timeBar.style.transform = null;
       timeText.style.transform = null;
-      var len = that.state.lastLength,
+      var len = this.props.slot.DurationMins,
         lenPixels = len * 1152 / 1440;
       timeBar.style.width = lenPixels + 'px';
-    });
+    }.bind(this));
     return false;
   },
 
   doubleClicked: function() {
-    this.props.editSlot(this.state.slot);
+    this.props.editSlot(this.props.slot);
   }
 
 });
@@ -1868,6 +1880,9 @@ window.ConferenceService = function($, mid) {
   }
   this.changeAttendeeStatus = function(conferenceId, newStatus, success, fail) {
     this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, { Status: newStatus}, success, fail);
+  }
+  this.getLocations = function(conferenceId, success, fail) {
+    this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
   }
 
 }

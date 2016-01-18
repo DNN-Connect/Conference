@@ -1,4 +1,4 @@
-
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -12,8 +12,15 @@ using System.Web;
 namespace Connect.DNN.Modules.Conference.Api
 {
 
-	public partial class LocationsController : ConferenceApiController
-	{
+    public partial class LocationsController : ConferenceApiController
+    {
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, LocationRepository.Instance.GetLocations(conferenceId).OrderBy(l => l.Sort));
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

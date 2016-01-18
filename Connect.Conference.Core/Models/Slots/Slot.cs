@@ -20,6 +20,8 @@ namespace Connect.Conference.Core.Models.Slots
 
         #region Properties
         [DataMember]
+        public string LocationName { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }
@@ -46,6 +48,7 @@ namespace Connect.Conference.Core.Models.Slots
             res.Title = Title;
             res.Description = Description;
             res.DayNr = DayNr;
+             res.LocationId = LocationId;
             res.CreatedByUserID = CreatedByUserID;
             res.CreatedOnDate = CreatedOnDate;
             res.LastModifiedByUserID = LastModifiedByUserID;

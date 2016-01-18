@@ -3,18 +3,13 @@ var TimesheetEditorSlot = React.createClass({
 
   getInitialState: function() {
     return {
-      moduleId: this.props.moduleId,
-      slot: this.props.slot,
-      service: ConnectConference.modules[this.props.moduleId].service,
-      lastStart: this.props.slot.StartMinutes,
-      lastLength: this.props.slot.DurationMins
     }
   },
 
   render: function() {
-    var start = this.state.lastStart,
+    var start = this.props.slot.StartMinutes,
       startPixels = start * 1152 / 1440,
-      len = this.state.lastLength,
+      len = this.props.slot.DurationMins,
       lenPixels = len * 1152 / 1440,
       timeString = this.getTimestring(start, len);
     var barStyle = {
@@ -26,7 +21,7 @@ var TimesheetEditorSlot = React.createClass({
       marginLeft: lenPixels + 'px'
     };
     var classes = "timesheet-box";
-    switch (this.state.slot.SlotType) {
+    switch (this.props.slot.SlotType) {
       case 0:
         classes += ' timesheet-box-sessions';
         break;
@@ -37,17 +32,17 @@ var TimesheetEditorSlot = React.createClass({
     return (
       <li>
         <span className={classes}
-               data-id={this.state.slot.SlotId}
-               data-oldstart={this.state.lastStart}
-               data-oldlength={this.state.lastLength}
-               data-start={this.state.lastStart}
+               data-id={this.props.slot.SlotId}
+               data-oldstart={this.props.slot.StartMinutes}
+               data-oldlength={this.props.slot.DurationMins}
+               data-start={this.props.slot.StartMinutes}
                data-scale="48"
-               data-length={this.state.lastLength}
+               data-length={this.props.slot.DurationMins}
                style={barStyle}
-               title={this.state.slot.Title}
+               title={this.props.slot.Title}
                onDoubleClick={this.doubleClicked}
                ref="timeBar">
-           <strong>{this.state.slot.DayNr}</strong> {this.state.slot.Title}
+           <strong>{this.props.slot.DayNr}</strong> <strong>{this.props.slot.LocationName}</strong> {this.props.slot.Title}
         </span>
         <span className="timesheet-time" style={txtStyle} ref="timeText">{timeString}</span>
       </li>
@@ -132,23 +127,22 @@ var TimesheetEditorSlot = React.createClass({
   updateSlot: function(event) {
     var timeBar = this.refs.timeBar.getDOMNode(),
       timeText = this.refs.timeText.getDOMNode(),
-      slot = this.state.slot,
-      that = this;
+      slot = this.props.slot;
     slot.DurationMins = parseInt(timeBar.getAttribute('data-length'));
     slot.NewStartMinutes = parseInt(timeBar.getAttribute('data-start'));
     this.props.onSlotUpdate(slot, function() {
       timeBar.style.webkitTransform =
         timeBar.style.transform = null;
       timeText.style.transform = null;
-      var len = that.state.lastLength,
+      var len = this.props.slot.DurationMins,
         lenPixels = len * 1152 / 1440;
       timeBar.style.width = lenPixels + 'px';
-    });
+    }.bind(this));
     return false;
   },
 
   doubleClicked: function() {
-    this.props.editSlot(this.state.slot);
+    this.props.editSlot(this.props.slot);
   }
 
 });
