@@ -2,8 +2,7 @@
 var SchedulerUnscheduledSession = React.createClass({
 
   getInitialState: function() {
-    return {
-    }
+    return {}
   },
 
   render: function() {
@@ -13,7 +12,7 @@ var SchedulerUnscheduledSession = React.createClass({
         );
     });
     return (
-      <div className="panel panel-default session" data-slotkey="" 
+      <div className="panel panel-default session" data-slotkey="" data-orig-x="0" data-orig-y="0"
            data-sessionid={this.props.session.SessionId}
            data-plenary={this.props.session.IsPlenary}>
         <div className="panel-body">

@@ -34,13 +34,14 @@ var SchedulerGrid = React.createClass({
       );
     }
     var slotBands = [];
-    for (i = 0; i < this.props.mySlots.length; i++) {
-      var slot = this.props.mySlots[i];
+    for (i = 0; i < this.props.slots.length; i++) {
+      var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
-        var refId = 'slot' + slot.SlotId.toString();
+        var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString();
         slotBands.push(
           <rect x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} 
-                width={this.props.width} height={slot.DurationMins} 
+                width={this.props.width} height={slot.DurationMins} data-type="slot"
+                id={refId} data-slotid={slot.SlotId} data-locationid="-1" data-day={this.props.day}
                 fill="url(#Pattern)" ref={refId} />
         );
       } else if (slot.SlotType == 1) {
@@ -66,14 +67,14 @@ var SchedulerGrid = React.createClass({
       }
     }
     var slots = [];
-    for (i = 0; i < this.props.mySlots.length; i++) {
-      var slot = this.props.mySlots[i];
+    for (i = 0; i < this.props.slots.length; i++) {
+      var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         for (j = 0; j < this.props.locations.length; j++) {
-          var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
+          var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
             <rect x={j * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} height={slot.DurationMins} width="100" className="sessionSlot canDrop"
-                   ref={refId} data-slotid={slot.SlotId} data-locationid={this.props.locations[j].LocationId}
+                   ref={refId} data-slotid={slot.SlotId} data-locationid={this.props.locations[j].LocationId} id={refId}
                    data-day={this.props.day} />
           );
         }
@@ -91,34 +92,7 @@ var SchedulerGrid = React.createClass({
     );
   },
 
-  componentDidMount: function() {},
-
-  placeElement: function(el, key) {
-    var sl = this.refs[key];
-    if (sl != undefined) {
-      if (key.indexOf('x') == -1) {
-        for (var ref in this.refs) {
-          if (ref.startsWith(key + 'x')) {
-            this.refs[ref].getDOMNode().setAttribute('class', 'sessionSlot');
-          }
-        }
-      }
-      else {
-        $(sl.getDOMNode()).attr('class', 'sessionSlot');
-      }
-      var box = sl.getDOMNode().getBoundingClientRect();
-      var sessionBox = el.getBoundingClientRect();
-      var session = $(el);
-      session.width(box.width - 12);
-      session.height(box.height - 12);
-      moveObject(el,
-        box.left - sessionBox.left + 4,
-        box.top - sessionBox.top + 4);
-      session.attr('data-orig-x', box.left - sessionBox.left + 4);
-      session.attr('data-orig-y', box.top - sessionBox.top + 4);
-      session.attr('data-slotkey', sl.getDOMNode().getAttribute('data-reactid'));
-    }
-  }
+  componentDidMount: function() {}
 
 });
 

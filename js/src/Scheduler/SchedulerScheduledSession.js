@@ -14,7 +14,7 @@ var SchedulerScheduledSession = React.createClass({
     return (
       <div className="panel panel-default session scheduled" data-slotid={this.props.session.SlotId} 
            data-locationid={this.props.session.LocationId} data-plenary={this.props.session.IsPlenary}
-           ref="Session" data-sessionid={this.props.session.SessionId}>
+           ref="Session" data-sessionid={this.props.session.SessionId} data-day={this.props.session.DayNr}>
        <div className="panel-body">
          {speakers}<br />
          {this.props.session.Title}          
@@ -25,7 +25,7 @@ var SchedulerScheduledSession = React.createClass({
 
   componentDidMount: function() {
     $(document).ready(function() {
-      this.props.sessionPlace(this.refs.Session);
+      this.props.sessionPlace(this.refs.Session.getDOMNode());
     }.bind(this));
   }
 

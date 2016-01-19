@@ -203,8 +203,14 @@ var Scheduler = React.createClass({displayName: "Scheduler",
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
+    var locationList = {};
+    for (i=0;i<this.props.locations.length;i++)
+    {
+      locationList[this.props.locations[i].LocationId] = i;
+    }
     return {
-      sessionList: this.props.sessions
+      sessionList: this.props.sessions,
+      locationList: locationList
     }
   },
 
@@ -220,7 +226,24 @@ var Scheduler = React.createClass({displayName: "Scheduler",
     });
     var scheduleDays = [];
     for (i = 1; i <= this.props.nrDays; i++) {
-      scheduleDays.push(React.createElement(SchedulerDay, React.__spread({},  this.props, {day: i, sessionList: this.state.sessionList})));
+      var daySlots = [];
+      for (j=0;j<this.props.slots.length;j++)
+      {
+        var slot = this.props.slots[j];
+        if (slot.DayNr == undefined | slot.DayNr == i)
+        {
+          daySlots.push(slot);
+        }
+      }
+      scheduleDays.push(
+        React.createElement(SchedulerDay, {day: i, slots: daySlots, 
+           start: Math.floor(daySlots[0].StartMinutes/60) * 60 - 60, 
+           finish: 120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60, 
+           locationList: this.state.locationList, 
+           leftMargin: 50, 
+           sessionList: this.state.sessionList, 
+           locations: this.props.locations})
+        );
     }
     return (
       React.createElement("div", {className: "row Scheduler"}, 
@@ -318,48 +341,25 @@ var SchedulerGrid = require('./SchedulerGrid'),
 
 var SchedulerDay = React.createClass({displayName: "SchedulerDay",
 
+  propTypes: {
+    day: React.PropTypes.number,
+    start: React.PropTypes.number,
+    finish: React.PropTypes.number,
+    leftMargin: React.PropTypes.number
+  },
+
   getInitialState: function() {
-    var mySlots = [];
-    for (i=0;i<this.props.slots.length;i++)
-    {
-      var slot = this.props.slots[i];
-      if (slot.DayNr == undefined | slot.DayNr == this.props.day)
-      {
-        mySlots.push(slot);
-      }
-    }
-    var start = Math.floor(mySlots[0].StartMinutes/60) * 60 - 60;
-    var finish = 120 + Math.floor(mySlots[mySlots.length - 1].StartMinutes / 60) * 60;
-    var height = finish - start;
-    var locationList = {};
-    for (i=0;i<this.props.locations.length;i++)
-    {
-      locationList[this.props.locations[i].LocationId] = i;
-    }
-    var slotList = {};
-    for (i=0;i<mySlots.length;i++)
-    {
-      slotList[mySlots[i].SlotId] = mySlots[i];
-    }
-    return {
-      mySlots: mySlots,
-      start: start,
-      finish: finish,
-      width: this.props.locations.length * 100,
-      height: height,
-      locationList: locationList,
-      slotList: slotList,
-      sessionList: this.props.sessionList,
-      leftMargin: 50
-    }
+    return {}
   },
 
   render: function() {
-    var viewBox = "0 0 " + (this.state.width + this.state.leftMargin).toString() + " " + this.state.height;
+    var height = this.props.finish - this.props.start;
+    var width = this.props.locations.length * 100;
+    var viewBox = "0 0 " + (width + this.props.leftMargin).toString() + " " + height;
     var scheduledSessions = [];
-    for (i=0;i<this.state.sessionList.length;i++)
+    for (i=0;i<this.props.sessionList.length;i++)
     {
-      var session = this.state.sessionList[i];
+      var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0)
       {
         scheduledSessions.push(
@@ -376,10 +376,10 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
              React.createElement("pattern", {id: "Pattern", x: "10", y: "10", width: "8", height: "8", patternUnits: "userSpaceOnUse"}, 
               React.createElement("path", {d: "M0 0L8 8ZM8 0L0 8Z", className: "hashLines"})
              ), 
-             React.createElement("rect", {x: "0", y: "0", height: this.state.height, width: this.state.width + this.state.leftMargin, className: "dayBackground"}), 
-             React.createElement(SchedulerGrid, {width: this.state.width, height: this.state.height, leftMargin: this.state.leftMargin, 
-                            start: this.state.start, ref: "Grid", locationList: this.state.locationList, 
-                            locations: this.props.locations, mySlots: this.state.mySlots, day: this.props.day})
+             React.createElement("rect", {x: "0", y: "0", height: height, width: width + this.props.leftMargin, className: "dayBackground"}), 
+             React.createElement(SchedulerGrid, {width: width, height: height, leftMargin: this.props.leftMargin, 
+                            start: this.props.start, ref: "Grid", locationList: this.props.locationList, 
+                            locations: this.props.locations, slots: this.props.slots, day: this.props.day})
         ), 
         scheduledSessions
       )
@@ -390,12 +390,27 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
   },
 
   sessionPlace: function(session) {
-    var el = session.getDOMNode();
-    var key = 'slot' + $(el).data('slotid');
-    if (!$(el).data('plenary')) {
-      key += 'x' + $(el).data('locationid');
+    var jqSession = $(session);
+    var sessionBox = session.getBoundingClientRect();
+    var key = 'slot' + jqSession.data('day') + 'x' + jqSession.data('slotid');
+    if (!jqSession.data('plenary')) {
+      key += 'x' + jqSession.data('locationid');
     }
-    this.refs.Grid.placeElement(el, key);
+    var slot = document.getElementById(key);
+    if (slot != null)
+    {
+      var jqSlot = $(slot);
+      var slotBox = slot.getBoundingClientRect();
+      jqSession.width(slotBox.width - 12);
+      jqSession.height(slotBox.height - 12);
+      moveObject(session,
+        slotBox.left - sessionBox.left + 4,
+        slotBox.top - sessionBox.top + 4);
+      jqSession.attr('data-orig-x', slotBox.left - sessionBox.left + 4);
+      jqSession.attr('data-orig-y', slotBox.top - sessionBox.top + 4);
+      jqSession.attr('data-slotkey', slot.getAttribute('data-reactid'));
+      slot.classList.remove('canDrop');
+    }
   }
 
 });
@@ -440,13 +455,14 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
       );
     }
     var slotBands = [];
-    for (i = 0; i < this.props.mySlots.length; i++) {
-      var slot = this.props.mySlots[i];
+    for (i = 0; i < this.props.slots.length; i++) {
+      var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
-        var refId = 'slot' + slot.SlotId.toString();
+        var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString();
         slotBands.push(
           React.createElement("rect", {x: this.props.leftMargin, y: slot.StartMinutes - this.props.start, 
-                width: this.props.width, height: slot.DurationMins, 
+                width: this.props.width, height: slot.DurationMins, "data-type": "slot", 
+                id: refId, "data-slotid": slot.SlotId, "data-locationid": "-1", "data-day": this.props.day, 
                 fill: "url(#Pattern)", ref: refId})
         );
       } else if (slot.SlotType == 1) {
@@ -472,14 +488,14 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
       }
     }
     var slots = [];
-    for (i = 0; i < this.props.mySlots.length; i++) {
-      var slot = this.props.mySlots[i];
+    for (i = 0; i < this.props.slots.length; i++) {
+      var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         for (j = 0; j < this.props.locations.length; j++) {
-          var refId = 'slot' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
+          var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
             React.createElement("rect", {x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot canDrop", 
-                   ref: refId, "data-slotid": slot.SlotId, "data-locationid": this.props.locations[j].LocationId, 
+                   ref: refId, "data-slotid": slot.SlotId, "data-locationid": this.props.locations[j].LocationId, id: refId, 
                    "data-day": this.props.day})
           );
         }
@@ -497,34 +513,7 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
     );
   },
 
-  componentDidMount: function() {},
-
-  placeElement: function(el, key) {
-    var sl = this.refs[key];
-    if (sl != undefined) {
-      if (key.indexOf('x') == -1) {
-        for (var ref in this.refs) {
-          if (ref.startsWith(key + 'x')) {
-            this.refs[ref].getDOMNode().setAttribute('class', 'sessionSlot');
-          }
-        }
-      }
-      else {
-        $(sl.getDOMNode()).attr('class', 'sessionSlot');
-      }
-      var box = sl.getDOMNode().getBoundingClientRect();
-      var sessionBox = el.getBoundingClientRect();
-      var session = $(el);
-      session.width(box.width - 12);
-      session.height(box.height - 12);
-      moveObject(el,
-        box.left - sessionBox.left + 4,
-        box.top - sessionBox.top + 4);
-      session.attr('data-orig-x', box.left - sessionBox.left + 4);
-      session.attr('data-orig-y', box.top - sessionBox.top + 4);
-      session.attr('data-slotkey', sl.getDOMNode().getAttribute('data-reactid'));
-    }
-  }
+  componentDidMount: function() {}
 
 });
 
@@ -548,7 +537,7 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
     return (
       React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
-           ref: "Session", "data-sessionid": this.props.session.SessionId}, 
+           ref: "Session", "data-sessionid": this.props.session.SessionId, "data-day": this.props.session.DayNr}, 
        React.createElement("div", {className: "panel-body"}, 
          speakers, React.createElement("br", null), 
          this.props.session.Title
@@ -559,7 +548,7 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
 
   componentDidMount: function() {
     $(document).ready(function() {
-      this.props.sessionPlace(this.refs.Session);
+      this.props.sessionPlace(this.refs.Session.getDOMNode());
     }.bind(this));
   }
 
@@ -573,8 +562,7 @@ module.exports = SchedulerScheduledSession;
 var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnscheduledSession",
 
   getInitialState: function() {
-    return {
-    }
+    return {}
   },
 
   render: function() {
@@ -584,7 +572,7 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
         );
     });
     return (
-      React.createElement("div", {className: "panel panel-default session", "data-slotkey": "", 
+      React.createElement("div", {className: "panel panel-default session", "data-slotkey": "", "data-orig-x": "0", "data-orig-y": "0", 
            "data-sessionid": this.props.session.SessionId, 
            "data-plenary": this.props.session.IsPlenary}, 
         React.createElement("div", {className: "panel-body"}, 

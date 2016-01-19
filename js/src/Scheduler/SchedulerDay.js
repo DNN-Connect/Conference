@@ -4,48 +4,25 @@ var SchedulerGrid = require('./SchedulerGrid'),
 
 var SchedulerDay = React.createClass({
 
+  propTypes: {
+    day: React.PropTypes.number,
+    start: React.PropTypes.number,
+    finish: React.PropTypes.number,
+    leftMargin: React.PropTypes.number
+  },
+
   getInitialState: function() {
-    var mySlots = [];
-    for (i=0;i<this.props.slots.length;i++)
-    {
-      var slot = this.props.slots[i];
-      if (slot.DayNr == undefined | slot.DayNr == this.props.day)
-      {
-        mySlots.push(slot);
-      }
-    }
-    var start = Math.floor(mySlots[0].StartMinutes/60) * 60 - 60;
-    var finish = 120 + Math.floor(mySlots[mySlots.length - 1].StartMinutes / 60) * 60;
-    var height = finish - start;
-    var locationList = {};
-    for (i=0;i<this.props.locations.length;i++)
-    {
-      locationList[this.props.locations[i].LocationId] = i;
-    }
-    var slotList = {};
-    for (i=0;i<mySlots.length;i++)
-    {
-      slotList[mySlots[i].SlotId] = mySlots[i];
-    }
-    return {
-      mySlots: mySlots,
-      start: start,
-      finish: finish,
-      width: this.props.locations.length * 100,
-      height: height,
-      locationList: locationList,
-      slotList: slotList,
-      sessionList: this.props.sessionList,
-      leftMargin: 50
-    }
+    return {}
   },
 
   render: function() {
-    var viewBox = "0 0 " + (this.state.width + this.state.leftMargin).toString() + " " + this.state.height;
+    var height = this.props.finish - this.props.start;
+    var width = this.props.locations.length * 100;
+    var viewBox = "0 0 " + (width + this.props.leftMargin).toString() + " " + height;
     var scheduledSessions = [];
-    for (i=0;i<this.state.sessionList.length;i++)
+    for (i=0;i<this.props.sessionList.length;i++)
     {
-      var session = this.state.sessionList[i];
+      var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0)
       {
         scheduledSessions.push(
@@ -62,10 +39,10 @@ var SchedulerDay = React.createClass({
              <pattern id="Pattern" x="10" y="10" width="8" height="8" patternUnits="userSpaceOnUse">
               <path d='M0 0L8 8ZM8 0L0 8Z' className="hashLines" />
              </pattern>
-             <rect x="0" y="0" height={this.state.height} width={this.state.width + this.state.leftMargin} className="dayBackground" />
-             <SchedulerGrid width={this.state.width} height={this.state.height} leftMargin={this.state.leftMargin}
-                            start={this.state.start} ref="Grid" locationList={this.state.locationList}
-                            locations={this.props.locations} mySlots={this.state.mySlots} day={this.props.day} />
+             <rect x="0" y="0" height={height} width={width + this.props.leftMargin} className="dayBackground" />
+             <SchedulerGrid width={width} height={height} leftMargin={this.props.leftMargin}
+                            start={this.props.start} ref="Grid" locationList={this.props.locationList}
+                            locations={this.props.locations} slots={this.props.slots} day={this.props.day} />
         </svg>
         {scheduledSessions}
       </div>
@@ -76,12 +53,27 @@ var SchedulerDay = React.createClass({
   },
 
   sessionPlace: function(session) {
-    var el = session.getDOMNode();
-    var key = 'slot' + $(el).data('slotid');
-    if (!$(el).data('plenary')) {
-      key += 'x' + $(el).data('locationid');
+    var jqSession = $(session);
+    var sessionBox = session.getBoundingClientRect();
+    var key = 'slot' + jqSession.data('day') + 'x' + jqSession.data('slotid');
+    if (!jqSession.data('plenary')) {
+      key += 'x' + jqSession.data('locationid');
     }
-    this.refs.Grid.placeElement(el, key);
+    var slot = document.getElementById(key);
+    if (slot != null)
+    {
+      var jqSlot = $(slot);
+      var slotBox = slot.getBoundingClientRect();
+      jqSession.width(slotBox.width - 12);
+      jqSession.height(slotBox.height - 12);
+      moveObject(session,
+        slotBox.left - sessionBox.left + 4,
+        slotBox.top - sessionBox.top + 4);
+      jqSession.attr('data-orig-x', slotBox.left - sessionBox.left + 4);
+      jqSession.attr('data-orig-y', slotBox.top - sessionBox.top + 4);
+      jqSession.attr('data-slotkey', slot.getAttribute('data-reactid'));
+      slot.classList.remove('canDrop');
+    }
   }
 
 });
