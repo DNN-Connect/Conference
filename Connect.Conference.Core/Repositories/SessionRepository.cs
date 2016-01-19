@@ -52,6 +52,15 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(sessionId, conferenceId);
             }
         }
+        public IEnumerable<Session> GetSessionsBySlot(int conferenceId, int dayNr, int slotId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<Session>(System.Data.CommandType.Text,
+                    "SELECT s.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s WHERE s.ConferenceId=@0 AND s.DayNr=@1 AND s.SlotId=@2",
+                    conferenceId, dayNr,slotId);
+            }
+        }
         public int AddSession(ref SessionBase session, int userId)
         {
             Requires.NotNull(session);
@@ -106,6 +115,7 @@ namespace Connect.Conference.Core.Repositories
         IEnumerable<SessionWithVote> GetSessionsWithVote(int conferenceId, int userId, int statusThreshold);
         IEnumerable<Session> GetSessionsBySpeaker(int conferenceId, int userId);
         Session GetSession(int conferenceId, int sessionId);
+        IEnumerable<Session> GetSessionsBySlot(int conferenceId, int dayNr, int slotId);
         int AddSession(ref SessionBase session, int userId);
         void DeleteSession(SessionBase session);
         void DeleteSession(int conferenceId, int sessionId);

@@ -197,9 +197,6 @@ var SchedulerDay = require('./SchedulerDay'),
 
 var Scheduler = React.createClass({displayName: "Scheduler",
 
-  resources: null,
-  service: null,
-
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
@@ -278,6 +275,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
           overlap: 0.5,
           ondropactivate: function(event) {
             hasReset = false;
+            $(event.relatedTarget).width(100);
           },
           ondragenter: function(event) {
             var dropzoneElement = event.target;
@@ -287,28 +285,8 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
-            var sessionId = event.relatedTarget.getAttribute('data-sessionid');
-            var slotId = event.target.getAttribute('data-slotid');
-            var locationId = event.target.getAttribute('data-locationid');
-            var day = event.target.getAttribute('data-day');
-            var isPlenary = event.relatedTarget.getAttribute('data-plenary');
-            if (event.relatedTarget.getAttribute('data-slotkey') != '') {
-              $('[data-reactid="' + event.relatedTarget.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
-            }
-            hasReset = true;
-            var session = $(event.relatedTarget);
-            var dropBox = event.target.getBoundingClientRect();
-            var sessionBox = event.relatedTarget.getBoundingClientRect();
-            session.width(dropBox.width - 12);
-            session.height(dropBox.height - 12);
-            moveObject(event.relatedTarget, 
-                       dropBox.left - sessionBox.left + 4,
-                       dropBox.top - sessionBox.top + 4);
-            session.data('orig-x', session.data('x'));
-            session.data('orig-y', session.data('y'));
-            event.relatedTarget.setAttribute('data-slotkey', event.target.getAttribute('data-reactid'));
-            event.target.classList.remove('canDrop');
-          },
+            this.tryMoveSession(event.relatedTarget, event.target);
+          }.bind(this),
           ondropdeactivate: function(event) {
             if (!hasReset)
             {
@@ -326,7 +304,39 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             event.target.classList.remove('drop-target');
           }
         });
+    }.bind(this));
+  },
+
+  tryMoveSession: function(session, slot) {
+    var jqSession = $(session);
+    var jqSlot = $(slot);
+    var sessionId = jqSession.data('sessionid');
+    var isPlenary = jqSession.data('plenary');
+    var slotId = jqSlot.data('slotid');
+    var locationId = jqSlot.data('locationid');
+    var day = jqSlot.data('day');
+    this.service.tryMoveSession(this.props.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
+      hasReset = true;
+      // var dropBox = slot.getBoundingClientRect();
+      // var sessionBox = session.getBoundingClientRect();
+      // jqSession.width(dropBox.width - 12);
+      // jqSession.height(dropBox.height - 12);
+      // moveObject(session, 
+      //            dropBox.left - sessionBox.left + 4,
+      //            dropBox.top - sessionBox.top + 4);
+      // jqSession.data('orig-x', jqSession.data('x'));
+      // jqSession.data('orig-y', jqSession.data('y'));
+      // jqSession.data('slotkey', jqSlot.data('reactid'));
+      // slot.classList.remove('canDrop');
+      this.setState({
+        sessionList: data
+      });
+    }.bind(this), function(data) {
+      alert(data);
     });
+    if (jqSession.data('slotkey') != '') {
+      $('[data-reactid="' + jqSession.data('slotkey') + '"]').attr('class', 'sessionSlot canDrop');
+    }
   }
 
 });
@@ -392,9 +402,9 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
   sessionPlace: function(session) {
     var jqSession = $(session);
     var sessionBox = session.getBoundingClientRect();
-    var key = 'slot' + jqSession.data('day') + 'x' + jqSession.data('slotid');
-    if (!jqSession.data('plenary')) {
-      key += 'x' + jqSession.data('locationid');
+    var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
+    if (session.getAttribute('data-plenary') != 'true') {
+      key += 'x' + session.getAttribute('data-locationid');
     }
     var slot = document.getElementById(key);
     if (slot != null)
@@ -406,9 +416,9 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
       moveObject(session,
         slotBox.left - sessionBox.left + 4,
         slotBox.top - sessionBox.top + 4);
-      jqSession.attr('data-orig-x', slotBox.left - sessionBox.left + 4);
-      jqSession.attr('data-orig-y', slotBox.top - sessionBox.top + 4);
-      jqSession.attr('data-slotkey', slot.getAttribute('data-reactid'));
+      session.setAttribute('data-orig-x', slotBox.left - sessionBox.left + 4);
+      session.setAttribute('data-orig-y', slotBox.top - sessionBox.top + 4);
+      session.setAttribute('data-slotkey', slot.getAttribute('data-reactid'));
       slot.classList.remove('canDrop');
     }
   }
@@ -550,6 +560,10 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
     $(document).ready(function() {
       this.props.sessionPlace(this.refs.Session.getDOMNode());
     }.bind(this));
+  },
+
+  componentDidUpdate: function() {
+    this.props.sessionPlace(this.refs.Session.getDOMNode());
   }
 
 });
@@ -1832,37 +1846,37 @@ window.ConferenceService = function($, mid) {
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
   this.ServicePath = function() {
-    return baseServicepath;
-  },
+      return baseServicepath;
+    },
 
-  this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
-    //showLoading();
-    // console.log(data);
-    var path = baseServicepath;
-    if (conferenceId != null) {
-      path += 'Conference/' + conferenceId + '/'
-    }
-    path = path + controller + '/' + action;
-    if (id != null) {
-      path += '/' + id
-    }
-    $.ajax({
-      type: method,
-      url: path,
-      beforeSend: $.dnnSF(moduleId).setModuleHeaders,
-      data: data
-    }).done(function(data) {
-      //hideLoading();
-      if (success != undefined) {
-        success(data);
+    this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
+      //showLoading();
+      // console.log(data);
+      var path = baseServicepath;
+      if (conferenceId != null) {
+        path += 'Conference/' + conferenceId + '/'
       }
-    }).fail(function(xhr, status) {
-      //showError(xhr.responseText);
-      if (fail != undefined) {
-        fail(xhr.responseText);
+      path = path + controller + '/' + action;
+      if (id != null) {
+        path += '/' + id
       }
-    });
-  }
+      $.ajax({
+        type: method,
+        url: path,
+        beforeSend: $.dnnSF(moduleId).setModuleHeaders,
+        data: data
+      }).done(function(data) {
+        //hideLoading();
+        if (success != undefined) {
+          success(data);
+        }
+      }).fail(function(xhr, status) {
+        //showError(xhr.responseText);
+        if (fail != undefined) {
+          fail(xhr.responseText);
+        }
+      });
+    }
 
   this.orderTracks = function(conferenceId, newOrder, success, fail) {
     this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
@@ -1892,52 +1906,89 @@ window.ConferenceService = function($, mid) {
     this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
   }
   this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
-    this.apiCall('POST', 'Comments', 'Add', conferenceId, null, { SessionId: sessionId, Visibility: visibility, Remarks: comment}, success, fail);
+    this.apiCall('POST', 'Comments', 'Add', conferenceId, null, {
+      SessionId: sessionId,
+      Visibility: visibility,
+      Remarks: comment
+    }, success, fail);
   }
   this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
-    this.apiCall('GET', 'Comments', 'List', conferenceId, null, { SessionId: sessionId, Visibility: visibility, PageIndex: pageIndex, PageSize: pageSize}, success, fail);
+    this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
+      SessionId: sessionId,
+      Visibility: visibility,
+      PageIndex: pageIndex,
+      PageSize: pageSize
+    }, success, fail);
   }
   this.deleteComment = function(conferenceId, commentId, success, fail) {
     this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
   }
   this.searchTags = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Tags', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
+    this.apiCall('GET', 'Tags', 'Search', conferenceId, null, {
+      search: searchTerm
+    }, success, fail);
   }
   this.tagVote = function(conferenceId, tagId, vote, success, fail) {
-    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, { vote: vote }, success, fail);
+    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, {
+      vote: vote
+    }, success, fail);
   }
   this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, { vote: vote }, success, fail);
+    this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, {
+      vote: vote
+    }, success, fail);
   }
   this.addTag = function(conferenceId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, { tagName: tagName }, success, fail);
+    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, {
+      tagName: tagName
+    }, success, fail);
   }
   this.editTag = function(conferenceId, tagId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, { tagName: tagName }, success, fail);
+    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, {
+      tagName: tagName
+    }, success, fail);
   }
   this.deleteTag = function(conferenceId, tagId, success, fail) {
     this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
   }
   this.searchUsers = function(conferenceId, search, success, fail) {
-    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, { search: search }, success, fail);
+    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, {
+      search: search
+    }, success, fail);
   }
   this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, { UserId: userId }, success, fail);
+    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
+      UserId: userId
+    }, success, fail);
   }
   this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, { UserId: userId }, success, fail);
+    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, {
+      UserId: userId
+    }, success, fail);
   }
   this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
     this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
   }
   this.searchTracks = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, { search: searchTerm}, success, fail);
+    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, {
+      search: searchTerm
+    }, success, fail);
   }
   this.changeAttendeeStatus = function(conferenceId, newStatus, success, fail) {
-    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, { Status: newStatus}, success, fail);
+    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
+      Status: newStatus
+    }, success, fail);
   }
   this.getLocations = function(conferenceId, success, fail) {
     this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
+  }
+  this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
+      Day: day,
+      SlotId: slotId,
+      LocationId: locationId,
+      DisplaceOthers: displaceOthers
+    }, success, fail);
   }
 
 }

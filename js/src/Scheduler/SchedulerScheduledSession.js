@@ -27,6 +27,10 @@ var SchedulerScheduledSession = React.createClass({
     $(document).ready(function() {
       this.props.sessionPlace(this.refs.Session.getDOMNode());
     }.bind(this));
+  },
+
+  componentDidUpdate: function() {
+    this.props.sessionPlace(this.refs.Session.getDOMNode());
   }
 
 });

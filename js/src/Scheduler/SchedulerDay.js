@@ -55,9 +55,9 @@ var SchedulerDay = React.createClass({
   sessionPlace: function(session) {
     var jqSession = $(session);
     var sessionBox = session.getBoundingClientRect();
-    var key = 'slot' + jqSession.data('day') + 'x' + jqSession.data('slotid');
-    if (!jqSession.data('plenary')) {
-      key += 'x' + jqSession.data('locationid');
+    var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
+    if (session.getAttribute('data-plenary') != 'true') {
+      key += 'x' + session.getAttribute('data-locationid');
     }
     var slot = document.getElementById(key);
     if (slot != null)
@@ -69,9 +69,9 @@ var SchedulerDay = React.createClass({
       moveObject(session,
         slotBox.left - sessionBox.left + 4,
         slotBox.top - sessionBox.top + 4);
-      jqSession.attr('data-orig-x', slotBox.left - sessionBox.left + 4);
-      jqSession.attr('data-orig-y', slotBox.top - sessionBox.top + 4);
-      jqSession.attr('data-slotkey', slot.getAttribute('data-reactid'));
+      session.setAttribute('data-orig-x', slotBox.left - sessionBox.left + 4);
+      session.setAttribute('data-orig-y', slotBox.top - sessionBox.top + 4);
+      session.setAttribute('data-slotkey', slot.getAttribute('data-reactid'));
       slot.classList.remove('canDrop');
     }
   }

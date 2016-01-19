@@ -4,9 +4,6 @@ var SchedulerDay = require('./SchedulerDay'),
 
 var Scheduler = React.createClass({
 
-  resources: null,
-  service: null,
-
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
@@ -85,6 +82,7 @@ var Scheduler = React.createClass({
           overlap: 0.5,
           ondropactivate: function(event) {
             hasReset = false;
+            $(event.relatedTarget).width(100);
           },
           ondragenter: function(event) {
             var dropzoneElement = event.target;
@@ -94,28 +92,8 @@ var Scheduler = React.createClass({
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
-            var sessionId = event.relatedTarget.getAttribute('data-sessionid');
-            var slotId = event.target.getAttribute('data-slotid');
-            var locationId = event.target.getAttribute('data-locationid');
-            var day = event.target.getAttribute('data-day');
-            var isPlenary = event.relatedTarget.getAttribute('data-plenary');
-            if (event.relatedTarget.getAttribute('data-slotkey') != '') {
-              $('[data-reactid="' + event.relatedTarget.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
-            }
-            hasReset = true;
-            var session = $(event.relatedTarget);
-            var dropBox = event.target.getBoundingClientRect();
-            var sessionBox = event.relatedTarget.getBoundingClientRect();
-            session.width(dropBox.width - 12);
-            session.height(dropBox.height - 12);
-            moveObject(event.relatedTarget, 
-                       dropBox.left - sessionBox.left + 4,
-                       dropBox.top - sessionBox.top + 4);
-            session.data('orig-x', session.data('x'));
-            session.data('orig-y', session.data('y'));
-            event.relatedTarget.setAttribute('data-slotkey', event.target.getAttribute('data-reactid'));
-            event.target.classList.remove('canDrop');
-          },
+            this.tryMoveSession(event.relatedTarget, event.target);
+          }.bind(this),
           ondropdeactivate: function(event) {
             if (!hasReset)
             {
@@ -133,7 +111,39 @@ var Scheduler = React.createClass({
             event.target.classList.remove('drop-target');
           }
         });
+    }.bind(this));
+  },
+
+  tryMoveSession: function(session, slot) {
+    var jqSession = $(session);
+    var jqSlot = $(slot);
+    var sessionId = jqSession.data('sessionid');
+    var isPlenary = jqSession.data('plenary');
+    var slotId = jqSlot.data('slotid');
+    var locationId = jqSlot.data('locationid');
+    var day = jqSlot.data('day');
+    this.service.tryMoveSession(this.props.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
+      hasReset = true;
+      // var dropBox = slot.getBoundingClientRect();
+      // var sessionBox = session.getBoundingClientRect();
+      // jqSession.width(dropBox.width - 12);
+      // jqSession.height(dropBox.height - 12);
+      // moveObject(session, 
+      //            dropBox.left - sessionBox.left + 4,
+      //            dropBox.top - sessionBox.top + 4);
+      // jqSession.data('orig-x', jqSession.data('x'));
+      // jqSession.data('orig-y', jqSession.data('y'));
+      // jqSession.data('slotkey', jqSlot.data('reactid'));
+      // slot.classList.remove('canDrop');
+      this.setState({
+        sessionList: data
+      });
+    }.bind(this), function(data) {
+      alert(data);
     });
+    if (jqSession.data('slotkey') != '') {
+      $('[data-reactid="' + jqSession.data('slotkey') + '"]').attr('class', 'sessionSlot canDrop');
+    }
   }
 
 });
