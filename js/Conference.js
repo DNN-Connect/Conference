@@ -239,15 +239,16 @@ var Scheduler = React.createClass({displayName: "Scheduler",
            locationList: this.state.locationList, 
            leftMargin: 50, 
            sessionList: this.state.sessionList, 
-           locations: this.props.locations})
+           locations: this.props.locations, 
+           sessionPlace: this.sessionPlace})
         );
     }
     return (
       React.createElement("div", {className: "row Scheduler"}, 
-        React.createElement("div", {className: "col-xs-12 col-md-2"}, 
+        React.createElement("div", {className: "col-xs-12 col-md-2 unscheduled canDrop", ref: "unscheduledColumn"}, 
           unscheduledSessions
         ), 
-        React.createElement("div", {className: "col-xs-12 col-md-10"}, 
+        React.createElement("div", {className: "col-xs-12 col-md-10", ref: "schedulerColumn"}, 
           scheduleDays
         )
       )
@@ -263,7 +264,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
           restrict: {
             endOnly: true
           },
-          autoScroll: false,
+          autoScroll: true,
           onend: function(event) {}
         })
         .on('dragmove', function(event) {
@@ -285,26 +286,77 @@ var Scheduler = React.createClass({displayName: "Scheduler",
             event.target.classList.remove('drop-target');
           },
           ondrop: function(event) {
-            this.tryMoveSession(event.relatedTarget, event.target);
+            hasReset = true;
+            if (event.target === this.refs.unscheduledColumn.getDOMNode())
+            {
+              this.tryRemoveSession(event.relatedTarget);
+            }
+            else
+            {
+              this.tryMoveSession(event.relatedTarget, event.target);
+            }
           }.bind(this),
           ondropdeactivate: function(event) {
             if (!hasReset)
             {
-              var s = event.relatedTarget;
-              var session = $(s);
-              var x = session.data('orig-x');
-              var y = session.data('orig-y');
-              s.style.webkitTransform =
-                s.style.transform =
-                'translate(' + x + 'px, ' + y + 'px)';
-              s.setAttribute('data-x', x);
-              s.setAttribute('data-y', y);
+              this.sessionPlace(event.relatedTarget);
               hasReset = true;
             }
             event.target.classList.remove('drop-target');
-          }
+          }.bind(this)
         });
+        $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
     }.bind(this));
+  },
+
+  sessionPlace: function(session) {
+    var jqSession = $(session);
+    var sessionBox = session.getBoundingClientRect();
+    var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
+    if (session.getAttribute('data-plenary') != 'true') {
+      key += 'x' + session.getAttribute('data-locationid');
+    }
+    var slot = document.getElementById(key);
+    if (slot != null)
+    {
+      var jqSlot = $(slot);
+      var slotBox = slot.getBoundingClientRect();
+      jqSession.width(slotBox.width - 12);
+      jqSession.height(slotBox.height - 12);
+      moveObject(session,
+        slotBox.left - sessionBox.left + 4,
+        slotBox.top - sessionBox.top + 4);
+      session.setAttribute('data-orig-x', slotBox.left - sessionBox.left + 4);
+      session.setAttribute('data-orig-y', slotBox.top - sessionBox.top + 4);
+      session.setAttribute('data-slotkey', slot.getAttribute('data-reactid'));
+      slot.classList.remove('canDrop');
+    }
+    else {
+      session.setAttribute('data-orig-x', '');
+      session.setAttribute('data-orig-y', '');
+      session.setAttribute('data-slotkey', '');
+      session.style.webkitTransform =
+        session.style.transform =
+        '';
+      session.setAttribute('data-x', '');
+      session.setAttribute('data-y', '');
+    }
+  },
+
+  tryRemoveSession: function(session) {
+    var sessionId = session.getAttribute('data-sessionid');
+    this.service.tryRemoveSession(this.props.conferenceId, sessionId, function(data) {
+      hasReset = true;
+      this.setState({
+        sessionList: data
+      });
+    }.bind(this), function(data) {
+      alert(data);
+      this.sessionPlace(session);
+    }.bind(this));
+    if (session.getAttribute('data-slotkey') != '') {
+      $('[data-reactid="' + session.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
+    }
   },
 
   tryMoveSession: function(session, slot) {
@@ -317,23 +369,13 @@ var Scheduler = React.createClass({displayName: "Scheduler",
     var day = jqSlot.data('day');
     this.service.tryMoveSession(this.props.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
-      // var dropBox = slot.getBoundingClientRect();
-      // var sessionBox = session.getBoundingClientRect();
-      // jqSession.width(dropBox.width - 12);
-      // jqSession.height(dropBox.height - 12);
-      // moveObject(session, 
-      //            dropBox.left - sessionBox.left + 4,
-      //            dropBox.top - sessionBox.top + 4);
-      // jqSession.data('orig-x', jqSession.data('x'));
-      // jqSession.data('orig-y', jqSession.data('y'));
-      // jqSession.data('slotkey', jqSlot.data('reactid'));
-      // slot.classList.remove('canDrop');
       this.setState({
         sessionList: data
       });
     }.bind(this), function(data) {
       alert(data);
-    });
+      this.sessionPlace(session);
+    }.bind(this));
     if (jqSession.data('slotkey') != '') {
       $('[data-reactid="' + jqSession.data('slotkey') + '"]').attr('class', 'sessionSlot canDrop');
     }
@@ -373,7 +415,7 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
       if (session.DayNr == this.props.day & session.SlotId > 0)
       {
         scheduledSessions.push(
-          React.createElement(SchedulerScheduledSession, {session: session, sessionPlace: this.sessionPlace})
+          React.createElement(SchedulerScheduledSession, {session: session, sessionPlace: this.props.sessionPlace})
           );
       }
     }
@@ -397,30 +439,6 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
   },
 
   componentDidMount: function() {
-  },
-
-  sessionPlace: function(session) {
-    var jqSession = $(session);
-    var sessionBox = session.getBoundingClientRect();
-    var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
-    if (session.getAttribute('data-plenary') != 'true') {
-      key += 'x' + session.getAttribute('data-locationid');
-    }
-    var slot = document.getElementById(key);
-    if (slot != null)
-    {
-      var jqSlot = $(slot);
-      var slotBox = slot.getBoundingClientRect();
-      jqSession.width(slotBox.width - 12);
-      jqSession.height(slotBox.height - 12);
-      moveObject(session,
-        slotBox.left - sessionBox.left + 4,
-        slotBox.top - sessionBox.top + 4);
-      session.setAttribute('data-orig-x', slotBox.left - sessionBox.left + 4);
-      session.setAttribute('data-orig-y', slotBox.top - sessionBox.top + 4);
-      session.setAttribute('data-slotkey', slot.getAttribute('data-reactid'));
-      slot.classList.remove('canDrop');
-    }
   }
 
 });
@@ -1989,6 +2007,9 @@ window.ConferenceService = function($, mid) {
       LocationId: locationId,
       DisplaceOthers: displaceOthers
     }, success, fail);
+  }
+  this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
   }
 
 }

@@ -126,6 +126,22 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Remove(int conferenceId, int id)
+        {
+            var session = SessionRepository.Instance.GetSession(conferenceId, id);
+            if (session == null)
+            {
+                return ServiceError("Can't find session");
+            }
+            session.SlotId = 0;
+            session.LocationId = null;
+            session.DayNr = 0;
+            SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
+        }
     }
 }
 

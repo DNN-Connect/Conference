@@ -147,5 +147,8 @@ window.ConferenceService = function($, mid) {
       DisplaceOthers: displaceOthers
     }, success, fail);
   }
+  this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
+  }
 
 }

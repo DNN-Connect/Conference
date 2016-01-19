@@ -26,7 +26,7 @@ var SchedulerDay = React.createClass({
       if (session.DayNr == this.props.day & session.SlotId > 0)
       {
         scheduledSessions.push(
-          <SchedulerScheduledSession session={session} sessionPlace={this.sessionPlace} />
+          <SchedulerScheduledSession session={session} sessionPlace={this.props.sessionPlace} />
           );
       }
     }
@@ -50,30 +50,6 @@ var SchedulerDay = React.createClass({
   },
 
   componentDidMount: function() {
-  },
-
-  sessionPlace: function(session) {
-    var jqSession = $(session);
-    var sessionBox = session.getBoundingClientRect();
-    var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
-    if (session.getAttribute('data-plenary') != 'true') {
-      key += 'x' + session.getAttribute('data-locationid');
-    }
-    var slot = document.getElementById(key);
-    if (slot != null)
-    {
-      var jqSlot = $(slot);
-      var slotBox = slot.getBoundingClientRect();
-      jqSession.width(slotBox.width - 12);
-      jqSession.height(slotBox.height - 12);
-      moveObject(session,
-        slotBox.left - sessionBox.left + 4,
-        slotBox.top - sessionBox.top + 4);
-      session.setAttribute('data-orig-x', slotBox.left - sessionBox.left + 4);
-      session.setAttribute('data-orig-y', slotBox.top - sessionBox.top + 4);
-      session.setAttribute('data-slotkey', slot.getAttribute('data-reactid'));
-      slot.classList.remove('canDrop');
-    }
   }
 
 });

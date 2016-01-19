@@ -31,8 +31,8 @@
     }
     .session {
         z-index: 200;
-        position: absolute;
         overflow: hidden;
+        position: absolute;
         cursor: grab;
         .panel-body {
             padding: 5px;
@@ -50,5 +50,13 @@
         font-size: smaller;
         color: #888;
         padding-right: 10px;
+    }
+    .unscheduled {
+        border: 1px dotted #666;
+        background-color: #777;
+        padding: 6px;
+        .session {
+            position: relative;
+        }
     }
 }
