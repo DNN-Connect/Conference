@@ -352,6 +352,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
       });
     }.bind(this), function(data) {
       alert(data);
+      $(session).css('width', 'auto');
       this.sessionPlace(session);
     }.bind(this));
     if (session.getAttribute('data-slotkey') != '') {
@@ -374,6 +375,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
       });
     }.bind(this), function(data) {
       alert(data);
+      $(session).css('width', 'auto');
       this.sessionPlace(session);
     }.bind(this));
     if (jqSession.data('slotkey') != '') {

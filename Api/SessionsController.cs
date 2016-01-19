@@ -70,6 +70,7 @@ namespace Connect.DNN.Modules.Conference.Api
         public HttpResponseMessage Move(int conferenceId, int id, [FromBody]moveDTO moveParams)
         {
             var session = SessionRepository.Instance.GetSession(conferenceId, id);
+            var speakerIds = session.Speakers.Select(s => s.Key).ToList();
             if (session == null)
             {
                 return ServiceError("Can't find session");
@@ -79,6 +80,16 @@ namespace Connect.DNN.Modules.Conference.Api
                 return ServiceError("Not moved");
             }
             var parallelSessions = SessionRepository.Instance.GetSessionsBySlot(conferenceId, moveParams.Day, moveParams.SlotId);
+            foreach (var s in parallelSessions)
+            {
+                foreach (var sp in s.Speakers.Select(sp => sp.Key))
+                {
+                    if (speakerIds.Contains(sp))
+                    {
+                        return ServiceError("This move would cause a speaker to have to be in 2 places at the same time. Please revise.");
+                    }
+                }
+            }
             if (moveParams.DisplaceOthers)
             {
                 if (session.IsPlenary)
