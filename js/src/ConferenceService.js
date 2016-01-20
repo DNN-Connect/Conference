@@ -150,5 +150,8 @@ window.ConferenceService = function($, mid) {
   this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
     this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
   }
+  this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
+    this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
+  }
 
 }

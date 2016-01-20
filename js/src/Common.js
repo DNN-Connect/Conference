@@ -74,8 +74,7 @@ function minutesToTime(mins) {
   return res;
 }
 
-function moveObject(object, dx, dy)
-{
+function moveObject(object, dx, dy) {
   var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
     y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
   object.style.webkitTransform =
@@ -90,6 +89,28 @@ if (!String.prototype.startsWith) {
     position = position || 0;
     return this.indexOf(searchString, position) === position;
   };
+}
+
+function pad(number) {
+  if (number < 10) {
+    return '0' + number;
+  }
+  return number;
+}
+
+if (!Date.prototype.toUTCDateTimeDigits) {
+  (function() {
+    Date.prototype.toUTCDateTimeDigits = function() {
+      return this.getUTCFullYear() + '-' +
+        pad(this.getUTCMonth() + 1) + '-' +
+        pad(this.getUTCDate()) +
+        'T' +
+        pad(this.getUTCHours()) + ':' +
+        pad(this.getUTCMinutes()) + ':' +
+        pad(this.getUTCSeconds()) +
+        'Z';
+    };
+  }());
 }
 
 $(document).ready(function() {

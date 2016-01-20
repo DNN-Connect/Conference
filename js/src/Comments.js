@@ -1,14 +1,16 @@
 /** @jsx React.DOM */
-var CommentList = require('./CommentList');
+var Comment = require('./Comment');
 
 var Comments = React.createClass({
-
-  resources: null,
-  service: null,
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
+    if (this.props.pollingSeconds == undefined) {
+      this.pollingInterval = 30000;
+    } else {
+      this.pollingInterval = this.props.pollingSeconds * 1000;
+    }
     return {
       comments: this.props.comments,
       commentCount: this.props.totalComments,
@@ -19,6 +21,10 @@ var Comments = React.createClass({
 
   render: function() {
     var submitPanel = <div />;
+    var commentList = this.state.comments.map(function(item) {
+      return <Comment moduleId={this.props.moduleId} comment={item} key={item.CommentId} 
+                      appPath={this.props.appPath} onDelete={this.onCommentDelete} />
+    }.bind(this));
     if (this.props.loggedIn) {
       submitPanel = (
         <div className="panel-form">
@@ -42,8 +48,9 @@ var Comments = React.createClass({
            </div>
            {submitPanel}
            <div className="panel-body">
-            <CommentList moduleId={this.props.moduleId} comments={this.state.comments} 
-                         appPath={this.props.appPath} onCommentDelete={this.onCommentDelete} />
+            <ul className="list-group">
+              {commentList}
+            </ul>
             <a href="#" className="btn btn-primary btn-sm btn-block" role="button" 
                onClick={this.loadMoreComments} ref="cmdMore" disabled={!this.state.canLoadMore}>
                <span className="glyphicon glyphicon-refresh"></span> {this.resources.More}
@@ -55,7 +62,10 @@ var Comments = React.createClass({
     );
   },
 
-  componentDidMount: function() {},
+  componentDidMount: function() {
+    this.lastCheck = new Date();
+    this.pollServer();
+  },
 
   addComment: function(e) {
     e.preventDefault();
@@ -103,6 +113,29 @@ var Comments = React.createClass({
         });
       }.bind(this));
     }
+  },
+
+  pollServer: function() {
+    setTimeout(function() {
+      this.service.checkNewComments(this.props.conferenceId, this.props.sessionId,
+        this.props.visibility, this.lastCheck,
+        function(data) {
+          this.lastCheck = new Date(data.CheckTime);
+          if (data.Comments.length > 0) {
+            var newCommentList = data.Comments;
+            for (i = 0; i < this.state.comments.length; i++) {
+              if ($.inArray(this.state.comments[i], newCommentList) == -1) {
+                newCommentList.push(this.state.comments[i]);
+              }
+            }
+            this.setState({
+              comments: newCommentList,
+              commentCount: data.NewTotalComments
+            });
+          }
+          this.pollServer();
+        }.bind(this));
+    }.bind(this), this.pollingInterval);
   }
 
 

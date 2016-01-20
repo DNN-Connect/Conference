@@ -26,6 +26,21 @@ namespace Connect.Conference.Core.Repositories
                 return rep.Get(conferenceId);
             }
         }
+        public IEnumerable<Comment> GetNewComments(int sessionId, int visibility, System.DateTime lastCheck)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<Comment>();
+                return rep.Find("WHERE SessionId=@0 AND Visibility=@1 AND Datime>@2 ORDER BY Datime DESC", sessionId, visibility, lastCheck);
+            }
+        }
+        public int GetTotalComments(int sessionId, int visibility)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteScalar<int>(System.Data.CommandType.Text, "SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Comments WHERE SessionId=@0 AND Visibility=@1", sessionId, visibility);
+            }
+        }
         public IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize)
         {
             using (var context = DataContext.Instance())
@@ -103,6 +118,8 @@ namespace Connect.Conference.Core.Repositories
     public interface ICommentRepository
     {
         IEnumerable<Comment> GetComments(int conferenceId);
+        IEnumerable<Comment> GetNewComments(int sessionId, int visibility, System.DateTime lastCheck);
+        int GetTotalComments(int sessionId, int visibility);
         IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize);
         IEnumerable<Comment> GetCommentsByUser(int userId);
         Comment GetComment(int conferenceId, int commentId);

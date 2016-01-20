@@ -48,46 +48,16 @@ module.exports = Comment;
 /** @jsx React.DOM */
 var Comment = require('./Comment');
 
-var CommentList = React.createClass({displayName: "CommentList",
-
-  resources: null,
-
-  getInitialState: function() {
-    this.resources = ConnectConference.modules[this.props.moduleId].resources;
-    return {
-      comments: this.props.comments
-    }
-  },
-
-  render: function() {
-    var commentItems = this.state.comments.map(function(item) {
-      return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId, 
-                      appPath: this.props.appPath, onDelete: this.props.onCommentDelete})
-    }.bind(this));
-    return (
-      React.createElement("ul", {className: "list-group"}, 
-       commentItems
-      )
-    );
-  }
-
-});
-
-module.exports = CommentList;
-
-
-},{"./Comment":1}],3:[function(require,module,exports){
-/** @jsx React.DOM */
-var CommentList = require('./CommentList');
-
 var Comments = React.createClass({displayName: "Comments",
-
-  resources: null,
-  service: null,
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
+    if (this.props.pollingSeconds == undefined) {
+      this.pollingInterval = 30000;
+    } else {
+      this.pollingInterval = this.props.pollingSeconds * 1000;
+    }
     return {
       comments: this.props.comments,
       commentCount: this.props.totalComments,
@@ -98,6 +68,10 @@ var Comments = React.createClass({displayName: "Comments",
 
   render: function() {
     var submitPanel = React.createElement("div", null);
+    var commentList = this.state.comments.map(function(item) {
+      return React.createElement(Comment, {moduleId: this.props.moduleId, comment: item, key: item.CommentId, 
+                      appPath: this.props.appPath, onDelete: this.onCommentDelete})
+    }.bind(this));
     if (this.props.loggedIn) {
       submitPanel = (
         React.createElement("div", {className: "panel-form"}, 
@@ -121,8 +95,9 @@ var Comments = React.createClass({displayName: "Comments",
            ), 
            submitPanel, 
            React.createElement("div", {className: "panel-body"}, 
-            React.createElement(CommentList, {moduleId: this.props.moduleId, comments: this.state.comments, 
-                         appPath: this.props.appPath, onCommentDelete: this.onCommentDelete}), 
+            React.createElement("ul", {className: "list-group"}, 
+              commentList
+            ), 
             React.createElement("a", {href: "#", className: "btn btn-primary btn-sm btn-block", role: "button", 
                onClick: this.loadMoreComments, ref: "cmdMore", disabled: !this.state.canLoadMore}, 
                React.createElement("span", {className: "glyphicon glyphicon-refresh"}), " ", this.resources.More
@@ -134,7 +109,10 @@ var Comments = React.createClass({displayName: "Comments",
     );
   },
 
-  componentDidMount: function() {},
+  componentDidMount: function() {
+    this.lastCheck = new Date();
+    this.pollServer();
+  },
 
   addComment: function(e) {
     e.preventDefault();
@@ -182,6 +160,29 @@ var Comments = React.createClass({displayName: "Comments",
         });
       }.bind(this));
     }
+  },
+
+  pollServer: function() {
+    setTimeout(function() {
+      this.service.checkNewComments(this.props.conferenceId, this.props.sessionId,
+        this.props.visibility, this.lastCheck,
+        function(data) {
+          this.lastCheck = new Date(data.CheckTime);
+          if (data.Comments.length > 0) {
+            var newCommentList = data.Comments;
+            for (i = 0; i < this.state.comments.length; i++) {
+              if ($.inArray(this.state.comments[i], newCommentList) == -1) {
+                newCommentList.push(this.state.comments[i]);
+              }
+            }
+            this.setState({
+              comments: newCommentList,
+              commentCount: data.NewTotalComments
+            });
+          }
+          this.pollServer();
+        }.bind(this));
+    }.bind(this), this.pollingInterval);
   }
 
 
@@ -190,7 +191,7 @@ var Comments = React.createClass({displayName: "Comments",
 module.exports = Comments;
 
 
-},{"./CommentList":2}],4:[function(require,module,exports){
+},{"./Comment":1}],3:[function(require,module,exports){
 /** @jsx React.DOM */
 var SchedulerDay = require('./SchedulerDay'),
   SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession');
@@ -388,7 +389,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
 module.exports = Scheduler;
 
 
-},{"./SchedulerDay":5,"./SchedulerUnscheduledSession":8}],5:[function(require,module,exports){
+},{"./SchedulerDay":4,"./SchedulerUnscheduledSession":7}],4:[function(require,module,exports){
 /** @jsx React.DOM */
 var SchedulerGrid = require('./SchedulerGrid'),
     SchedulerScheduledSession = require('./SchedulerScheduledSession');
@@ -448,7 +449,7 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
 module.exports = SchedulerDay;
 
 
-},{"./SchedulerGrid":6,"./SchedulerScheduledSession":7}],6:[function(require,module,exports){
+},{"./SchedulerGrid":5,"./SchedulerScheduledSession":6}],5:[function(require,module,exports){
 /** @jsx React.DOM */
 var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
 
@@ -550,7 +551,7 @@ var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
 module.exports = SchedulerGrid;
 
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 var SchedulerScheduledSession = React.createClass({displayName: "SchedulerScheduledSession",
 
@@ -591,7 +592,7 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
 module.exports = SchedulerScheduledSession;
 
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnscheduledSession",
 
@@ -624,7 +625,7 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
 
 module.exports = SchedulerUnscheduledSession;
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var SessionVote = React.createClass({displayName: "SessionVote",
 
@@ -686,7 +687,7 @@ var SessionVote = React.createClass({displayName: "SessionVote",
 
 module.exports = SessionVote;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var SessionVote = require('./SessionVote');
 
@@ -779,7 +780,7 @@ var SessionVotes = React.createClass({displayName: "SessionVotes",
 module.exports = SessionVotes;
 
 
-},{"./SessionVote":9}],11:[function(require,module,exports){
+},{"./SessionVote":8}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var Speaker = React.createClass({displayName: "Speaker",
 
@@ -814,7 +815,7 @@ var Speaker = React.createClass({displayName: "Speaker",
 
 module.exports = Speaker;
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 var Speaker = require('./Speaker');
 
@@ -946,7 +947,7 @@ var Speakers = React.createClass({displayName: "Speakers",
 module.exports = Speakers;
 
 
-},{"./Speaker":11}],13:[function(require,module,exports){
+},{"./Speaker":10}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 var Tag = React.createClass({displayName: "Tag",
   render: function() {
@@ -960,7 +961,7 @@ var Tag = React.createClass({displayName: "Tag",
 
 module.exports = Tag;
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = React.createClass({displayName: "TagVote",
 
@@ -1008,7 +1009,7 @@ var TagVote = React.createClass({displayName: "TagVote",
 
 module.exports = TagVote;
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 var TagVote = require('./TagVote');
 
@@ -1133,7 +1134,7 @@ var TagVotes = React.createClass({displayName: "TagVotes",
 module.exports = TagVotes;
 
 
-},{"./TagVote":14}],16:[function(require,module,exports){
+},{"./TagVote":13}],15:[function(require,module,exports){
 /** @jsx React.DOM */
 var Tag = require('./Tag');
 
@@ -1234,7 +1235,7 @@ var Tags = React.createClass({displayName: "Tags",
 module.exports = Tags;
 
 
-},{"./Tag":13}],17:[function(require,module,exports){
+},{"./Tag":12}],16:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = require('./TimesheetEditorSlot');
 
@@ -1490,7 +1491,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":18}],18:[function(require,module,exports){
+},{"./TimesheetEditorSlot":17}],17:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
@@ -1643,7 +1644,7 @@ var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 module.exports = TimesheetEditorSlot;
 
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /** @jsx React.DOM */
 var Track = React.createClass({displayName: "Track",
   render: function() {
@@ -1665,7 +1666,7 @@ var Track = React.createClass({displayName: "Track",
 
 module.exports = Track;
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /** @jsx React.DOM */
 var Track = require('./Track');
 
@@ -1733,7 +1734,7 @@ var Tracks = React.createClass({displayName: "Tracks",
 module.exports = Tracks;
 
 
-},{"./Track":19}],21:[function(require,module,exports){
+},{"./Track":18}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 var TimesheetEditor = require('./TimesheetEditor'),
     Comments = require('./Comments'),
@@ -1860,7 +1861,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./Comments":3,"./Scheduler/Scheduler":4,"./SessionVotes":10,"./Speakers":12,"./TagVotes":15,"./Tags":16,"./TimesheetEditor":17,"./Tracks":20}]},{},[21])
+},{"./Comments":2,"./Scheduler/Scheduler":3,"./SessionVotes":9,"./Speakers":11,"./TagVotes":14,"./Tags":15,"./TimesheetEditor":16,"./Tracks":19}]},{},[20])
 window.ConferenceService = function($, mid) {
   var moduleId = mid;
   var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
@@ -2013,6 +2014,9 @@ window.ConferenceService = function($, mid) {
   this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
     this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
   }
+  this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
+    this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
+  }
 
 }
 
@@ -2092,8 +2096,7 @@ function minutesToTime(mins) {
   return res;
 }
 
-function moveObject(object, dx, dy)
-{
+function moveObject(object, dx, dy) {
   var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
     y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
   object.style.webkitTransform =
@@ -2108,6 +2111,28 @@ if (!String.prototype.startsWith) {
     position = position || 0;
     return this.indexOf(searchString, position) === position;
   };
+}
+
+function pad(number) {
+  if (number < 10) {
+    return '0' + number;
+  }
+  return number;
+}
+
+if (!Date.prototype.toUTCDateTimeDigits) {
+  (function() {
+    Date.prototype.toUTCDateTimeDigits = function() {
+      return this.getUTCFullYear() + '-' +
+        pad(this.getUTCMonth() + 1) + '-' +
+        pad(this.getUTCDate()) +
+        'T' +
+        pad(this.getUTCHours()) + ':' +
+        pad(this.getUTCMinutes()) + ':' +
+        pad(this.getUTCSeconds()) +
+        'Z';
+    };
+  }());
 }
 
 $(document).ready(function() {

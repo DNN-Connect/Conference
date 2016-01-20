@@ -6,6 +6,7 @@ using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Models.Comments;
 using Connect.Conference.Core.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -96,6 +97,48 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        public class pollReturnDTO
+        {
+            public System.DateTime CheckTime { get; set; }
+            public IEnumerable<Comment> Comments { get; set; }
+            public int NewTotalComments { get; set; } = -1;
+        }
+
+        [HttpGet]
+        [DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]
+        public HttpResponseMessage Poll(int conferenceId, int sessionId, int visibility, System.DateTime lastCheck)
+        {
+            switch (visibility)
+            {
+                case 0: // just the authors
+                    if (!ConferenceModuleContext.Security.IsPresenter(sessionId))
+                    {
+                        return AccessViolation("You need to be a presenter to see this");
+                    }
+                    break;
+                case 1: // between authors and managers
+                    if (!(ConferenceModuleContext.Security.IsPresenter(sessionId) | ConferenceModuleContext.Security.CanManage))
+                    {
+                        return AccessViolation("You need to be a presenter or manager to see this");
+                    }
+                    break;
+            }
+            try
+            {
+                var retValue = new pollReturnDTO();
+                retValue.CheckTime = System.DateTime.Now;
+                retValue.Comments = CommentRepository.Instance.GetNewComments(sessionId, visibility, lastCheck).FillStampLines();
+                if (retValue.Comments.Count() > 0)
+                {
+                    retValue.NewTotalComments = CommentRepository.Instance.GetTotalComments(sessionId, visibility);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, retValue);
+            }
+            catch (System.Exception ex)
+            {
+                return ServiceError(ex.Message);
+            }
+        }
     }
 }
 
