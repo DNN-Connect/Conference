@@ -278,6 +278,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
           ondropactivate: function(event) {
             hasReset = false;
             $(event.relatedTarget).width(100);
+            $(event.relatedTarget).popover('hide');
           },
           ondragenter: function(event) {
             var dropzoneElement = event.target;
@@ -307,6 +308,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
           }.bind(this)
         });
         $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
+        $('[data-toggle="popover"]').popover({html:true, trigger: 'hover'});
     }.bind(this));
   },
 
@@ -565,12 +567,18 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
         React.createElement("span", {className: "speaker"}, item.Value)
         );
     });
+    var speakerList = '<br/>';
+    this.props.session.Speakers.forEach(function(el) {
+      speakerList += '<span class="speaker">' + el.Value + '</span>';
+    });
     return (
       React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
-           ref: "Session", "data-sessionid": this.props.session.SessionId, "data-day": this.props.session.DayNr}, 
+           ref: "Session", "data-sessionid": this.props.session.SessionId, "data-day": this.props.session.DayNr, 
+           "data-toggle": "popover", title: this.props.session.Title, 
+           "data-content": this.props.session.Description + speakerList}, 
        React.createElement("div", {className: "panel-body"}, 
-         speakers, React.createElement("br", null), 
+         React.createElement("div", {className: "speakers"}, speakers), 
          this.props.session.Title
        )
       )
@@ -606,12 +614,19 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
         React.createElement("span", {className: "speaker"}, item.Value)
         );
     });
+    var speakerList = '<br/>';
+    this.props.session.Speakers.forEach(function(el) {
+      speakerList += '<span class="speaker">' + el.Value + '</span>';
+    });
     return (
       React.createElement("div", {className: "panel panel-default session", "data-slotkey": "", "data-orig-x": "0", "data-orig-y": "0", 
            "data-sessionid": this.props.session.SessionId, 
-           "data-plenary": this.props.session.IsPlenary}, 
+           "data-plenary": this.props.session.IsPlenary, 
+           "data-toggle": "popover", title: this.props.session.Title, 
+           "data-content": this.props.session.Description + speakerList, 
+           "data-placement": "bottom"}, 
         React.createElement("div", {className: "panel-body"}, 
-         speakers, React.createElement("br", null), 
+         React.createElement("div", {className: "speakers"}, speakers), 
          this.props.session.Title
         )
       )

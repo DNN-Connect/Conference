@@ -84,6 +84,7 @@ var Scheduler = React.createClass({
           ondropactivate: function(event) {
             hasReset = false;
             $(event.relatedTarget).width(100);
+            $(event.relatedTarget).popover('hide');
           },
           ondragenter: function(event) {
             var dropzoneElement = event.target;
@@ -113,6 +114,7 @@ var Scheduler = React.createClass({
           }.bind(this)
         });
         $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
+        $('[data-toggle="popover"]').popover({html:true, trigger: 'hover'});
     }.bind(this));
   },
 
