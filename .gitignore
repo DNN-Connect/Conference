@@ -159,6 +159,7 @@ packages
 *.config
 _References
 _Development
+_Packages
 _BuildSupport
 node_modules
 bower_components

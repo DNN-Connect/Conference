@@ -83,3 +83,140 @@ gulp.task('watch', function() {
   gulp.watch('js/src/**/*.js', ['browserify']);
   gulp.watch('css/src/**/*.less', ['css']);
 });
+
+gulp.task('assemblyInfo', function() {
+  return gulp
+    .src('**/AssemblyInfo.cs')
+    .pipe(assemblyInfo({
+      title: config.dnnModule.friendlyName,
+      description: config.description,
+      version: config.version,
+      fileVersion: config.version,
+      company: config.dnnModule.owner.organization,
+      copyright: function(value) {
+        return 'Copyright ' + new Date().getFullYear() + ' by ' + config.dnnModule.owner.organization;
+      }
+    }))
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('build', ['assemblyInfo'], function() {
+  return gulp.src('./Connect.Conference.csproj')
+    .pipe(msbuild({
+      toolsVersion: 14.0,
+      targets: ['Clean', 'Build'],
+      errorOnFail: true,
+      stdout: true,
+      properties: {
+        Configuration: 'Release',
+        OutputPath: config.dnnModule.pathToAssemblies
+      }
+    }));
+});
+
+gulp.task('packageInstall', ['browserify', 'build'], function() {
+  var packageName = config.dnnModule.fullName + '_' + config.version;
+  var dirFilter = filter(fileTest);
+  return merge(
+      merge(
+        gulp.src([
+          'App_LocalResources/*.resx',
+          '*.ascx',
+          'Views/**/*.cshtml'
+        ], {
+          base: '.'
+        }),
+        gulp.src([
+          '**/*.html'
+        ], {
+          base: '.'
+        })
+        .pipe(dirFilter),
+        gulp.src([
+          '**/*.png',
+          '**/*.gif',
+          '**/*.txt'
+        ], {
+          base: '.'
+        })
+        .pipe(dirFilter),
+        gulp.src(['*.css', 'css/*.css'], {
+          base: '.'
+        })
+        .pipe(minifyCss())
+        .pipe(dirFilter),
+        gulp.src(['js/*.js', '!js/*.min.js'], {
+          base: '.'
+        })
+        .pipe(uglify().on('error', gutil.log)),
+        gulp.src(['js/*.min.js'], {
+          base: '.'
+        })
+      )
+      .pipe(zip('Resources.zip')),
+      gulp.src(config.dnnModule.pathToSupplementaryFiles + '/*.dnn')
+      .pipe(manifest(config)),
+      gulp.src([config.dnnModule.pathToAssemblies + '/*.dll',
+        config.dnnModule.pathToScripts + '/*.SqlDataProvider',
+        config.dnnModule.pathToSupplementaryFiles + '/License.txt',
+        config.dnnModule.pathToSupplementaryFiles + '/ReleaseNotes.txt'
+      ]),
+      gulp.src(config.dnnModule.pathToSupplementaryFiles + '/ReleaseNotes.md')
+      .pipe(markdown())
+      .pipe(rename('ReleaseNotes.txt'))
+    )
+    .pipe(zip(packageName + '_Install.zip'))
+    .pipe(gulp.dest(config.dnnModule.packagesPath));
+});
+
+gulp.task('packageSource', ['browserify', 'build'], function() {
+  var packageName = config.dnnModule.fullName + '_' + config.version;
+  var dirFilter = filter(fileTest);
+  return merge(
+      gulp.src(['**/*.html',
+        '**/*.png',
+        '**/*.gif',
+        '**/*.css',
+        'js/**/*.js',
+        '**/*.??proj',
+        '**/*.sln',
+        '**/*.json',
+        '**/*.cs',
+        '**/*.vb',
+        '**/*.resx',
+        '**/*.ascx',
+        '**/*.cshtml',
+        '**/*.less',
+        config.dnnModule.pathToSupplementaryFiles + '**/*.*'
+      ], {
+        base: '.'
+      })
+      .pipe(dirFilter)
+      .pipe(zip('Resources.zip')),
+      gulp.src(config.dnnModule.pathToSupplementaryFiles + '/*.dnn')
+      .pipe(manifest(config)),
+      gulp.src([config.dnnModule.pathToAssemblies + '/*.dll',
+        config.dnnModule.pathToScripts + '/*.SqlDataProvider',
+        config.dnnModule.pathToSupplementaryFiles + '/License.txt',
+        config.dnnModule.pathToSupplementaryFiles + '/ReleaseNotes.txt'
+      ])
+    )
+    .pipe(zip(packageName + '_Source.zip'))
+    .pipe(gulp.dest(config.dnnModule.packagesPath));
+})
+
+gulp.task('package', ['packageInstall', 'packageSource'], function() {
+  return null;
+})
+
+function fileTest(file) {
+  var res = false;
+  for (var i = config.dnnModule.excludeFilter.length - 1; i >= 0; i--) {
+    res = res | file.relative.startsWith(config.dnnModule.excludeFilter[i]) | file.relative.indexOf('/obj/') > -1;
+  };
+  return !res;
+}
+
+function startsWith(str, strToSearch) {
+  return str.indexOf(strToSearch) === 0;
+}

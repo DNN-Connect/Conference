@@ -1,8 +1,6 @@
 $(function() {
 
-  interact('.timesheet-box')
-
-  .draggable({
+  interact('.timesheet-box').draggable({
     inertia: false,
     restrict: {
       restriction: "parent",
@@ -10,9 +8,7 @@ $(function() {
     },
     autoScroll: false,
     onend: function(event) {}
-  })
-
-  .on('dragmove', function(event) {
+  }).on('dragmove', function(event) {
     var target = event.target,
       x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
       hour = parseFloat(target.getAttribute('data-scale')),
@@ -30,9 +26,7 @@ $(function() {
     startSpan.style.transform =
       'translate(' + roundX + 'px, 0px)';
     showTime(target);
-  })
-
-  .resizable({
+  }).resizable({
     preserveAspectRatio: false,
     edges: {
       left: false,
@@ -40,9 +34,7 @@ $(function() {
       bottom: false,
       top: false
     }
-  })
-
-  .on('resizemove', function(event) {
+  }).on('resizemove', function(event) {
     var target = event.target,
       dragLen = event.rect.width,
       hour = parseFloat(target.getAttribute('data-scale')),
@@ -53,13 +45,7 @@ $(function() {
     target.setAttribute('data-length', newMins);
     target.style.width = roundLen + 'px';
     showTime(target);
-  })
-
-  .('drop', function(event) {
-    console.log(event);
-  })
-
-  ;
+  });
 
   function showTime(target) {
     var start = parseInt(target.getAttribute('data-start')),
