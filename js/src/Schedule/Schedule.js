@@ -36,7 +36,7 @@ var Schedule = React.createClass({
         }
       }
       scheduleDays.push(
-        <ScheduleDay day={i} slots={daySlots} 
+        <ScheduleDay conference={this.props.conference} day={i} slots={daySlots} 
            start={Math.floor(daySlots[0].StartMinutes/60) * 60 - 60}
            finish={120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60}
            locationList={this.state.locationList} 

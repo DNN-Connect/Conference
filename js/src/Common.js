@@ -113,6 +113,13 @@ if (!Date.prototype.toUTCDateTimeDigits) {
   }());
 }
 
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
 $(document).ready(function() {
   var el = $('.ModConnectConferenceC .container');
   if (el != undefined) {

@@ -30,9 +30,12 @@ var SchedulerDay = React.createClass({
           );
       }
     }
+    var date = new Date(this.props.conference.StartDate);
+    date = date.addDays(this.props.day - 1);
+    var dateString = moment(date).format('dddd MMM Do');
     return (
       <div>
-        <h2>{this.props.day}</h2>
+        <h2>{dateString}</h2>
         <svg xmlns="http://www.w3.org/2000/svg"
              className="schedulerDay" 
              viewBox={viewBox}>

@@ -230,7 +230,7 @@ var Schedule = React.createClass({displayName: "Schedule",
         }
       }
       scheduleDays.push(
-        React.createElement(ScheduleDay, {day: i, slots: daySlots, 
+        React.createElement(ScheduleDay, {conference: this.props.conference, day: i, slots: daySlots, 
            start: Math.floor(daySlots[0].StartMinutes/60) * 60 - 60, 
            finish: 120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60, 
            locationList: this.state.locationList, 
@@ -308,9 +308,12 @@ var ScheduleDay = React.createClass({displayName: "ScheduleDay",
         }
       }
     }
+    var date = new Date(this.props.conference.StartDate);
+    date = date.addDays(this.props.day - 1);
+    var dateString = moment(date).format('dddd MMM Do');
     return (
       React.createElement("div", null, 
-        React.createElement("h2", null, this.props.day), 
+        React.createElement("h2", null, dateString), 
         React.createElement("svg", {xmlns: "http://www.w3.org/2000/svg", 
              className: "schedulerDay", 
              viewBox: viewBox}, 
@@ -491,7 +494,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
         }
       }
       scheduleDays.push(
-        React.createElement(SchedulerDay, {day: i, slots: daySlots, 
+        React.createElement(SchedulerDay, {conference: this.props.conference, day: i, slots: daySlots, 
            start: Math.floor(daySlots[0].StartMinutes/60) * 60 - 60, 
            finish: 120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60, 
            locationList: this.state.locationList, 
@@ -605,7 +608,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
 
   tryRemoveSession: function(session) {
     var sessionId = session.getAttribute('data-sessionid');
-    this.service.tryRemoveSession(this.props.conferenceId, sessionId, function(data) {
+    this.service.tryRemoveSession(this.props.conference.conferenceId, sessionId, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data
@@ -628,7 +631,7 @@ var Scheduler = React.createClass({displayName: "Scheduler",
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    this.service.tryMoveSession(this.props.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
+    this.service.tryMoveSession(this.props.conference.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data
@@ -681,9 +684,12 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
           );
       }
     }
+    var date = new Date(this.props.conference.StartDate);
+    date = date.addDays(this.props.day - 1);
+    var dateString = moment(date).format('dddd MMM Do');
     return (
       React.createElement("div", null, 
-        React.createElement("h2", null, this.props.day), 
+        React.createElement("h2", null, dateString), 
         React.createElement("svg", {xmlns: "http://www.w3.org/2000/svg", 
              className: "schedulerDay", 
              viewBox: viewBox}, 
@@ -2109,24 +2115,24 @@ var TimesheetEditor = require('./TimesheetEditor'),
       });
       $('.schedulerComponent').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
-        var conferenceId = $(el).data('conference');
+        var conference = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
         var slots = $(el).data('slots');
         var sessions = $(el).data('sessions');
         var gridHeight = $(el).data('gridheight');
         var locations = $(el).data('locations');
-        React.render(React.createElement(Scheduler, {moduleId: moduleId, conferenceId: conferenceId, locations: locations, 
+        React.render(React.createElement(Scheduler, {moduleId: moduleId, conference: conference, locations: locations, 
                       nrDays: nrDays, slots: slots, sessions: sessions, gridHeight: gridHeight}), el);
       });
       $('.scheduleComponent').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
-        var conferenceId = $(el).data('conference');
+        var conference = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
         var slots = $(el).data('slots');
         var sessions = $(el).data('sessions');
         var gridHeight = $(el).data('gridheight');
         var locations = $(el).data('locations');
-        React.render(React.createElement(Schedule, {moduleId: moduleId, conferenceId: conferenceId, locations: locations, 
+        React.render(React.createElement(Schedule, {moduleId: moduleId, conference: conference, locations: locations, 
                       nrDays: nrDays, slots: slots, sessions: sessions, gridHeight: gridHeight}), el);
       });
     },
@@ -2417,6 +2423,13 @@ if (!Date.prototype.toUTCDateTimeDigits) {
         'Z';
     };
   }());
+}
+
+Date.prototype.addDays = function(days)
+{
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
 }
 
 $(document).ready(function() {

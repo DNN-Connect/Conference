@@ -100,24 +100,24 @@ var TimesheetEditor = require('./TimesheetEditor'),
       });
       $('.schedulerComponent').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
-        var conferenceId = $(el).data('conference');
+        var conference = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
         var slots = $(el).data('slots');
         var sessions = $(el).data('sessions');
         var gridHeight = $(el).data('gridheight');
         var locations = $(el).data('locations');
-        React.render(<Scheduler moduleId={moduleId} conferenceId={conferenceId} locations={locations}
+        React.render(<Scheduler moduleId={moduleId} conference={conference} locations={locations}
                       nrDays={nrDays} slots={slots} sessions={sessions} gridHeight={gridHeight} />, el);
       });
       $('.scheduleComponent').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
-        var conferenceId = $(el).data('conference');
+        var conference = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
         var slots = $(el).data('slots');
         var sessions = $(el).data('sessions');
         var gridHeight = $(el).data('gridheight');
         var locations = $(el).data('locations');
-        React.render(<Schedule moduleId={moduleId} conferenceId={conferenceId} locations={locations}
+        React.render(<Schedule moduleId={moduleId} conference={conference} locations={locations}
                       nrDays={nrDays} slots={slots} sessions={sessions} gridHeight={gridHeight} />, el);
       });
     },

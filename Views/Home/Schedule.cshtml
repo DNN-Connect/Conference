@@ -16,7 +16,8 @@
  <div class="row">
   <div class="col-xs-12">
    <div class="scheduleComponent" data-moduleid="@Dnn.ModuleContext.ModuleId"
-        data-conference="@Model.ConferenceId" data-nrdays="@(Model.EndDate != null ? ((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays) : 1)"
+        data-conference="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model))"
+        data-nrdays="@(Model.EndDate != null ? ((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays) : 1)"
         data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(SlotRepository.Instance.GetSlots(Model.ConferenceId).OrderBy(s => s.Start)))"
         data-sessions="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort)))"
         data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))"

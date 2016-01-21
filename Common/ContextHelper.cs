@@ -100,7 +100,7 @@ namespace Connect.DNN.Modules.Conference.Common
             AddBootstrapJs();
             AddReactJs();
             AddScript("interact.min.js", "interact", "1.2.6");
-            AddScript("moment.min.js", "moment", "2.10.6");
+            AddScript("moment-with-locales.min.js", "moment", "2.10.6");
             AddScript("bootstrap-datetimepicker.min.js", "bootstrap-datetimepicker", "4.17.37");
             AddScript("Conference.js");
         }

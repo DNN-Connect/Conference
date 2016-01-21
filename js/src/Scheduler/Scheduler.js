@@ -40,7 +40,7 @@ var Scheduler = React.createClass({
         }
       }
       scheduleDays.push(
-        <SchedulerDay day={i} slots={daySlots} 
+        <SchedulerDay conference={this.props.conference} day={i} slots={daySlots} 
            start={Math.floor(daySlots[0].StartMinutes/60) * 60 - 60}
            finish={120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60}
            locationList={this.state.locationList} 
@@ -154,7 +154,7 @@ var Scheduler = React.createClass({
 
   tryRemoveSession: function(session) {
     var sessionId = session.getAttribute('data-sessionid');
-    this.service.tryRemoveSession(this.props.conferenceId, sessionId, function(data) {
+    this.service.tryRemoveSession(this.props.conference.conferenceId, sessionId, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data
@@ -177,7 +177,7 @@ var Scheduler = React.createClass({
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    this.service.tryMoveSession(this.props.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
+    this.service.tryMoveSession(this.props.conference.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data
