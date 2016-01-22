@@ -425,7 +425,11 @@ var ScheduleScheduledSession = React.createClass({displayName: "ScheduleSchedule
   render: function() {
     var speakers = this.props.session.Speakers.map(function(item) {
       return (
-        React.createElement("span", {className: "speaker"}, item.Value)
+        React.createElement("span", {className: "speaker"}, 
+         React.createElement("a", {href: window.speakerDetailUrl.replace('-1', item.Key)}, 
+          item.Value
+         )
+        )
         );
     });
     var speakerList = '<br/>';
@@ -440,7 +444,9 @@ var ScheduleScheduledSession = React.createClass({displayName: "ScheduleSchedule
            "data-content": this.props.session.Description + speakerList}, 
        React.createElement("div", {className: "panel-body"}, 
          React.createElement("div", {className: "speakers"}, speakers), 
+         React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.session.SessionId.toString())}, 
          this.props.session.Title
+         )
        )
       )
     );
@@ -946,7 +952,7 @@ var SessionVote = React.createClass({displayName: "SessionVote",
     });
     return (
       React.createElement("tr", null, 
-       React.createElement("td", null, React.createElement("p", null, this.props.item.Title), 
+       React.createElement("td", null, React.createElement("p", null, React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}, this.props.item.Title)), 
         React.createElement("p", {className: "itemDetails"}, 
         React.createElement("span", {className: "glyphicon glyphicon-user"}), speakers, 
         React.createElement("span", {className: "glyphicon glyphicon-tags"}), tags

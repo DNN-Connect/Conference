@@ -56,7 +56,7 @@
     @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
     {
     <tr>
-     <td>@s.DisplayName</td>
+     <td><a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">@s.DisplayName</a></td>
      <td class="nrcol">@s.NrSessions</td>
     </tr>
     }

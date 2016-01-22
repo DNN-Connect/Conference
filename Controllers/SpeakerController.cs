@@ -20,6 +20,13 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        public ActionResult View(int conferenceId, int speakerId)
+        {
+            var speaker = _repository.GetSpeaker(conferenceId, speakerId);
+            return View(speaker);
+        }
+
+        [HttpGet]
         public ActionResult Edit(int conferenceId, int speakerId)
         {
             if (!ConferenceModuleContext.Security.CanManage)

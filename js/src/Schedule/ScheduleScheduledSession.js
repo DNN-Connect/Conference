@@ -8,7 +8,11 @@ var ScheduleScheduledSession = React.createClass({
   render: function() {
     var speakers = this.props.session.Speakers.map(function(item) {
       return (
-        <span className="speaker">{item.Value}</span>
+        <span className="speaker">
+         <a href={window.speakerDetailUrl.replace('-1', item.Key)}>
+          {item.Value}
+         </a>
+        </span>
         );
     });
     var speakerList = '<br/>';
@@ -22,8 +26,8 @@ var ScheduleScheduledSession = React.createClass({
            data-toggle="popover" title={this.props.session.Title} 
            data-content={this.props.session.Description + speakerList}>
        <div className="panel-body">
-         <a href={window.sessionDetailUrl.replace('-1', this.props.session.SessionId.toString())}>
          <div className="speakers">{speakers}</div>
+         <a href={window.sessionDetailUrl.replace('-1', this.props.session.SessionId.toString())}>
          {this.props.session.Title} 
          </a>         
        </div>

@@ -242,6 +242,9 @@
   <ItemGroup>
     <Content Include="Views\Home\Schedule.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Speaker\View.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
