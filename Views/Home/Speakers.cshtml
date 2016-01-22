@@ -1,0 +1,32 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+}
+
+<div class="container">
+ <div class="row">
+  <div class="col-sm-12">
+   @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.Sort))
+   {
+   <div class="panel panel-info speakerListDetail">
+    <div class="panel-heading">
+     <h2 class="panel-title">
+      <a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">@s.DisplayName</a>
+     </h2>
+    </div>
+    <div class="panel-body">
+     <div class="row">
+      <a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">
+       <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=128&h=128&userId=@s.UserId" />
+      </a>
+      <p>@s.Company</p>
+     </div>
+    </div>
+   </div>
+   }
+  </div>
+ </div>
+</div>
