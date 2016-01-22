@@ -22,8 +22,10 @@ var ScheduleScheduledSession = React.createClass({
            data-toggle="popover" title={this.props.session.Title} 
            data-content={this.props.session.Description + speakerList}>
        <div className="panel-body">
+         <a href={window.sessionDetailUrl.replace('-1', this.props.session.SessionId.toString())}>
          <div className="speakers">{speakers}</div>
-         {this.props.session.Title}          
+         {this.props.session.Title} 
+         </a>         
        </div>
       </div>
     );

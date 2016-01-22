@@ -40,7 +40,7 @@ var SessionVote = React.createClass({
     });
     return (
       <tr>
-       <td><p>{this.props.item.Title}</p>
+       <td><p><a href={window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}>{this.props.item.Title}</a></p>
         <p className="itemDetails">
         <span className="glyphicon glyphicon-user"></span>{speakers}
         <span className="glyphicon glyphicon-tags"></span>{tags}

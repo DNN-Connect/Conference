@@ -7,6 +7,7 @@
     ConferenceModuleContext.AddEditScripts();
     var canVote = (ConferenceModuleContext.Security.UserId != -1);
     canVote = canVote & (Model.StartDate != null && Model.StartDate > DateTime.Now);
+    canVote = canVote & Model.SessionVoting;
 }
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -63,3 +64,7 @@
   </div>
  </div>
 </div>
+
+<script type="text/javascript">
+ window.sessionDetailUrl = '@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = -1 })';
+</script>
