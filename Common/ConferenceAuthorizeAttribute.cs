@@ -13,9 +13,8 @@ namespace Connect.DNN.Modules.Conference.Common
         Admin = 4,
         Host = 5,
         SessionSubmit = 6,
-        SessionApprove = 7,
-        AttendConference = 8,
-        ManageConference = 9
+        AttendConference = 7,
+        ManageConference = 8
     }
 
     public class ConferenceAuthorizeAttribute : AuthorizeAttributeBase, IOverrideDefaultAuthLevel
@@ -55,8 +54,6 @@ namespace Connect.DNN.Modules.Conference.Common
                     return security.CanView;
                 case SecurityAccessLevel.SessionSubmit:
                     return security.CanSubmitSessions;
-                case SecurityAccessLevel.SessionApprove:
-                    return security.CanApproveSessions;
                 case SecurityAccessLevel.AttendConference:
                     return security.CanAttend;
                 case SecurityAccessLevel.ManageConference:

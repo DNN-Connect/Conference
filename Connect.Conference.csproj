@@ -107,13 +107,9 @@
   <ItemGroup>
     <Compile Include="Api\AttendeesController.cs" />
     <Compile Include="Api\CommentsController.cs" />
-    <Compile Include="Api\ConferencesController.cs" />
     <Compile Include="Api\LocationsController.cs" />
-    <Compile Include="Api\SessionAttendeesController.cs" />
     <Compile Include="Api\SessionsController.cs" />
     <Compile Include="Api\SessionSpeakersController.cs" />
-    <Compile Include="Api\SessionTagsController.cs" />
-    <Compile Include="Api\SessionTracksController.cs" />
     <Compile Include="Api\SlotsController.cs" />
     <Compile Include="Api\SpeakersController.cs" />
     <Compile Include="Api\TagsController.cs" />
@@ -244,6 +240,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Speaker\View.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Speakers.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

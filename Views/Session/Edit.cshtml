@@ -4,7 +4,7 @@
 @using Connect.Conference.Core.Models.Sessions;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage || ConferenceModuleContext.Security.CanApproveSessions);
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddEditScripts();
