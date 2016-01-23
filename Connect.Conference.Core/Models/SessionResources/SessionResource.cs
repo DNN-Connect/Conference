@@ -35,6 +35,10 @@ namespace Connect.Conference.Core.Models.SessionResources
              res.ResourceDescription = ResourceDescription;
              res.ResourceType = ResourceType;
              res.Visibility = Visibility;
+  res.CreatedByUserID = CreatedByUserID;
+  res.CreatedOnDate = CreatedOnDate;
+  res.LastModifiedByUserID = LastModifiedByUserID;
+  res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

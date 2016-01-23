@@ -44,8 +44,8 @@ namespace Connect.Conference.Core.Models.SessionResources
      return SessionId.ToString(strFormat, formatProvider);
     case "resourcelink": // NVarChar
      return PropertyAccess.FormatString(ResourceLink, strFormat);
-    case "resourcedescription": // NVarCharMax
-     if (ResourceDescription == null);
+    case "resourcedescription": // NVarChar
+     if (ResourceDescription == null)
      {
          return "";
      };

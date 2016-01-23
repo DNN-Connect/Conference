@@ -34,10 +34,10 @@ namespace Connect.Conference.Core.Repositories
                 return rep.GetById(sessionResourceId, sessionId);
             }
         }
-        public int AddSessionResource(SessionResourceBase sessionResource, int userId)
+        public int AddSessionResource(ref SessionResourceBase sessionResource, int userId)
         {
             Requires.NotNull(sessionResource);
-            Requires.PropertyNotNegative(sessionResource, "PortalId");
+            Requires.PropertyNotNegative(sessionResource, "SessionId");
             sessionResource.CreatedByUserID = userId;
             sessionResource.CreatedOnDate = DateTime.Now;
             sessionResource.LastModifiedByUserID = userId;
@@ -59,6 +59,14 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete(sessionResource);
             }
         }
+        public void DeleteSessionResource(int sessionId, int sessionResourceId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var rep = context.GetRepository<SessionResourceBase>();
+                rep.Delete("WHERE SessionId = @0 AND SessionResourceId = @1", sessionId, sessionResourceId);
+            }
+        }
         public void UpdateSessionResource(SessionResourceBase sessionResource, int userId)
         {
             Requires.NotNull(sessionResource);
@@ -77,8 +85,9 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<SessionResource> GetSessionResources(int sessionId);
         SessionResource GetSessionResource(int sessionId, int sessionResourceId);
-        int AddSessionResource(SessionResourceBase sessionResource, int userId);
+        int AddSessionResource(ref SessionResourceBase sessionResource, int userId);
         void DeleteSessionResource(SessionResourceBase sessionResource);
+        void DeleteSessionResource(int sessionId, int sessionResourceId);
         void UpdateSessionResource(SessionResourceBase sessionResource, int userId);
     }
 }
