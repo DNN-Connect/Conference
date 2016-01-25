@@ -44,6 +44,7 @@ var SessionVote = React.createClass({
         <p className="itemDetails">
         <span className="glyphicon glyphicon-user"></span>{speakers}
         <span className="glyphicon glyphicon-tags"></span>{tags}
+        <span className="glyphicon glyphicon-paperclip"></span>{this.props.item.NrResources}
         </p>
        </td>
        <td className="nrcol">{this.props.item.NrVotes}</td>

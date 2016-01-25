@@ -32,6 +32,8 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int? NrVotes { get; set; }
         [DataMember]
+        public int? NrResources { get; set; }
+        [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
         public string LastModifiedByUser { get; set; }

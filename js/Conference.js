@@ -1363,7 +1363,8 @@ var SessionVote = React.createClass({displayName: "SessionVote",
        React.createElement("td", null, React.createElement("p", null, React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}, this.props.item.Title)), 
         React.createElement("p", {className: "itemDetails"}, 
         React.createElement("span", {className: "glyphicon glyphicon-user"}), speakers, 
-        React.createElement("span", {className: "glyphicon glyphicon-tags"}), tags
+        React.createElement("span", {className: "glyphicon glyphicon-tags"}), tags, 
+        React.createElement("span", {className: "glyphicon glyphicon-paperclip"}), this.props.item.NrResources
         )
        ), 
        React.createElement("td", {className: "nrcol"}, this.props.item.NrVotes), 
