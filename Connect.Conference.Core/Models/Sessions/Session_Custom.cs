@@ -40,7 +40,7 @@ namespace Connect.Conference.Core.Models.Sessions
         {
             get
             {
-                return Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId).OrderBy(s => s.Sort).Select(s => new KeyValuePair<int,string>(s.SpeakerId, s.DisplayName)).ToList();
+                return Repositories.SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(SessionId).OrderBy(s => s.Sort).Select(s => new KeyValuePair<int, string>(s.SpeakerId, s.DisplayName)).ToList();
             }
         }
 

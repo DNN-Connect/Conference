@@ -7,7 +7,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
     TagVotes = require('./TagVotes'),
     SessionVotes = require('./SessionVotes'),
     Scheduler = require('./Scheduler/Scheduler'),
-    Schedule = require('./Schedule/Schedule');
+    Schedule = require('./Schedule/Schedule'),
+    Resources = require('./Resources/Resources');
 
 (function($, window, document, undefined) {
 
@@ -119,6 +120,17 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var locations = $(el).data('locations');
         React.render(<Schedule moduleId={moduleId} conference={conference} locations={locations}
                       nrDays={nrDays} slots={slots} sessions={sessions} gridHeight={gridHeight} />, el);
+      });
+      $('.resourcesComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var tabId = $(el).data('tabid');
+        var conferenceId = $(el).data('conferenceid');
+        var sessionId = $(el).data('sessionid');
+        var resources = $(el).data('resources');
+        var canAdd = $(el).data('canadd');
+        var resourceDir = $(el).data('resourcedir');
+        React.render(<Resources moduleId={moduleId} conferenceId={conferenceId} resources={resources}
+                      canAdd={canAdd} tabId={tabId} sessionId={sessionId} resourceDir={resourceDir} />, el);
       });
     },
 

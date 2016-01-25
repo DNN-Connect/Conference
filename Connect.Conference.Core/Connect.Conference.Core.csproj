@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\AttendeeStatus.cs" />
+    <Compile Include="Common\Globals.cs" />
+    <Compile Include="Common\ResourceType.cs" />
     <Compile Include="Common\SessionStatus.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />

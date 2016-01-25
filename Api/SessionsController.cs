@@ -8,6 +8,8 @@ using System.Web;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Connect.Conference.Core.Repositories;
+using DotNetNuke.Entities.Host;
+using Connect.Conference.Core.Models.SessionResources;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -153,6 +155,7 @@ namespace Connect.DNN.Modules.Conference.Api
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
         }
+
     }
 }
 

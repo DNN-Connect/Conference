@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Connect.Conference.Core.Models.Comments;
 using DotNetNuke.Collections;
+using System.Net;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -93,6 +94,22 @@ namespace Connect.DNN.Modules.Conference.Common
         public static IEnumerable<AutoCompletePair> ToAutoCompleteList(this IEnumerable<Connect.Conference.Core.Models.Tracks.Track> trackList)
         {
             return trackList.Select(t => new AutoCompletePair() { label = t.Title, value = t.TrackId.ToString() });
+        }
+
+        public static bool IsValidUrl(this string url)
+        {
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                request.Method = "HEAD";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                response.Close();
+                return (response.StatusCode == HttpStatusCode.OK);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
     }

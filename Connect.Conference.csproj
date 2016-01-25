@@ -108,6 +108,7 @@
     <Compile Include="Api\AttendeesController.cs" />
     <Compile Include="Api\CommentsController.cs" />
     <Compile Include="Api\LocationsController.cs" />
+    <Compile Include="Api\SessionResourcesController.cs" />
     <Compile Include="Api\SessionsController.cs" />
     <Compile Include="Api\SessionSpeakersController.cs" />
     <Compile Include="Api\SlotsController.cs" />

@@ -153,5 +153,17 @@ window.ConferenceService = function($, mid) {
   this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
     this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
   }
+  this.addUrl = function(conferenceId, sessionId, url, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
+  }
+  this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
+  this.deleteResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Delete', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
+  this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
 
 }
