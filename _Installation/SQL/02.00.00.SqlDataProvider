@@ -1,0 +1,1680 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_AttendeeListSession') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}Connect_Conference_AttendeeListSession
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionRegistrations') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}Connect_Conference_SessionRegistrations
+GO
+
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_TrackLang] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_TrackLang_{objectQualifier}Connect_Conference_Track]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Track] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Track_{objectQualifier}Connect_Conference_Resource]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Track] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Track_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Tag] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Tag_{objectQualifier}Connect_Conference_Session]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SpeakerLang] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SpeakerLang_{objectQualifier}Connect_Conference_Speaker]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Speaker] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Speaker_{objectQualifier}Connect_Conference_Resource]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Speaker] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Speaker_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionTrack] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionTrack_{objectQualifier}Connect_Conference_Track]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionTrack] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionTrack_{objectQualifier}Connect_Conference_Session]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionSpeaker] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionSpeaker_{objectQualifier}Connect_Conference_Speaker]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionSpeaker] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionSpeaker_{objectQualifier}Connect_Conference_Session]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionLang] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionLang_{objectQualifier}Connect_Conference_Session]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionAttendee] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionAttendee_{objectQualifier}Connect_Conference_Session]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_SessionAttendee] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_SessionAttendee_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Session] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Session_{objectQualifier}Connect_Conference_Resource]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Session] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Session_{objectQualifier}Connect_Conference_Location1]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Session] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Session_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Session] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Session_{objectQualifier}Connect_Conference_Category]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Resource] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Resource_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Location] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Location_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Event] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Event_{objectQualifier}Connect_Conference_Resource]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Contact] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Contact_{objectQualifier}Connect_Conference_Speaker]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_CategoryLang] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_CategoryLang_{objectQualifier}Connect_Conference_Category]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Category] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Category_{objectQualifier}Connect_Conference_Event]
+GO
+ALTER TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Attendee] DROP CONSTRAINT [FK_{objectQualifier}Connect_Conference_Attendee_{objectQualifier}Connect_Conference_Event]
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendee', '{objectQualifier}Connect_Conference_Attendees', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Category', '{objectQualifier}Connect_Conference_Categories', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLang', '{objectQualifier}Connect_Conference_CategoryLocalizations', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contact', '{objectQualifier}Connect_Conference_Contacts', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Event', '{objectQualifier}Connect_Conference_Conferences', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Location', '{objectQualifier}Connect_Conference_Locations', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resource', '{objectQualifier}Connect_Conference_Resources', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Session', '{objectQualifier}Connect_Conference_Sessions', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendee', '{objectQualifier}Connect_Conference_SessionAttendees', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLang', '{objectQualifier}Connect_Conference_SessionLocalizations', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeaker', '{objectQualifier}Connect_Conference_SessionSpeakers', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionTrack', '{objectQualifier}Connect_Conference_SessionTracks', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speaker', '{objectQualifier}Connect_Conference_Speakers', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLang', '{objectQualifier}Connect_Conference_SpeakerLocalizations', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tag', '{objectQualifier}Connect_Conference_Tags', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Track', '{objectQualifier}Connect_Conference_Tracks', 'OBJECT'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLang', '{objectQualifier}Connect_Conference_TrackLocalizations', 'OBJECT'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.Id', 'AttendeeId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Categories.Id', 'CategoryId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations.Id', 'CategoryLocalizationId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contacts.Id', 'ContactId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Conferences.Id', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.Id', 'LocationId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.Id', 'ResourceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees.Id', 'SessionAttendeeId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations.Id', 'SessionLocalizationId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.Id', 'SessionId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations.Id', 'SpeakerLocalizationId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.Id', 'SpeakerId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tags.Id', 'TagId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations.Id', 'TrackLocalizationId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.Id', 'TrackId', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Categories.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contacts.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Conferences.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.CreatedBy', 'CreatedByUserID', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Categories.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contacts.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Conferences.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.CreatedDate', 'CreatedOnDate', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Categories.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contacts.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Conferences.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.ModifiedBy', 'LastModifiedByUserID', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Categories.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Contacts.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Conferences.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.ModifiedDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tags.CRUser', 'CreatedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tags.CRDate', 'CreatedOnDate', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tags.LMUser', 'LastModifiedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tags.LMDate', 'LastModifiedOnDate', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.ApprovedBy', 'ApprovedByUserID', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.ApprovedDate', 'ApprovedOnDate', 'COLUMN'
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Attendees.EventId', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.EventId', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Resources.EventId', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Sessions.EventId', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Speakers.EventId', 'ConferenceId', 'COLUMN'
+GO
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Tracks.EventId', 'ConferenceId', 'COLUMN'
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tags') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tags
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+SET UserId=a.UserID
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON a.Email=u.Email
+GO
+
+IF EXISTS (SELECT * FROM {databaseOwner}sysobjects WHERE id = object_id(N'p_base64_encode') AND xtype IN (N'FN', N'IF', N'TF'))
+DROP FUNCTION {databaseOwner}[p_base64_encode]
+GO
+
+CREATE FUNCTION {databaseOwner}[p_base64_encode] (@data VARBINARY(max)) RETURNS VARCHAR(max)
+WITH SCHEMABINDING, RETURNS NULL ON NULL INPUT
+BEGIN
+RETURN (
+SELECT [text()] = @data
+FOR XML PATH('')
+)
+END
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[p_Create_ASP_User]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[p_Create_ASP_User]
+GO
+
+CREATE PROCEDURE p_Create_ASP_User
+@FirstName nvarchar(50),
+@LastName nvarchar(50),
+@PortalID int
+
+AS
+BEGIN
+DECLARE @CurrentTimeUtc datetime
+DECLARE @CreateDate datetime
+DECLARE @PasswordFormat int
+DECLARE @UniqueEmail int
+DECLARE @IsApproved bit
+DECLARE @ApplicationName nvarchar(256)
+DECLARE @salt uniqueidentifier
+DECLARE @encoded_hashed_password nvarchar(128)
+DECLARE @encoded_salt nvarchar(128)
+DECLARE @RC int
+DECLARE @UserId uniqueidentifier
+DECLARE @DisplayName nvarchar(200)
+SET @DisplayName = LTRIM(@FirstName + ' ' + @LastName)
+DECLARE @uid int
+DECLARE @ClearTextPassword nvarchar(100) = 'noaccess'
+DECLARE @username nvarchar(200)
+SET @username = @LastName + @FirstName
+DECLARE @email nvarchar(200)
+SET @email = @LastName + @FirstName + '@fake.com'
+
+--SET CONSTANTS
+SET @ApplicationName = 'DotNetNuke'
+SET @IsApproved = 1
+SET @UniqueEmail = 0
+SET @PasswordFormat = 0
+
+--SET VARIABLES
+SET @salt = NEWID()
+SET @encoded_salt = {databaseOwner}p_base64_encode(@salt)
+SET @UserId = NEWID()
+SET @CurrentTimeUtc = GetDate()
+SET @CreateDate = GetDate()
+
+--SET EMPLOYER INFORMATION
+SET @encoded_hashed_password = {databaseOwner}p_base64_encode(HASHBYTES('SHA1', Cast(@salt as varbinary(MAX)) + CAST(@ClearTextPassword AS varbinary(MAX)) ))
+ 
+EXECUTE @RC = aspnet_Membership_CreateUser
+@ApplicationName
+,@username
+,@ClearTextPassword
+,@encoded_salt
+,@email
+,''
+,''
+,@IsApproved
+,@CurrentTimeUtc
+,@CreateDate
+,@UniqueEmail
+,@PasswordFormat
+,@UserId OUTPUT
+
+EXECUTE @uid = {databaseOwner}AddUser @PortalID, @UserName, @FirstName, @LastName, null, 0, @Email, @DisplayName, 1, 0, -1
+
+SELECT @uid
+
+END
+
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+SET UserId=u.UserID
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON s.Lastname=u.LastName AND s.Firstname=u.FirstName
+GO
+
+DECLARE
+ @DisplayName nvarchar(150),
+ @Firstname nvarchar(150),
+ @Lastname nvarchar(150),
+ @PortalId int,
+ @uid int
+
+DECLARE db_cursor CURSOR FOR  
+SELECT DisplayName, Firstname, Lastname, c.PortalId
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId = s.ConferenceId
+WHERE UserId IS NULL
+
+OPEN db_cursor  
+FETCH NEXT FROM db_cursor INTO @DisplayName, @Firstname, @Lastname, @PortalId
+
+WHILE @@FETCH_STATUS = 0  
+BEGIN
+ EXECUTE @uid = {databaseOwner}p_Create_ASP_User @Firstname, @Lastname, @PortalId;
+ FETCH NEXT FROM db_cursor INTO @DisplayName, @Firstname, @Lastname, @PortalId;
+END  
+
+CLOSE db_cursor  
+DEALLOCATE db_cursor 
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+SET UserId=u.UserID
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON s.Lastname=u.LastName AND s.Firstname=u.FirstName
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[p_Create_ASP_User]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[p_Create_ASP_User]
+GO
+
+IF EXISTS (SELECT * FROM {databaseOwner}sysobjects WHERE id = object_id(N'p_base64_encode') AND xtype IN (N'FN', N'IF', N'TF'))
+DROP FUNCTION {databaseOwner}[p_base64_encode]
+GO
+
+
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+DROP COLUMN Firstname
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+DROP COLUMN Lastname
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+DROP COLUMN Email
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN DisplayName
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN Firstname
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN Lastname
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN ImageId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN Title
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN Country
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+DROP CONSTRAINT PK_{objectQualifier}Connect_Conference_Attendee
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+DROP COLUMN AttendeeId
+GO
+DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+WHERE UserId IS NULL
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+ALTER COLUMN UserId INT NOT NULL
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees ADD CONSTRAINT
+	PK_{objectQualifier}Connect_Conference_Attendees PRIMARY KEY CLUSTERED 
+	(
+	ConferenceId,
+	UserId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP CONSTRAINT PK_Connnect_Conference_Speaker
+GO
+DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+WHERE UserId IS NULL
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+ALTER COLUMN UserId INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers ADD CONSTRAINT
+	PK_{objectQualifier}Connect_Conference_Speakers PRIMARY KEY CLUSTERED 
+	(
+	ConferenceId,
+	UserId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees
+DROP COLUMN EventId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees
+DROP CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionAttendee
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees
+DROP COLUMN SessionAttendeeId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees
+ADD CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionAttendees PRIMARY KEY CLUSTERED 
+(
+ [SessionId] ASC,
+ [UserId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_Contacts
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers
+SET SpeakerId = s.UserId
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Speakers s ON ss.SpeakerId = s.SpeakerId
+GO
+
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Connect_Conference_Slots]') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}[{objectQualifier}Connect_Conference_Slots](
+	[SlotId] [int] IDENTITY(1,1) NOT NULL,
+	[ConferenceId] [int] NOT NULL,
+	[Start] [time](0) NOT NULL,
+	[DurationMins] [int] NOT NULL,
+	[SlotType] [int] NOT NULL,
+	[CreatedByUserID] [int] NOT NULL,
+	[CreatedOnDate] [datetime] NOT NULL,
+	[LastModifiedByUserID] [int] NOT NULL,
+	[LastModifiedOnDate] [datetime] NOT NULL,
+	[Title] [nvarchar](150) NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_{objectQualifier}Connect_Conference_Slots] PRIMARY KEY CLUSTERED 
+(
+	[SlotId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+INSERT INTO {databaseOwner}[{objectQualifier}Connect_Conference_Slots]
+([Start]
+,[DurationMins]
+,[SlotType]
+,[ConferenceId]
+,[CreatedByUserID]
+,[CreatedOnDate]
+,[LastModifiedByUserID]
+,[LastModifiedOnDate])
+SELECT DISTINCT
+ CONVERT(TIME, s.DateStart) Tm,
+ DATEDIFF(MINUTE, s.DateStart, s.DateEnd) Duration,
+ 0,
+ s.ConferenceId,
+ -1,
+ GETDATE(),
+ -1,
+ GETDATE()
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD SlotId INT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET SlotId=sl.SlotId
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Slots sl ON
+  CONVERT(TIME, s.DateStart) = sl.Start
+  AND DATEDIFF(MINUTE, s.DateStart, s.DateEnd) = sl.DurationMins
+  AND s.ConferenceId = sl.ConferenceId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ALTER COLUMN SlotId INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD SessionDate DATE NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET SessionDate=CONVERT(DATE, DateStart)
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ALTER COLUMN SessionDate DATE NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN DateStart
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN DateEnd
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_Categories
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_CategoryLocalizations
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN CategoryId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations
+DROP COLUMN DescriptionShort
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+SET Country = ISNULL(ll.EntryID, -1)
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l
+ LEFT JOIN {databaseOwner}Lists ll ON ll.Text=l.Country
+ AND ll.ListName='Country'
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+ALTER COLUMN Country INT NOT NULL
+GO
+
+EXEC sp_rename '{databaseOwner}{objectQualifier}Connect_Conference_Locations.Country', 'CountryId', 'COLUMN'
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD	[Title] [nvarchar](150) NULL,
+	[SubTitle] [nvarchar](150) NULL,
+	[Description] [nvarchar](max) NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations
+SET CultureCode=p.DefaultLanguage
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=sl.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=''
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET Title=sl.Title,
+ SubTitle=sl.SubTitle,
+ Description=sl.Description
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations sl ON sl.SessionId=s.SessionId AND sl.CultureCode=p.DefaultLanguage
+GO
+
+DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=sl.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=p.DefaultLanguage
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionLocalizations
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+ADD	[Description] [nvarchar](max) NULL,
+	[DescriptionShort] [nvarchar](max) NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations
+SET CultureCode=p.DefaultLanguage
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Speakers s ON s.SpeakerId=sl.SpeakerId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=''
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+SET Description=sl.Description,
+ DescriptionShort=sl.DescriptionShort 
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations sl ON sl.SpeakerId=s.SpeakerId AND sl.CultureCode=p.DefaultLanguage
+GO
+
+DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Speakers s ON s.SpeakerId=sl.SpeakerId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=p.DefaultLanguage
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+DROP COLUMN SpeakerId
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_SpeakerLocalizations
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks
+ADD	[Title] [nvarchar](150) NULL,
+	[Description] [nvarchar](max) NULL,
+	[DescriptionShort] [nvarchar](max) NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations
+SET CultureCode=p.DefaultLanguage
+FROM {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks s ON s.TrackId=sl.TrackId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=''
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Tracks
+SET Title=sl.Title,
+ Description=sl.Description,
+ DescriptionShort=sl.DescriptionShort
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Tracks s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations sl ON sl.TrackId=s.TrackId AND sl.CultureCode=p.DefaultLanguage
+GO
+
+DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations
+FROM {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations sl
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks s ON s.TrackId=sl.TrackId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=c.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Portals p ON p.PortalID=c.PortalId
+WHERE sl.CultureCode=p.DefaultLanguage
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_TrackLocalizations
+GO
+
+-- cleaning up more fields from DB that we didn't use
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN DescriptionShort
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN NotesPrivate
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN NotesPublic
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN DateDescription
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN LogoId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN Organizer_Name
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN Organizer_UserId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN SessionApproval
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+DROP COLUMN EventType
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN DescriptionShort
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Address1
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Address2
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN City
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN PostalCode
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN CountryId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Latitude
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Longitude
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Email
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Phone
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations
+DROP COLUMN Website
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN ImageId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN IsVisible
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN IsApproved
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN ApprovedOnDate
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN ApprovedByUserID
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN BackgroundColor
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers
+DROP COLUMN [Role]
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks
+DROP COLUMN ImageId
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks
+DROP COLUMN DescriptionShort
+GO
+
+-- dropping resources in favor of hard coded paths
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_Resources
+GO
+
+-- add speaker sorting
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers
+ADD Sort INT NULL
+GO
+
+-- add workflow for sessions
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD [Status] INT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET Status = 3
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+SET AttendeeRole=-1
+WHERE AttendeeRole IS NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+SET SpeakerRole=-1
+WHERE SpeakerRole IS NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ALTER COLUMN AttendeeRole INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ALTER COLUMN SpeakerRole INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ADD Location NVARCHAR(1000) NULL
+GO
+
+-- Plenary
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD IsPlenary BIT
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET IsPlenary = 0
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ALTER COLUMN IsPlenary BIT NOT NULL
+GO
+
+-- Slot adjustments
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Slots
+ADD DayNr INT NULL
+GO
+
+-- Switch to relative date for sessions
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD DayNr INT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET DayNr = DATEDIFF(DAY, c.StartDate, s.SessionDate)
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON s.ConferenceId=s.ConferenceId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ALTER COLUMN DayNr INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN SessionDate
+GO
+
+-- new stuff for conferences
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ADD [Url] NVARCHAR(300) NULL
+GO
+
+-- notes/remarks field for sessions
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD [Notes] NVARCHAR(MAX) NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Slots
+ADD LocationId INT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Slots
+SET DayNr = (select top 1 DayNr
+from
+(select distinct
+ s1.DayNr 
+from {databaseOwner}{objectQualifier}Connect_Conference_Sessions s1
+ inner join {databaseOwner}{objectQualifier}Connect_Conference_Slots sl1 ON s1.SlotId=sl1.SlotId
+ where sl1.SlotId=s.SlotId) x)
+from {databaseOwner}{objectQualifier}Connect_Conference_Slots s
+where
+(select count(*)
+from
+(select distinct
+ s1.DayNr 
+from {databaseOwner}{objectQualifier}Connect_Conference_Sessions s1
+ inner join {databaseOwner}{objectQualifier}Connect_Conference_Slots sl1 ON s1.SlotId=sl1.SlotId
+ where sl1.SlotId=s.SlotId) x) = 1
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+SET AttendeeRole=-1
+WHERE AttendeeRole IS NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+SET SpeakerRole=-1
+WHERE SpeakerRole IS NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ALTER COLUMN AttendeeRole INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ALTER COLUMN SpeakerRole INT NOT NULL
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+DROP COLUMN Votes
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+DROP COLUMN CreatedByUserID
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+DROP COLUMN CreatedOnDate
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+DROP COLUMN LastModifiedByUserID
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+DROP COLUMN LastModifiedOnDate
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
+ALTER COLUMN Company NVARCHAR(200) NULL
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Comments') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_Comments(
+ [CommentId] [int] IDENTITY(1,1) NOT NULL,
+ [UserId] [int] NOT NULL,
+ [ConferenceId] [int] NOT NULL,
+ [SessionId] [int] NOT NULL,
+ [Datime] [datetime] NOT NULL,
+ [Remarks] [nvarchar](max) NOT NULL,
+ [Visibility] [int] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_Comments PRIMARY KEY CLUSTERED 
+(
+ [CommentId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTags') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTags(
+ [SessionId] [int] NOT NULL,
+ [TagId] [int] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionTags PRIMARY KEY CLUSTERED 
+(
+ [SessionId] ASC,
+ [TagId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes(
+ [SessionId] [int] NOT NULL,
+ [UserId] [int] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionVotes PRIMARY KEY CLUSTERED 
+(
+ [SessionId] ASC,
+ [UserId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tags') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tags(
+ [TagId] [int] IDENTITY(1,1) NOT NULL,
+ [ConferenceId] [int] NOT NULL,
+ [TagName] [nvarchar](100) NOT NULL,
+ [CreatedByUserID] [int] NOT NULL,
+ [CreatedOnDate] [datetime] NOT NULL,
+ [LastModifiedByUserID] [int] NOT NULL,
+ [LastModifiedOnDate] [datetime] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_Tags PRIMARY KEY CLUSTERED 
+(
+ [TagId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_TagVotes') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_TagVotes(
+ [TagId] [int] NOT NULL,
+ [UserId] [int] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_TagVotes PRIMARY KEY CLUSTERED 
+(
+ [TagId] ASC,
+ [UserId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionResources') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionResources(
+ [SessionResourceId] [int] IDENTITY(1,1) NOT NULL,
+ [SessionId] [int] NOT NULL,
+ [ResourceLink] [nvarchar](500) NOT NULL,
+ [ResourceDescription] [nvarchar](1000) NULL,
+ [ResourceType] [int] NOT NULL,
+ [Visibility] [int] NOT NULL,
+ [CreatedByUserID] [int] NOT NULL,
+ [CreatedOnDate] [datetime] NOT NULL,
+ [LastModifiedByUserID] [int] NOT NULL,
+ [LastModifiedOnDate] [datetime] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionResources PRIMARY KEY CLUSTERED 
+(
+ [SessionResourceId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+
+/******* STRUCTURE *******/
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Attendees_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Attendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Attendees_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Attendees_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Attendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Attendees_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Attendees_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Attendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Attendees_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Attendees_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Attendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Attendees_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Comments_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Comments'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Comments  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Comments_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Comments_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Comments'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Comments CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Comments_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Comments_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Comments'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Comments  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Comments_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Comments_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Comments'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Comments CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Comments_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Conferences_Portals') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Conferences'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Conferences_Portals FOREIGN KEY([PortalId])
+REFERENCES {databaseOwner}{objectQualifier}Portals ([PortalID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Conferences_Portals') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Conferences'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Conferences_Portals
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Locations_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Locations'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Locations_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Locations_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Locations'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Locations CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Locations_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionAttendees_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionAttendees_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionAttendees_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionAttendees_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionAttendees_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionAttendees_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionAttendees_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionAttendees_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionResources_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionResources'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionResources  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionResources_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionResources_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionResources'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionResources CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionResources_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Sessions_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Sessions'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Sessions_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Sessions_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Sessions'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Sessions_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionSpeakers_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionSpeakers_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionSpeakers_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionSpeakers_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionSpeakers_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionSpeakers_Users FOREIGN KEY([SpeakerId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionSpeakers_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionSpeakers_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTags_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTags'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTags  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTags_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTags_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTags'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTags CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTags_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks FOREIGN KEY([TrackId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Tracks ([TrackId])
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionVotes_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionVotes_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionVotes_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionVotes_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Slots_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Slots'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Slots  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Slots_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Slots_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Slots'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Slots CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Slots_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Speakers_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Speakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Speakers_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Speakers_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Speakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Speakers_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Speakers_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Speakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Speakers_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Speakers_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Speakers'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Speakers_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Tags_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tags'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tags  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Tags_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Tags_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tags'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tags CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Tags_Conferences
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_TagVotes_Tags') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_TagVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_TagVotes  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_TagVotes_Tags FOREIGN KEY([TagId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Tags ([TagId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_TagVotes_Tags') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_TagVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_TagVotes CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_TagVotes_Tags
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_TagVotes_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_TagVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_TagVotes  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_TagVotes_Users FOREIGN KEY([UserId])
+REFERENCES {databaseOwner}{objectQualifier}Users ([UserID])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_TagVotes_Users') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_TagVotes'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_TagVotes CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_TagVotes_Users
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Tracks_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Tracks_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Tracks_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Tracks'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Tracks_Conferences
+GO
+
+/******* VIEWS *******/
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+AS
+SELECT
+ a.*,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ propPhoto.Visibility PhotoVisibility,
+ propPhoto.[FileName] PhotoFilename,
+ propPhoto.Folder PhotoFolder,
+ propPhoto.Width PhotoWidth,
+ propPhoto.Height PhotoHeight,
+ propPhoto.ContentType PhotoContentType,
+ propBio.PropertyValue Biography,
+ propCompany.PropertyValue Company,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=a.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=a.UserId
+LEFT JOIN (
+SELECT
+ ppd.PortalID propPortalId,
+ up.UserID,
+ up.Visibility,
+ f.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+ INNER JOIN {databaseOwner}{objectQualifier}Files f ON up.PropertyValue=f.FileId
+WHERE ppd.PropertyName='Photo'
+) propPhoto ON propPhoto.propPortalId=c.PortalId AND propPhoto.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Biography'
+) propBio ON propBio.PortalID=c.PortalId AND propBio.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Company'
+) propCompany ON propCompany.PortalID=c.PortalId AND propCompany.UserID=u.UserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=a.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=a.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Comments'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Comments
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Comments
+AS
+SELECT
+ c.*,
+ u.DisplayName,
+ u.Email,
+ u.FirstName,
+ u.LastName,
+ conf.Name ConferenceName,
+ s.Title SessionTitle
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Comments c
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=c.UserId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences conf ON conf.ConferenceId=c.ConferenceId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=c.SessionId
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences
+AS
+SELECT
+ c.*,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a WHERE a.ConferenceId=c.ConferenceId) NrAttendees,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s WHERE s.ConferenceId=c.ConferenceId) NrSpeakers,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l WHERE l.ConferenceId=c.ConferenceId) NrLocations,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Tracks t WHERE t.ConferenceId=c.ConferenceId) NrTracks,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s WHERE s.ConferenceId=c.ConferenceId AND s.[Status] >= 3) NrSessions,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Conferences c
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=c.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=c.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Locations'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Locations
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Locations
+AS
+SELECT
+ l.*,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=l.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=l.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees
+AS
+SELECT
+ sa.*,
+ s.Title,
+ u.DisplayName SessionAttendeeName,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees sa
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=sa.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=sa.UserId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=sa.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=sa.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionResources'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionResources
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionResources
+AS
+SELECT
+ sr.*,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionResources sr
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=sr.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=sr.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+AS
+SELECT
+ s.*,
+ DATEADD(DAY, s.DayNr, c.StartDate) + sl.Start SessionDateAndTime,
+ l.Name LocationName,
+ sl.Title SlotTitle,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees a WHERE a.SessionId=s.SessionId) NrAttendees,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss WHERE ss.SessionId=s.SessionId) NrSpeakers,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes sv WHERE sv.SessionId=s.SessionId) NrVotes,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionResources sr WHERE sr.SessionId=s.SessionId AND sr.Visibility=1) NrResources,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=s.ConferenceId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Locations l ON l.LocationId=s.LocationId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Slots sl ON sl.SlotId=s.SlotId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers
+AS
+SELECT
+ ss.*,
+ sp.Company,
+ sp.Description,
+ sp.DescriptionShort,
+ sp.Url,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=ss.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Speakers sp ON sp.UserId=ss.SpeakerId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=ss.SpeakerId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=ss.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=ss.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTags'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTags
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTags
+AS
+SELECT
+ st.*,
+ s.Title,
+ t.TagName,
+ t.ConferenceId
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTags st
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=st.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tags t ON t.TagId=st.TagId
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks
+AS
+SELECT
+ st.*,
+ s.Title SessionTitle,
+ t.Title TrackTitle,
+ t.Sort
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks st
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=st.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks t ON t.TrackId=st.TrackId
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Slots'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Slots
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Slots
+AS
+SELECT
+ sl.*,
+ l.Name LocationName,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Slots sl
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Locations l ON l.LocationId=sl.LocationId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=sl.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=sl.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers
+AS
+SELECT
+ s.*,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ propPhoto.Visibility PhotoVisibility,
+ propPhoto.[FileName] PhotoFilename,
+ propPhoto.Folder PhotoFolder,
+ propPhoto.Width PhotoWidth,
+ propPhoto.Height PhotoHeight,
+ propPhoto.ContentType PhotoContentType,
+ propBio.PropertyValue Biography,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=s.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=s.UserId
+LEFT JOIN (
+SELECT
+ ppd.PortalID propPortalId,
+ up.UserID,
+ up.Visibility,
+ f.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+ INNER JOIN {databaseOwner}{objectQualifier}Files f ON up.PropertyValue=f.FileId
+WHERE ppd.PropertyName='Photo'
+) propPhoto ON propPhoto.propPortalId=c.PortalId AND propPhoto.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Biography'
+) propBio ON propBio.PortalID=c.PortalId AND propBio.UserID=u.UserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Tags'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Tags
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Tags
+AS
+SELECT
+ t.*,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTags st 
+    INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=st.SessionId WHERE st.TagId=t.TagId AND s.[Status] >= 3) NrSessions,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_TagVotes tv WHERE tv.TagId=t.TagId) NrVotes,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Tags t
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=t.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=t.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Tracks'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Tracks
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Tracks
+AS
+SELECT
+ t.*,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser,
+ (SELECT COUNT(s.SessionId) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s 
+   INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks st ON st.SessionId=s.SessionId WHERE st.TrackId=t.TrackId) NrSessions
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Tracks t
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=t.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=t.LastModifiedByUserID
+GO
