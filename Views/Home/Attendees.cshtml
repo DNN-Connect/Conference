@@ -13,7 +13,6 @@
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
 </div>
-
 <div class="container">
 
  <div class="row">
@@ -68,8 +67,7 @@
      {
      <tr>
       <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
-      <td>@a.LastName</td>
-      <td>@a.FirstName</td>
+      <td>@a.DisplayName</td>
      </tr>
      }
     </tbody>
@@ -87,8 +85,15 @@
      {
      <tr>
       <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
-      <td>@a.LastName</td>
-      <td>@a.FirstName</td>
+      <td>@a.DisplayName</td>
+      @if (ConferenceModuleContext.Security.CanManage)
+      {
+      <td class="btncol">
+       <a href="#" class="btn btn-success cmdStatusChange" data-confirm="@Dnn.LocalizeString("Confirmed.Confirm")" data-status="2" data-userid="@a.UserId">
+        <span class="glyphicon glyphicon-check"></span>
+       </a>
+      </td>
+      }
      </tr>
      }
     </tbody>
@@ -106,8 +111,15 @@
      {
      <tr>
       <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
-      <td>@a.LastName</td>
-      <td>@a.FirstName</td>
+      <td>@a.DisplayName</td>
+      @if (ConferenceModuleContext.Security.CanManage)
+      {
+      <td class="btncol">
+       <a href="#" class="btn btn-danger cmdStatusChange" data-confirm="@Dnn.LocalizeString("NotGoing.Confirm")" data-status="-1" data-userid="@a.UserId">
+        <span class="glyphicon glyphicon-remove"></span>
+       </a>
+      </td>
+      }
      </tr>
      }
     </tbody>
@@ -153,7 +165,11 @@
    $('.cmdStatusChange').click(function (e) {
     e.preventDefault()
     if (confirm($(this).data('confirm'))) {
-     moduleConferenceService.changeAttendeeStatus(@Model.ConferenceId, $(this).data('status'), function() {
+     var userId = @Dnn.User.UserID;
+     if ($(this).data('userid') != null) {
+      userId = $(this).data('userid');
+     }
+     moduleConferenceService.changeAttendeeStatus(@Model.ConferenceId, userId, $(this).data('status'), function() {
       location.reload();
      });
     }

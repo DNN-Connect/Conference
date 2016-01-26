@@ -24629,8 +24629,9 @@ window.ConferenceService = function($, mid) {
       search: searchTerm
     }, success, fail);
   }
-  this.changeAttendeeStatus = function(conferenceId, newStatus, success, fail) {
+  this.changeAttendeeStatus = function(conferenceId, userId, newStatus, success, fail) {
     this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
+      UserId: userId,
       Status: newStatus
     }, success, fail);
   }

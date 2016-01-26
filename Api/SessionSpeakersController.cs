@@ -30,6 +30,7 @@ namespace Connect.DNN.Modules.Conference.Api
                 SpeakerRepository.Instance.AddSpeaker(new Connect.Conference.Core.Models.Speakers.SpeakerBase() { ConferenceId = conferenceId, UserId = user.UserId, Sort = 999 }, UserInfo.UserID);
             }
             SessionSpeakerRepository.Instance.AddSessionSpeaker(new Connect.Conference.Core.Models.SessionSpeakers.SessionSpeakerBase() { SessionId = id, SpeakerId = user.UserId, Sort = 0 }, UserInfo.UserID);
+            Connect.Conference.Core.Controllers.DnnRoleController.CheckSpeaker(PortalSettings.PortalId, conferenceId, user.UserId);
             return Request.CreateResponse(HttpStatusCode.OK, SessionSpeakerRepository.Instance.GetSessionSpeakersBySession(id).FirstOrDefault(s => s.SpeakerId == user.UserId));
         }
 

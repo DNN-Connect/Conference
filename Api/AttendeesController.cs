@@ -15,6 +15,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         public class ChangeStatusDTO
         {
+            public int UserId { get; set; }
             public int Status { get; set; }
         }
 
@@ -25,25 +26,32 @@ namespace Connect.DNN.Modules.Conference.Api
         {
             if (!ConferenceModuleContext.Security.CanManage)
             {
-                if (newStatus.Status > 0)
+                if (newStatus.Status > 1)
                 {
                     return AccessViolation("Only management can increase your status this far");
                 }
+                if (newStatus.UserId != UserInfo.UserID)
+                {
+                    return AccessViolation("Only management can change status for other users");
+                }
             }
-            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID);
+            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, newStatus.UserId);
             if (attendee == null)
             {
-                var a = new AttendeeBase() { ConferenceId = conferenceId, UserId = UserInfo.UserID, ReceiveNotifications = true, Status = newStatus.Status };
+                var a = new AttendeeBase() { ConferenceId = conferenceId, UserId = newStatus.UserId, ReceiveNotifications = true, Status = newStatus.Status };
                 AttendeeRepository.Instance.AddAttendee(a, UserInfo.UserID);
+                Connect.Conference.Core.Controllers.DnnRoleController.CheckAttendee(PortalSettings.PortalId, a);
             }
             else if (newStatus.Status == -1)
             {
-                AttendeeRepository.Instance.DeleteAttendee(conferenceId, UserInfo.UserID);
+                AttendeeRepository.Instance.DeleteAttendee(conferenceId, newStatus.UserId);
+                Connect.Conference.Core.Controllers.DnnRoleController.RemoveAttendee(PortalSettings.PortalId, conferenceId, newStatus.UserId);
             }
             else
             {
                 attendee.Status = newStatus.Status;
                 AttendeeRepository.Instance.UpdateAttendee(attendee, UserInfo.UserID);
+                Connect.Conference.Core.Controllers.DnnRoleController.CheckAttendee(PortalSettings.PortalId, attendee);
             }
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }

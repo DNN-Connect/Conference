@@ -141,6 +141,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     SpeakerRepository.Instance.AddSpeaker(new Connect.Conference.Core.Models.Speakers.SpeakerBase() { ConferenceId = session.ConferenceId, UserId = User.UserID, Sort = 999 }, User.UserID);
                 }
                 SessionSpeakerRepository.Instance.AddSessionSpeaker(new Connect.Conference.Core.Models.SessionSpeakers.SessionSpeakerBase() { SessionId = recordToUpdate.SessionId, SpeakerId = User.UserID, Sort = 0 }, User.UserID);
+                Connect.Conference.Core.Controllers.DnnRoleController.CheckSpeaker(PortalSettings.PortalId, session.ConferenceId, User.UserID);
             }
             HandleTags(session);
             return RedirectToDefaultRoute();

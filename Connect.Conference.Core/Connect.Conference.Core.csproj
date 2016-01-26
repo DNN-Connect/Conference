@@ -67,6 +67,7 @@
     <Compile Include="Common\Globals.cs" />
     <Compile Include="Common\ResourceType.cs" />
     <Compile Include="Common\SessionStatus.cs" />
+    <Compile Include="Controllers\DnnRoleController.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />
     <Compile Include="Models\Attendees\Attendee.cs" />
@@ -145,9 +146,7 @@
     <Compile Include="Repositories\TagVoteRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

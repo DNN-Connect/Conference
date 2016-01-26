@@ -120,6 +120,9 @@
   <data name="AddSession.Text" xml:space="preserve">
     <value>Add Session</value>
   </data>
+  <data name="Confirmed.Confirm" xml:space="preserve">
+    <value>This attendee has been confirmed?</value>
+  </data>
   <data name="EditProfile.Text" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
@@ -143,5 +146,8 @@
   </data>
   <data name="New.Text" xml:space="preserve">
     <value>New Conference</value>
+  </data>
+  <data name="NotGoing.Confirm" xml:space="preserve">
+    <value>This attendee is not going</value>
   </data>
 </root>
