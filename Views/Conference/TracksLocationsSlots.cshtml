@@ -24,12 +24,17 @@
     <tbody>
      @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort))
      {
-     <tr data-id="@t.TrackId" class="sortable">
-      <td>@t.Title</td>
-      <td class="nrcol">@t.NrSessions</td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-      <td class="btncol"><a href="#" class="deleteTrack btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
-     </tr>
+      var rowStyle = "";
+      if (t.BackgroundColor != "")
+      {
+       rowStyle = "background-color: " + t.BackgroundColor;
+      }
+      <tr data-id="@t.TrackId" class="sortable" style="@(rowStyle)">
+       <td>@t.Title</td>
+       <td class="nrcol">@t.NrSessions</td>
+       <td class="btncol"><a href="@Url.Action("Edit", "Track", new { conferenceId = Model.ConferenceId, trackId = t.TrackId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+       <td class="btncol"><a href="#" class="deleteTrack btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
+      </tr>
      }
     </tbody>
     <tr>

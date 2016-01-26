@@ -10,19 +10,26 @@
 
 <fieldset id="editTrack">
  <div class="dnnFormItem">
-  <div class="dnnLabel" style="position: relative;">
+  <div class="dnnLabel">
    <label>@Dnn.LocalizeString("Title")</label>
   </div>
   @Html.TextBoxFor(m => m.Title)
  </div>
  <div class="dnnFormItem">
-  <div class="dnnLabel" style="position: relative;">
+  <div class="dnnLabel">
    <label>@Dnn.LocalizeString("Description")</label>
   </div>
   @Html.TextAreaFor(m => m.Description)
  </div>
  <div class="dnnFormItem">
-  <div class="dnnLabel" style="position: relative;">
+  <div class="dnnLabel">
+   <label>@Dnn.LocalizeString("BackgroundColor")</label>
+  </div>
+  @Html.TextBoxFor(m => m.BackgroundColor)
+  <a href="#" class="btn btn-success cmdRefresh"><span class="glyphicon glyphicon-refresh"></span></a>
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel">
    <label>@Dnn.LocalizeString("SessionVoting")</label>
   </div>
   @Html.CheckBoxFor(m => m.SessionVoting)
@@ -36,7 +43,6 @@
 </fieldset>
 
 @Html.HiddenFor(m => m.Sort)
-@Html.HiddenFor(m => m.BackgroundColor)
 
 <script type="text/javascript">
  $(function () {
@@ -44,5 +50,12 @@
    format: 'MM/DD/YYYY'
   });
   validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
+  $('#BackgroundColor').css('background-color', $('#BackgroundColor').val());
+  $('.cmdRefresh').click(function (e) {
+   e.preventDefault();
+   var newColor = '#' + getPastel();
+   $('#BackgroundColor').val(newColor);
+   $('#BackgroundColor').css('background-color', $('#BackgroundColor').val());
+  });
  });
 </script>

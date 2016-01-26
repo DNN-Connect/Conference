@@ -38,8 +38,14 @@ var SessionVote = React.createClass({
         <span className="detailItem bg-info">{item.Value}</span>
         )
     });
+    var rowStyle = {};
+    if (this.props.item.BackgroundColor != '') {
+      rowStyle = {
+        backgroundColor: this.props.item.BackgroundColor
+      }
+    }
     return (
-      <tr>
+      <tr style={rowStyle}>
        <td><p><a href={window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}>{this.props.item.Title}</a></p>
         <p className="itemDetails">
           <span className="glyphicon glyphicon-user" title={this.resources.Speakers}></span>{speakers}

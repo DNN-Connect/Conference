@@ -333,4 +333,7 @@
   <data name="Schedule.Text" xml:space="preserve">
     <value>Schedule</value>
   </data>
+  <data name="BackgroundColor.Text" xml:space="preserve">
+    <value>Background Color</value>
+  </data>
 </root>

@@ -1358,8 +1358,14 @@ var SessionVote = React.createClass({displayName: "SessionVote",
         React.createElement("span", {className: "detailItem bg-info"}, item.Value)
         )
     });
+    var rowStyle = {};
+    if (this.props.item.BackgroundColor != '') {
+      rowStyle = {
+        backgroundColor: this.props.item.BackgroundColor
+      }
+    }
     return (
-      React.createElement("tr", null, 
+      React.createElement("tr", {style: rowStyle}, 
        React.createElement("td", null, React.createElement("p", null, React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}, this.props.item.Title)), 
         React.createElement("p", {className: "itemDetails"}, 
           React.createElement("span", {className: "glyphicon glyphicon-user", title: this.resources.Speakers}), speakers
@@ -24758,6 +24764,22 @@ function pad(number) {
     return '0' + number;
   }
   return number;
+}
+
+function getPastel() {
+  var red = Math.floor(Math.random() * 256);
+  var green = Math.floor(Math.random() * 256);
+  var blue = Math.floor(Math.random() * 256);
+  red = Math.floor((red + 255) / 2);
+  green = Math.floor((green + 255) / 2);
+  blue = Math.floor((blue + 255) / 2);
+  red = Math.floor((red + 255) / 2);
+  green = Math.floor((green + 255) / 2);
+  blue = Math.floor((blue + 255) / 2);
+  var res = ("00" + red.toString(16)).substr(-2);
+  res += ("00" + green.toString(16)).substr(-2);
+  res += ("00" + blue.toString(16)).substr(-2);
+  return res;
 }
 
 if (!Date.prototype.toUTCDateTimeDigits) {

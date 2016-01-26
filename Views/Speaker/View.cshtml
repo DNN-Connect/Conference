@@ -41,10 +41,13 @@
      <h2 class="panel-title"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId })">@s.Title</a></h2>
     </div>
     <div class="panel-body">
+     <p>
      @if (s.SessionDateAndTime != null)
      {
-     <p><strong>@(((DateTime)s.SessionDateAndTime).ToString("D")) @(((DateTime)s.SessionDateAndTime).ToString("t"))</strong></p>
+     <strong>@(((DateTime)s.SessionDateAndTime).ToString("D")) @(((DateTime)s.SessionDateAndTime).ToString("t"))</strong>
      }
+      <em>@s.TrackTitle</em>
+     </p>
      <p>
       @foreach (var sp in s.Speakers)
       {

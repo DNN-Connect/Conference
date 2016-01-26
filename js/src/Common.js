@@ -98,6 +98,22 @@ function pad(number) {
   return number;
 }
 
+function getPastel() {
+  var red = Math.floor(Math.random() * 256);
+  var green = Math.floor(Math.random() * 256);
+  var blue = Math.floor(Math.random() * 256);
+  red = Math.floor((red + 255) / 2);
+  green = Math.floor((green + 255) / 2);
+  blue = Math.floor((blue + 255) / 2);
+  red = Math.floor((red + 255) / 2);
+  green = Math.floor((green + 255) / 2);
+  blue = Math.floor((blue + 255) / 2);
+  var res = ("00" + red.toString(16)).substr(-2);
+  res += ("00" + green.toString(16)).substr(-2);
+  res += ("00" + blue.toString(16)).substr(-2);
+  return res;
+}
+
 if (!Date.prototype.toUTCDateTimeDigits) {
   (function() {
     Date.prototype.toUTCDateTimeDigits = function() {
