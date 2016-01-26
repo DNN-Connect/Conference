@@ -3,7 +3,7 @@
   <package name="Conference" type="Module" version="01.00.00">
    <friendlyName>Conference</friendlyName>
    <description>DNN Connect Conference module</description>
-   <iconFile>DesktopModules/Connect/Conference/img/Conference.png</iconFile>
+   <iconFile>DesktopModules/MVC/Connect/Conference/Conference.png</iconFile>
    <owner>
     <name></name>
     <organization>DNN Connect</organization>
