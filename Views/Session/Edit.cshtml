@@ -2,12 +2,21 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Sessions;
+@using Connect.Conference.Core.Repositories;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddJqueryUi();
     ConferenceModuleContext.AddEditScripts();
+
+    var tracks = new List<System.Web.Mvc.SelectListItem>();
+    tracks.Add(new System.Web.Mvc.SelectListItem { Text = Dnn.LocalizeString("SelectTrack"), Value = "-1" });
+    foreach (var t in TrackRepository.Instance.GetTracks(Model.ConferenceId))
+    {
+     tracks.Add(new System.Web.Mvc.SelectListItem { Text = t.Title, Value = t.TrackId.ToString() });
+    }
+
 }
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -46,8 +55,7 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Tracks")</label>
   </div>
-  <div class="tracksComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-name="EditTracks" data-tracks="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort)))" data-placeholder="@Dnn.LocalizeString("NewTrack")" data-initial="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetTracks().Select(t => t.TrackId)))">
-  </div>
+  @Html.DropDownListFor(m => m.TrackId, tracks)
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
@@ -77,7 +85,7 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Status")</label>
   </div>
-  @Html.DropDownListFor(m => m.Status, Globals.StatusDropdownList(Locale))
+  @Html.DropDownListFor(m => m.Status, Connect.DNN.Modules.Conference.Common.Globals.StatusDropdownList(Locale))
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">

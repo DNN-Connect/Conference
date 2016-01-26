@@ -20,6 +20,8 @@ namespace Connect.Conference.Core.Models.Sessions
    SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
    LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
    SlotTitle = Convert.ToString(Null.SetNull(dr["SlotTitle"], SlotTitle));
+   TrackTitle = Convert.ToString(Null.SetNull(dr["TrackTitle"], TrackTitle));
+   BackgroundColor = Convert.ToString(Null.SetNull(dr["BackgroundColor"], BackgroundColor));
    NrAttendees = Convert.ToInt32(Null.SetNull(dr["NrAttendees"], NrAttendees));
    NrSpeakers = Convert.ToInt32(Null.SetNull(dr["NrSpeakers"], NrSpeakers));
    NrVotes = Convert.ToInt32(Null.SetNull(dr["NrVotes"], NrVotes));
@@ -51,6 +53,18 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return PropertyAccess.FormatString(SlotTitle, strFormat);
+    case "tracktitle": // NVarChar
+     if (TrackTitle == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(TrackTitle, strFormat);
+    case "backgroundcolor": // NVarChar
+     if (BackgroundColor == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(BackgroundColor, strFormat);
     case "nrattendees": // Int
      if (NrAttendees == null)
      {

@@ -43,18 +43,6 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
-        public HttpResponseMessage Delete(int conferenceId, int id)
-        {
-            ISessionTrackRepository _stRepo = SessionTrackRepository.Instance;
-            _stRepo.DeleteSessionTracksByTrack(id);
-            ITrackRepository _repository = TrackRepository.Instance;
-            _repository.DeleteTrack(conferenceId, id);
-            return Request.CreateResponse(HttpStatusCode.OK, "");
-        }
-
     }
 }
 

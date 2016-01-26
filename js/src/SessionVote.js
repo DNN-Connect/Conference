@@ -42,9 +42,12 @@ var SessionVote = React.createClass({
       <tr>
        <td><p><a href={window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}>{this.props.item.Title}</a></p>
         <p className="itemDetails">
-        <span className="glyphicon glyphicon-user"></span>{speakers}
-        <span className="glyphicon glyphicon-tags"></span>{tags}
-        <span className="glyphicon glyphicon-paperclip"></span>{this.props.item.NrResources}
+          <span className="glyphicon glyphicon-user" title={this.resources.Speakers}></span>{speakers}
+        </p>
+        <p className="itemDetails">
+          <span className="glyphicon glyphicon-resize-vertical" title={this.resources.Track}></span>{this.props.item.TrackTitle}
+          <span className="glyphicon glyphicon-paperclip" title={this.resources.Resources}></span>{this.props.item.NrResources}
+          <span className="glyphicon glyphicon-tags" title={this.resources.Tags}></span>{tags}
         </p>
        </td>
        <td className="nrcol">{this.props.item.NrVotes}</td>

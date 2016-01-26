@@ -51,6 +51,8 @@ namespace Connect.Conference.Core.Models.Sessions
         public int DayNr { get; set; }
         [DataMember]
         public string Notes { get; set; }
+        [DataMember]
+        public int? TrackId { get; set; }
         #endregion
 
         #region Methods
@@ -96,6 +98,9 @@ namespace Connect.Conference.Core.Models.Sessions
 
             if (!String.IsNullOrEmpty(session.Notes))
                 Notes = session.Notes;
+
+            if (session.TrackId > -1)
+                TrackId = session.TrackId;
 
         }
         #endregion

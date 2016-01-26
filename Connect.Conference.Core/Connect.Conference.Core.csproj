@@ -109,10 +109,6 @@
     <Compile Include="Models\SessionTags\SessionTagBase.cs" />
     <Compile Include="Models\SessionTags\SessionTagBase_Interfaces.cs" />
     <Compile Include="Models\SessionTags\SessionTag_Interfaces.cs" />
-    <Compile Include="Models\SessionTracks\SessionTrack.cs" />
-    <Compile Include="Models\SessionTracks\SessionTrackBase.cs" />
-    <Compile Include="Models\SessionTracks\SessionTrackBase_Interfaces.cs" />
-    <Compile Include="Models\SessionTracks\SessionTrack_Interfaces.cs" />
     <Compile Include="Models\Slots\Slot.cs" />
     <Compile Include="Models\Slots\SlotBase.cs" />
     <Compile Include="Models\Slots\SlotBase_Interfaces.cs" />
@@ -142,7 +138,6 @@
     <Compile Include="Repositories\SessionResourceRepository.cs" />
     <Compile Include="Repositories\SessionSpeakerRepository.cs" />
     <Compile Include="Repositories\SessionTagRepository.cs" />
-    <Compile Include="Repositories\SessionTrackRepository.cs" />
     <Compile Include="Repositories\SessionVoteRepository.cs" />
     <Compile Include="Repositories\SlotRepository.cs" />
     <Compile Include="Repositories\SpeakerRepository.cs" />

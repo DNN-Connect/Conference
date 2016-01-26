@@ -26,6 +26,10 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public string SlotTitle { get; set; }
         [DataMember]
+        public string TrackTitle { get; set; }
+        [DataMember]
+        public string BackgroundColor { get; set; }
+        [DataMember]
         public int? NrAttendees { get; set; }
         [DataMember]
         public int? NrSpeakers { get; set; }
@@ -57,6 +61,7 @@ namespace Connect.Conference.Core.Models.Sessions
             res.IsPlenary = IsPlenary;
             res.DayNr = DayNr;
              res.Notes = Notes;
+             res.TrackId = TrackId;
             res.CreatedByUserID = CreatedByUserID;
             res.CreatedOnDate = CreatedOnDate;
             res.LastModifiedByUserID = LastModifiedByUserID;

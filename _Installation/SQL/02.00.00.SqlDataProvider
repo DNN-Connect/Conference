@@ -962,25 +962,27 @@ ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
 DROP COLUMN Votes
 GO
 
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
-DROP COLUMN CreatedByUserID
-GO
-
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
-DROP COLUMN CreatedOnDate
-GO
-
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
-DROP COLUMN LastModifiedByUserID
-GO
-
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
-DROP COLUMN LastModifiedOnDate
-GO
-
 ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Speakers
 ALTER COLUMN Company NVARCHAR(200) NULL
 GO
+
+
+-- Getting rid of many-to-many for SessionTracks
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+ADD TrackId INT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Sessions
+SET TrackId = (SELECT TOP 1 TrackId 
+  FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+  WHERE SessionId = s.SessionId)
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+GO
+
+DROP TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks
+GO
+
+-- Comments table
 
 SET ANSI_NULLS ON
 GO
@@ -1099,7 +1101,6 @@ CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionResources
 END
 GO
 
-
 /******* STRUCTURE *******/
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Attendees_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Attendees'))
 ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Attendees_Conferences FOREIGN KEY([ConferenceId])
@@ -1201,21 +1202,6 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databa
 ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTags CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTags_Sessions
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions FOREIGN KEY([SessionId])
-REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
-ON DELETE CASCADE
-IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Sessions
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks FOREIGN KEY([TrackId])
-REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Tracks ([TrackId])
-IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionTracks'))
-ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionTracks_Tracks
-GO
-
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionVotes'))
 ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionVotes_Sessions FOREIGN KEY([SessionId])
 REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
@@ -1288,6 +1274,7 @@ IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databa
 ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Tracks CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Tracks_Conferences
 GO
 
+/******* TRIGGERS *******/
 /******* VIEWS *******/
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees'))
 DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
@@ -1440,10 +1427,6 @@ FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees sa
  LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=sa.LastModifiedByUserID
 GO
 
-IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions'))
-DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
-GO
-
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionResources'))
 DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionResources
 GO
@@ -1478,6 +1461,8 @@ SELECT
  DATEADD(DAY, s.DayNr, c.StartDate) + sl.Start SessionDateAndTime,
  l.Name LocationName,
  sl.Title SlotTitle,
+ t.Title TrackTitle,
+ t.BackgroundColor,
  (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees a WHERE a.SessionId=s.SessionId) NrAttendees,
  (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss WHERE ss.SessionId=s.SessionId) NrSpeakers,
  (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes sv WHERE sv.SessionId=s.SessionId) NrVotes,
@@ -1488,6 +1473,7 @@ FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
  INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=s.ConferenceId
  LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Locations l ON l.LocationId=s.LocationId
  LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Slots sl ON sl.SlotId=s.SlotId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks t ON t.TrackId=s.TrackId
  LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
  LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
 GO
@@ -1541,26 +1527,6 @@ SELECT
 FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTags st
  INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=st.SessionId
  INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tags t ON t.TagId=st.TagId
-GO
-
-IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks'))
-DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks
-GO
-
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionTracks
-AS
-SELECT
- st.*,
- s.Title SessionTitle,
- t.Title TrackTitle,
- t.Sort
-FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks st
- INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=st.SessionId
- INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks t ON t.TrackId=st.TrackId
 GO
 
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Slots'))
@@ -1672,9 +1638,11 @@ SELECT
  t.*,
  uc.DisplayName CreatedByUser,
  um.DisplayName LastModifiedByUser,
- (SELECT COUNT(s.SessionId) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s 
-   INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionTracks st ON st.SessionId=s.SessionId WHERE st.TrackId=t.TrackId) NrSessions
+ (SELECT COUNT(s.SessionId) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s WHERE s.TrackId=t.TrackId) NrSessions
 FROM {databaseOwner}{objectQualifier}Connect_Conference_Tracks t
  LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=t.CreatedByUserID
  LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=t.LastModifiedByUserID
 GO
+
+/******* FUNCTIONS *******/
+/******* SPROCS *******/

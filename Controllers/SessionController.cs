@@ -92,7 +92,6 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 _repository.UpdateSession(session, User.UserID);
             }
             HandleTags(session);
-            HandleTracks(session);
             return ReturnRoute(session.ConferenceId, View("View", _repository.GetSession(session.ConferenceId, session.SessionId)));
         }
 
@@ -169,15 +168,6 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     }
                 }
                 SessionTagRepository.Instance.SetSessionTags(session.SessionId, tagsToAdd.Select(t => t.TagId).ToList());
-            }
-        }
-
-        private void HandleTracks(SessionBase session)
-        {
-            if (session.EditTracks != null)
-            {
-                IEnumerable<int> selectedTracks = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<int>>(session.EditTracks);
-                SessionTrackRepository.Instance.SetSessionTracks(session.SessionId, selectedTracks.ToList());
             }
         }
         #endregion

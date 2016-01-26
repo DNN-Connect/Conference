@@ -150,6 +150,9 @@
   <data name="Retract.Text" xml:space="preserve">
     <value>Retract</value>
   </data>
+  <data name="SelectTrack.Text" xml:space="preserve">
+    <value>&lt; Select Track ... &gt;</value>
+  </data>
   <data name="Submit.Confirm" xml:space="preserve">
     <value>Do you wish to submit this session?</value>
   </data>

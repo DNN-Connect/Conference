@@ -54,16 +54,6 @@ namespace Connect.Conference.Core.Models.Sessions
             }
         }
 
-        [IgnoreColumn]
-        [DataMember]
-        public List<KeyValuePair<int, string>> Tracks
-        {
-            get
-            {
-                return Repositories.SessionTrackRepository.Instance.GetSessionTracksBySession(SessionId).OrderBy(t => t.Sort).Select(t => new KeyValuePair<int, string>(t.TrackId, t.TrackTitle)).ToList();
-            }
-        }
-
         public bool UserIsAuthor(int userId)
         {
             if (CreatedByUserID == userId) { return true; }

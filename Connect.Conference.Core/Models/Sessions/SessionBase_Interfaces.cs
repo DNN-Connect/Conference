@@ -31,6 +31,7 @@ namespace Connect.Conference.Core.Models.Sessions
    IsPlenary = Convert.ToBoolean(Null.SetNull(dr["IsPlenary"], IsPlenary));
    DayNr = Convert.ToInt32(Null.SetNull(dr["DayNr"], DayNr));
    Notes = Convert.ToString(Null.SetNull(dr["Notes"], Notes));
+   TrackId = Convert.ToInt32(Null.SetNull(dr["TrackId"], TrackId));
         }
 
         [IgnoreColumn()]
@@ -110,6 +111,12 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return PropertyAccess.FormatString(Notes, strFormat);
+    case "trackid": // Int
+     if (TrackId == null)
+     {
+         return "";
+     };
+     return ((int)TrackId).ToString(strFormat, formatProvider);
                 default:
                     propertyNotFound = true;
                     break;

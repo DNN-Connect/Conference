@@ -15,11 +15,6 @@ namespace Connect.Conference.Core.Common
             return SessionTagRepository.Instance.GetSessionTagsBySession(session.SessionId).OrderBy(t => t.TagName);
         }
 
-        public static IOrderedEnumerable<Models.SessionTracks.SessionTrack> GetTracks(this Models.Sessions.SessionBase session)
-        {
-            return SessionTrackRepository.Instance.GetSessionTracksBySession(session.SessionId).OrderBy(t => t.Sort);
-        }
-
         public static string GetResourcesPath(this Models.Sessions.SessionBase session, string slash)
         {
             return Globals.GetResourcesPath(session.ConferenceId, session.SessionId, slash);
