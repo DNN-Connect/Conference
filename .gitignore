@@ -1,0 +1,7 @@
+_BuildSupport/
+_Development/
+_Packages/
+_References/
+bower_components/
+node_modules/
+.vs/
