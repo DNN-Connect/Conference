@@ -35,12 +35,18 @@
 <p>There are 6 screens to choose from:</p>
 
 <ul>
-<li>Attendees - a screen where users can signal they wish to attend and see other (potential) attendees</li>
-<li>Conference - overview of the conference with sessions and speakers as a list</li>
-<li>Index (default) - management screen for conference organizers. This screen does not require selecting a conference to show as it shows a list of all conferences in the system.</li>
+<li>Attendees - a screen where users can signal they wish to attend and see other (potential) attendees
+</li>
+<li>Conference - overview of the conference with sessions and speakers as a list<br />
+<img src="img/2016-01-27 22_47_12.png" width="500" />
+</li>
+<li>Index (default) - management screen for conference organizers. This screen does not require selecting a conference to show as it shows a list of all conferences in the system.<br />
+<img src="img/2016-01-27 22_46_40.png" width="500" /></li>
 <li>MyPresentations - this is meant for (potential) speakers. They create and manage their presentations here.</li>
-<li>Schedule - schedule view of the conference</li>
-<li>Speakers - card list of speakers</li>
+<li>Schedule - schedule view of the conference<br />
+<img src="img/2016-01-27 23_11_28.png" width="500" /></li>
+<li>Speakers - card list of speakers<br />
+<img src="img/2016-01-27 23_12_35.png" width="500" /></li>
 </ul>
 
 <h3>
@@ -53,16 +59,23 @@
 <li>Can Attend - permission to attend the conference (allows the user to flag themselves as going)</li>
 <li>Manage Conference - permission to manage all aspects of the conference(s)</li>
 </ul>
+<div>
+  <img src="img/2016-01-27 23_13_59.png" width="300" />
+</div>
 
 <h3>
 <a id="main-components" class="anchor" href="#main-components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Main Components</h3>
 
-<p>The module manages <em>Conferences</em>, <em>Locations</em>, <em>Sessions</em>, <em>Slots</em>, <em>Tracks</em>, <em>Tags</em>, <em>Resources</em>, <em>Speakers</em> and <em>Attendees</em>. This is how they relate to each other:</p>
+<p>The module manages <em>Conferences</em>, <em>Locations</em>, <em>Sessions</em>, <em>Slots</em>, <em>Tracks</em>, <em>Tags</em>, <em>Resources</em>, <em>Comments</em>, <em>Speakers</em> and <em>Attendees</em>. This is how they relate to each other:</p>
 
 <h4>
 <a id="conferences" class="anchor" href="#conferences" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conferences</h4>
 
 <p>This is the root object. You can have any number of conferences in a single DNN portal. You specify the start and end dates, the location, a url for more info, max capacity, whether to allow voting and which roles speakers and attendees should get once approved.</p>
+
+<div>
+  <img src="img/2016-01-27 22_46_19.png" width="500" />
+</div>
 
 <h4>
 <a id="locations" class="anchor" href="#locations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Locations</h4>
@@ -74,6 +87,10 @@
 
 <p>Most of the application revolves around this. The session obviously has a title, subtitle and abstract. But crucially it also has a status, ranging from "saved" to "submitted" to "accepted" and finally "wrapped up".</p>
 
+<div>
+  <img src="img/2016-01-27 22_58_40.png" width="500" />
+</div>
+
 <h4>
 <a id="slots" class="anchor" href="#slots" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Slots</h4>
 
@@ -83,6 +100,10 @@
 <a id="tracks" class="anchor" href="#tracks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tracks</h4>
 
 <p>Tracks provide visitors with some guidance on where to go based on their primary interest. It's the organizers that control which track a session belongs to. And the track has a certain color that is used throughout the application so everyone can clearly see them.</p>
+
+<div>
+  <img src="img/2016-01-27 22_59_49.png" width="500" />
+</div>
 
 <h4>
 <a id="tags" class="anchor" href="#tags" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tags</h4>
@@ -94,15 +115,46 @@
 
 <p>A session can contain any number of resources. These may be files (e.g. Powerpoint, Zip) or hyperlinks. Hyperlinks can be plain urls or links to Youtube or Vimeo videos. In the latter cases the module will present them embedded on screen in the session view.</p>
 
+<div>
+  <img src="img/2016-01-27 23_18_28.png" width="500" />
+</div>
+
+<h4>
+<a id="comments" class="anchor" href="#comments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Comments</h4>
+
+<p>Comments are straightforward non-threaded lists of messages. They are either between speakers (in case there are multiple speakers working on a single presentation), between speakers and conference managers or public.</p>
+
+<div>
+  <img src="img/2016-01-27 23_21_53.png" width="500" />
+</div>
+
 <h4>
 <a id="speakers" class="anchor" href="#speakers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Speakers</h4>
 
 <p>Speakers link a DNN user to the conference. Certain fields are kept specific for the conference: a resume/description, a url and a company name. If a user re-registers for another conference as speaker they'd have to fill this out again. But this ensures that these fields (that may change over time) remain static for the conference. The edit screen for the speaker facilitates the uploading of a photo and cropping it easily.</p>
 
+<div>
+  <img src="img/2016-01-27 23_02_21.png" width="500" />
+</div>
+
 <h4>
 <a id="attendees" class="anchor" href="#attendees" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Attendees</h4>
 
 <p>Attendees manage the status of a DNN user vis-a-vis the conference. This starts with "intends to go", proceeds to "going" then to "confirmed" and finally "attended". Only the conference managers control the latter statuses and are meant to help plan attendee numbers.</p>
+
+<h3>Special Features</h3>
+
+<h4>MVC</h4>
+<p>This module aims to show how an MVC module can be built for DNN Platform. Settings and security are grouped together in a single object that is present in the MVC controllers, the WebAPI controllers and in teh Razor views. The custom security attribute allows the application to shield itself well at the MVC/WebAPI controller level. Multiple techniques had to be developed for this pattern to allow for a solid architecture for a larger DNN module built on this framework.</p>
+
+<h4>React JS</h4>
+<p>A number of more complex front-end components were developed in React JS. The comment list for instance and the tag selector were built this way. The most complex component is undoubtedly the drag n drop scheduler where the user can drag and drop sessions around to fill the schedule. It generates SVG through React.</p>
+
+<h4>Built with Gulp</h4>
+<p>Gulp is used as a task runner to build and package the module. Note you'll need to use NPM and Bower to ensure you have all components in your local installation.</p>
+
+<h4>Datalayer repository pattern</h4>
+<p>The Visual Studio solution has two projects. The "core" project contains the model and data access layer. You'll find the latest patterns for data access used in DNN development here.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/DNN-Connect/Conference">Connect Conference</a> is maintained by <a href="https://github.com/DNN-Connect">DNN-Connect</a>.</span>
