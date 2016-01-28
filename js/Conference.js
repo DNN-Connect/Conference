@@ -844,12 +844,15 @@ var ScheduleScheduledSession = React.createClass({displayName: "ScheduleSchedule
     this.props.session.Speakers.forEach(function(el) {
       speakerList += '<span class="speaker">' + el.Value + '</span>';
     });
+    var divStyle = {
+      backgroundColor: this.props.session.BackgroundColor
+    }
     return (
       React.createElement("div", {className: "panel panel-default session scheduled embedded", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
            ref: "Session", "data-sessionid": this.props.session.SessionId, "data-day": this.props.session.DayNr, 
            "data-toggle": "popover", title: this.props.session.Title, 
-           "data-content": this.props.session.Description + speakerList}, 
+           "data-content": this.props.session.Description + speakerList, style: divStyle}, 
        React.createElement("div", {className: "panel-body"}, 
          React.createElement("div", {className: "speakers"}, speakers), 
          React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.session.SessionId.toString())}, 
@@ -1249,12 +1252,15 @@ var SchedulerScheduledSession = React.createClass({displayName: "SchedulerSchedu
     this.props.session.Speakers.forEach(function(el) {
       speakerList += '<span class="speaker">' + el.Value + '</span>';
     });
+    var divStyle = {
+      backgroundColor: this.props.session.BackgroundColor
+    }
     return (
       React.createElement("div", {className: "panel panel-default session scheduled", "data-slotid": this.props.session.SlotId, 
            "data-locationid": this.props.session.LocationId, "data-plenary": this.props.session.IsPlenary, 
            ref: "Session", "data-sessionid": this.props.session.SessionId, "data-day": this.props.session.DayNr, 
            "data-toggle": "popover", title: this.props.session.Title, 
-           "data-content": this.props.session.Description + speakerList}, 
+           "data-content": this.props.session.Description + speakerList, style: divStyle}, 
        React.createElement("div", {className: "panel-body"}, 
          React.createElement("div", {className: "speakers"}, speakers), 
          this.props.session.Title
@@ -1296,13 +1302,16 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
     this.props.session.Speakers.forEach(function(el) {
       speakerList += '<span class="speaker">' + el.Value + '</span>';
     });
+    var divStyle = {
+      backgroundColor: this.props.session.BackgroundColor
+    }
     return (
       React.createElement("div", {className: "panel panel-default session", "data-slotkey": "", "data-orig-x": "0", "data-orig-y": "0", 
            "data-sessionid": this.props.session.SessionId, 
            "data-plenary": this.props.session.IsPlenary, 
            "data-toggle": "popover", title: this.props.session.Title, 
            "data-content": this.props.session.Description + speakerList, 
-           "data-placement": "bottom"}, 
+           "data-placement": "bottom", style: divStyle}, 
         React.createElement("div", {className: "panel-body"}, 
          React.createElement("div", {className: "speakers"}, speakers), 
          this.props.session.Title
