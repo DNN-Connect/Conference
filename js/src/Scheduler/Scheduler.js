@@ -25,7 +25,7 @@ var Scheduler = React.createClass({
       }
       else
       {
-        return null;        
+        return null;
       }
     });
     var scheduleDays = [];
@@ -154,7 +154,7 @@ var Scheduler = React.createClass({
 
   tryRemoveSession: function(session) {
     var sessionId = session.getAttribute('data-sessionid');
-    this.service.tryRemoveSession(this.props.conference.conferenceId, sessionId, function(data) {
+    this.service.tryRemoveSession(this.props.conference.ConferenceId, sessionId, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data
@@ -177,7 +177,8 @@ var Scheduler = React.createClass({
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    this.service.tryMoveSession(this.props.conference.conferenceId, sessionId, day, slotId, locationId, false, function(data) {
+    console.log(this.props.conference.ConferenceId);
+    this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
       this.setState({
         sessionList: data

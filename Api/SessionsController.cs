@@ -84,11 +84,14 @@ namespace Connect.DNN.Modules.Conference.Api
             var parallelSessions = SessionRepository.Instance.GetSessionsBySlot(conferenceId, moveParams.Day, moveParams.SlotId);
             foreach (var s in parallelSessions)
             {
-                foreach (var sp in s.Speakers.Select(sp => sp.Key))
+                if (id != s.SessionId)
                 {
-                    if (speakerIds.Contains(sp))
+                    foreach (var sp in s.Speakers.Select(sp => sp.Key))
                     {
-                        return ServiceError("This move would cause a speaker to have to be in 2 places at the same time. Please revise.");
+                        if (speakerIds.Contains(sp))
+                        {
+                            return ServiceError("This move would cause a speaker to have to be in 2 places at the same time. Please revise.");
+                        }
                     }
                 }
             }
