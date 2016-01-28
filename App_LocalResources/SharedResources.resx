@@ -336,4 +336,7 @@
   <data name="BackgroundColor.Text" xml:space="preserve">
     <value>Background Color</value>
   </data>
+  <data name="ReceiveNotifications.Text" xml:space="preserve">
+    <value>Receive Notifications</value>
+  </data>
 </root>

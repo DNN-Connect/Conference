@@ -135,6 +135,7 @@
     <Compile Include="Common\WebApiDtos.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\AttendeeController.cs" />
     <Compile Include="Controllers\SpeakerController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
@@ -244,6 +245,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Speakers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Attendee\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
