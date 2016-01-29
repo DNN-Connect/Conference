@@ -1458,7 +1458,7 @@ CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
 AS
 SELECT
  s.*,
- DATEADD(DAY, s.DayNr, c.StartDate) + sl.Start SessionDateAndTime,
+ DATEADD(DAY, s.DayNr, c.StartDate) + CAST(sl.Start AS DATETIME) SessionDateAndTime,
  l.Name LocationName,
  sl.Title SlotTitle,
  t.Title TrackTitle,
