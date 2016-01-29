@@ -22,6 +22,7 @@
       <foldername>Connect/Conference</foldername>
       <moduleDefinitions>
        <moduleDefinition>
+        <definitionName>Connect_Conference</definitionName>
         <friendlyName>Conference</friendlyName>
         <defaultCacheTime>0</defaultCacheTime>
         <moduleControls>
