@@ -57,8 +57,7 @@ gulp.task('js', function() {
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
       'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
       'node_modules/croppie/croppie.min.js',
-      'node_modules/simple-ajax-uploader/SimpleAjaxUploader.min.js',
-      'node_modules/raphael/raphael-min.js'
+      'node_modules/simple-ajax-uploader/SimpleAjaxUploader.min.js'
     ])
     .pipe(gulp.dest('js'));
 });
@@ -122,7 +121,8 @@ gulp.task('packageInstall', ['browserify', 'build'], function() {
         gulp.src([
           'App_LocalResources/*.resx',
           '*.ascx',
-          'Views/**/*.cshtml'
+          'Views/**/*.cshtml',
+          'fonts/*.*'
         ], {
           base: '.'
         }),
@@ -187,6 +187,7 @@ gulp.task('packageSource', ['browserify', 'build'], function() {
         '**/*.ascx',
         '**/*.cshtml',
         '**/*.less',
+        'fonts/*.*',
         config.dnnModule.pathToSupplementaryFiles + '**/*.*'
       ], {
         base: '.'
