@@ -84,6 +84,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddModuleService()
         {
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxScriptSupport();
             AddScript("ConferenceService.js");
         }
         public void AddBootstrapJs()
@@ -96,6 +97,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddEditScripts()
         {
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxScriptSupport();
             AddJqueryUi();
             AddBootstrapJs();
             AddReactJs();
