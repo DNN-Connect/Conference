@@ -310,7 +310,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwne
 DROP PROCEDURE {databaseOwner}[p_Create_ASP_User]
 GO
 
-CREATE PROCEDURE p_Create_ASP_User
+CREATE PROCEDURE {databaseOwner}p_Create_ASP_User
 @FirstName nvarchar(50),
 @LastName nvarchar(50),
 @PortalID int
@@ -353,7 +353,7 @@ SET @CreateDate = GetDate()
 --SET EMPLOYER INFORMATION
 SET @encoded_hashed_password = {databaseOwner}p_base64_encode(HASHBYTES('SHA1', Cast(@salt as varbinary(MAX)) + CAST(@ClearTextPassword AS varbinary(MAX)) ))
  
-EXECUTE @RC = aspnet_Membership_CreateUser
+EXECUTE @RC = {databaseOwner}aspnet_Membership_CreateUser
 @ApplicationName
 ,@username
 ,@ClearTextPassword

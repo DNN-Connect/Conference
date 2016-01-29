@@ -66,6 +66,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 recordToUpdate = existingRecord.GetAttendeeBase();
             }
             recordToUpdate.ReceiveNotifications = attendee.ReceiveNotifications;
+            recordToUpdate.Company = attendee.Company;
             if (modeAdd)
             {
                 _repository.AddAttendee(recordToUpdate, User.UserID);
@@ -105,6 +106,10 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     sizedContent.Dispose();
                     ImageUtils.CreateThumbnails(file.FileId);
                 }
+            }
+            if (!string.IsNullOrEmpty(attendee.Company))
+            {
+                dnnUser.Profile.SetProfileProperty("Company", attendee.Company);
             }
             UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
             DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);

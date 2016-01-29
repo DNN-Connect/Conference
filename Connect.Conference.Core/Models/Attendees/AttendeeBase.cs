@@ -27,6 +27,8 @@ namespace Connect.Conference.Core.Models.Attendees
         public int Status { get; set; }
         [DataMember]
         public bool ReceiveNotifications { get; set; }
+        [DataMember]
+        public string Company { get; set; }
         #endregion
 
         #region Methods
@@ -42,6 +44,9 @@ namespace Connect.Conference.Core.Models.Attendees
                 Status = attendee.Status;
 
             ReceiveNotifications = attendee.ReceiveNotifications;
+
+            if (!String.IsNullOrEmpty(attendee.Company))
+                Company = attendee.Company;
 
         }
         #endregion

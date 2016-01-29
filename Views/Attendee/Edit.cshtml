@@ -49,6 +49,12 @@
   </div>
   @Html.TextBoxFor(m => m.Email, new { data_message = Dnn.LocalizeString("EmailRequired.Error"), data_required = "true" })
  </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Company")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Company)
+ </div>
  @if (userFolder != "")
  {
  <div class="dnnFormItem">

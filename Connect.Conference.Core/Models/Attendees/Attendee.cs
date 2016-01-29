@@ -42,7 +42,7 @@ namespace Connect.Conference.Core.Models.Attendees
         [DataMember]
         public string Biography { get; set; }
         [DataMember]
-        public string Company { get; set; }
+        public string ProfileCompany { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -57,6 +57,7 @@ namespace Connect.Conference.Core.Models.Attendees
              res.UserId = UserId;
              res.Status = Status;
              res.ReceiveNotifications = ReceiveNotifications;
+             res.Company = Company;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

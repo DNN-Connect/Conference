@@ -55,8 +55,8 @@ namespace Connect.Conference.Core.Repositories
                 context.Execute(System.Data.CommandType.Text,
                     "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees " +
                     "WHERE ConferenceId=@0 AND UserId=@1) " +
-                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Attendees (ConferenceId, UserId, Status, ReceiveNotifications, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate) " +
-                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7", attendee.ConferenceId, attendee.UserId, attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate);
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Attendees (ConferenceId, UserId, Status, ReceiveNotifications, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Company) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7, @8", attendee.ConferenceId, attendee.UserId, attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate, attendee.Company);
             }
         }
         public void DeleteAttendee(AttendeeBase attendee)
@@ -102,8 +102,8 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<AttendeeBase>();
-                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5 WHERE ConferenceId=@6 AND UserId=@7",
-                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate, attendee.ConferenceId,attendee.UserId);
+                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5, Company=@6 WHERE ConferenceId=@7 AND UserId=@8",
+                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate,attendee.Company, attendee.ConferenceId,attendee.UserId);
             }
         } 
  }
