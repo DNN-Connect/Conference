@@ -141,6 +141,9 @@
   <data name="Comments" xml:space="preserve">
     <value>Comments</value>
   </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
   <data name="Day" xml:space="preserve">
     <value>Day</value>
   </data>
@@ -150,11 +153,23 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
   <data name="DropHere" xml:space="preserve">
     <value>Drop files here</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
   <data name="General" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
   </data>
   <data name="LocationSpecific" xml:space="preserve">
     <value>Location Specific</value>

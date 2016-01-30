@@ -1,4 +1,3 @@
-
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -42,19 +41,21 @@ namespace Connect.DNN.Modules.Conference.Api
                 var a = new AttendeeBase() { ConferenceId = conferenceId, UserId = newStatus.UserId, ReceiveNotifications = true, Status = newStatus.Status };
                 AttendeeRepository.Instance.AddAttendee(a, UserInfo.UserID);
                 Connect.Conference.Core.Controllers.DnnRoleController.CheckAttendee(PortalSettings.PortalId, a);
+                return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, a.UserId));
             }
             else if (newStatus.Status == -1)
             {
                 AttendeeRepository.Instance.DeleteAttendee(conferenceId, newStatus.UserId);
                 Connect.Conference.Core.Controllers.DnnRoleController.RemoveAttendee(PortalSettings.PortalId, conferenceId, newStatus.UserId);
+                return Request.CreateResponse(HttpStatusCode.OK, "");
             }
             else
             {
                 attendee.Status = newStatus.Status;
                 AttendeeRepository.Instance.UpdateAttendee(attendee, UserInfo.UserID);
                 Connect.Conference.Core.Controllers.DnnRoleController.CheckAttendee(PortalSettings.PortalId, attendee);
+                return Request.CreateResponse(HttpStatusCode.OK, attendee);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
         [HttpPost]
@@ -93,6 +94,24 @@ namespace Connect.DNN.Modules.Conference.Api
             var file = DotNetNuke.Services.FileSystem.FileManager.Instance.AddFile(userFolder, fileName, postedFile.InputStream, true, false, contentType, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
+
+        public class UserDTO
+        {
+            public int UserId { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string DisplayName { get; set; }
+            public string Email { get; set; }
+            public string Company { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Add(int conferenceId, [FromBody]UserDTO user)
+        {
+            var userId = Connect.Conference.Core.Controllers.ConferenceController.AddAttendee(PortalSettings.PortalId, conferenceId, -1, user.Email, user.FirstName, user.LastName, user.DisplayName, user.Company, UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, userId));
+        }
     }
 }
-

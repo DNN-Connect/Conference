@@ -51,11 +51,17 @@
      break;
     case 0:
     <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
-     <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImGoing.Confirm")" da data-status="1">@Dnn.LocalizeString("ImGoing")</a>
+    <a href="#" class="btn btn-primary cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImGoing.Confirm")" da data-status="1">@Dnn.LocalizeString("ImGoing")</a>
      break;
     case 1:
     <a href="#" class="btn btn-default cmdStatusChange" data-confirm="@Dnn.LocalizeString("ImNotGoing.Confirm")" data-status="-1">@Dnn.LocalizeString("ImNotGoing")</a>
      break;
+   }
+   @if (ConferenceModuleContext.Security.CanManage)
+   {
+   <a href="@Url.Action("BulkAdd", "Attendee", new { conferenceId = Model.ConferenceId, ret = "home" })" class="btn btn-default">
+    @Dnn.LocalizeString("BulkAdd")
+   </a>
    }
   </div>
   }

@@ -166,5 +166,20 @@ window.ConferenceService = function($, mid) {
   this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
     this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
   }
+  this.searchUsersByEmail = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Module', 'SearchUsers', conferenceId, null, {
+      field: 'email',
+      search: searchTerm
+    }, success, fail);
+  }
+  this.addAttendee = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+    this.apiCall('POST', 'Attendees', 'Add', conferenceId, null, {
+      Email: email,
+      FirstName: firstName,
+      LastName: lastName,
+      DisplayName: displayName,
+      Company: company
+    }, success, fail);
+  }
 
 }

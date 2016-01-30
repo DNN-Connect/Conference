@@ -28,6 +28,14 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public ActionResult BulkAdd(int conferenceId)
+        {
+            var conference = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
+            return View(conference);
+        }
+
+        [HttpGet]
         public ActionResult Edit(int conferenceId, int attendeeId)
         {
             if (!ConferenceModuleContext.Security.CanManage)

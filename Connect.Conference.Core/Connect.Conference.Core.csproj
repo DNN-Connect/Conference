@@ -111,6 +111,7 @@
     <Compile Include="Models\SessionTags\SessionTagBase.cs" />
     <Compile Include="Models\SessionTags\SessionTagBase_Interfaces.cs" />
     <Compile Include="Models\SessionTags\SessionTag_Interfaces.cs" />
+    <Compile Include="Models\SimpleUser.cs" />
     <Compile Include="Models\Slots\Slot.cs" />
     <Compile Include="Models\Slots\SlotBase.cs" />
     <Compile Include="Models\Slots\SlotBase_Interfaces.cs" />

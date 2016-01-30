@@ -120,6 +120,9 @@
   <data name="AddSession.Text" xml:space="preserve">
     <value>Add Session</value>
   </data>
+  <data name="BulkAdd.Text" xml:space="preserve">
+    <value>Bulk Add</value>
+  </data>
   <data name="Confirmed.Confirm" xml:space="preserve">
     <value>This attendee has been confirmed?</value>
   </data>

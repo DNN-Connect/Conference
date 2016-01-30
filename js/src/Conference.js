@@ -7,7 +7,8 @@ var TimesheetEditor = require('./TimesheetEditor'),
     SessionVotes = require('./SessionVotes'),
     Scheduler = require('./Scheduler/Scheduler'),
     Schedule = require('./Schedule/Schedule'),
-    Resources = require('./Resources/Resources');
+    Resources = require('./Resources/Resources'),
+    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers');
 
 (function($, window, document, undefined) {
 
@@ -121,6 +122,13 @@ var TimesheetEditor = require('./TimesheetEditor'),
         var resourceDir = $(el).data('resourcedir');
         React.render(<Resources moduleId={moduleId} conferenceId={conferenceId} resources={resources}
                       canAdd={canAdd} tabId={tabId} sessionId={sessionId} resourceDir={resourceDir} />, el);
+      });
+      $('.bulkAddUsersComponent').each(function(i, el) {
+        var moduleId = $(el).data('moduleid');
+        var tabId = $(el).data('tabid');
+        var conferenceId = $(el).data('conferenceid');
+        var type = $(el).data('type');
+        React.render(<BulkAddUsers moduleId={moduleId} conferenceId={conferenceId} type={type} />, el);
       });
     },
 
