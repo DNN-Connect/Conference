@@ -181,5 +181,14 @@ window.ConferenceService = function($, mid) {
       Company: company
     }, success, fail);
   }
+  this.addSpeaker = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+    this.apiCall('POST', 'Speakers', 'Add', conferenceId, null, {
+      Email: email,
+      FirstName: firstName,
+      LastName: lastName,
+      DisplayName: displayName,
+      Company: company
+    }, success, fail);
+  }
 
 }

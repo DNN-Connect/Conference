@@ -78,6 +78,25 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.SearchUsers(ActiveModule.PortalID, search));
         }
 
+        public class UserDTO
+        {
+            public int UserId { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string DisplayName { get; set; }
+            public string Email { get; set; }
+            public string Company { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Add(int conferenceId, [FromBody]UserDTO user)
+        {
+            var userId = Connect.Conference.Core.Controllers.ConferenceController.AddSpeaker(PortalSettings.PortalId, conferenceId, -1, user.Email, user.FirstName, user.LastName, user.DisplayName, user.Company, UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.GetSpeaker(conferenceId, userId));
+        }
+
     }
 }
 

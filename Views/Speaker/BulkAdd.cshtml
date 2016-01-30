@@ -1,0 +1,30 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@{
+    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+}
+
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
+
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+
+   <div class="bulkAddUsersComponent" data-conferenceid="@Model.ConferenceId"
+        data-moduleid="@Dnn.ModuleContext.ModuleId" data-tabid="@Dnn.ModuleContext.TabId" data-type="speakers">
+   </div>
+
+   <div class="right">
+    <a href="@HttpContext.Current.Request.UrlReferrer.PathAndQuery" class="btn btn-default">@Dnn.LocalizeString("Return")</a>
+   </div>
+
+  </div>
+ </div>
+</div>
+

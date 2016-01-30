@@ -93,21 +93,35 @@ var BulkAddUsers = React.createClass({
           this.refs.txtDisplayName.getDOMNode().value,
           this.refs.txtCompany.getDOMNode().value,
           function(data) {
-            this.refs.txtEmail.getDOMNode().value = '';
-            this.refs.txtFirstName.getDOMNode().value = '';
-            this.refs.txtLastName.getDOMNode().value = '';
-            this.refs.txtDisplayName.getDOMNode().value = '';
-            this.refs.txtCompany.getDOMNode().value = '';
-            var newList = this.state.addedUsers;
-            newList.push(data);
-            this.setState({
-              addedUsers: newList
-            })
+            this.addedUser(data);
           }.bind(this));
         break;
       case 'speakers':
+      console.log('here');
+        this.service.addSpeaker(this.props.conferenceId,
+          this.refs.txtEmail.getDOMNode().value,
+          this.refs.txtFirstName.getDOMNode().value,
+          this.refs.txtLastName.getDOMNode().value,
+          this.refs.txtDisplayName.getDOMNode().value,
+          this.refs.txtCompany.getDOMNode().value,
+          function(data) {
+            this.addedUser(data);
+          }.bind(this));
         break;
     }
+  },
+
+  addedUser: function(data) {
+    this.refs.txtEmail.getDOMNode().value = '';
+    this.refs.txtFirstName.getDOMNode().value = '';
+    this.refs.txtLastName.getDOMNode().value = '';
+    this.refs.txtDisplayName.getDOMNode().value = '';
+    this.refs.txtCompany.getDOMNode().value = '';
+    var newList = this.state.addedUsers;
+    newList.push(data);
+    this.setState({
+      addedUsers: newList
+    })
   },
 
   makeDisplayName: function(e) {

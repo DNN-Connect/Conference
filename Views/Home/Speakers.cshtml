@@ -8,7 +8,7 @@
 
 <div class="container">
  <div class="row">
-  <div class="col-sm-12">
+  <div class="col-xs-12">
    @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.Sort))
    {
    <div class="panel panel-info speakerListDetail">
@@ -28,5 +28,14 @@
    </div>
    }
   </div>
+  @if (ConferenceModuleContext.Security.CanManage)
+  {
+  <div class="col-xs-12">
+   <a href="@Url.Action("BulkAdd", "Speaker", new { conferenceId = Model.ConferenceId, ret = "home" })" class="btn btn-default">
+    @Dnn.LocalizeString("BulkAdd")
+   </a>
+  </div>
+  }
+
  </div>
 </div>
