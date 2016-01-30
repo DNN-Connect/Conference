@@ -116,7 +116,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
             DotNetNuke.Entities.Users.UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
             DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);
-            return ReturnRoute(speaker.ConferenceId, View("View", _repository.GetSpeaker(speaker.ConferenceId, speaker.UserId)));
+            return ReturnRoute(speaker.ConferenceId, View("View", _repository.GetSpeaker(speaker.ConferenceId, recordToUpdate.UserId)));
         }
 
         public class SpeakerDTO : Speaker
