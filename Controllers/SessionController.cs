@@ -128,7 +128,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             recordToUpdate.Capacity = session.Capacity;
             if (recordToUpdate.SessionId == -1)
             {
-                _repository.AddSession(ref recordToUpdate, User.UserID);
+                session.SessionId = _repository.AddSession(ref recordToUpdate, User.UserID);
             }
             else
             {
