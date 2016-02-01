@@ -23,6 +23,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var Location = _repository.GetLocation(conferenceId, locationId);
             if (Location == null) { Location = new Location() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(Location);
         }
 
@@ -32,6 +33,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var location = _repository.GetLocation(conferenceId, locationId);
             if (location == null) { location = new Location() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(location.GetLocationBase());
         }
 

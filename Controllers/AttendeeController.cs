@@ -24,6 +24,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         public ActionResult View(int conferenceId, int attendeeId)
         {
             var attendee = _repository.GetAttendee(conferenceId, attendeeId);
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(attendee);
         }
 
@@ -32,6 +33,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         public ActionResult BulkAdd(int conferenceId)
         {
             var conference = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(conference);
         }
 
@@ -47,6 +49,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
             var attendee = _repository.GetAttendee(conferenceId, attendeeId);
             var dto = new AttendeeDTO(attendee);
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(dto);
         }
 

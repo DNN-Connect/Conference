@@ -23,6 +23,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var track = _repository.GetTrack(conferenceId, trackId);
             if (track == null) { track = new Track() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(track);
         }
 
@@ -32,6 +33,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var track = _repository.GetTrack(conferenceId, trackId);
             if (track == null) { track = new Track() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(track.GetTrackBase());
         }
 

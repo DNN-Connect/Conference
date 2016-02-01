@@ -26,6 +26,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var session = _repository.GetSession(conferenceId, sessionId);
             if (session == null) { session = new Session() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(session);
         }
 
@@ -63,6 +64,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                         break;
                 }
             }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(session);
         }
 
@@ -72,6 +74,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var session = _repository.GetSession(conferenceId, sessionId);
             if (session == null) { session = new Session() { ConferenceId = conferenceId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(session.GetSessionBase());
         }
 
@@ -111,6 +114,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     ConferenceModuleContext.ThrowAccessViolation();
                 }
             }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(session.GetSessionBase());
         }
 

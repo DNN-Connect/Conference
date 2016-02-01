@@ -24,6 +24,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(conference);
         }
 
@@ -33,12 +34,14 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(conference);
         }
 
         [HttpGet]
         public ActionResult View(int conferenceId)
         {
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
         }
 
@@ -46,6 +49,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Manage(int conferenceId)
         {
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
         }
 
@@ -53,6 +57,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Schedule(int conferenceId)
         {
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(_repository.GetConference(PortalSettings.PortalId, conferenceId));
         }
 
@@ -62,6 +67,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         {
             var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
             if (conference == null) { conference = new Connect.Conference.Core.Models.Conferences.Conference() { PortalId = PortalSettings.PortalId }; }
+            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
             return View(conference.GetConferenceBase());
         }
 
