@@ -36,7 +36,7 @@ namespace Connect.DNN.Modules.Conference.Common
             }
         }
 
-        public static MemoryStream CreateImage(Stream stream, float[] crop, string extension)
+        public static MemoryStream CreateImage(Stream stream, float[] crop, float zoom, int imageSize, string extension)
         {
             var original = new Bitmap(stream);
             PixelFormat format = original.PixelFormat;
@@ -45,9 +45,16 @@ namespace Connect.DNN.Modules.Conference.Common
                 format = PixelFormat.Format24bppRgb;
             }
 
-            int newHeight = (int)(crop[3] - crop[1]);
-            int newWidth = (int)(crop[2] - crop[0]);
-            var newImg = new Bitmap(newWidth, newHeight, format);
+            float origZoom = 1;
+            if (original.Width > original.Height)
+            {
+                origZoom = (float)200 / (float)original.Height;
+            }
+            else
+            {
+                origZoom = (float)200 / (float)original.Width;
+            }
+            var newImg = new Bitmap(imageSize, imageSize, format);
             newImg.SetResolution(original.HorizontalResolution, original.VerticalResolution);
             Graphics canvas = Graphics.FromImage(newImg);
             canvas.SmoothingMode = SmoothingMode.None;
@@ -57,10 +64,10 @@ namespace Connect.DNN.Modules.Conference.Common
             if (extension.ToLowerInvariant() != ".png")
             {
                 canvas.Clear(Color.White);
-                canvas.FillRectangle(Brushes.White, 0, 0, newWidth, newHeight);
+                canvas.FillRectangle(Brushes.White, 0, 0, imageSize, imageSize);
             }
 
-            canvas.DrawImage(original, -crop[0], -crop[1], original.Width, original.Height);
+            canvas.DrawImage(original, -crop[0], -crop[1], original.Width * origZoom * zoom, original.Height * origZoom * zoom);
 
             //newImg.Save
             var content = new MemoryStream();

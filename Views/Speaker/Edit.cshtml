@@ -124,10 +124,6 @@
   });
   validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
 
-  $('#cmdSave').click(function() {
-   $('#ProfilePicDTO').val(JSON.stringify(currentImageSettings));
-  });
-
   $('#cmdChangePhoto').click(function () {
    $('#spanPhoto').hide();
    $('#spanPhotoEdit').show();
@@ -145,6 +141,7 @@
      currentImageSettings.width = Math.floor(cropper.points[2] - cropper.points[0]);
      currentImageSettings.height = Math.floor(cropper.points[3] - cropper.points[1]);
      currentImageSettings.smallestSide = Math.min(currentImageSettings.width, currentImageSettings.height);
+     $('#ProfilePicDTO').val(JSON.stringify(currentImageSettings));
     }
    });
    if (currentImageSettings.filename != '') {

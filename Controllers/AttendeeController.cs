@@ -111,7 +111,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     System.IO.MemoryStream sizedContent = null;
                     using (var content = FileManager.Instance.GetFileContent(file))
                     {
-                        sizedContent = ImageUtils.CreateImage(content, attendee.ProfilePic.crop.points, file.Extension);
+                        sizedContent = ImageUtils.CreateImage(content, attendee.ProfilePic.crop.points, attendee.ProfilePic.crop.zoom, 200, file.Extension);
                     }
                     FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
                     sizedContent.Dispose();
