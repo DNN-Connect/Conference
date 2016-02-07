@@ -171,6 +171,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Last Name</value>
   </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
   <data name="LocationSpecific" xml:space="preserve">
     <value>Location Specific</value>
   </data>
