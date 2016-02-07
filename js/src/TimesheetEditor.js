@@ -48,6 +48,11 @@ var TimesheetEditor = React.createClass({
           </label>
       );
     }
+    var locations = this.props.locations.map(function(item) {
+      return (
+        <option value={item.LocationId}>{item.Name}</option>
+        );
+    });
     return (
       <div>
         <div ref="mainDiv" className="timesheet">
@@ -89,6 +94,8 @@ var TimesheetEditor = React.createClass({
                 <div className="form-group">
                   <label>{this.resources.Location}</label>
                   <select className="form-control" ref="location">
+                    <option value="-1">{this.resources.All}</option>
+                    {locations}
                   </select>
                 </div>
                 <div className="form-group">

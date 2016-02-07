@@ -33,9 +33,10 @@ var TimesheetEditor = require('./TimesheetEditor'),
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var slots = $(el).data('slots');
+        var locations = $(el).data('locations');
         var conferenceId = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
-        React.render(<TimesheetEditor moduleId={moduleId} slots={slots} 
+        React.render(<TimesheetEditor moduleId={moduleId} slots={slots} locations={locations}
            conferenceId={conferenceId} nrDays={nrDays} />, el);
       });
       $('.commentsComponent').each(function(i, el) {

@@ -118,6 +118,7 @@
 <h3>@Dnn.LocalizeString("Slots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
      data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).OrderBy(s => s.Start)))"
+     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))"
      data-conference="@Model.ConferenceId" data-nrdays="@(Model.EndDate != null ? ((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays) : 1)"
      data-resources="@SerializedResources()">
 </div>

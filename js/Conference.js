@@ -2162,6 +2162,11 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
           )
       );
     }
+    var locations = this.props.locations.map(function(item) {
+      return (
+        React.createElement("option", {value: item.LocationId}, item.Name)
+        );
+    });
     return (
       React.createElement("div", null, 
         React.createElement("div", {ref: "mainDiv", className: "timesheet"}, 
@@ -2202,7 +2207,9 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
                 ), 
                 React.createElement("div", {className: "form-group"}, 
                   React.createElement("label", null, this.resources.Location), 
-                  React.createElement("select", {className: "form-control", ref: "location"}
+                  React.createElement("select", {className: "form-control", ref: "location"}, 
+                    React.createElement("option", {value: "-1"}, this.resources.All), 
+                    locations
                   )
                 ), 
                 React.createElement("div", {className: "form-group"}, 
@@ -2556,9 +2563,10 @@ var TimesheetEditor = require('./TimesheetEditor'),
       $('.timesheetEditor').each(function(i, el) {
         var moduleId = $(el).data('moduleid');
         var slots = $(el).data('slots');
+        var locations = $(el).data('locations');
         var conferenceId = $(el).data('conference');
         var nrDays = $(el).data('nrdays');
-        React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, 
+        React.render(React.createElement(TimesheetEditor, {moduleId: moduleId, slots: slots, locations: locations, 
            conferenceId: conferenceId, nrDays: nrDays}), el);
       });
       $('.commentsComponent').each(function(i, el) {
