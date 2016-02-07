@@ -25,7 +25,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.Edit)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage Reorder(int conferenceId)
         {
             var raw = new System.IO.StreamReader(HttpContext.Current.Request.InputStream).ReadToEnd();
