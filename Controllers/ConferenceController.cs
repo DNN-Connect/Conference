@@ -79,6 +79,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
             var previousRecord = _repository.GetConference(PortalSettings.PortalId, conference.ConferenceId);
             if (previousRecord == null)
             {
+                conference.PortalId = PortalSettings.PortalId;
                 _repository.AddConference(ref conference, User.UserID);
             }
             else
