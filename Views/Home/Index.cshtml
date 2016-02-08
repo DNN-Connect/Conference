@@ -52,6 +52,7 @@
     <a href="@Url.Action("Manage", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Manage")" class="pull-right">
      @Dnn.LocalizeString("Manage")
     </a>
+    @Html.ActionLink(Dnn.LocalizeString("Delete"), "Delete", "Conference", new { ConferenceId = c.ConferenceId }, new { @class = "pull-right cmdDelete", style = "padding-right:10px;" })
     <a href="@Url.Action("Edit", "Conference", new {conferenceId = c.ConferenceId})" title="@Dnn.LocalizeString("Edit")" class="pull-right" style="padding-right:10px;">
      @Dnn.LocalizeString("Edit")
     </a>
@@ -71,3 +72,17 @@
     </div>
     }
 }
+
+<script type="text/javascript">
+ $(function () {
+
+  $(document).ready(function() {
+
+   $('.cmdDelete').click(function () {
+    return confirm('@Dnn.LocalizeString("DeleteConference.Confirm")');
+   });
+
+  });
+
+ });
+</script>

@@ -85,6 +85,10 @@
  </div>
  <div class="right">
   @ReturnLink(Dnn.LocalizeString("Cancel"), "Home", "Index", null, new { @class = "btn btn-default" }, Model.ConferenceId)
+  @if (Model.ConferenceId > 0)
+  {
+   @Html.ActionLink(Dnn.LocalizeString("Delete"), "Delete", "Conference", new { ConferenceId = Model.ConferenceId }, new { @class = "btn btn-default cmdDelete" })
+  }
   <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
  </div>
 </fieldset>
@@ -95,5 +99,8 @@
    format: 'MM/DD/YYYY'
   });
   validateForm($('#editConference'), $('#cmdSave'), $('#formErrors'));
+  $('.cmdDelete').click(function () {
+   return confirm('@Dnn.LocalizeString("DeleteConference.Confirm")');
+  });
  });
 </script>

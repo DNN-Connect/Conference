@@ -47,6 +47,18 @@ namespace Connect.DNN.Modules.Conference.Controllers
 
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public ActionResult Delete(int conferenceId)
+        {
+            var conference = _repository.GetConference(PortalSettings.PortalId, conferenceId);
+            if (conference != null)
+            {
+                _repository.DeleteConference(conference.GetConferenceBase());
+            }
+            return RedirectToDefaultRoute();
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Manage(int conferenceId)
         {
             DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();

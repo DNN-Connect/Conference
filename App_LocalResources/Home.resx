@@ -126,6 +126,9 @@
   <data name="Confirmed.Confirm" xml:space="preserve">
     <value>This attendee has been confirmed?</value>
   </data>
+  <data name="DeleteConference.Confirm" xml:space="preserve">
+    <value>Do you wish to delete this conference? Note this cannot be undone.</value>
+  </data>
   <data name="EditProfile.Text" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
