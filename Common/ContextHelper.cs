@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using DotNetNuke.Common;
 using DotNetNuke.Web.Client.ClientResourceManagement;
 using DotNetNuke.Web.Mvc.Framework.Controllers;
-using Connect.DNN.Modules.Conference.Common.Settings;
 using DotNetNuke.Web.Api;
 using DotNetNuke.Entities.Modules;
 

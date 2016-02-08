@@ -12,10 +12,10 @@ namespace Connect.DNN.Modules.Conference
     public partial class Settings : ModuleSettingsBase
     {
         #region Properties
-        private Common.Settings.ModuleSettings _settings;
-        public Common.Settings.ModuleSettings ModSettings
+        private Common.ModuleSettings _settings;
+        public Common.ModuleSettings ModSettings
         {
-            get { return _settings ?? (_settings = Common.Settings.ModuleSettings.GetSettings(ModuleContext.Configuration)); }
+            get { return _settings ?? (_settings = Common.ModuleSettings.GetSettings(ModuleContext.Configuration)); }
         }
         #endregion
 
@@ -64,7 +64,7 @@ namespace Connect.DNN.Modules.Conference
             {
                 ModSettings.View = ddView.SelectedValue;
                 ModSettings.Conference = int.Parse(ddConference.SelectedValue);
-                ModSettings.SaveSettings();
+                ModSettings.SaveSettings(ModuleContext.Configuration);
             }
             catch (Exception exc) //Module failed to load
             {
