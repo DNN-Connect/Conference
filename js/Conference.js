@@ -24878,6 +24878,12 @@ window.ConferenceService = function($, mid) {
       Company: company
     }, success, fail);
   }
+  this.deleteSession = function(conferenceId, sessionId, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Delete', conferenceId, sessionId, null, success, fail);
+  }
+  this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
+    this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus}, success, fail);
+  }
 
 }
 

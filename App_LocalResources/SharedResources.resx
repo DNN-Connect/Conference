@@ -339,4 +339,10 @@
   <data name="ReceiveNotifications.Text" xml:space="preserve">
     <value>Receive Notifications</value>
   </data>
+  <data name="Retract.Text" xml:space="preserve">
+    <value>Retract</value>
+  </data>
+  <data name="Submit.Text" xml:space="preserve">
+    <value>Submit</value>
+  </data>
 </root>

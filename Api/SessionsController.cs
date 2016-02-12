@@ -159,6 +159,54 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.SessionSubmit)]
+        public HttpResponseMessage Delete(int conferenceId, int id)
+        {
+            var session = SessionRepository.Instance.GetSession(conferenceId, id);
+            if (session == null)
+            {
+                return ServiceError("Can't find session");
+            }
+            if (!ConferenceModuleContext.Security.CanManage)
+            {
+                if (!ConferenceModuleContext.Security.IsPresenter(id))
+                {
+                    return AccessViolation("You can't delete this session because you are not a presenter of it");
+                }
+            }
+            SessionRepository.Instance.DeleteSession(session.ConferenceId, session.SessionId);
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
+
+        public class StatusDTO
+        {
+            public int newStatus { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.SessionSubmit)]
+        public HttpResponseMessage ChangeStatus(int conferenceId, int id, [FromBody]StatusDTO data)
+        {
+            var session = SessionRepository.Instance.GetSession(conferenceId, id);
+            if (session == null)
+            {
+                return ServiceError("Can't find session");
+            }
+            if (!ConferenceModuleContext.Security.CanManage)
+            {
+                if (!ConferenceModuleContext.Security.IsPresenter(id))
+                {
+                    return AccessViolation("You can't delete this session because you are not a presenter of it");
+                }
+            }
+            session.Status = data.newStatus;
+            SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSession(session.ConferenceId, session.SessionId));
+        }
+
     }
 }
 

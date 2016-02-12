@@ -5,6 +5,7 @@
 @using Connect.Conference.Core.Repositories;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
+    ConferenceModuleContext.AddModuleService();
 
     IEnumerable<Session> mySessions = SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, Dnn.User.UserID);
     ConferenceModuleContext.AddBootstrapCss();
@@ -21,6 +22,14 @@
    <div>
     @s.Description
    </div>
+   <div style="margin-top:20px">
+    <dl class="dl-horizontal">
+     <dt>@Dnn.LocalizeString("Speakers")</dt>
+     <dd>@String.Join(", ", s.Speakers.Select(sp => sp.Value))</dd>
+     <dt>@Dnn.LocalizeString("Status")</dt>
+     <dd>@Dnn.LocalizeString(((Connect.Conference.Core.Common.SessionStatus)s.Status).ToString())</dd>
+    </dl>
+   </div>
    <div>
     <a href="@Url.Action("Submit", "Session", new {conferenceId = Model.ConferenceId, sessionId = s.SessionId})" title="@Dnn.LocalizeString("Edit")" class="btn btn-default">
      @Dnn.LocalizeString("Edit")
@@ -28,6 +37,21 @@
     <a href="@Url.Action("View", "Session", new {conferenceId = Model.ConferenceId, sessionId = s.SessionId})" title="@Dnn.LocalizeString("View")" class="btn btn-default">
      @Dnn.LocalizeString("View")
     </a>
+    <a href="#" class="btn btn-warning cmdDelete" data-sessionid="@s.SessionId">
+     @Dnn.LocalizeString("Delete")
+    </a>
+    @if (s.Status > 0)
+    {
+    <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="0">
+     @Dnn.LocalizeString("Retract")
+    </a>
+    }
+    @if (s.Status == 0)
+    {
+    <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="1">
+     @Dnn.LocalizeString("Submit")
+    </a>
+    }
    </div>
   </div>
   <div class="panel-footer">
@@ -51,3 +75,27 @@
  </a>
  }
 </div>
+
+<script type="text/javascript">
+ $(function () {
+  var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  $(document).ready(function () {
+   $('.cmdDelete').click(function (e) {
+    e.preventDefault();
+    var btn = e.target;
+    if (confirm('@Dnn.LocalizeString("DeleteSession.Confirm")')) {
+     moduleConferenceService.deleteSession(@Model.ConferenceId, $(btn).data('sessionid'), function() {
+      location.reload();
+     });
+    }
+   }.bind(this));
+   $('.cmdWorkflow').click(function (e) {
+    e.preventDefault();
+    var btn = e.target;
+    moduleConferenceService.changeSessionStatus(@Model.ConferenceId, $(btn).data('sessionid'), $(btn).data('workflow'), function(data) {
+     location.reload();
+    });
+   });
+  });
+ });
+</script>

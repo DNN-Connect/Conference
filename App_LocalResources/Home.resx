@@ -129,6 +129,9 @@
   <data name="DeleteConference.Confirm" xml:space="preserve">
     <value>Do you wish to delete this conference? Note this cannot be undone.</value>
   </data>
+  <data name="DeleteSession.Confirm" xml:space="preserve">
+    <value>Do you wish to delete this session?</value>
+  </data>
   <data name="EditProfile.Text" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
