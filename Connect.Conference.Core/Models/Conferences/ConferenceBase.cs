@@ -48,6 +48,8 @@ namespace Connect.Conference.Core.Models.Conferences
         public string Location { get; set; }
         [DataMember]
         public string Url { get; set; }
+        [DataMember]
+        public bool SubmittedSessionsPublic { get; set; }
         #endregion
 
         #region Methods
@@ -87,6 +89,8 @@ namespace Connect.Conference.Core.Models.Conferences
 
             if (!String.IsNullOrEmpty(conference.Url))
                 Url = conference.Url;
+
+            SubmittedSessionsPublic = conference.SubmittedSessionsPublic;
 
         }
         #endregion

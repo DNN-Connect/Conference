@@ -8,6 +8,13 @@
     var canVote = (ConferenceModuleContext.Security.UserId != -1);
     canVote = canVote & (Model.StartDate != null && Model.StartDate > DateTime.Now);
     canVote = canVote & Model.SessionVoting;
+    var sessionsTitle = Dnn.LocalizeString("AcceptedSessions");
+    var sessionStatusThreshold = 3;
+    if (Model.SubmittedSessionsPublic)
+    {
+     sessionsTitle = Dnn.LocalizeString("SubmittedSessions");
+     sessionStatusThreshold = 2;
+    }
 }
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -18,9 +25,9 @@
 <div class="container">
  <div class="row">
   <div class="col-xs-12">
-<h2>@Model.Name</h2>
-@if (Model.StartDate != null)
-{
+   <h2>@Model.Name</h2>
+   @if (Model.StartDate != null)
+   {
    <div class="panel panel-info">
     <div class="panel-body">
      @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("d MMMM") : "")
@@ -29,15 +36,15 @@
      @Model.Location
     </div>
    </div>
-}
-<p class="lead">@Model.Description</p>
+   }
+   <p class="lead">@Model.Description</p>
   </div>
  </div>
  <div class="row">
   <div class="col-xs-12 col-md-6">
-   <h3>@Dnn.LocalizeString("AcceptedSessions")</h3>
+   <h3>@sessionsTitle</h3>
    <div class="sessionVoteComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-allowvote="@(canVote.ToString().ToLower())"
-        data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsWithVote(Model.ConferenceId, Dnn.User.UserID, 3)))">
+        data-conference="@Model.ConferenceId" data-votelist="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsWithVote(Model.ConferenceId, Dnn.User.UserID, sessionStatusThreshold)))">
    </div>
   </div>
   <div class="col-xs-12 col-md-6">

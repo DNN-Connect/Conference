@@ -51,6 +51,7 @@ namespace Connect.Conference.Core.Models.Conferences
              res.SpeakerRole = SpeakerRole;
              res.Location = Location;
              res.Url = Url;
+             res.SubmittedSessionsPublic = SubmittedSessionsPublic;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

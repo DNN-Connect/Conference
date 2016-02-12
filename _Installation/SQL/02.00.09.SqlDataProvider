@@ -1,0 +1,36 @@
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ADD SubmittedSessionsPublic BIT NULL
+GO
+
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+SET SubmittedSessionsPublic = 0
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Conferences
+ALTER COLUMN SubmittedSessionsPublic BIT NOT NULL
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Conferences
+AS
+SELECT
+ c.*,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a WHERE a.ConferenceId=c.ConferenceId) NrAttendees,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Speakers s WHERE s.ConferenceId=c.ConferenceId) NrSpeakers,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l WHERE l.ConferenceId=c.ConferenceId) NrLocations,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Tracks t WHERE t.ConferenceId=c.ConferenceId) NrTracks,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s WHERE s.ConferenceId=c.ConferenceId AND s.[Status] >= 3) NrSessions,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Conferences c
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=c.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=c.LastModifiedByUserID
+GO
+

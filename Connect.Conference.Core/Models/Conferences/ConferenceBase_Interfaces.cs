@@ -29,6 +29,7 @@ namespace Connect.Conference.Core.Models.Conferences
    SpeakerRole = Convert.ToInt32(Null.SetNull(dr["SpeakerRole"], SpeakerRole));
    Location = Convert.ToString(Null.SetNull(dr["Location"], Location));
    Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
+   SubmittedSessionsPublic = Convert.ToBoolean(Null.SetNull(dr["SubmittedSessionsPublic"], SubmittedSessionsPublic));
         }
 
         [IgnoreColumn()]
@@ -92,6 +93,8 @@ namespace Connect.Conference.Core.Models.Conferences
          return "";
      };
      return PropertyAccess.FormatString(Url, strFormat);
+    case "submittedsessionspublic": // Bit
+     return SubmittedSessionsPublic.ToString();
                 default:
                     propertyNotFound = true;
                     break;

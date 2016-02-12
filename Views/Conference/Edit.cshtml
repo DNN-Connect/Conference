@@ -71,6 +71,13 @@
  <div class="clearfix">&nbsp;</div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("SubmittedSessionsPublic")</label>
+  </div>
+  @Html.CheckBoxFor(m => m.SubmittedSessionsPublic)
+ </div>
+ <div class="clearfix">&nbsp;</div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("AttendeeRole")</label>
   </div>
   @Html.DropDownListFor(m => m.AttendeeRole, roles)
