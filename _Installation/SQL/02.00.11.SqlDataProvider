@@ -1,0 +1,31 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionSpeakers
+AS
+SELECT
+ ss.*,
+ sp.Company,
+ sp.Description,
+ sp.DescriptionShort,
+ sp.Url,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=ss.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Speakers sp ON sp.UserId=ss.SpeakerId AND sp.ConferenceId=s.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=ss.SpeakerId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=ss.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=ss.LastModifiedByUserID
+GO
+
