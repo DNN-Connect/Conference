@@ -59,7 +59,7 @@
         @if (Model.SlotId != 0)
         {
         <dt>@Dnn.LocalizeString("DateAndTime")</dt>
-        <dd>@(((System.DateTime)Model.SessionDateAndTime).ToString("G"))</dd>
+        <dd>@(((DateTime)Model.SessionDateAndTime).ToString("G"))</dd>
         }
         @if (Model.LocationId != null)
         {
@@ -70,7 +70,7 @@
        <hr />
        @if (!string.IsNullOrEmpty(Model.Description))
        {
-        <div>@Model.Description</div>
+        <div>@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))</div>
         <hr />
        }
        <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
