@@ -45,37 +45,6 @@ namespace Connect.DNN.Modules.Conference.Common
             return Regex.Replace(filename, "[\\:;,\\?]", "");
         }
 
-        public static IEnumerable<Comment> FillStampLines(this IEnumerable<Comment> commentList)
-        {
-            var res = new List<Comment>();
-            foreach (var comment in commentList)
-            {
-                res.Add(comment.FillStampLine());
-            }
-            return res;
-        }
-
-        public static IEnumerable<Comment> FillStampLines(this IPagedList<Comment> commentList)
-        {
-            var res = new List<Comment>();
-            foreach (var comment in commentList)
-            {
-                res.Add(comment.FillStampLine());
-            }
-            return res;
-        }
-
-        public static Comment FillStampLine(this Comment comment)
-        {
-            var res = comment;
-            try
-            {
-                res.StampLine = string.Format(Localization.GetString("StampLine.Text", SharedResourceFileName), comment.Datime, comment.DisplayName);
-            }
-            catch { }
-            return res;
-        }
-
         public static string ToStatusString(this Connect.Conference.Core.Common.SessionStatus status)
         {
             return Localization.GetString(status.ToString(), SharedResourceFileName);

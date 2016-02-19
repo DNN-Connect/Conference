@@ -17,9 +17,5 @@ namespace Connect.Conference.Core.Models.Comments
             }
         }
 
-        [IgnoreColumn]
-        [DataMember]
-        public string StampLine { get; set; } = "";
-
     }
 }

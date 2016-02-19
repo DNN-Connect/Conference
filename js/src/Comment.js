@@ -24,13 +24,22 @@ var Comment = React.createClass({
                   </div>
         );
     }
+    var time = moment(this.props.comment.Datime);
+    var strTime = time.fromNow();
+    if (moment().diff(time, 'months', true) > 1)
+    {
+      strTime = time.format('LLL');
+    }
     return (
       <li className="list-group-item">
           <div className="row">
               <div className="img-col">
                   <img src={imgUrl} className="img-circle img-responsive" alt="" /></div>
               <div className="comment-col">
-                  <div className="comment-details">{this.props.comment.StampLine}</div>
+                  <div className="comment-details">
+                   {this.props.comment.DisplayName}&nbsp;
+                   {strTime}
+                  </div>
                   <div className="comment-text">{this.props.comment.Remarks}</div>
                   {actionBar}
               </div>

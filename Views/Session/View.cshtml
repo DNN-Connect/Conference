@@ -129,7 +129,7 @@
    <div class="commentsComponent col-xs-12 col-sm-@colWidth" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("PrivateComments")" data-help="@Dnn.LocalizeString("PrivateComments.Help")"
         data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="0" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
-        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList))"
         data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
    </div>
   }
@@ -141,7 +141,7 @@
    <div class="commentsComponent col-xs-12 col-sm-@colWidth" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("InternalComments")" data-help="@Dnn.LocalizeString("InternalComments.Help")"
         data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="1" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
-        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+        data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList))"
         data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
    </div>
   }
@@ -153,7 +153,7 @@
        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("PublicComments")" data-help="@Dnn.LocalizeString("PublicComments.Help")"
        data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-visibility="2" data-pagesize="@commentsPageSize"
        data-totalcomments="@publicTotalComments"
-       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(publicCommentList.FillStampLines()))"
+       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(publicCommentList))"
        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
   </div>
  </div>

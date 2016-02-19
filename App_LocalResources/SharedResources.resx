@@ -261,9 +261,6 @@
   <data name="Notes.Text" xml:space="preserve">
     <value>Notes</value>
   </data>
-  <data name="StampLine.Text" xml:space="preserve">
-    <value>{1} on {0:d} at {0:t}</value>
-  </data>
   <data name="DateAndTime.Text" xml:space="preserve">
     <value>Date and Time</value>
   </data>

@@ -189,13 +189,22 @@ var Comment = React.createClass({displayName: "Comment",
                   )
         );
     }
+    var time = moment(this.props.comment.Datime);
+    var strTime = time.fromNow();
+    if (moment().diff(time, 'months', true) > 1)
+    {
+      strTime = time.format('LLL');
+    }
     return (
       React.createElement("li", {className: "list-group-item"}, 
           React.createElement("div", {className: "row"}, 
               React.createElement("div", {className: "img-col"}, 
                   React.createElement("img", {src: imgUrl, className: "img-circle img-responsive", alt: ""})), 
               React.createElement("div", {className: "comment-col"}, 
-                  React.createElement("div", {className: "comment-details"}, this.props.comment.StampLine), 
+                  React.createElement("div", {className: "comment-details"}, 
+                   this.props.comment.DisplayName, " ", 
+                   strTime
+                  ), 
                   React.createElement("div", {className: "comment-text"}, this.props.comment.Remarks), 
                   actionBar
               )

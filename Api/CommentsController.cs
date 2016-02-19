@@ -35,9 +35,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             try
             {
-                var list = CommentRepository.Instance.GetCommentsBySession(sessionId, visibility, pageIndex, pageSize);
-                var res = list.FillStampLines();
-                return Request.CreateResponse(HttpStatusCode.OK, res);
+                return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetCommentsBySession(sessionId, visibility, pageIndex, pageSize));
             }
             catch
             {
@@ -75,7 +73,7 @@ namespace Connect.DNN.Modules.Conference.Api
             comment.UserId = UserInfo.UserID;
             comment.Datime = System.DateTime.Now;
             CommentRepository.Instance.AddComment(ref comment);
-            return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetComment(conferenceId, comment.CommentId).FillStampLine());
+            return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetComment(conferenceId, comment.CommentId));
         }
 
         [HttpPost]
@@ -127,7 +125,7 @@ namespace Connect.DNN.Modules.Conference.Api
             {
                 var retValue = new pollReturnDTO();
                 retValue.CheckTime = System.DateTime.Now;
-                retValue.Comments = CommentRepository.Instance.GetNewComments(sessionId, visibility, lastCheck).FillStampLines();
+                retValue.Comments = CommentRepository.Instance.GetNewComments(sessionId, visibility, lastCheck);
                 if (retValue.Comments.Count() > 0)
                 {
                     retValue.NewTotalComments = CommentRepository.Instance.GetTotalComments(sessionId, visibility);

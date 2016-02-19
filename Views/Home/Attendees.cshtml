@@ -145,7 +145,7 @@
   <div class="commentsComponent col-xs-12" data-moduleid="@Dnn.ModuleContext.ModuleId"
        data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("Comments")" data-help=""
        data-conference="@Model.ConferenceId" data-session="-1" data-visibility="2" data-pagesize="@commentsPageSize" data-totalcomments="@totalComments"
-       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList.FillStampLines()))"
+       data-comments="@(Newtonsoft.Json.JsonConvert.SerializeObject(commentList))"
        data-apppath="@DotNetNuke.Common.Globals.ApplicationPath">
   </div>
 
