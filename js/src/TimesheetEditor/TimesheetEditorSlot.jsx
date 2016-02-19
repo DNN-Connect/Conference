@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var TimesheetEditorSlot = React.createClass({
 
   getInitialState: function() {

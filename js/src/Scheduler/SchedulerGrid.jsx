@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var SchedulerGrid = React.createClass({
 
   getInitialState: function() {

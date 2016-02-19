@@ -1,6 +1,5 @@
-/** @jsx React.DOM */
-var SchedulerDay = require('./SchedulerDay'),
-  SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession');
+var SchedulerDay = require('./SchedulerDay.jsx'),
+  SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession.jsx');
 
 var Scheduler = React.createClass({
 
@@ -177,7 +176,6 @@ var Scheduler = React.createClass({
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    console.log(this.props.conference.ConferenceId);
     this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
       this.setState({

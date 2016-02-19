@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var TimesheetEditorSlot = require('./TimesheetEditorSlot');
+var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
 
 var TimesheetEditor = React.createClass({
 

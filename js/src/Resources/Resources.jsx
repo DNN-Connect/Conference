@@ -1,6 +1,5 @@
-/** @jsx React.DOM */
-var Resource = require('./Resource'),
-    Video = require('./Video');
+var Resource = require('./Resource.jsx'),
+    Video = require('./Video.jsx');
 
 var Resources = React.createClass({
 

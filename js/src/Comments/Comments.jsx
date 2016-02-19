@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var Comment = require('./Comment');
+var Comment = require('./Comment.jsx');
 
 var Comments = React.createClass({
 

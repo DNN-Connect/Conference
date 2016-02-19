@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var Speaker = React.createClass({
 
   resources: null,

@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var SessionVote = require('./SessionVote');
+var SessionVote = require('./SessionVote.jsx');
 
 var SessionVotes = React.createClass({
 

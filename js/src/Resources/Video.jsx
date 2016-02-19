@@ -1,8 +1,4 @@
-/** @jsx React.DOM */
-var Icon = require('./Icon'),
-    StatusApprovalButton = require('./StatusApprovalButton.jsx');
-
-var Resource = React.createClass({
+var Video = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -14,24 +10,14 @@ var Resource = React.createClass({
   },
 
   render: function() {
-    var icon = "file";
-    var link = this.props.resourceDir + this.props.resource.ResourceLink;
-    var linkClass = "btn btn-sm btn-success glyphicon glyphicon-download";
+    var srcLink = "";
     switch (this.props.resource.ResourceType)
     {
-      case 1:
-        icon = "file-powerpoint";
+      case 200:
+        srcLink = "//www.youtube.com/embed/" + this.props.resource.ResourceLink + "?rel=0";
         break;
-      case 2:
-        icon = "file-archive";
-        break;
-      case 3:
-        icon = "file-pdf";
-        break;
-      case 100:
-        icon = "hyperlink";
-        link = this.props.resource.ResourceLink;
-        linkClass = "btn btn-sm btn-info glyphicon glyphicon-globe";
+      case 201:
+        srcLink = "https://player.vimeo.com/video/" + this.props.resource.ResourceLink + "?rel=0";
         break;
     }
     var deleteCol = null;
@@ -45,13 +31,21 @@ var Resource = React.createClass({
         );
     }
     var okCol = null;
-    if (this.security.CanManage | this.props.canAdd) {
-      okCol = (
-        <StatusApprovalButton resource={this.props.resource} 
-                   approveResource={this.props.approveResource} 
-                   canManage={this.security.CanManage}
-                   moduleId={this.props.moduleId} />
-        );
+    if (this.security.CanManage) {
+      if (this.props.resource.Visibility == 0) {
+        okCol = (
+        <td className="iconCol">
+         <a href="#" onClick={this.props.approveResource.bind(null, this.props.resource)} title={this.resources.Approve}>
+           <span className="btn btn-sm btn-success glyphicon glyphicon-check"></span>
+         </a>
+        </td>
+          );
+      } else {
+        okCol = (
+        <td className="iconCol">
+        </td>
+          );
+      }
     }
     var descriptionBox = this.props.resource.ResourceDescription;
     if (this.props.canAdd) {
@@ -61,19 +55,19 @@ var Resource = React.createClass({
         );
     }
     return (
-      <tr>
-       <td className="iconCol">
-         <Icon type={icon} />
-       </td>
-       <td>{descriptionBox}</td>
-       {okCol}
-       {deleteCol}
-       <td className="iconCol">
-         <a href={link}>
-           <span className={linkClass}></span>
-         </a>
-       </td>
-      </tr>
+      <div className="embeddedContent">
+        <iframe width="100%" height="400px" src={srcLink} frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+        </iframe>
+        <table className="table">
+          <tbody>
+            <tr>
+             <td>{descriptionBox}</td>
+             {okCol}
+             {deleteCol}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     );
   },
 
@@ -97,4 +91,4 @@ var Resource = React.createClass({
 
 });
 
-module.exports = Resource;
+module.exports = Video;

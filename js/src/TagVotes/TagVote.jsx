@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var TagVote = React.createClass({
 
   resources: null,

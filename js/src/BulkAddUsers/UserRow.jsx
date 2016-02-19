@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var UserRow = React.createClass({
 
   getInitialState: function() {

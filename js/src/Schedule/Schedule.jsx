@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var ScheduleDay = require('./ScheduleDay');
+var ScheduleDay = require('./ScheduleDay.jsx');
 
 var Schedule = React.createClass({
 

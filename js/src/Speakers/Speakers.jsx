@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var Speaker = require('./Speaker');
+var Speaker = require('./Speaker.jsx');
 
 var Speakers = React.createClass({
 

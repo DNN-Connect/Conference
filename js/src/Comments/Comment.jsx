@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var Comment = React.createClass({
 
   resources: null,

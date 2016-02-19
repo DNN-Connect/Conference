@@ -1,8 +1,7 @@
-/** @jsx React.DOM */
-var SchedulerGrid = require('./SchedulerGrid'),
-    SchedulerScheduledSession = require('./SchedulerScheduledSession');
+var ScheduleGrid = require('./ScheduleGrid.jsx'),
+    SchedulerScheduledSession = require('./ScheduleScheduledSession.jsx');
 
-var SchedulerDay = React.createClass({
+var ScheduleDay = React.createClass({
 
   propTypes: {
     day: React.PropTypes.number,
@@ -25,9 +24,21 @@ var SchedulerDay = React.createClass({
       var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0)
       {
-        scheduledSessions.push(
-          <SchedulerScheduledSession session={session} sessionPlace={this.props.sessionPlace} />
-          );
+        var slot = this.props.slotList[session.SlotId];
+        if (session.IsPlenary) {
+          scheduledSessions.push(
+          <foreignObject x={this.props.leftMargin} y={slot.StartMinutes - this.props.start} width={this.props.width} height={slot.DurationMins}>
+            <SchedulerScheduledSession session={session} />
+          </foreignObject>
+            );          
+
+        } else {
+          scheduledSessions.push(
+          <foreignObject x={this.props.locationList[session.LocationId] * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} width="100" height={slot.DurationMins}>
+            <SchedulerScheduledSession session={session} />
+          </foreignObject>
+            );          
+        }
       }
     }
     var date = new Date(this.props.conference.StartDate);
@@ -43,18 +54,15 @@ var SchedulerDay = React.createClass({
               <path d='M0 0L8 8ZM8 0L0 8Z' className="hashLines" />
              </pattern>
              <rect x="0" y="0" height={height} width={width + this.props.leftMargin} className="dayBackground" />
-             <SchedulerGrid width={width} height={height} leftMargin={this.props.leftMargin}
+             <ScheduleGrid width={width} height={height} leftMargin={this.props.leftMargin}
                             start={this.props.start} ref="Grid" locationList={this.props.locationList}
                             locations={this.props.locations} slots={this.props.slots} day={this.props.day} />
+             {scheduledSessions}
         </svg>
-        {scheduledSessions}
       </div>
     );
-  },
-
-  componentDidMount: function() {
   }
 
 });
 
-module.exports = SchedulerDay;
+module.exports = ScheduleDay;

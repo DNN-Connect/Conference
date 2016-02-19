@@ -63,7 +63,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('browserify', function() {
-  var react = gulp.src('js/src/Conference.js')
+  var react = gulp.src('js/src/Conference.jsx')
     .pipe(plumber())
     .pipe(browserify({
       transform: 'reactify',

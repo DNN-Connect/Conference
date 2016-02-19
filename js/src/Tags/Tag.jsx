@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var Tag = React.createClass({
   render: function() {
     return (

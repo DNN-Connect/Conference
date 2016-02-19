@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var Tag = require('./Tag');
+var Tag = require('./Tag.jsx');
 
 var Tags = React.createClass({
 

@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var SessionVote = React.createClass({
 
   resources: null,

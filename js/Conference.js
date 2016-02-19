@@ -1,6 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** @jsx React.DOM */
-var UserRow = require('./UserRow');
+var UserRow = require('./UserRow.jsx');
 
 var BulkAddUsers = React.createClass({displayName: "BulkAddUsers",
 
@@ -98,7 +97,6 @@ var BulkAddUsers = React.createClass({displayName: "BulkAddUsers",
           }.bind(this));
         break;
       case 'speakers':
-      console.log('here');
         this.service.addSpeaker(this.props.conferenceId,
           this.refs.txtEmail.getDOMNode().value,
           this.refs.txtFirstName.getDOMNode().value,
@@ -136,8 +134,7 @@ var BulkAddUsers = React.createClass({displayName: "BulkAddUsers",
 module.exports = BulkAddUsers;
 
 
-},{"./UserRow":2}],2:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./UserRow.jsx":2}],2:[function(require,module,exports){
 var UserRow = React.createClass({displayName: "UserRow",
 
   getInitialState: function() {
@@ -163,7 +160,6 @@ var UserRow = React.createClass({displayName: "UserRow",
 module.exports = UserRow;
 
 },{}],3:[function(require,module,exports){
-/** @jsx React.DOM */
 var Comment = React.createClass({displayName: "Comment",
 
   resources: null,
@@ -218,8 +214,7 @@ module.exports = Comment;
 
 
 },{}],4:[function(require,module,exports){
-/** @jsx React.DOM */
-var Comment = require('./Comment');
+var Comment = require('./Comment.jsx');
 
 var Comments = React.createClass({displayName: "Comments",
 
@@ -364,8 +359,7 @@ var Comments = React.createClass({displayName: "Comments",
 module.exports = Comments;
 
 
-},{"./Comment":3}],5:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./Comment.jsx":3}],5:[function(require,module,exports){
 var React = require('react/addons');
 
 var Icon = React.createClass({displayName: "Icon",
@@ -420,8 +414,7 @@ module.exports = Icon;
 
 
 },{"react/addons":31}],6:[function(require,module,exports){
-/** @jsx React.DOM */
-var Icon = require('./Icon'),
+var Icon = require('./Icon.jsx'),
     StatusApprovalButton = require('./StatusApprovalButton.jsx');
 
 var Resource = React.createClass({displayName: "Resource",
@@ -521,10 +514,9 @@ var Resource = React.createClass({displayName: "Resource",
 
 module.exports = Resource;
 
-},{"./Icon":5,"./StatusApprovalButton.jsx":8}],7:[function(require,module,exports){
-/** @jsx React.DOM */
-var Resource = require('./Resource'),
-    Video = require('./Video');
+},{"./Icon.jsx":5,"./StatusApprovalButton.jsx":8}],7:[function(require,module,exports){
+var Resource = require('./Resource.jsx'),
+    Video = require('./Video.jsx');
 
 var Resources = React.createClass({displayName: "Resources",
 
@@ -668,7 +660,7 @@ var Resources = React.createClass({displayName: "Resources",
 module.exports = Resources;
 
 
-},{"./Resource":6,"./Video":9}],8:[function(require,module,exports){
+},{"./Resource.jsx":6,"./Video.jsx":9}],8:[function(require,module,exports){
 var StatusApprovalButton = React.createClass({displayName: "StatusApprovalButton",
 
   getInitialState: function() {
@@ -716,7 +708,6 @@ var StatusApprovalButton = React.createClass({displayName: "StatusApprovalButton
 module.exports = StatusApprovalButton;
 
 },{}],9:[function(require,module,exports){
-/** @jsx React.DOM */
 var Video = React.createClass({displayName: "Video",
 
   getInitialState: function() {
@@ -813,8 +804,7 @@ var Video = React.createClass({displayName: "Video",
 module.exports = Video;
 
 },{}],10:[function(require,module,exports){
-/** @jsx React.DOM */
-var ScheduleDay = require('./ScheduleDay');
+var ScheduleDay = require('./ScheduleDay.jsx');
 
 var Schedule = React.createClass({displayName: "Schedule",
 
@@ -884,10 +874,9 @@ var Schedule = React.createClass({displayName: "Schedule",
 module.exports = Schedule;
 
 
-},{"./ScheduleDay":11}],11:[function(require,module,exports){
-/** @jsx React.DOM */
-var ScheduleGrid = require('./ScheduleGrid'),
-    SchedulerScheduledSession = require('./ScheduleScheduledSession');
+},{"./ScheduleDay.jsx":11}],11:[function(require,module,exports){
+var ScheduleGrid = require('./ScheduleGrid.jsx'),
+    SchedulerScheduledSession = require('./ScheduleScheduledSession.jsx');
 
 var ScheduleDay = React.createClass({displayName: "ScheduleDay",
 
@@ -956,8 +945,7 @@ var ScheduleDay = React.createClass({displayName: "ScheduleDay",
 module.exports = ScheduleDay;
 
 
-},{"./ScheduleGrid":12,"./ScheduleScheduledSession":13}],12:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./ScheduleGrid.jsx":12,"./ScheduleScheduledSession.jsx":13}],12:[function(require,module,exports){
 var ScheduleGrid = React.createClass({displayName: "ScheduleGrid",
 
   getInitialState: function() {
@@ -1036,7 +1024,6 @@ module.exports = ScheduleGrid;
 
 
 },{}],13:[function(require,module,exports){
-/** @jsx React.DOM */
 var ScheduleScheduledSession = React.createClass({displayName: "ScheduleScheduledSession",
 
   getInitialState: function() {
@@ -1082,9 +1069,8 @@ module.exports = ScheduleScheduledSession;
 
 
 },{}],14:[function(require,module,exports){
-/** @jsx React.DOM */
-var SchedulerDay = require('./SchedulerDay'),
-  SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession');
+var SchedulerDay = require('./SchedulerDay.jsx'),
+  SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession.jsx');
 
 var Scheduler = React.createClass({displayName: "Scheduler",
 
@@ -1261,7 +1247,6 @@ var Scheduler = React.createClass({displayName: "Scheduler",
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    console.log(this.props.conference.ConferenceId);
     this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, function(data) {
       hasReset = true;
       this.setState({
@@ -1282,10 +1267,9 @@ var Scheduler = React.createClass({displayName: "Scheduler",
 module.exports = Scheduler;
 
 
-},{"./SchedulerDay":15,"./SchedulerUnscheduledSession":18}],15:[function(require,module,exports){
-/** @jsx React.DOM */
-var SchedulerGrid = require('./SchedulerGrid'),
-    SchedulerScheduledSession = require('./SchedulerScheduledSession');
+},{"./SchedulerDay.jsx":15,"./SchedulerUnscheduledSession.jsx":18}],15:[function(require,module,exports){
+var SchedulerGrid = require('./SchedulerGrid.jsx'),
+    SchedulerScheduledSession = require('./SchedulerScheduledSession.jsx');
 
 var SchedulerDay = React.createClass({displayName: "SchedulerDay",
 
@@ -1345,8 +1329,7 @@ var SchedulerDay = React.createClass({displayName: "SchedulerDay",
 module.exports = SchedulerDay;
 
 
-},{"./SchedulerGrid":16,"./SchedulerScheduledSession":17}],16:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./SchedulerGrid.jsx":16,"./SchedulerScheduledSession.jsx":17}],16:[function(require,module,exports){
 var SchedulerGrid = React.createClass({displayName: "SchedulerGrid",
 
   getInitialState: function() {
@@ -1448,7 +1431,6 @@ module.exports = SchedulerGrid;
 
 
 },{}],17:[function(require,module,exports){
-/** @jsx React.DOM */
 var SchedulerScheduledSession = React.createClass({displayName: "SchedulerScheduledSession",
 
   getInitialState: function() {
@@ -1498,7 +1480,6 @@ module.exports = SchedulerScheduledSession;
 
 
 },{}],18:[function(require,module,exports){
-/** @jsx React.DOM */
 var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnscheduledSession",
 
   getInitialState: function() {
@@ -1541,7 +1522,6 @@ var SchedulerUnscheduledSession = React.createClass({displayName: "SchedulerUnsc
 module.exports = SchedulerUnscheduledSession;
 
 },{}],19:[function(require,module,exports){
-/** @jsx React.DOM */
 var SessionVote = React.createClass({displayName: "SessionVote",
 
   resources: null,
@@ -1613,8 +1593,7 @@ var SessionVote = React.createClass({displayName: "SessionVote",
 module.exports = SessionVote;
 
 },{}],20:[function(require,module,exports){
-/** @jsx React.DOM */
-var SessionVote = require('./SessionVote');
+var SessionVote = require('./SessionVote.jsx');
 
 var SessionVotes = React.createClass({displayName: "SessionVotes",
 
@@ -1705,8 +1684,7 @@ var SessionVotes = React.createClass({displayName: "SessionVotes",
 module.exports = SessionVotes;
 
 
-},{"./SessionVote":19}],21:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./SessionVote.jsx":19}],21:[function(require,module,exports){
 var Speaker = React.createClass({displayName: "Speaker",
 
   resources: null,
@@ -1741,8 +1719,7 @@ var Speaker = React.createClass({displayName: "Speaker",
 module.exports = Speaker;
 
 },{}],22:[function(require,module,exports){
-/** @jsx React.DOM */
-var Speaker = require('./Speaker');
+var Speaker = require('./Speaker.jsx');
 
 var Speakers = React.createClass({displayName: "Speakers",
 
@@ -1872,22 +1849,7 @@ var Speakers = React.createClass({displayName: "Speakers",
 module.exports = Speakers;
 
 
-},{"./Speaker":21}],23:[function(require,module,exports){
-/** @jsx React.DOM */
-var Tag = React.createClass({displayName: "Tag",
-  render: function() {
-    return (
-      React.createElement("span", {className: "tag label label-info"}, this.props.tag.TagName, 
-       React.createElement("span", {"data-role": "remove", onClick: this.props.onRemoveTag.bind(null, this.props.tag.TagId)})
-      )
-    );
-  }
-});
-
-module.exports = Tag;
-
-},{}],24:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./Speaker.jsx":21}],23:[function(require,module,exports){
 var TagVote = React.createClass({displayName: "TagVote",
 
   resources: null,
@@ -1934,9 +1896,8 @@ var TagVote = React.createClass({displayName: "TagVote",
 
 module.exports = TagVote;
 
-},{}],25:[function(require,module,exports){
-/** @jsx React.DOM */
-var TagVote = require('./TagVote');
+},{}],24:[function(require,module,exports){
+var TagVote = require('./TagVote.jsx');
 
 var TagVotes = React.createClass({displayName: "TagVotes",
 
@@ -2059,9 +2020,21 @@ var TagVotes = React.createClass({displayName: "TagVotes",
 module.exports = TagVotes;
 
 
-},{"./TagVote":24}],26:[function(require,module,exports){
-/** @jsx React.DOM */
-var Tag = require('./Tag');
+},{"./TagVote.jsx":23}],25:[function(require,module,exports){
+var Tag = React.createClass({displayName: "Tag",
+  render: function() {
+    return (
+      React.createElement("span", {className: "tag label label-info"}, this.props.tag.TagName, 
+       React.createElement("span", {"data-role": "remove", onClick: this.props.onRemoveTag.bind(null, this.props.tag.TagId)})
+      )
+    );
+  }
+});
+
+module.exports = Tag;
+
+},{}],26:[function(require,module,exports){
+var Tag = require('./Tag.jsx');
 
 var Tags = React.createClass({displayName: "Tags",
 
@@ -2160,9 +2133,8 @@ var Tags = React.createClass({displayName: "Tags",
 module.exports = Tags;
 
 
-},{"./Tag":23}],27:[function(require,module,exports){
-/** @jsx React.DOM */
-var TimesheetEditorSlot = require('./TimesheetEditorSlot');
+},{"./Tag.jsx":25}],27:[function(require,module,exports){
+var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
 
 var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 
@@ -2423,8 +2395,7 @@ var TimesheetEditor = React.createClass({displayName: "TimesheetEditor",
 module.exports = TimesheetEditor;
 
 
-},{"./TimesheetEditorSlot":28}],28:[function(require,module,exports){
-/** @jsx React.DOM */
+},{"./TimesheetEditorSlot.jsx":28}],28:[function(require,module,exports){
 var TimesheetEditorSlot = React.createClass({displayName: "TimesheetEditorSlot",
 
   getInitialState: function() {
@@ -2577,17 +2548,16 @@ module.exports = TimesheetEditorSlot;
 
 
 },{}],29:[function(require,module,exports){
-/** @jsx React.DOM */
-var TimesheetEditor = require('./TimesheetEditor'),
-    Comments = require('./Comments'),
-    Tags = require('./Tags'),
-    Speakers = require('./Speakers'),
-    TagVotes = require('./TagVotes'),
-    SessionVotes = require('./SessionVotes'),
-    Scheduler = require('./Scheduler/Scheduler'),
-    Schedule = require('./Schedule/Schedule'),
-    Resources = require('./Resources/Resources'),
-    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers');
+var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
+    Comments = require('./Comments/Comments.jsx'),
+    Tags = require('./Tags/Tags.jsx'),
+    Speakers = require('./Speakers/Speakers.jsx'),
+    TagVotes = require('./TagVotes/TagVotes.jsx'),
+    SessionVotes = require('./SessionVotes/SessionVotes.jsx'),
+    Scheduler = require('./Scheduler/Scheduler.jsx'),
+    Schedule = require('./Schedule/Schedule.jsx'),
+    Resources = require('./Resources/Resources.jsx'),
+    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx');
 
 (function($, window, document, undefined) {
 
@@ -2726,7 +2696,7 @@ var TimesheetEditor = require('./TimesheetEditor'),
 })(jQuery, window, document);
 
 
-},{"./BulkAddUsers/BulkAddUsers":1,"./Comments":4,"./Resources/Resources":7,"./Schedule/Schedule":10,"./Scheduler/Scheduler":14,"./SessionVotes":20,"./Speakers":22,"./TagVotes":25,"./Tags":26,"./TimesheetEditor":27}],30:[function(require,module,exports){
+},{"./BulkAddUsers/BulkAddUsers.jsx":1,"./Comments/Comments.jsx":4,"./Resources/Resources.jsx":7,"./Schedule/Schedule.jsx":10,"./Scheduler/Scheduler.jsx":14,"./SessionVotes/SessionVotes.jsx":20,"./Speakers/Speakers.jsx":22,"./TagVotes/TagVotes.jsx":24,"./Tags/Tags.jsx":26,"./TimesheetEditor/TimesheetEditor.jsx":27}],30:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -24745,7 +24715,6 @@ window.ConferenceService = function($, mid) {
 
     this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
       //showLoading();
-      // console.log(data);
       var path = baseServicepath;
       if (conferenceId != null) {
         path += 'Conference/' + conferenceId + '/'
@@ -24772,32 +24741,14 @@ window.ConferenceService = function($, mid) {
       });
     }
 
-  this.orderTracks = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderLocations = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderSessions = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderSpeakers = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.deleteTrack = function(conferenceId, trackId, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
-  }
-  this.deleteLocation = function(conferenceId, locationId, success, fail) {
-    this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
-  }
-  this.getConferenceSlots = function(conferenceId, success, fail) {
-    this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
-  }
-  this.updateSlot = function(conferenceId, slot, success, fail) {
-    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
-  }
-  this.deleteSlot = function(conferenceId, slotId, success, fail) {
-    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+  this.addAttendee = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+    this.apiCall('POST', 'Attendees', 'Add', conferenceId, null, {
+      Email: email,
+      FirstName: firstName,
+      LastName: lastName,
+      DisplayName: displayName,
+      Company: company
+    }, success, fail);
   }
   this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
     this.apiCall('POST', 'Comments', 'Add', conferenceId, null, {
@@ -24805,6 +24756,83 @@ window.ConferenceService = function($, mid) {
       Visibility: visibility,
       Remarks: comment
     }, success, fail);
+  }
+  this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
+      UserId: userId
+    }, success, fail);
+  }
+  this.addSpeaker = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+    this.apiCall('POST', 'Speakers', 'Add', conferenceId, null, {
+      Email: email,
+      FirstName: firstName,
+      LastName: lastName,
+      DisplayName: displayName,
+      Company: company
+    }, success, fail);
+  }
+  this.addTag = function(conferenceId, tagName, success, fail) {
+    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, {
+      tagName: tagName
+    }, success, fail);
+  }
+  this.addUrl = function(conferenceId, sessionId, url, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
+  }
+  this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
+  this.changeAttendeeStatus = function(conferenceId, userId, newStatus, success, fail) {
+    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
+      UserId: userId,
+      Status: newStatus
+    }, success, fail);
+  }
+  this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
+    this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
+  }
+  this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
+    this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
+  }
+  this.deleteComment = function(conferenceId, commentId, success, fail) {
+    this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
+  }
+  this.deleteLocation = function(conferenceId, locationId, success, fail) {
+    this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
+  }
+  this.deleteResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Delete', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
+  this.deleteSession = function(conferenceId, sessionId, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Delete', conferenceId, sessionId, null, success, fail);
+  }
+  this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, {
+      UserId: userId
+    }, success, fail);
+  }
+  this.deleteSlot = function(conferenceId, slotId, success, fail) {
+    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+  }
+  this.deleteTag = function(conferenceId, tagId, success, fail) {
+    this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
+  }
+  this.deleteTrack = function(conferenceId, trackId, success, fail) {
+    this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
+  }
+  this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+    this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
+  }
+  this.editTag = function(conferenceId, tagId, tagName, success, fail) {
+    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, {
+      tagName: tagName
+    }, success, fail);
+  }
+  this.getConferenceSlots = function(conferenceId, success, fail) {
+    this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+  }
+  this.getLocations = function(conferenceId, success, fail) {
+    this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
   }
   this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
     this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
@@ -24814,17 +24842,40 @@ window.ConferenceService = function($, mid) {
       PageSize: pageSize
     }, success, fail);
   }
-  this.deleteComment = function(conferenceId, commentId, success, fail) {
-    this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
+  this.orderLocations = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderSessions = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Sessions', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
+    this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderSpeakers = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.orderTracks = function(conferenceId, newOrder, success, fail) {
+    this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+  }
+  this.searchUsers = function(conferenceId, search, success, fail) {
+    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, {
+      search: search
+    }, success, fail);
+  }
+  this.searchUsersByEmail = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Module', 'SearchUsers', conferenceId, null, {
+      field: 'email',
+      search: searchTerm
+    }, success, fail);
   }
   this.searchTags = function(conferenceId, searchTerm, success, fail) {
     this.apiCall('GET', 'Tags', 'Search', conferenceId, null, {
       search: searchTerm
     }, success, fail);
   }
-  this.tagVote = function(conferenceId, tagId, vote, success, fail) {
-    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, {
-      vote: vote
+  this.searchTracks = function(conferenceId, searchTerm, success, fail) {
+    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, {
+      search: searchTerm
     }, success, fail);
   }
   this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
@@ -24832,50 +24883,10 @@ window.ConferenceService = function($, mid) {
       vote: vote
     }, success, fail);
   }
-  this.addTag = function(conferenceId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, {
-      tagName: tagName
+  this.tagVote = function(conferenceId, tagId, vote, success, fail) {
+    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, {
+      vote: vote
     }, success, fail);
-  }
-  this.editTag = function(conferenceId, tagId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, {
-      tagName: tagName
-    }, success, fail);
-  }
-  this.deleteTag = function(conferenceId, tagId, success, fail) {
-    this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
-  }
-  this.searchUsers = function(conferenceId, search, success, fail) {
-    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, {
-      search: search
-    }, success, fail);
-  }
-  this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
-      UserId: userId
-    }, success, fail);
-  }
-  this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, {
-      UserId: userId
-    }, success, fail);
-  }
-  this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
-  }
-  this.searchTracks = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, {
-      search: searchTerm
-    }, success, fail);
-  }
-  this.changeAttendeeStatus = function(conferenceId, userId, newStatus, success, fail) {
-    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
-      UserId: userId,
-      Status: newStatus
-    }, success, fail);
-  }
-  this.getLocations = function(conferenceId, success, fail) {
-    this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
   }
   this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
     this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
@@ -24888,50 +24899,8 @@ window.ConferenceService = function($, mid) {
   this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
     this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
   }
-  this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
-    this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
-  }
-  this.addUrl = function(conferenceId, sessionId, url, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
-  }
-  this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.deleteResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Delete', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.searchUsersByEmail = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Module', 'SearchUsers', conferenceId, null, {
-      field: 'email',
-      search: searchTerm
-    }, success, fail);
-  }
-  this.addAttendee = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
-    this.apiCall('POST', 'Attendees', 'Add', conferenceId, null, {
-      Email: email,
-      FirstName: firstName,
-      LastName: lastName,
-      DisplayName: displayName,
-      Company: company
-    }, success, fail);
-  }
-  this.addSpeaker = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
-    this.apiCall('POST', 'Speakers', 'Add', conferenceId, null, {
-      Email: email,
-      FirstName: firstName,
-      LastName: lastName,
-      DisplayName: displayName,
-      Company: company
-    }, success, fail);
-  }
-  this.deleteSession = function(conferenceId, sessionId, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Delete', conferenceId, sessionId, null, success, fail);
-  }
-  this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
-    this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
+  this.updateSlot = function(conferenceId, slot, success, fail) {
+    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
   }
 
 }

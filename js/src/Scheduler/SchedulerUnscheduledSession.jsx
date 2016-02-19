@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var SchedulerUnscheduledSession = React.createClass({
 
   getInitialState: function() {

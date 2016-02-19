@@ -1,14 +1,13 @@
-/** @jsx React.DOM */
-var TimesheetEditor = require('./TimesheetEditor'),
-    Comments = require('./Comments'),
-    Tags = require('./Tags'),
-    Speakers = require('./Speakers'),
-    TagVotes = require('./TagVotes'),
-    SessionVotes = require('./SessionVotes'),
-    Scheduler = require('./Scheduler/Scheduler'),
-    Schedule = require('./Schedule/Schedule'),
-    Resources = require('./Resources/Resources'),
-    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers');
+var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
+    Comments = require('./Comments/Comments.jsx'),
+    Tags = require('./Tags/Tags.jsx'),
+    Speakers = require('./Speakers/Speakers.jsx'),
+    TagVotes = require('./TagVotes/TagVotes.jsx'),
+    SessionVotes = require('./SessionVotes/SessionVotes.jsx'),
+    Scheduler = require('./Scheduler/Scheduler.jsx'),
+    Schedule = require('./Schedule/Schedule.jsx'),
+    Resources = require('./Resources/Resources.jsx'),
+    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx');
 
 (function($, window, document, undefined) {
 

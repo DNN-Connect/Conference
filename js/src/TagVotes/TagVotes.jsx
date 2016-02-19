@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var TagVote = require('./TagVote');
+var TagVote = require('./TagVote.jsx');
 
 var TagVotes = React.createClass({
 

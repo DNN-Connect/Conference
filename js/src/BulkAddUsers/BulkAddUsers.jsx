@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-var UserRow = require('./UserRow');
+var UserRow = require('./UserRow.jsx');
 
 var BulkAddUsers = React.createClass({
 
@@ -97,7 +96,6 @@ var BulkAddUsers = React.createClass({
           }.bind(this));
         break;
       case 'speakers':
-      console.log('here');
         this.service.addSpeaker(this.props.conferenceId,
           this.refs.txtEmail.getDOMNode().value,
           this.refs.txtFirstName.getDOMNode().value,

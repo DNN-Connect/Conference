@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var SchedulerScheduledSession = React.createClass({
 
   getInitialState: function() {
