@@ -78,7 +78,7 @@
         @foreach (var speaker in speakers)
         {
         <dt>@speaker.DisplayName</dt>
-        <dd class="speaker">@speaker.Description</dd>
+        <dd class="speaker">@Html.Raw(speaker.Description.Replace(Environment.NewLine, "<br />"))</dd>
         }
        </dl>
       </div>

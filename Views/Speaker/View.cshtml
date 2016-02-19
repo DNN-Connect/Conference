@@ -24,7 +24,7 @@
        </div>
       </div>
       <div class="col-xs-8 col-sm-10">
-       <p>@Model.Description</p>
+       <p>@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))</p>
       </div>
      </div>
     </div>
@@ -54,7 +54,7 @@
       <span class="speaker">@sp.Value</span>
       }
      </p>
-     <p>@s.Description</p>
+     <p>@Html.Raw(s.Description.Replace(Environment.NewLine, "<br />"))</p>
     </div>
    </div>
    }

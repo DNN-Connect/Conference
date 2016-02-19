@@ -20,7 +20,7 @@
   </div>
   <div class="panel-body">
    <div>
-    @s.Description
+    @Html.Raw(s.Description.Replace(Environment.NewLine, "<br />"))
    </div>
    <div style="margin-top:20px">
     <dl class="dl-horizontal">
