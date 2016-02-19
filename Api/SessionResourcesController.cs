@@ -140,7 +140,7 @@ namespace Connect.DNN.Modules.Conference.Api
         public HttpResponseMessage Approve(int conferenceId, int id, [FromBody]EditDTO data)
         {
             var resource = SessionResourceRepository.Instance.GetSessionResource(id, data.SessionResource.SessionResourceId);
-            resource.Visibility = 1;
+            resource.Visibility = (resource.Visibility == 0) ? 1 : 0;
             SessionResourceRepository.Instance.UpdateSessionResource(resource.GetSessionResourceBase(), UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
         }

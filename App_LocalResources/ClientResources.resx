@@ -123,11 +123,17 @@
   <data name="AddComment" xml:space="preserve">
     <value>Add Comment</value>
   </data>
+  <data name="AdminMustApprove" xml:space="preserve">
+    <value>An administrator must approve this first</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Approve</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
   <data name="ChooseLocation" xml:space="preserve">
     <value>&lt; Location &gt;</value>
@@ -224,6 +230,9 @@
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="Unapproved" xml:space="preserve">
+    <value>Unapproved</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Upload</value>

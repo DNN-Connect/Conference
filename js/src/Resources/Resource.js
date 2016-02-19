@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
-var Icon = require('./Icon');
+var Icon = require('./Icon'),
+    StatusApprovalButton = require('./StatusApprovalButton.jsx');
 
 var Resource = React.createClass({
 
@@ -44,21 +45,13 @@ var Resource = React.createClass({
         );
     }
     var okCol = null;
-    if (this.security.CanManage) {
-      if (this.props.resource.Visibility == 0) {
-        okCol = (
-        <td className="iconCol">
-         <a href="#" onClick={this.props.approveResource.bind(null, this.props.resource)} title={this.resources.Approve}>
-           <span className="btn btn-sm btn-success glyphicon glyphicon-check"></span>
-         </a>
-        </td>
-          );
-      } else {
-        okCol = (
-        <td className="iconCol">
-        </td>
-          );
-      }
+    if (this.security.CanManage | this.props.canAdd) {
+      okCol = (
+        <StatusApprovalButton resource={this.props.resource} 
+                   approveResource={this.props.approveResource} 
+                   canManage={this.security.CanManage}
+                   moduleId={this.props.moduleId} />
+        );
     }
     var descriptionBox = this.props.resource.ResourceDescription;
     if (this.props.canAdd) {
