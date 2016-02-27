@@ -28,7 +28,7 @@
         <moduleControls>
          <moduleControl>
           <controlKey />
-          <controlSrc>Home/Index.mvc</controlSrc>
+          <controlSrc>Connect.DNN.Modules.Conference.Controllers/Home/Index.mvc</controlSrc>
           <supportsPartialRendering>False</supportsPartialRendering>
           <controlTitle />
           <controlType>View</controlType>
