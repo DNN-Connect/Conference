@@ -20,6 +20,12 @@ namespace Connect.Conference.Core.Common
             return Globals.GetResourcesPath(session.ConferenceId, session.SessionId, slash);
         }
 
+        public static string SafeReplace(this string input, string oldValue, string newValue)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            return input.Replace(oldValue, newValue);
+        }
+
 
     }
 }

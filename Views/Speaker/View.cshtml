@@ -1,5 +1,6 @@
 ﻿@inherits ConferenceWebPage<Speaker>
 @using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
 @using Connect.DNN.Modules.Conference.Controllers;
 @using Connect.Conference.Core.Models.Speakers;
 @using Connect.Conference.Core.Repositories;
@@ -24,7 +25,7 @@
        </div>
       </div>
       <div class="col-xs-8 col-sm-10">
-       <p>@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))</p>
+       <p>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
       </div>
      </div>
     </div>
@@ -54,7 +55,7 @@
       <span class="speaker">@sp.Value</span>
       }
      </p>
-     <p>@Html.Raw(s.Description.Replace(Environment.NewLine, "<br />"))</p>
+     <p>@Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
     </div>
    </div>
    }

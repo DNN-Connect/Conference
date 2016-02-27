@@ -1,5 +1,6 @@
 ﻿@inherits ConferenceWebPage<Conference>
 @using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Conferences;
 @using Connect.Conference.Core.Models.Sessions;
 @using Connect.Conference.Core.Repositories;
@@ -20,7 +21,7 @@
   </div>
   <div class="panel-body">
    <div>
-    @Html.Raw(s.Description.Replace(Environment.NewLine, "<br />"))
+    @Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))
    </div>
    <div style="margin-top:20px">
     <dl class="dl-horizontal">

@@ -70,7 +70,7 @@
        <hr />
        @if (!string.IsNullOrEmpty(Model.Description))
        {
-        <div>@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))</div>
+        <div>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
         <hr />
        }
        <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
@@ -78,7 +78,7 @@
         @foreach (var speaker in speakers)
         {
         <dt>@speaker.DisplayName</dt>
-        <dd class="speaker">@Html.Raw(speaker.Description.Replace(Environment.NewLine, "<br />"))</dd>
+        <dd class="speaker">@Html.Raw(speaker.Description.SafeReplace(Environment.NewLine, "<br />"))</dd>
         }
        </dl>
       </div>
