@@ -1,8 +1,8 @@
 var UserRow = require('./UserRow.jsx');
 
-var BulkAddUsers = React.createClass({
+module.exports = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     return {
@@ -10,8 +10,8 @@ var BulkAddUsers = React.createClass({
     }
   },
 
-  render: function() {
-    var userRows = this.state.addedUsers.map(function(item) {
+  render() {
+    var userRows = this.state.addedUsers.map((item) => {
       return (<UserRow user={item} />);
     });
     return (
@@ -55,13 +55,13 @@ var BulkAddUsers = React.createClass({
     );
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     $(document).ready(function() {
       $(this.refs.txtEmail.getDOMNode()).autocomplete({
         minLength: 1,
         source: function(request, response) {
-          this.service.searchUsersByEmail(this.props.conferenceId, request.term, function(data) {
-            response(data.map(function(item) {
+          this.service.searchUsersByEmail(this.props.conferenceId, request.term, (data) => {
+            response(data.map((item) => {
               return {
                 label: item.Email,
                 value: item.UserId,
@@ -81,7 +81,7 @@ var BulkAddUsers = React.createClass({
     }.bind(this));
   },
 
-  addUser: function(e) {
+  addUser(e) {
     e.preventDefault();
     switch (this.props.type) {
       case 'attendees':
@@ -109,7 +109,7 @@ var BulkAddUsers = React.createClass({
     }
   },
 
-  addedUser: function(data) {
+  addedUser(data) {
     this.refs.txtEmail.getDOMNode().value = '';
     this.refs.txtFirstName.getDOMNode().value = '';
     this.refs.txtLastName.getDOMNode().value = '';
@@ -122,12 +122,10 @@ var BulkAddUsers = React.createClass({
     })
   },
 
-  makeDisplayName: function(e) {
+  makeDisplayName(e) {
     if (this.refs.txtDisplayName.getDOMNode().value == '') {
       this.refs.txtDisplayName.getDOMNode().value = this.refs.txtFirstName.getDOMNode().value + ' ' + this.refs.txtLastName.getDOMNode().value;
     }
   }
 
 });
-
-module.exports = BulkAddUsers;

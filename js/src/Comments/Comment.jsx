@@ -1,15 +1,15 @@
-var Comment = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   security: null,
 
-  getInitialState: function() {
+  getInitialState() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.security = ConnectConference.modules[this.props.moduleId].security;
     return {};
   },
 
-  render: function() {
+  render() {
     var imgUrl = this.props.appPath + '/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=' + this.props.comment.UserId;
     var actionBar = null;
     if (this.security.CanManage | this.security.UserId == this.props.comment.UserId) {
@@ -47,5 +47,3 @@ var Comment = React.createClass({
     );
   }
 });
-
-module.exports = Comment;

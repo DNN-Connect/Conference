@@ -1,6 +1,6 @@
 var Speaker = require('./Speaker.jsx');
 
-var Speakers = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -124,5 +124,3 @@ var Speakers = React.createClass({
   }
 
 });
-
-module.exports = Speakers;

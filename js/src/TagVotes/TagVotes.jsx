@@ -1,6 +1,6 @@
 var TagVote = require('./TagVote.jsx');
 
-var TagVotes = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -117,5 +117,3 @@ var TagVotes = React.createClass({
   }
 
 });
-
-module.exports = TagVotes;

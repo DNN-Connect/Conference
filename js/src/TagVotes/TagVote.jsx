@@ -1,4 +1,4 @@
-var TagVote = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -41,5 +41,3 @@ var TagVote = React.createClass({
   }
 
 });
-
-module.exports = TagVote;

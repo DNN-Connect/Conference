@@ -1,7 +1,7 @@
 var SchedulerDay = require('./SchedulerDay.jsx'),
   SchedulerUnscheduledSession = require('./SchedulerUnscheduledSession.jsx');
 
-var Scheduler = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -192,5 +192,3 @@ var Scheduler = React.createClass({
   }
 
 });
-
-module.exports = Scheduler;

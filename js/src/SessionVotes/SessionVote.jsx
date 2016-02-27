@@ -1,4 +1,4 @@
-var SessionVote = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -71,5 +71,3 @@ var SessionVote = React.createClass({
   }
 
 });
-
-module.exports = SessionVote;

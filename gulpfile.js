@@ -1,6 +1,10 @@
 var gulp = require('gulp'),
   msbuild = require('gulp-msbuild'),
-  browserify = require('gulp-browserify'),
+  browserify = require('browserify'),
+  source = require('vinyl-source-stream'),
+  buffer = require('vinyl-buffer'),
+  sourcemaps = require('gulp-sourcemaps'),
+  babelify = require('babelify'),
   minifyCss = require('gulp-minify-css'),
   uglify = require('gulp-uglify'),
   assemblyInfo = require('gulp-dotnet-assembly-info'),
@@ -63,6 +67,30 @@ gulp.task('js', function() {
 });
 
 gulp.task('browserify', function() {
+  var b = browserify({
+    entries: ['js/src/Conference.jsx'],
+    debug: true
+  });
+  b.transform("babelify", {presets: ["es2015", "react"]});
+  b.external('react');
+  var react =  b.bundle()
+    .on('error', function(err){
+      console.log(err.message);
+      this.emit('end');
+    })
+    .pipe(source('FlickrGallery.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .on('error', gutil.log);
+  var service = gulp.src('js/src/ConferenceService.js')
+    .pipe(gulp.dest('js/'));
+  var common = gulp.src('js/src/Common.js');
+  return merge(react, service, common)
+    .pipe(concat('Conference.js'))
+    .pipe(gulp.dest('js/'));
+});
+
+gulp.task('browserify_old', function() {
   var react = gulp.src('js/src/Conference.jsx')
     .pipe(plumber())
     .pipe(browserify({

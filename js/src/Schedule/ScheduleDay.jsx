@@ -1,7 +1,7 @@
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
     SchedulerScheduledSession = require('./ScheduleScheduledSession.jsx');
 
-var ScheduleDay = React.createClass({
+module.exports = React.createClass({
 
   propTypes: {
     day: React.PropTypes.number,
@@ -64,5 +64,3 @@ var ScheduleDay = React.createClass({
   }
 
 });
-
-module.exports = ScheduleDay;

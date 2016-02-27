@@ -1,4 +1,4 @@
-var ScheduleGrid = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     return {}
@@ -71,5 +71,3 @@ var ScheduleGrid = React.createClass({
   componentDidMount: function() {}
 
 });
-
-module.exports = ScheduleGrid;

@@ -1,11 +1,11 @@
-var UserRow = React.createClass({
+module.exports = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     return {
     }
   },
 
-  render: function() {
+  render() {
     return (
       <tr>
        <td>{this.props.user.Email}</td>
@@ -19,5 +19,3 @@ var UserRow = React.createClass({
   }
 
 });
-
-module.exports = UserRow;

@@ -1,8 +1,6 @@
-var React = require('react/addons');
+module.exports = React.createClass({
 
-var Icon = React.createClass({
-
-  render: function() {
+  render() {
     switch(this.props.type) {
 
       case 'file-text':
@@ -47,5 +45,3 @@ var Icon = React.createClass({
   }
 
 });
-
-module.exports = Icon;

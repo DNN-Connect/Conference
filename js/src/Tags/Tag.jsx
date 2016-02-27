@@ -1,4 +1,4 @@
-var Tag = React.createClass({
+module.exports = React.createClass({
   render: function() {
     return (
       <span className="tag label label-info">{this.props.tag.TagName}
@@ -7,5 +7,3 @@ var Tag = React.createClass({
     );
   }
 });
-
-module.exports = Tag;

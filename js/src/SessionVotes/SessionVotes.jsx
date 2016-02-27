@@ -1,6 +1,6 @@
 var SessionVote = require('./SessionVote.jsx');
 
-var SessionVotes = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -85,5 +85,3 @@ var SessionVotes = React.createClass({
   }
 
 });
-
-module.exports = SessionVotes;

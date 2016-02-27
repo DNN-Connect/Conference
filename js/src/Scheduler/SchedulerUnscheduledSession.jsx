@@ -1,4 +1,4 @@
-var SchedulerUnscheduledSession = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     return {}
@@ -36,5 +36,3 @@ var SchedulerUnscheduledSession = React.createClass({
   }
 
 });
-
-module.exports = SchedulerUnscheduledSession;

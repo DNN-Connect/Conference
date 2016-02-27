@@ -1,6 +1,6 @@
 var ScheduleDay = require('./ScheduleDay.jsx');
 
-var Schedule = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -64,5 +64,3 @@ var Schedule = React.createClass({
   }
 
 });
-
-module.exports = Schedule;

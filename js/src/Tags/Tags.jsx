@@ -1,6 +1,6 @@
 var Tag = require('./Tag.jsx');
 
-var Tags = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -93,5 +93,3 @@ var Tags = React.createClass({
   }
 
 });
-
-module.exports = Tags;

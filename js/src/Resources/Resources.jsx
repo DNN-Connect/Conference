@@ -1,7 +1,7 @@
 var Resource = require('./Resource.jsx'),
     Video = require('./Video.jsx');
 
-var Resources = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -139,5 +139,3 @@ var Resources = React.createClass({
   }
 
 });
-
-module.exports = Resources;

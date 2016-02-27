@@ -1,7 +1,7 @@
 var Icon = require('./Icon.jsx'),
     StatusApprovalButton = require('./StatusApprovalButton.jsx');
 
-var Resource = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -95,5 +95,3 @@ var Resource = React.createClass({
   }
 
 });
-
-module.exports = Resource;

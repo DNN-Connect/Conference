@@ -1,4 +1,4 @@
-var TimesheetEditorSlot = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     return {
@@ -145,5 +145,3 @@ var TimesheetEditorSlot = React.createClass({
   }
 
 });
-
-module.exports = TimesheetEditorSlot;

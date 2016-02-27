@@ -1,4 +1,4 @@
-var Speaker = React.createClass({
+module.exports = React.createClass({
 
   resources: null,
   service: null,
@@ -28,5 +28,3 @@ var Speaker = React.createClass({
   }
 
 });
-
-module.exports = Speaker;

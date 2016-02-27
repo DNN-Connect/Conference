@@ -1,4 +1,4 @@
-var Video = React.createClass({
+module.exports = React.createClass({
 
   getInitialState: function() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
@@ -90,5 +90,3 @@ var Video = React.createClass({
   }
 
 });
-
-module.exports = Video;

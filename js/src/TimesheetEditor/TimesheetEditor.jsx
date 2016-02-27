@@ -1,6 +1,6 @@
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
 
-var TimesheetEditor = React.createClass({
+module.exports = React.createClass({
 
   slotBeingEdited: null,
   resources: null,
@@ -255,5 +255,3 @@ var TimesheetEditor = React.createClass({
 
 
 });
-
-module.exports = TimesheetEditor;

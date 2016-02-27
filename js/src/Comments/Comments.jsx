@@ -1,8 +1,8 @@
 var Comment = require('./Comment.jsx');
 
-var Comments = React.createClass({
+module.exports = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     if (this.props.pollingSeconds == undefined) {
@@ -18,12 +18,12 @@ var Comments = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     var submitPanel = <div />;
-    var commentList = this.state.comments.map(function(item) {
+    var commentList = this.state.comments.map((item) => {
       return <Comment moduleId={this.props.moduleId} comment={item} key={item.CommentId} 
                       appPath={this.props.appPath} onDelete={this.onCommentDelete} />
-    }.bind(this));
+    });
     if (this.props.loggedIn) {
       submitPanel = (
         <div className="panel-form">
@@ -61,15 +61,15 @@ var Comments = React.createClass({
     );
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.lastCheck = new Date();
     this.pollServer();
   },
 
-  addComment: function(e) {
+  addComment(e) {
     e.preventDefault();
     var comment = this.refs.txtComment.getDOMNode().value;
-    this.service.addComment(this.props.conferenceId, this.props.sessionId, this.props.visibility, comment, function(data) {
+    this.service.addComment(this.props.conferenceId, this.props.sessionId, this.props.visibility, comment, (data) => {
       this.refs.txtComment.getDOMNode().value = '';
       var newComments = this.state.comments;
       newComments.unshift(data);
@@ -77,14 +77,14 @@ var Comments = React.createClass({
         comments: newComments,
         commentCount: this.state.commentCount + 1
       });
-    }.bind(this));
+    });
     return false;
   },
 
-  loadMoreComments: function(e) {
+  loadMoreComments(e) {
     e.preventDefault();
     if (this.state.canLoadMore) {
-      this.service.loadComments(this.props.conferenceId, this.props.sessionId, this.props.visibility, this.state.lastPage + 1, this.props.pageSize, function(data) {
+      this.service.loadComments(this.props.conferenceId, this.props.sessionId, this.props.visibility, this.state.lastPage + 1, this.props.pageSize, (data) => {
         var newCommentList = this.state.comments;
         newCommentList = newCommentList.concat(data);
         this.setState({
@@ -92,14 +92,14 @@ var Comments = React.createClass({
           lastPage: this.state.lastPage + 1,
           canLoadMore: (data.length < this.props.pageSize) ? false : true
         });
-      }.bind(this));
+      });
     }
   },
 
-  onCommentDelete: function(commentId, e) {
+  onCommentDelete(commentId, e) {
     e.preventDefault();
     if (confirm(this.resources.CommentDeleteConfirm)) {
-      this.service.deleteComment(this.props.conferenceId, commentId, function() {
+      this.service.deleteComment(this.props.conferenceId, commentId, () => {
         var newCommentList = [];
         for (i = 0; i < this.state.comments.length; i++) {
           if (this.state.comments[i].CommentId != commentId) {
@@ -110,11 +110,11 @@ var Comments = React.createClass({
           comments: newCommentList,
           commentCount: this.state.commentCount - 1
         });
-      }.bind(this));
+      });
     }
   },
 
-  pollServer: function() {
+  pollServer() {
     setTimeout(function() {
       this.service.checkNewComments(this.props.conferenceId, this.props.sessionId,
         this.props.visibility, this.lastCheck,
@@ -139,5 +139,3 @@ var Comments = React.createClass({
 
 
 });
-
-module.exports = Comments;
