@@ -29,12 +29,12 @@ var SessionVote = React.createClass({
     }
     var speakers = this.props.item.Speakers.map(function (item) {
       return (
-        <span className="detailItem bg-info">{item.Value}</span>
+        <span className="detailItem">{item.Value}</span>
         )
     });
     var tags = this.props.item.Tags.map(function (item) {
       return (
-        <span className="detailItem bg-info">{item.Value}</span>
+        <span className="detailItem">{item.Value}</span>
         )
     });
     var rowStyle = {};
@@ -43,6 +43,12 @@ var SessionVote = React.createClass({
         backgroundColor: this.props.item.BackgroundColor
       }
     }
+    var track = (this.props.item.TrackTitle == undefined) ? null : (
+      <span className="glyphicon glyphicon-resize-vertical" title={this.resources.Track}></span>
+      );
+    var tagsIcon = (tags.length == 0) ? null : (
+      <span className="glyphicon glyphicon-tags" title={this.resources.Tags}></span>
+      );
     return (
       <tr style={rowStyle}>
        <td><p><a href={window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}>{this.props.item.Title}</a></p>
@@ -50,9 +56,9 @@ var SessionVote = React.createClass({
           <span className="glyphicon glyphicon-user" title={this.resources.Speakers}></span>{speakers}
         </p>
         <p className="itemDetails">
-          <span className="glyphicon glyphicon-resize-vertical" title={this.resources.Track}></span>{this.props.item.TrackTitle}
+          {track}{this.props.item.TrackTitle}
           <span className="glyphicon glyphicon-paperclip" title={this.resources.Resources}></span>{this.props.item.NrResources}
-          <span className="glyphicon glyphicon-tags" title={this.resources.Tags}></span>{tags}
+          {tagsIcon}{tags}
         </p>
        </td>
        <td className="nrcol">{this.props.item.NrVotes}</td>

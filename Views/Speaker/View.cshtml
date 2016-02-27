@@ -67,3 +67,13 @@
  @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
 </div>
 
+<script type="text/javascript">
+ $(document).ready(function () {
+  var el = $('.ModConnectConferenceC .container');
+  if (el != undefined) {
+   if (el.parent().closest('.container').length == 1) {
+    el.removeClass('container');
+   }
+  }
+ })
+</script>

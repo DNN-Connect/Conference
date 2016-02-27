@@ -1553,12 +1553,12 @@ var SessionVote = React.createClass({displayName: "SessionVote",
     }
     var speakers = this.props.item.Speakers.map(function (item) {
       return (
-        React.createElement("span", {className: "detailItem bg-info"}, item.Value)
+        React.createElement("span", {className: "detailItem"}, item.Value)
         )
     });
     var tags = this.props.item.Tags.map(function (item) {
       return (
-        React.createElement("span", {className: "detailItem bg-info"}, item.Value)
+        React.createElement("span", {className: "detailItem"}, item.Value)
         )
     });
     var rowStyle = {};
@@ -1567,6 +1567,12 @@ var SessionVote = React.createClass({displayName: "SessionVote",
         backgroundColor: this.props.item.BackgroundColor
       }
     }
+    var track = (this.props.item.TrackTitle == undefined) ? null : (
+      React.createElement("span", {className: "glyphicon glyphicon-resize-vertical", title: this.resources.Track})
+      );
+    var tagsIcon = (tags.length == 0) ? null : (
+      React.createElement("span", {className: "glyphicon glyphicon-tags", title: this.resources.Tags})
+      );
     return (
       React.createElement("tr", {style: rowStyle}, 
        React.createElement("td", null, React.createElement("p", null, React.createElement("a", {href: window.sessionDetailUrl.replace('-1', this.props.item.SessionId.toString())}, this.props.item.Title)), 
@@ -1574,9 +1580,9 @@ var SessionVote = React.createClass({displayName: "SessionVote",
           React.createElement("span", {className: "glyphicon glyphicon-user", title: this.resources.Speakers}), speakers
         ), 
         React.createElement("p", {className: "itemDetails"}, 
-          React.createElement("span", {className: "glyphicon glyphicon-resize-vertical", title: this.resources.Track}), this.props.item.TrackTitle, 
+          track, this.props.item.TrackTitle, 
           React.createElement("span", {className: "glyphicon glyphicon-paperclip", title: this.resources.Resources}), this.props.item.NrResources, 
-          React.createElement("span", {className: "glyphicon glyphicon-tags", title: this.resources.Tags}), tags
+          tagsIcon, tags
         )
        ), 
        React.createElement("td", {className: "nrcol"}, this.props.item.NrVotes), 

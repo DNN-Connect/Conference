@@ -40,7 +40,7 @@
   <div class="col-xs-12">
    @if (currentUserStatus > -1)
    {
-   <a href="@Url.Action("Edit", "Attendee", new { conferenceId = Model.ConferenceId, attendeeId = Dnn.User.UserID, ret = "home" })" class="btn btn-default">
+   <a href="@Url.Action("Edit", "Attendee", new { conferenceId = Model.ConferenceId, attendeeId = Dnn.User.UserID, ret = "home" })" class="btn btn-primary">
     @Dnn.LocalizeString("EditProfile")
    </a>
    }
@@ -82,7 +82,7 @@
      @foreach (var a in intending)
      {
      <tr>
-      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle" /></td>
       <td>@a.DisplayName <span>@a.Company</span></td>
      </tr>
      }
@@ -103,7 +103,7 @@
      @foreach (var a in going)
      {
      <tr>
-      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle" /></td>
       <td>@a.DisplayName <span>@a.Company</span></td>
       @if (ConferenceModuleContext.Security.CanManage)
       {
@@ -132,7 +132,7 @@
      @foreach (var a in confirmed)
      {
      <tr>
-      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@a.UserId" width="32" height="32" class="img-circle" /></td>
       <td>@a.DisplayName <span>@a.Company</span></td>
       @if (ConferenceModuleContext.Security.CanManage)
       {
