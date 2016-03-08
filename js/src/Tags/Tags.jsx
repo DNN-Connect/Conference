@@ -50,7 +50,7 @@ module.exports = React.createClass({
   onRemoveTag: function(tagId, e) {
     e.preventDefault();
     var newTagList = [];
-    for (i = 0; i < this.state.tags.length; i++) {
+    for (var i = 0; i < this.state.tags.length; i++) {
       if (this.state.tags[i].TagId != tagId) {
         newTagList.push(this.state.tags[i]);
       }
@@ -74,7 +74,7 @@ module.exports = React.createClass({
   addTag: function(tagName, tagId) {
     var newTagList = this.state.tags;
     var shouldAdd = true;
-    for (i = 0; i < this.state.tags.length; i++) {
+    for (var i = 0; i < this.state.tags.length; i++) {
       if (this.state.tags[i].TagName == tagName) {
         shouldAdd = false;
       }

@@ -101,7 +101,7 @@ module.exports = React.createClass({
     if (confirm(this.resources.CommentDeleteConfirm)) {
       this.service.deleteComment(this.props.conferenceId, commentId, () => {
         var newCommentList = [];
-        for (i = 0; i < this.state.comments.length; i++) {
+        for (var i = 0; i < this.state.comments.length; i++) {
           if (this.state.comments[i].CommentId != commentId) {
             newCommentList.push(this.state.comments[i]);
           }
@@ -122,7 +122,7 @@ module.exports = React.createClass({
           this.lastCheck = new Date(data.CheckTime);
           if (data.Comments.length > 0) {
             var newCommentList = data.Comments;
-            for (i = 0; i < this.state.comments.length; i++) {
+            for (var i = 0; i < this.state.comments.length; i++) {
               if ($.inArray(this.state.comments[i], newCommentList) == -1) {
                 newCommentList.push(this.state.comments[i]);
               }

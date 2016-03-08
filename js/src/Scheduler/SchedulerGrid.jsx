@@ -12,19 +12,19 @@ module.exports = React.createClass({
       );
     }
     var horLabels = [];
-    for (i = 0; i < this.props.locations.length; i++) {
+    for (var i = 0; i < this.props.locations.length; i++) {
       horLabels.push(
         <text x={6 + i*100 + this.props.leftMargin} y="20" className="gridLabel">{this.props.locations[i].Name}</text>
       );
     }
     var horLines = [];
-    for (i = 0; i < this.props.height; i = i + 60) {
+    for (var i = 0; i < this.props.height; i = i + 60) {
       horLines.push(
         <line x1={this.props.leftMargin} y1={i} x2={this.props.width + this.props.leftMargin} y2={i} className="gridline" />
       );
     }
     var vertLabels = [];
-    for (i = 60; i < this.props.height; i = i + 60) {
+    for (var i = 60; i < this.props.height; i = i + 60) {
       vertLabels.push(
         <text x="6" y={i + 12} className="gridLabel">{minutesToTime(i + this.props.start)}</text>
       );
@@ -33,7 +33,7 @@ module.exports = React.createClass({
       );
     }
     var slotBands = [];
-    for (i = 0; i < this.props.slots.length; i++) {
+    for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString();
@@ -66,7 +66,7 @@ module.exports = React.createClass({
       }
     }
     var slots = [];
-    for (i = 0; i < this.props.slots.length; i++) {
+    for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         for (j = 0; j < this.props.locations.length; j++) {

@@ -90,7 +90,7 @@ module.exports = React.createClass({
     if (confirm(this.resources.SpeakerDeleteConfirm)) {
       this.service.deleteSessionSpeaker(this.props.conferenceId, this.props.sessionId, speaker.SpeakerId, function(data) {
         var newList = [];
-        for (i = 0; i < this.state.speakers.length; i++) {
+        for (var i = 0; i < this.state.speakers.length; i++) {
           if (this.state.speakers[i].SpeakerId != speaker.SpeakerId) {
             newList.push(this.state.speakers[i]);
           }
@@ -106,7 +106,7 @@ module.exports = React.createClass({
     e.preventDefault();
     var newUserId = this.refs.newSpeakerId.getDOMNode().value;
     if (newUserId != '') {
-      for (i = 0; i < this.state.speakers.length; i++) {
+      for (var i = 0; i < this.state.speakers.length; i++) {
         if (this.state.speakers[i].UserId == newUserId) {
           return;
         }

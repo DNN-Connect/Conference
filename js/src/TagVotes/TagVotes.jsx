@@ -75,7 +75,7 @@ module.exports = React.createClass({
 
   voteChanged: function(vote) {
     var newList = [];
-    for (i = 0; i < this.state.votes.length; i++) {
+    for (var i = 0; i < this.state.votes.length; i++) {
       if (this.state.votes[i].TagId == vote.TagId) {
         newList.push(vote);
       } else {

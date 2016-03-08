@@ -407,7 +407,7 @@ module.exports = React.createClass({
     if (confirm(this.resources.CommentDeleteConfirm)) {
       this.service.deleteComment(this.props.conferenceId, commentId, function () {
         var newCommentList = [];
-        for (i = 0; i < _this4.state.comments.length; i++) {
+        for (var i = 0; i < _this4.state.comments.length; i++) {
           if (_this4.state.comments[i].CommentId != commentId) {
             newCommentList.push(_this4.state.comments[i]);
           }
@@ -425,7 +425,7 @@ module.exports = React.createClass({
         this.lastCheck = new Date(data.CheckTime);
         if (data.Comments.length > 0) {
           var newCommentList = data.Comments;
-          for (i = 0; i < this.state.comments.length; i++) {
+          for (var i = 0; i < this.state.comments.length; i++) {
             if ($.inArray(this.state.comments[i], newCommentList) == -1) {
               newCommentList.push(this.state.comments[i]);
             }
@@ -1240,7 +1240,7 @@ module.exports = React.createClass({
       vertLines.push(React.createElement("line", { x1: i, y1: "0", x2: i, y2: this.props.height, className: "gridline" }));
     }
     var horLabels = [];
-    for (i = 0; i < this.props.locations.length; i++) {
+    for (var i = 0; i < this.props.locations.length; i++) {
       horLabels.push(React.createElement(
         "text",
         { x: 6 + i * 100 + this.props.leftMargin, y: "20", className: "gridLabel" },
@@ -1248,11 +1248,11 @@ module.exports = React.createClass({
       ));
     }
     var horLines = [];
-    for (i = 0; i < this.props.height; i = i + 60) {
+    for (var i = 0; i < this.props.height; i = i + 60) {
       horLines.push(React.createElement("line", { x1: this.props.leftMargin, y1: i, x2: this.props.width + this.props.leftMargin, y2: i, className: "gridline" }));
     }
     var vertLabels = [];
-    for (i = 60; i < this.props.height; i = i + 60) {
+    for (var i = 60; i < this.props.height; i = i + 60) {
       vertLabels.push(React.createElement(
         "text",
         { x: "6", y: i + 12, className: "gridLabel" },
@@ -1261,7 +1261,7 @@ module.exports = React.createClass({
       horLines.push(React.createElement("line", { x1: "0", y1: i, x2: this.props.width, y2: i, className: "gridline" }));
     }
     var slotBands = [];
-    for (i = 0; i < this.props.slots.length; i++) {
+    for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 1) {
         slotBands.push(React.createElement(
@@ -1633,7 +1633,7 @@ module.exports = React.createClass({
       vertLines.push(React.createElement("line", { x1: i, y1: "0", x2: i, y2: this.props.height, className: "gridline" }));
     }
     var horLabels = [];
-    for (i = 0; i < this.props.locations.length; i++) {
+    for (var i = 0; i < this.props.locations.length; i++) {
       horLabels.push(React.createElement(
         "text",
         { x: 6 + i * 100 + this.props.leftMargin, y: "20", className: "gridLabel" },
@@ -1641,11 +1641,11 @@ module.exports = React.createClass({
       ));
     }
     var horLines = [];
-    for (i = 0; i < this.props.height; i = i + 60) {
+    for (var i = 0; i < this.props.height; i = i + 60) {
       horLines.push(React.createElement("line", { x1: this.props.leftMargin, y1: i, x2: this.props.width + this.props.leftMargin, y2: i, className: "gridline" }));
     }
     var vertLabels = [];
-    for (i = 60; i < this.props.height; i = i + 60) {
+    for (var i = 60; i < this.props.height; i = i + 60) {
       vertLabels.push(React.createElement(
         "text",
         { x: "6", y: i + 12, className: "gridLabel" },
@@ -1654,7 +1654,7 @@ module.exports = React.createClass({
       horLines.push(React.createElement("line", { x1: "0", y1: i, x2: this.props.width, y2: i, className: "gridline" }));
     }
     var slotBands = [];
-    for (i = 0; i < this.props.slots.length; i++) {
+    for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString();
@@ -1693,7 +1693,7 @@ module.exports = React.createClass({
       }
     }
     var slots = [];
-    for (i = 0; i < this.props.slots.length; i++) {
+    for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
         for (j = 0; j < this.props.locations.length; j++) {
@@ -2011,7 +2011,7 @@ module.exports = React.createClass({
 
   voteChanged: function voteChanged(vote) {
     var newList = [];
-    for (i = 0; i < this.state.votes.length; i++) {
+    for (var i = 0; i < this.state.votes.length; i++) {
       if (this.state.votes[i].SessionId == vote.SessionId) {
         newList.push(vote);
       } else {
@@ -2197,7 +2197,7 @@ module.exports = React.createClass({
     if (confirm(this.resources.SpeakerDeleteConfirm)) {
       this.service.deleteSessionSpeaker(this.props.conferenceId, this.props.sessionId, speaker.SpeakerId, function (data) {
         var newList = [];
-        for (i = 0; i < this.state.speakers.length; i++) {
+        for (var i = 0; i < this.state.speakers.length; i++) {
           if (this.state.speakers[i].SpeakerId != speaker.SpeakerId) {
             newList.push(this.state.speakers[i]);
           }
@@ -2213,7 +2213,7 @@ module.exports = React.createClass({
     e.preventDefault();
     var newUserId = this.refs.newSpeakerId.getDOMNode().value;
     if (newUserId != '') {
-      for (i = 0; i < this.state.speakers.length; i++) {
+      for (var i = 0; i < this.state.speakers.length; i++) {
         if (this.state.speakers[i].UserId == newUserId) {
           return;
         }
@@ -2403,7 +2403,7 @@ module.exports = React.createClass({
 
   voteChanged: function voteChanged(vote) {
     var newList = [];
-    for (i = 0; i < this.state.votes.length; i++) {
+    for (var i = 0; i < this.state.votes.length; i++) {
       if (this.state.votes[i].TagId == vote.TagId) {
         newList.push(vote);
       } else {
@@ -2518,7 +2518,7 @@ module.exports = React.createClass({
   onRemoveTag: function onRemoveTag(tagId, e) {
     e.preventDefault();
     var newTagList = [];
-    for (i = 0; i < this.state.tags.length; i++) {
+    for (var i = 0; i < this.state.tags.length; i++) {
       if (this.state.tags[i].TagId != tagId) {
         newTagList.push(this.state.tags[i]);
       }
@@ -2542,7 +2542,7 @@ module.exports = React.createClass({
   addTag: function addTag(tagName, tagId) {
     var newTagList = this.state.tags;
     var shouldAdd = true;
-    for (i = 0; i < this.state.tags.length; i++) {
+    for (var i = 0; i < this.state.tags.length; i++) {
       if (this.state.tags[i].TagName == tagName) {
         shouldAdd = false;
       }
