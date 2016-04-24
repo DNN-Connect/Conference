@@ -7,6 +7,8 @@ using System.Web;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Connect.Conference.Core.Repositories;
+using System.Linq;
+using System.Net.Http.Headers;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -95,6 +97,24 @@ namespace Connect.DNN.Modules.Conference.Api
         {
             var userId = Connect.Conference.Core.Controllers.ConferenceController.AddSpeaker(PortalSettings.PortalId, conferenceId, -1, user.Email, user.FirstName, user.LastName, user.DisplayName, user.Company, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.GetSpeaker(conferenceId, userId));
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Download(int conferenceId)
+        {
+            var res = new HttpResponseMessage(HttpStatusCode.OK);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("LastName,FirstName,DisplayName,Email,NrSessions,Company,DescriptionShort");
+            foreach (var sp in SpeakerRepository.Instance.GetSpeakersByConference(conferenceId).OrderBy(s => s.LastName))
+            {
+                sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},{4},\"{5}\",\"{6}\"", sp.LastName, sp.FirstName, sp.DisplayName, sp.Email, sp.NrSessions, sp.Company, sp.DescriptionShort));
+            }
+            res.Content = new StringContent(sb.ToString());
+            res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            res.Content.Headers.ContentDisposition.FileName = "Speakers.csv";
+            return res;
         }
 
     }
