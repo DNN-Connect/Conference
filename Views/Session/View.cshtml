@@ -45,7 +45,21 @@
       <div class="col-xs-6 col-sm-10">
        <dl class="dl-horizontal">
         <dt>@Dnn.LocalizeString("Status")</dt>
+        @if (isPresenter | ConferenceModuleContext.Security.CanManage)
+        {
+        <dd>
+         <span class="sessionStatusButton"
+          data-conferenceid="@Model.ConferenceId"
+          data-sessionid="@Model.SessionId"
+          data-moduleid="@Dnn.ModuleContext.ModuleId"
+          data-options="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.DNN.Modules.Conference.Common.Globals.SessionStatusOptions(ConferenceModuleContext.Security.CanManage)))"
+          data-selected="@Model.Status"></span>
+        </dd>
+        }
+        else
+        {
         <dd>@(((Connect.Conference.Core.Common.SessionStatus)Model.Status).ToStatusString())</dd>
+        }
         @if (!string.IsNullOrEmpty(Model.Level))
         {
         <dt>@Dnn.LocalizeString("Level")</dt>
@@ -70,8 +84,8 @@
        <hr />
        @if (!string.IsNullOrEmpty(Model.Description))
        {
-        <div>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
-        <hr />
+       <div>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
+       <hr />
        }
        <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
        <dl>
@@ -93,7 +107,7 @@
   <div class="col-xs-12">
    @if (!string.IsNullOrEmpty(Model.Notes))
    {
-    <div class="well">@Model.Notes</div>
+   <div class="well">@Model.Notes</div>
    }
    <div class="buttons-right">
     @if (Model.Status > 0)
@@ -159,8 +173,14 @@
  </div>
 </div>
 
-<div class="right">
- @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+<div class="container">
+ <div class="row">
+  <div class="col-xs-12">
+   <div class="right">
+    @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+   </div>
+  </div>
+ </div>
 </div>
 
 <script type="text/javascript">

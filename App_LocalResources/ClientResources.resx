@@ -216,6 +216,12 @@
   <data name="Speakers" xml:space="preserve">
     <value>Speakers</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Statuses" xml:space="preserve">
+    <value>Statuses</value>
+  </data>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="Track" xml:space="preserve">
     <value>Track</value>
+  </data>
+  <data name="Tracks" xml:space="preserve">
+    <value>Tracks</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>

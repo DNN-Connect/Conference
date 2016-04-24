@@ -149,6 +149,7 @@
     <Compile Include="Common\ModuleSettings.cs" />
     <Compile Include="Common\NakedBodyParameter.cs" />
     <Compile Include="Common\RouteMapper.cs" />
+    <Compile Include="Common\SwitchButtonOption.cs" />
     <Compile Include="Common\WebApiDtos.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -272,6 +273,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Speaker\BulkAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\Speakers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\Attendees.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Conference\Sessions.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,7 +3,8 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
 
 <div class="container">
@@ -49,21 +50,28 @@
       <a href="@Url.Action("Schedule", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Schedule")" class="btn btn-default">
        @Dnn.LocalizeString("Schedule")
       </a>
+      <a href="@Url.Action("Sessions", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Sessions")" class="btn btn-default">
+       @Dnn.LocalizeString("Sessions")
+      </a>
+      <a href="@Url.Action("Speakers", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Speakers")" class="btn btn-default">
+       @Dnn.LocalizeString("Speakers")
+      </a>
+      <a href="@Url.Action("Attendees", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Attendees")" class="btn btn-default">
+       @Dnn.LocalizeString("Attendees")
+      </a>
      </div>
     </div>
    </div>
   </div>
  </div>
+ <div class="row">
+  <div class="col-xs-12">
+   <div class="right">
+    @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+   </div>
+  </div>
+ </div>
 </div>
-
-<div class="right">
- @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
-</div>
-
-@{
-    ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddEditScripts();
-}
 
 <script type="text/javascript">
  $(function () {

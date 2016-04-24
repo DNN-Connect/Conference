@@ -144,14 +144,8 @@
   <data name="PublicComments.Text" xml:space="preserve">
     <value>Public Comments</value>
   </data>
-  <data name="Retract.Confirm" xml:space="preserve">
-    <value>Do you wish to retract your presentation?</value>
-  </data>
   <data name="SelectTrack.Text" xml:space="preserve">
     <value>&lt; Select Track ... &gt;</value>
-  </data>
-  <data name="Submit.Confirm" xml:space="preserve">
-    <value>Do you wish to submit this session?</value>
   </data>
   <data name="TitleRequired.Error" xml:space="preserve">
     <value>A session requires a title</value>

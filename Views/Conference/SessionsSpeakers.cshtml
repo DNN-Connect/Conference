@@ -1,10 +1,16 @@
 ﻿@inherits ConferenceWebPage<Conference>
 @using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Conferences;
-@using DotNetNuke.Web.Mvc.Helpers;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    var allSessions = Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId);
 }
+
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
 
 <div class="container">
  <div class="row">
@@ -25,75 +31,41 @@
   </div>
  </div>
  <div class="row">
-  <div class="col-sm-6">
-   <table class="table" id="tblSessions">
+  <div class="col-sm-8">
+   <table class="table tblSessions">
     <thead>
      <tr>
-      <th>@Dnn.LocalizeString("AcceptedSessions")</th>
-      <th />
+      <th>@Dnn.LocalizeString("Sessions")</th>
       <th />
      </tr>
     </thead>
     <tbody>
-     @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status >= 3).OrderBy(s => s.Sort))
+     @foreach (var s in allSessions.OrderByDescending(s => s.NrVotes))
      {
-     <tr data-id="@s.SessionId" class="sortable">
-      <td>@s.Title</td>
-      <td class="btncol">
-       <span class="glyphicon glyphicon-@s.StatusGlyphicon" title="@Dnn.LocalizeString(((Connect.Conference.Core.Common.SessionStatus)s.Status).ToString())"></span>
+     <tr data-id="@s.SessionId">
+      <td>
+       <span class="sessionTitle" data-id="@s.SessionId">@s.Title</span><br />
+       <span class="details">@string.Join(", ", s.Speakers.Select(sp => sp.Value))</span><br />
+       <span class="details">@string.Join(", ", s.Tags.Select(t => t.Value))</span><br />
+       <span class="details">@Dnn.LocalizeString("NrVotes"): @s.NrVotes</span>
+       <div class="details sessionAbstract" data-visible="false" data-id="@s.SessionId">@Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
       </td>
-      <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-     </tr>
-     }
-    </tbody>
-   </table>
-   <table class="table" id="tblSessions">
-    <thead>
-     <tr>
-      <th>@Dnn.LocalizeString("SubmittedSessions")</th>
-      <th />
-      <th />
-     </tr>
-    </thead>
-    <tbody>
-     @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status > 0 & s.Status < 3).OrderBy(s => s.Sort))
-     {
-     <tr data-id="@s.SessionId" class="sortable">
-      <td>@s.Title</td>
-      <td class="btncol">
-       <span class="glyphicon glyphicon-@s.StatusGlyphicon"></span>
+      <td class="ctlColumn">
+       <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a>
+       <a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a><br />
+         <span class="sessionStatusButton"
+          data-conferenceid="@Model.ConferenceId"
+          data-sessionid="@s.SessionId"
+          data-moduleid="@Dnn.ModuleContext.ModuleId"
+          data-options="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.DNN.Modules.Conference.Common.Globals.SessionStatusOptions(ConferenceModuleContext.Security.CanManage)))"
+          data-selected="@s.Status"></span>
       </td>
-      <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-     </tr>
-     }
-    </tbody>
-   </table>
-   <table class="table" id="tblSessions">
-    <thead>
-     <tr>
-      <th>@Dnn.LocalizeString("RejectedSessions")</th>
-      <th />
-      <th />
-     </tr>
-    </thead>
-    <tbody>
-     @foreach (var s in Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status < 0).OrderBy(s => s.Sort))
-     {
-     <tr data-id="@s.SessionId" class="sortable">
-      <td>@s.Title</td>
-      <td class="btncol">
-       <span class="glyphicon glyphicon-@s.StatusGlyphicon"></span>
-      </td>
-      <td class="btncol"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a></td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
      </tr>
      }
     </tbody>
    </table>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
    <table class="table" id="tblSpeakers">
     <thead>
      <tr>
@@ -116,11 +88,23 @@
    </table>
   </div>
  </div>
+ <div class="row">
+  <div class="col-xs-12">
+   <div class="right">
+    <a href="@GetModuleUrl("API/Sessions/Download?conferenceId=" + Model.ConferenceId.ToString(), true)" class="btn btn-default">
+     <span class="glyphicon glyphicon-save"></span>
+     @Dnn.LocalizeString("Sessions")
+    </a>
+    <a href="@GetModuleUrl("API/Speakers/Download?conferenceId=" + Model.ConferenceId.ToString(), true)" class="btn btn-default">
+     <span class="glyphicon glyphicon-save"></span>
+     @Dnn.LocalizeString("Speakers")
+    </a>
+    @ReturnLink(Dnn.LocalizeString("Return"), "Conference", "Manage", new { ConferenceId = Model.ConferenceId }, new { @class = "btn btn-primary" }, Model.ConferenceId)
+   </div>
+  </div>
+ </div>
 </div>
 
-<div class="right">
- @ReturnLink(Dnn.LocalizeString("Return"), "Conference", "Manage", new { ConferenceId = Model.ConferenceId}, new { @class = "btn btn-primary" }, Model.ConferenceId)
-</div>
 
 @{
     ConferenceModuleContext.AddBootstrapCss();
@@ -134,14 +118,20 @@
 
    var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
 
-   $('#tblSessions tbody:first').sortable({
-    update: function (event, ui) {
-     moduleConferenceService.orderSessions(@Model.ConferenceId, getTableOrder('tblSessions'));
-    }
-   });
    $('#tblSpeakers tbody:first').sortable({
     update: function (event, ui) {
      moduleConferenceService.orderSpeakers(@Model.ConferenceId, getTableOrder('tblSpeakers'));
+    }
+   });
+
+   $('.sessionTitle').click(function() {
+    var abs = $('.sessionAbstract[data-id="' + $(this).attr('data-id') + '"]');
+    if (abs.attr('data-visible') == 'true') {
+     abs.hide({ duration: 600 });
+     abs.attr('data-visible', 'false');
+    } else {
+     abs.show({ duration: 600 });
+     abs.attr('data-visible', 'true');
     }
    });
 

@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Connect.Conference.Core.Models.Comments;
-using DotNetNuke.Collections;
 using System.Net;
+using System;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -79,6 +78,96 @@ namespace Connect.DNN.Modules.Conference.Common
             {
                 return false;
             }
+        }
+
+        public static string ResolveUrl(this DotNetNuke.Entities.Portals.PortalAliasInfo portalAlias, string url)
+        {
+            url = url.TrimStart('~');
+            url = url.TrimStart('/');
+            var childPortalAlias = portalAlias.GetChildPortalAlias();
+            if (childPortalAlias.StartsWith(DotNetNuke.Common.Globals.ApplicationPath))
+            {
+                return String.Format("{0}/{1}", childPortalAlias, url);
+            }
+            else
+            {
+                return String.Format("{0}{1}/{2}", DotNetNuke.Common.Globals.ApplicationPath, childPortalAlias, url);
+            }
+        }
+
+        public static string GetChildPortalAlias(this DotNetNuke.Entities.Portals.PortalAliasInfo portalAlias)
+        {
+            var currentAlias = portalAlias.HTTPAlias;
+            var index = currentAlias.IndexOf('/');
+            if (index > 0)
+            {
+                return "/" + currentAlias.Substring(index + 1);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public static List<SwitchButtonOption> SessionStatusOptions(bool isAdmin)
+        {
+            var res = new List<SwitchButtonOption>();
+            if (isAdmin)
+            {
+                res.Add(new SwitchButtonOption()
+                {
+                    Id = -1,
+                    Text = Localization.GetString("Rejected", SharedResourceFileName),
+                    Confirm = Localization.GetString("Rejected.Confirm", SharedResourceFileName),
+                    ClassName = "danger"
+                });
+            }
+            res.Add(new SwitchButtonOption()
+            {
+                Id = 0,
+                Text = Localization.GetString("NotSubmitted", SharedResourceFileName),
+                Confirm = Localization.GetString("NotSubmitted.Confirm", SharedResourceFileName),
+                ClassName = "default"
+            });
+            res.Add(new SwitchButtonOption()
+            {
+                Id = 1,
+                Text = Localization.GetString("Submitted", SharedResourceFileName),
+                Confirm = Localization.GetString("Submitted.Confirm", SharedResourceFileName),
+                ClassName = "info"
+            });
+            res.Add(new SwitchButtonOption()
+            {
+                Id = 2,
+                Text = Localization.GetString("Revising", SharedResourceFileName),
+                Confirm = Localization.GetString("Revising.Confirm", SharedResourceFileName),
+                ClassName = "warning"
+            });
+            if (isAdmin)
+            {
+                res.Add(new SwitchButtonOption()
+                {
+                    Id = 3,
+                    Text = Localization.GetString("Accepted", SharedResourceFileName),
+                    Confirm = Localization.GetString("Accepted.Confirm", SharedResourceFileName),
+                    ClassName = "success"
+                });
+                res.Add(new SwitchButtonOption()
+                {
+                    Id = 4,
+                    Text = Localization.GetString("Ready", SharedResourceFileName),
+                    Confirm = Localization.GetString("Ready.Confirm", SharedResourceFileName),
+                    ClassName = "success"
+                });
+                res.Add(new SwitchButtonOption()
+                {
+                    Id = 5,
+                    Text = Localization.GetString("WrappedUp", SharedResourceFileName),
+                    Confirm = Localization.GetString("WrappedUp.Confirm", SharedResourceFileName),
+                    ClassName = "primary"
+                });
+            }
+            return res;
         }
 
     }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Connect.Conference.Core.Repositories;
 using DotNetNuke.Entities.Host;
 using Connect.Conference.Core.Models.SessionResources;
+using System.Net.Http.Headers;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -205,6 +206,44 @@ namespace Connect.DNN.Modules.Conference.Api
             session.Status = data.newStatus;
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSession(session.ConferenceId, session.SessionId));
+        }
+
+        public class TrackDTO
+        {
+            public int newTrack { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage ChangeTrack(int conferenceId, int id, [FromBody]TrackDTO data)
+        {
+            var session = SessionRepository.Instance.GetSession(conferenceId, id);
+            if (session == null)
+            {
+                return ServiceError("Can't find session");
+            }
+            session.TrackId = data.newTrack;
+            SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSession(session.ConferenceId, session.SessionId));
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Download(int conferenceId)
+        {
+            var res = new HttpResponseMessage(HttpStatusCode.OK);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Title,SubTitle,Speakers,Status,Tags,Level,Track,Location,Votes,Plenary");
+            foreach (var session in SessionRepository.Instance.GetSessions(conferenceId).OrderBy(s => s.Title))
+            {
+                sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",\"{5}\",\"{6}\",\"{7}\",{8},{9}", session.Title, session.SubTitle, string.Join(", ", session.Speakers.Select(sp => sp.Value)), session.Status, string.Join(", ", session.Tags.Select(t => t.Value)), session.Level, session.TrackTitle, session.LocationName, session.NrVotes, session.IsPlenary));
+            }
+            res.Content = new StringContent(sb.ToString());
+            res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            res.Content.Headers.ContentDisposition.FileName = "Sessions.csv";
+            return res;
         }
 
     }

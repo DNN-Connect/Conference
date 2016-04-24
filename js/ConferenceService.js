@@ -84,6 +84,9 @@ window.ConferenceService = function($, mid) {
   this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
     this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
   }
+  this.changeSessionTrack = function(conferenceId, sessionId, newTrack, success, fail) {
+    this.apiCall('POST', 'Sessions', 'ChangeTrack', conferenceId, sessionId, { newTrack: newTrack }, success, fail);
+  }
   this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
     this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
   }

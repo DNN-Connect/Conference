@@ -7,7 +7,9 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     Scheduler = require('./Scheduler/Scheduler.jsx'),
     Schedule = require('./Schedule/Schedule.jsx'),
     Resources = require('./Resources/Resources.jsx'),
-    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx');
+    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
+    SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
+    SessionManager = require('./SessionManager/SessionManager.jsx');
 
 (function($, window, document, undefined) {
 
@@ -129,6 +131,20 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
         var conferenceId = $(el).data('conferenceid');
         var type = $(el).data('type');
         React.render(<BulkAddUsers moduleId={moduleId} conferenceId={conferenceId} type={type} />, el);
+      });
+      $('.sessionStatusButton').each(function(i, el) {
+        React.render(<SessionStatusButton module={ConnectConference.modules[$(el).data('moduleid')]}
+                        options={$(el).data('options')}
+                        selected={$(el).data('selected')}
+                        conferenceId={$(el).data('conferenceid')}
+                        sessionId={$(el).data('sessionid')} />, el);
+      });
+      $('.sessionManager').each(function(i, el) {
+        React.render(<SessionManager module={ConnectConference.modules[$(el).data('moduleid')]}
+                        statusOptions={$(el).data('statusoptions')}
+                        tracks={$(el).data('tracks')}
+                        conferenceId={$(el).data('conferenceid')}
+                        sessions={$(el).data('sessions')} />, el);
       });
     },
 

@@ -59,5 +59,24 @@ namespace Connect.DNN.Modules.Conference.Common
             return Html.ActionLink(linkText, defaultActionName, defaultController, defaultRouteValues, htmlAttributes);
         }
 
+        public string GetModuleUrl(string relativeUrl, bool addModTabIds)
+        {
+            if (addModTabIds)
+            {
+                relativeUrl += relativeUrl.Contains("?") ? "&" : "?";
+                relativeUrl += string.Format("moduleId={0}&tabId={1}", Dnn.ActiveModule.ModuleID, Dnn.ActiveModule.TabID);
+
+            }
+            if (relativeUrl.StartsWith("API/"))
+            {
+
+                return Dnn.PortalSettings.PortalAlias.ResolveUrl("~/DesktopModules/Connect/Conference/" + relativeUrl);
+            }
+            else
+            {
+                return DotNetNuke.Common.Globals.ResolveUrl("~/DesktopModules/MVC/Connect/Conference/" + relativeUrl);
+            }
+        }
+
     }
 }

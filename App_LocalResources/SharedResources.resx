@@ -342,4 +342,16 @@
   <data name="Submit.Text" xml:space="preserve">
     <value>Submit</value>
   </data>
+  <data name="Attendees.Text" xml:space="preserve">
+    <value>Attendees</value>
+  </data>
+  <data name="Download.Text" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="NotSubmitted.Confirm" xml:space="preserve">
+    <value>Do you wish to retract your presentation?</value>
+  </data>
+  <data name="Submitted.Confirm" xml:space="preserve">
+    <value>Do you wish to submit this session?</value>
+  </data>
 </root>

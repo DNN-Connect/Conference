@@ -1,0 +1,50 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    var speakers = SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.LastName);
+}
+
+<div class="container">
+ <div class="row">
+  <div class="col-sm-12">
+   <table class="table table-responsive table-striped">
+    <thead>
+     <tr>
+      <th>@Dnn.LocalizeString("Name")</th>
+      <th>@Dnn.LocalizeString("Email")</th>
+      <th>@Dnn.LocalizeString("NrSessions")</th>
+     </tr>
+    </thead>
+    <tbody>
+     @foreach (var sp in speakers)
+     {
+     <tr>
+      <td>@sp.LastName, @sp.FirstName</td>
+      <td>@sp.Email</td>
+      <td>@sp.NrSessions</td>
+     </tr>
+     }
+    </tbody>
+   </table>
+  </div>
+ </div>
+ <div class="row">
+  <div class="col-sm-12">
+   <div class="right">
+    <a href="@GetModuleUrl("API/Speakers/Download?conferenceId=" + Model.ConferenceId.ToString(), true)" class="btn btn-default">
+     <span class="glyphicon glyphicon-save"></span>
+     @Dnn.LocalizeString("Download")
+    </a>
+    @ReturnLink(Dnn.LocalizeString("Return"), "Home", "Index", null, new { @class = "btn btn-primary" }, Model.ConferenceId)
+   </div>
+  </div>
+ </div>
+</div>
+
+<script type="text/javascript">
+ $(document).ready(function () {
+ })
+</script>

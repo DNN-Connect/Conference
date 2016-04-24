@@ -4,7 +4,11 @@
 @import "scheduler.less";
 @import "resources.less";
 .ModConnectConferenceC {
-    a.btn-primary, a.btn-success, a.btn-info, a.btn-warning, a.btn-danger {
+    a.btn-primary,
+    a.btn-success,
+    a.btn-info,
+    a.btn-warning,
+    a.btn-danger {
         color: #fff;
     }
     a.btn-default {
@@ -145,8 +149,7 @@
             padding: 0 10px;
             cursor: help;
         }
-        span.detailItem {
-        }
+        span.detailItem {}
     }
     .list-group.checked-list-box {
         .list-group-item {
@@ -190,10 +193,34 @@
             }
         }
     }
-
     .attendeeTable > tbody > tr > td > span {
         color: #888;
         font-size: small;
         float: right;
+    }
+    .tblSessions {
+        .sessionAbstract {
+            display: none;
+        }
+        .sessionTitle {
+            cursor: pointer;
+        }
+        .ctlColumn {
+            width: 150px;
+            text-align: right;
+            a {
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .details {
+        color: #888;
+        font-size: small;
+    }
+    .glyphicon {
+        font-family: "Glyphicons Halflings" !important;
+    }
+    .text-right {
+        text-align: right;
     }
 }

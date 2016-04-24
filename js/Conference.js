@@ -204,6 +204,82 @@ module.exports = React.createClass({
 
 module.exports = React.createClass({
   displayName: "exports",
+  getInitialState: function getInitialState() {
+    return {
+      selectedOption: this.props.selected
+    };
+  },
+  render: function render() {
+    var btnClass = "";
+    var btnText = "";
+    var options = [];
+    for (var i = 0; i < this.props.options.length; i++) {
+      var opt = this.props.options[i];
+      if (opt.Id == this.state.selectedOption) {
+        btnClass = opt.ClassName;
+        btnText = opt.Text;
+      } else {
+        options.push(React.createElement(
+          "li",
+          null,
+          React.createElement(
+            "a",
+            { href: "#", "data-id": opt.Id,
+              "data-confirm": opt.Confirm,
+              onClick: this.statusChange.bind(null, opt) },
+            opt.Text
+          )
+        ));
+      }
+    }
+    return React.createElement(
+      "div",
+      { className: "btn-group" },
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass },
+        btnText
+      ),
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass + " dropdown-toggle", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+        " ",
+        React.createElement("span", { className: "caret" }),
+        React.createElement(
+          "span",
+          { className: "sr-only" },
+          "Toggle Dropdown"
+        )
+      ),
+      React.createElement(
+        "ul",
+        { className: "dropdown-menu" },
+        options
+      )
+    );
+  },
+  statusChange: function statusChange(newStatus, e) {
+    var _this = this;
+
+    e.preventDefault();
+    if (newStatus.Confirm != undefined) {
+      if (!confirm(newStatus.Confirm)) {
+        return;
+      }
+    }
+    this.props.module.service.changeSessionStatus(this.props.conferenceId, this.props.sessionId, newStatus.Id, function (data) {
+      _this.setState({
+        selectedOption: data.Status
+      });
+    });
+  }
+});
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+  displayName: "exports",
 
 
   resources: null,
@@ -268,7 +344,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 var Comment = require('./Comment.jsx');
@@ -441,7 +517,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Comment.jsx":3}],5:[function(require,module,exports){
+},{"./Comment.jsx":4}],6:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
@@ -453,7 +529,9 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     Scheduler = require('./Scheduler/Scheduler.jsx'),
     Schedule = require('./Schedule/Schedule.jsx'),
     Resources = require('./Resources/Resources.jsx'),
-    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx');
+    BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
+    SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
+    SessionManager = require('./SessionManager/SessionManager.jsx');
 
 (function ($, window, document, undefined) {
 
@@ -576,6 +654,20 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
         var type = $(el).data('type');
         React.render(React.createElement(BulkAddUsers, { moduleId: moduleId, conferenceId: conferenceId, type: type }), el);
       });
+      $('.sessionStatusButton').each(function (i, el) {
+        React.render(React.createElement(SessionStatusButton, { module: ConnectConference.modules[$(el).data('moduleid')],
+          options: $(el).data('options'),
+          selected: $(el).data('selected'),
+          conferenceId: $(el).data('conferenceid'),
+          sessionId: $(el).data('sessionid') }), el);
+      });
+      $('.sessionManager').each(function (i, el) {
+        React.render(React.createElement(SessionManager, { module: ConnectConference.modules[$(el).data('moduleid')],
+          statusOptions: $(el).data('statusoptions'),
+          tracks: $(el).data('tracks'),
+          conferenceId: $(el).data('conferenceid'),
+          sessions: $(el).data('sessions') }), el);
+      });
     },
 
     formatString: function formatString(format) {
@@ -588,7 +680,7 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
   };
 })(jQuery, window, document);
 
-},{"./BulkAddUsers/BulkAddUsers.jsx":1,"./Comments/Comments.jsx":4,"./Resources/Resources.jsx":8,"./Schedule/Schedule.jsx":11,"./Scheduler/Scheduler.jsx":15,"./SessionVotes/SessionVotes.jsx":21,"./Speakers/Speakers.jsx":23,"./TagVotes/TagVotes.jsx":25,"./Tags/Tags.jsx":27,"./TimesheetEditor/TimesheetEditor.jsx":28}],6:[function(require,module,exports){
+},{"./BulkAddUsers/BulkAddUsers.jsx":1,"./Buttons/SessionStatusButton.jsx":3,"./Comments/Comments.jsx":5,"./Resources/Resources.jsx":9,"./Schedule/Schedule.jsx":12,"./Scheduler/Scheduler.jsx":16,"./SessionManager/SessionManager.jsx":22,"./SessionVotes/SessionVotes.jsx":26,"./Speakers/Speakers.jsx":28,"./TagVotes/TagVotes.jsx":30,"./Tags/Tags.jsx":32,"./TimesheetEditor/TimesheetEditor.jsx":33}],7:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -652,7 +744,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var Icon = require('./Icon.jsx'),
@@ -762,7 +854,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Icon.jsx":6,"./StatusApprovalButton.jsx":9}],8:[function(require,module,exports){
+},{"./Icon.jsx":7,"./StatusApprovalButton.jsx":10}],9:[function(require,module,exports){
 'use strict';
 
 var Resource = require('./Resource.jsx'),
@@ -926,7 +1018,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Resource.jsx":7,"./Video.jsx":10}],9:[function(require,module,exports){
+},{"./Resource.jsx":8,"./Video.jsx":11}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -973,7 +1065,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1078,7 +1170,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var ScheduleDay = require('./ScheduleDay.jsx');
@@ -1146,7 +1238,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleDay.jsx":12}],12:[function(require,module,exports){
+},{"./ScheduleDay.jsx":13}],13:[function(require,module,exports){
 'use strict';
 
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
@@ -1223,7 +1315,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleGrid.jsx":13,"./ScheduleScheduledSession.jsx":14}],13:[function(require,module,exports){
+},{"./ScheduleGrid.jsx":14,"./ScheduleScheduledSession.jsx":15}],14:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1308,7 +1400,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1364,7 +1456,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1550,7 +1642,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerDay.jsx":16,"./SchedulerUnscheduledSession.jsx":19}],16:[function(require,module,exports){
+},{"./SchedulerDay.jsx":17,"./SchedulerUnscheduledSession.jsx":20}],17:[function(require,module,exports){
 'use strict';
 
 var SchedulerGrid = require('./SchedulerGrid.jsx'),
@@ -1616,7 +1708,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerGrid.jsx":17,"./SchedulerScheduledSession.jsx":18}],17:[function(require,module,exports){
+},{"./SchedulerGrid.jsx":18,"./SchedulerScheduledSession.jsx":19}],18:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1720,7 +1812,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1778,7 +1870,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1829,7 +1921,402 @@ module.exports = React.createClass({
 
 });
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
+'use strict';
+
+var Status = require('./Status.jsx'),
+    Track = require('./Track.jsx');
+
+module.exports = React.createClass({
+  displayName: 'exports',
+  render: function render() {
+    var speakers = this.props.session.Speakers.map(function (item) {
+      return item.Value;
+    });
+    return React.createElement(
+      'tr',
+      null,
+      React.createElement(
+        'td',
+        null,
+        this.props.session.Title,
+        React.createElement('br', null),
+        React.createElement(
+          'span',
+          { className: 'details' },
+          speakers.join(', ')
+        ),
+        React.createElement('br', null),
+        React.createElement(
+          'span',
+          { className: 'details' },
+          this.props.session.NrVotes,
+          ' ',
+          this.props.module.resources.Votes
+        )
+      ),
+      React.createElement(
+        'td',
+        { className: 'text-right' },
+        React.createElement(Status, { options: this.props.statusOptions,
+          session: this.props.session,
+          key: 'status' + this.props.session.SessionId,
+          changeStatus: this.props.changeStatus })
+      ),
+      React.createElement(
+        'td',
+        { className: 'text-right' },
+        React.createElement(Track, { tracks: this.props.tracks,
+          session: this.props.session,
+          key: 'track' + this.props.session.SessionId,
+          changeTrack: this.props.changeTrack })
+      )
+    );
+  }
+});
+
+},{"./Status.jsx":23,"./Track.jsx":24}],22:[function(require,module,exports){
+"use strict";
+
+var Session = require('./Session.jsx');
+
+module.exports = React.createClass({
+  displayName: "exports",
+  getInitialState: function getInitialState() {
+    var tracks = this.props.tracks;
+    tracks.unshift({
+      TrackId: -1,
+      Sort: -1,
+      Title: "None",
+      NrSessions: 0,
+      BackgroundColor: "#ffffff"
+    });
+    return {
+      sessions: this.props.sessions,
+      tracks: tracks
+    };
+  },
+  render: function render() {
+    var _this = this;
+
+    var statusTotals = {};
+    var trackTotals = {};
+    var speakerTotals = {};
+    var sessions = this.state.sessions.map(function (item) {
+      statusTotals[item.Status] = statusTotals[item.Status] == undefined ? 1 : statusTotals[item.Status] + 1;
+      var trackId = item.TrackId == null ? -1 : item.TrackId;
+      trackTotals[trackId] = trackTotals[trackId] == undefined ? 1 : trackTotals[trackId] + 1;
+      if (item.Status > 2) {
+        for (var i = 0; i < item.Speakers.length; i++) {
+          var sp = item.Speakers[i];
+          speakerTotals[sp.Value] = speakerTotals[sp.Value] == undefined ? 1 : speakerTotals[sp.Value] + 1;
+        }
+      }
+      return React.createElement(Session, { module: _this.props.module,
+        session: item,
+        statusOptions: _this.props.statusOptions,
+        tracks: _this.state.tracks,
+        key: item.SessionId,
+        changeStatus: _this.changeSessionStatus,
+        changeTrack: _this.changeSessionTrack });
+    });
+    var statusList = [];
+    for (var i = 0; i < this.props.statusOptions.length; i++) {
+      var so = this.props.statusOptions[i];
+      if (statusTotals[so.Id] != undefined) {
+        statusList.push(React.createElement(
+          "dt",
+          null,
+          so.Text
+        ));
+        statusList.push(React.createElement(
+          "dd",
+          null,
+          statusTotals[so.Id]
+        ));
+      }
+    }
+    var trackList = [];
+    for (var i = 0; i < this.state.tracks.length; i++) {
+      var tr = this.state.tracks[i];
+      trackList.push(React.createElement(
+        "dt",
+        null,
+        tr.Title
+      ));
+      trackList.push(React.createElement(
+        "dd",
+        null,
+        trackTotals[tr.TrackId] == undefined ? 0 : trackTotals[tr.TrackId]
+      ));
+    }
+    var speakerList = [];
+    for (var key in speakerTotals) {
+      if (speakerTotals.hasOwnProperty(key)) {
+        speakerList.push(React.createElement(
+          "dt",
+          null,
+          key
+        ));
+        speakerList.push(React.createElement(
+          "dd",
+          null,
+          speakerTotals[key]
+        ));
+      }
+    }
+
+    return React.createElement(
+      "div",
+      null,
+      React.createElement(
+        "div",
+        { className: "row" },
+        React.createElement(
+          "div",
+          { className: "col-sm-4" },
+          React.createElement(
+            "h3",
+            null,
+            "this.props.module.resources.Statuses"
+          ),
+          React.createElement(
+            "dl",
+            { className: "dl-horizontal" },
+            statusList
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "col-sm-4" },
+          React.createElement(
+            "h3",
+            null,
+            "this.props.module.resources.Tracks"
+          ),
+          React.createElement(
+            "dl",
+            { className: "dl-horizontal" },
+            trackList
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "col-sm-4" },
+          React.createElement(
+            "h3",
+            null,
+            "this.props.module.resources.Speakers"
+          ),
+          React.createElement(
+            "dl",
+            { className: "dl-horizontal" },
+            speakerList
+          )
+        )
+      ),
+      React.createElement(
+        "div",
+        { className: "row" },
+        React.createElement(
+          "div",
+          { className: "col-xs-12" },
+          React.createElement(
+            "table",
+            { className: "table" },
+            React.createElement(
+              "thead",
+              null,
+              React.createElement(
+                "tr",
+                null,
+                React.createElement(
+                  "th",
+                  null,
+                  "this.props.module.resources.Session"
+                ),
+                React.createElement(
+                  "th",
+                  { className: "text-right" },
+                  "this.props.module.resources.Status"
+                ),
+                React.createElement(
+                  "th",
+                  { className: "text-right" },
+                  "this.props.module.resources.Track"
+                )
+              )
+            ),
+            React.createElement(
+              "tbody",
+              null,
+              sessions
+            )
+          )
+        )
+      )
+    );
+  },
+  changeSessionStatus: function changeSessionStatus(session, newStatus, e) {
+    var _this2 = this;
+
+    e.preventDefault();
+    if (newStatus.Confirm != undefined) {
+      if (!confirm(newStatus.Confirm)) {
+        return;
+      }
+    }
+    this.props.module.service.changeSessionStatus(this.props.conferenceId, session.SessionId, newStatus.Id, function (data) {
+      var newList = [];
+      for (var i = 0; i < _this2.state.sessions.length; i++) {
+        var s = _this2.state.sessions[i];
+        if (s.SessionId == session.SessionId) {
+          s = data;
+        }
+        newList.push(s);
+      }
+      _this2.setState({
+        sessions: newList
+      });
+    });
+  },
+  changeSessionTrack: function changeSessionTrack(session, newTrack, e) {
+    var _this3 = this;
+
+    e.preventDefault();
+    this.props.module.service.changeSessionTrack(this.props.conferenceId, session.SessionId, newTrack.TrackId, function (data) {
+      var newList = [];
+      for (var i = 0; i < _this3.state.sessions.length; i++) {
+        var s = _this3.state.sessions[i];
+        if (s.SessionId == session.SessionId) {
+          s = data;
+        }
+        newList.push(s);
+      }
+      _this3.setState({
+        sessions: newList
+      });
+    });
+  }
+});
+
+},{"./Session.jsx":21}],23:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+  displayName: "exports",
+  render: function render() {
+    var btnClass = "";
+    var btnText = "";
+    var options = [];
+    for (var i = 0; i < this.props.options.length; i++) {
+      var opt = this.props.options[i];
+      if (opt.Id == this.props.session.Status) {
+        btnClass = opt.ClassName;
+        btnText = opt.Text;
+      } else {
+        options.push(React.createElement(
+          "li",
+          null,
+          React.createElement(
+            "a",
+            { href: "#", "data-id": opt.Id,
+              "data-confirm": opt.Confirm,
+              onClick: this.props.changeStatus.bind(null, this.props.session, opt) },
+            opt.Text
+          )
+        ));
+      }
+    }
+    return React.createElement(
+      "div",
+      { className: "btn-group" },
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass },
+        btnText
+      ),
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass + " dropdown-toggle", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+        " ",
+        React.createElement("span", { className: "caret" }),
+        React.createElement(
+          "span",
+          { className: "sr-only" },
+          "Toggle Dropdown"
+        )
+      ),
+      React.createElement(
+        "ul",
+        { className: "dropdown-menu" },
+        options
+      )
+    );
+  }
+});
+
+},{}],24:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+  displayName: "exports",
+  render: function render() {
+    var btnClass = "";
+    var btnText = "";
+    var options = [];
+    var btnStyle = {};
+    var trackId = this.props.session.TrackId == null ? -1 : this.props.session.TrackId;
+    for (var i = 0; i < this.props.tracks.length; i++) {
+      var opt = this.props.tracks[i];
+      if (opt.TrackId == trackId) {
+        btnClass = "default";
+        btnText = opt.Title;
+        btnStyle = {
+          backgroundColor: opt.BackgroundColor
+        };
+      } else {
+        options.push(React.createElement(
+          "li",
+          null,
+          React.createElement(
+            "a",
+            { href: "#", "data-id": opt.TrackId,
+              onClick: this.props.changeTrack.bind(null, this.props.session, opt) },
+            opt.Title
+          )
+        ));
+      }
+    }
+    return React.createElement(
+      "div",
+      { className: "btn-group" },
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass, style: btnStyle },
+        btnText
+      ),
+      React.createElement(
+        "button",
+        { type: "button", className: "btn btn-sm btn-" + btnClass + " dropdown-toggle", style: btnStyle, "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+        " ",
+        React.createElement("span", { className: "caret" }),
+        React.createElement(
+          "span",
+          { className: "sr-only" },
+          "Toggle Dropdown"
+        )
+      ),
+      React.createElement(
+        "ul",
+        { className: "dropdown-menu" },
+        options
+      )
+    );
+  }
+});
+
+},{}],25:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1931,7 +2418,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],21:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 var SessionVote = require('./SessionVote.jsx');
@@ -2040,7 +2527,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SessionVote.jsx":20}],22:[function(require,module,exports){
+},{"./SessionVote.jsx":25}],27:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2082,7 +2569,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],23:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 var Speaker = require('./Speaker.jsx');
@@ -2232,7 +2719,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Speaker.jsx":22}],24:[function(require,module,exports){
+},{"./Speaker.jsx":27}],29:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2293,7 +2780,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],25:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 var TagVote = require('./TagVote.jsx');
@@ -2446,7 +2933,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TagVote.jsx":24}],26:[function(require,module,exports){
+},{"./TagVote.jsx":29}],31:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2462,7 +2949,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],27:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 
 var Tag = require('./Tag.jsx');
@@ -2562,7 +3049,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Tag.jsx":26}],28:[function(require,module,exports){
+},{"./Tag.jsx":31}],33:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
@@ -2939,7 +3426,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TimesheetEditorSlot.jsx":29}],29:[function(require,module,exports){
+},{"./TimesheetEditorSlot.jsx":34}],34:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3103,7 +3590,7 @@ module.exports = React.createClass({
 
 });
 
-},{}]},{},[5])
+},{}]},{},[6])
 
 
 window.ConferenceService = function($, mid) {
@@ -3191,6 +3678,9 @@ window.ConferenceService = function($, mid) {
   }
   this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
     this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
+  }
+  this.changeSessionTrack = function(conferenceId, sessionId, newTrack, success, fail) {
+    this.apiCall('POST', 'Sessions', 'ChangeTrack', conferenceId, sessionId, { newTrack: newTrack }, success, fail);
   }
   this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
     this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
