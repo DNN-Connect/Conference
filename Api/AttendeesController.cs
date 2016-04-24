@@ -6,6 +6,8 @@ using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Attendees;
 using System.Web;
+using System.Linq;
+using System.Net.Http.Headers;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -113,5 +115,24 @@ namespace Connect.DNN.Modules.Conference.Api
             var userId = Connect.Conference.Core.Controllers.ConferenceController.AddAttendee(PortalSettings.PortalId, conferenceId, -1, user.Email, user.FirstName, user.LastName, user.DisplayName, user.Company, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, userId));
         }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Download(int conferenceId)
+        {
+            var res = new HttpResponseMessage(HttpStatusCode.OK);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("LastName,FirstName,DisplayName,Email,Company,Status,ReceiveNotifications");
+            foreach (var att in AttendeeRepository.Instance.GetAttendeesByConference(conferenceId).OrderBy(a => a.LastName))
+            {
+                sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",{5},{6}", att.LastName, att.FirstName, att.DisplayName, att.Email, att.Company, att.Status, att.ReceiveNotifications));
+            }
+            res.Content = new StringContent(sb.ToString());
+            res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            res.Content.Headers.ContentDisposition.FileName = "Attendees.csv";
+            return res;
+        }
+
     }
 }
