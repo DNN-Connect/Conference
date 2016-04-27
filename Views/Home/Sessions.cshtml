@@ -1,0 +1,36 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+    var sessions = SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title);
+    var tracks = TrackRepository.Instance.GetTracks(Model.ConferenceId).Where(t => sessions.Where(s => s.TrackId==t.TrackId).Count() > 0).OrderBy(t => t.Sort);
+}
+
+<div class="container">
+ <div class="row">
+  @foreach (var track in tracks)
+  {
+   <div class="col-xs-12 col-md-3">
+    <h3>@track.Title</h3>
+    @foreach (var session in sessions.Where(s => s.TrackId == track.TrackId))
+    {
+    <div>
+     <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = session.SessionId })">
+      @session.Title
+     </a>
+     <div class="details">
+      @string.Join(", ", session.Speakers.Select(s => s.Value))
+     </div>
+    </div>
+    }
+   </div>
+  }
+ </div>
+</div>
+
+<script type="text/javascript">
+ window.sessionDetailUrl = '';
+</script>
