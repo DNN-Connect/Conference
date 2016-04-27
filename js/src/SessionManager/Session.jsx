@@ -10,10 +10,16 @@ module.exports = React.createClass({
     return (
       <tr>
        <td>
+        <div className="sessionTitle" onClick={this.toggleAbstract}>
         {this.props.session.Title}<br />
         <span className="details">{speakers.join(', ')}</span><br />
-        <span className="details">{this.props.session.NrVotes} {this.props.module.resources.Votes}</span>
+        </div>
+        <div className="details sessionAbstract" 
+             ref="abstract"
+             dangerouslySetInnerHTML={this.getAbstract()}>
+        </div>
        </td>
+       <td className="text-right">{this.props.session.NrVotes}</td>
        <td className="text-right"><Status options={this.props.statusOptions}
                    session={this.props.session}
                    key={'status' + this.props.session.SessionId}
@@ -24,6 +30,17 @@ module.exports = React.createClass({
                    changeTrack={this.props.changeTrack} /></td>
       </tr>
     );
+  },
+
+  toggleAbstract() {
+    $(this.refs.abstract.getDOMNode()).toggleClass('sessionAbstract');
+  },
+
+  getAbstract() {
+    if (this.props.session.Description == null) {
+      return {__html: ''};
+    }
+    return {__html: this.props.session.Description.replace(/(?:\r\n|\r|\n)/g, '<br />')};
   }
 
 });

@@ -1939,21 +1939,26 @@ module.exports = React.createClass({
       React.createElement(
         'td',
         null,
-        this.props.session.Title,
-        React.createElement('br', null),
         React.createElement(
-          'span',
-          { className: 'details' },
-          speakers.join(', ')
+          'div',
+          { className: 'sessionTitle', onClick: this.toggleAbstract },
+          this.props.session.Title,
+          React.createElement('br', null),
+          React.createElement(
+            'span',
+            { className: 'details' },
+            speakers.join(', ')
+          ),
+          React.createElement('br', null)
         ),
-        React.createElement('br', null),
-        React.createElement(
-          'span',
-          { className: 'details' },
-          this.props.session.NrVotes,
-          ' ',
-          this.props.module.resources.Votes
-        )
+        React.createElement('div', { className: 'details sessionAbstract',
+          ref: 'abstract',
+          dangerouslySetInnerHTML: this.getAbstract() })
+      ),
+      React.createElement(
+        'td',
+        { className: 'text-right' },
+        this.props.session.NrVotes
       ),
       React.createElement(
         'td',
@@ -1972,6 +1977,15 @@ module.exports = React.createClass({
           changeTrack: this.props.changeTrack })
       )
     );
+  },
+  toggleAbstract: function toggleAbstract() {
+    $(this.refs.abstract.getDOMNode()).toggleClass('sessionAbstract');
+  },
+  getAbstract: function getAbstract() {
+    if (this.props.session.Description == null) {
+      return { __html: '' };
+    }
+    return { __html: this.props.session.Description.replace(/(?:\r\n|\r|\n)/g, '<br />') };
   }
 });
 
@@ -1993,20 +2007,43 @@ module.exports = React.createClass({
     });
     return {
       sessions: this.props.sessions,
-      tracks: tracks
+      tracks: tracks,
+      sort: "Title",
+      sortOrder: "asc"
     };
+  },
+  sortSessions: function sortSessions(newSort) {
+    var newSortOrder = newSort == this.state.sort & this.state.sortOrder == 'asc' ? 'desc' : 'asc';
+    var newList = this.state.sessions;
+    newList.sort(function (a, b) {
+      if (a[newSort] < b[newSort]) {
+        return newSortOrder == 'asc' ? -1 : 1;
+      }
+      if (a[newSort] > b[newSort]) {
+        return newSortOrder == 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+    this.setState({
+      sessions: newList,
+      sort: newSort,
+      sortOrder: newSortOrder
+    });
   },
   render: function render() {
     var _this = this;
 
     var statusTotals = {};
     var trackTotals = {};
+    var trackTotalsAccepted = {};
     var speakerTotals = {};
+    var nrSpeakers = 0;
     var sessions = this.state.sessions.map(function (item) {
       statusTotals[item.Status] = statusTotals[item.Status] == undefined ? 1 : statusTotals[item.Status] + 1;
       var trackId = item.TrackId == null ? -1 : item.TrackId;
       trackTotals[trackId] = trackTotals[trackId] == undefined ? 1 : trackTotals[trackId] + 1;
       if (item.Status > 2) {
+        trackTotalsAccepted[trackId] = trackTotalsAccepted[trackId] == undefined ? 1 : trackTotalsAccepted[trackId] + 1;
         for (var i = 0; i < item.Speakers.length; i++) {
           var sp = item.Speakers[i];
           speakerTotals[sp.Value] = speakerTotals[sp.Value] == undefined ? 1 : speakerTotals[sp.Value] + 1;
@@ -2047,12 +2084,16 @@ module.exports = React.createClass({
       trackList.push(React.createElement(
         "dd",
         null,
-        trackTotals[tr.TrackId] == undefined ? 0 : trackTotals[tr.TrackId]
+        trackTotals[tr.TrackId] == undefined ? 0 : trackTotals[tr.TrackId],
+        "  (",
+        trackTotalsAccepted[tr.TrackId] == undefined ? 0 : trackTotalsAccepted[tr.TrackId],
+        ")"
       ));
     }
     var speakerList = [];
     for (var key in speakerTotals) {
       if (speakerTotals.hasOwnProperty(key)) {
+        nrSpeakers++;
         speakerList.push(React.createElement(
           "dt",
           null,
@@ -2078,7 +2119,7 @@ module.exports = React.createClass({
           React.createElement(
             "h3",
             null,
-            "this.props.module.resources.Statuses"
+            this.props.module.resources.Statuses
           ),
           React.createElement(
             "dl",
@@ -2092,7 +2133,7 @@ module.exports = React.createClass({
           React.createElement(
             "h3",
             null,
-            "this.props.module.resources.Tracks"
+            this.props.module.resources.Tracks
           ),
           React.createElement(
             "dl",
@@ -2106,7 +2147,10 @@ module.exports = React.createClass({
           React.createElement(
             "h3",
             null,
-            "this.props.module.resources.Speakers"
+            this.props.module.resources.Speakers,
+            " (",
+            nrSpeakers,
+            ")"
           ),
           React.createElement(
             "dl",
@@ -2132,18 +2176,23 @@ module.exports = React.createClass({
                 null,
                 React.createElement(
                   "th",
-                  null,
-                  "this.props.module.resources.Session"
+                  { className: "sortable", onClick: this.sortSessions.bind(null, 'Title') },
+                  this.props.module.resources.Session
                 ),
                 React.createElement(
                   "th",
-                  { className: "text-right" },
-                  "this.props.module.resources.Status"
+                  { className: "text-right sortable", onClick: this.sortSessions.bind(null, 'NrVotes') },
+                  this.props.module.resources.Votes
                 ),
                 React.createElement(
                   "th",
-                  { className: "text-right" },
-                  "this.props.module.resources.Track"
+                  { className: "text-right sortable", onClick: this.sortSessions.bind(null, 'Status') },
+                  this.props.module.resources.Status
+                ),
+                React.createElement(
+                  "th",
+                  { className: "text-right sortable", onClick: this.sortSessions.bind(null, 'TrackId') },
+                  this.props.module.resources.Track
                 )
               )
             ),

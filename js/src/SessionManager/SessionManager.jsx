@@ -13,19 +13,43 @@ module.exports = React.createClass({
     });
     return {
       sessions: this.props.sessions,
-      tracks: tracks
+      tracks: tracks,
+      sort: "Title",
+      sortOrder: "asc"
     }
+  },
+
+  sortSessions(newSort) {
+    var newSortOrder = (newSort == this.state.sort & this.state.sortOrder == 'asc') ? 'desc' : 'asc';
+    var newList = this.state.sessions;
+    newList.sort((a, b) => {
+      if (a[newSort] < b[newSort]) {
+        return (newSortOrder=='asc') ? -1 : 1;
+      }
+      if (a[newSort] > b[newSort]) {
+        return (newSortOrder=='asc') ? 1 : -1;
+      }
+      return 0;
+    });
+    this.setState({
+      sessions: newList,
+      sort: newSort,
+      sortOrder: newSortOrder
+    });
   },
 
   render() {
     var statusTotals = {};
     var trackTotals = {};
+    var trackTotalsAccepted = {};
     var speakerTotals = {};
+    var nrSpeakers = 0;
     var sessions = this.state.sessions.map((item) => {
       statusTotals[item.Status] = (statusTotals[item.Status] == undefined) ? 1 : statusTotals[item.Status] + 1;
       var trackId = (item.TrackId == null) ? -1 : item.TrackId;
       trackTotals[trackId] = (trackTotals[trackId] == undefined) ? 1 : trackTotals[trackId] + 1;
       if (item.Status > 2) {
+        trackTotalsAccepted[trackId] = (trackTotalsAccepted[trackId] == undefined) ? 1 : trackTotalsAccepted[trackId] + 1;
         for (var i=0;i<item.Speakers.length;i++) {
           var sp = item.Speakers[i];
           speakerTotals[sp.Value] = (speakerTotals[sp.Value] == undefined) ? 1 : speakerTotals[sp.Value] + 1;
@@ -51,11 +75,15 @@ module.exports = React.createClass({
     for (var i=0;i<this.state.tracks.length;i++) {
       var tr = this.state.tracks[i];
       trackList.push(<dt>{tr.Title}</dt>);
-      trackList.push(<dd>{(trackTotals[tr.TrackId]==undefined)?0:trackTotals[tr.TrackId]}</dd>);
+      trackList.push(<dd>
+        {(trackTotals[tr.TrackId]==undefined)?0:trackTotals[tr.TrackId]}&nbsp;
+        ({(trackTotalsAccepted[tr.TrackId]==undefined)?0:trackTotalsAccepted[tr.TrackId]})
+        </dd>);
     }
     var speakerList = [];
     for (var key in speakerTotals) {
       if (speakerTotals.hasOwnProperty(key)) {
+        nrSpeakers++;
         speakerList.push(<dt>{key}</dt>);
         speakerList.push(<dd>{speakerTotals[key]}</dd>);
       }
@@ -65,19 +93,19 @@ module.exports = React.createClass({
       <div>
         <div className="row">
           <div className="col-sm-4">
-            <h3>this.props.module.resources.Statuses</h3>
+            <h3>{this.props.module.resources.Statuses}</h3>
             <dl className="dl-horizontal">
               {statusList}
             </dl>
           </div>
           <div className="col-sm-4">
-            <h3>this.props.module.resources.Tracks</h3>
+            <h3>{this.props.module.resources.Tracks}</h3>
             <dl className="dl-horizontal">
             {trackList}
             </dl>
           </div>
           <div className="col-sm-4">
-            <h3>this.props.module.resources.Speakers</h3>
+            <h3>{this.props.module.resources.Speakers} ({nrSpeakers})</h3>
             <dl className="dl-horizontal">
             {speakerList}
             </dl>
@@ -88,9 +116,18 @@ module.exports = React.createClass({
             <table className="table">
              <thead>
               <tr>
-               <th>this.props.module.resources.Session</th>
-               <th className="text-right">this.props.module.resources.Status</th>
-               <th className="text-right">this.props.module.resources.Track</th>
+               <th className="sortable" onClick={this.sortSessions.bind(null, 'Title')}>
+                 {this.props.module.resources.Session}
+               </th>
+               <th className="text-right sortable" onClick={this.sortSessions.bind(null, 'NrVotes')}>
+                 {this.props.module.resources.Votes}
+               </th>
+               <th className="text-right sortable" onClick={this.sortSessions.bind(null, 'Status')}>
+                 {this.props.module.resources.Status}
+               </th>
+               <th className="text-right sortable" onClick={this.sortSessions.bind(null, 'TrackId')}>
+                 {this.props.module.resources.Track}
+               </th>
               </tr>
              </thead>
              <tbody>
