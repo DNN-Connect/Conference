@@ -21,8 +21,7 @@ module.exports = React.createClass({
       <div className="panel panel-default session scheduled" data-slotid={this.props.session.SlotId} 
            data-locationid={this.props.session.LocationId} data-plenary={this.props.session.IsPlenary}
            ref="Session" data-sessionid={this.props.session.SessionId} data-day={this.props.session.DayNr}
-           data-toggle="popover" title={this.props.session.Title} 
-           data-content={this.props.session.Description + speakerList} style={divStyle}>
+           style={divStyle}>
        <div className="panel-body">
          <div className="speakers">{speakers}</div>
          {this.props.session.Title}          

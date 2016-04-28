@@ -1183,11 +1183,11 @@ module.exports = React.createClass({
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     var locationList = {};
-    for (i = 0; i < this.props.locations.length; i++) {
+    for (var i = 0; i < this.props.locations.length; i++) {
       locationList[this.props.locations[i].LocationId] = i;
     }
     var slotList = {};
-    for (j = 0; j < this.props.slots.length; j++) {
+    for (var j = 0; j < this.props.slots.length; j++) {
       slotList[this.props.slots[j].SlotId] = this.props.slots[j];
     }
     return {
@@ -1199,9 +1199,9 @@ module.exports = React.createClass({
 
   render: function render() {
     var scheduleDays = [];
-    for (i = 1; i <= this.props.nrDays; i++) {
+    for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
-      for (j = 0; j < this.props.slots.length; j++) {
+      for (var j = 0; j < this.props.slots.length; j++) {
         var slot = this.props.slots[j];
         if (slot.DayNr == undefined | slot.DayNr == i) {
           daySlots.push(slot);
@@ -1264,7 +1264,7 @@ module.exports = React.createClass({
     var width = this.props.locations.length * 100;
     var viewBox = "0 0 " + (width + this.props.leftMargin).toString() + " " + height;
     var scheduledSessions = [];
-    for (i = 0; i < this.props.sessionList.length; i++) {
+    for (var i = 0; i < this.props.sessionList.length; i++) {
       var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0) {
         var slot = this.props.slotList[session.SlotId];
@@ -1328,7 +1328,7 @@ module.exports = React.createClass({
 
   render: function render() {
     var vertLines = [];
-    for (i = this.props.leftMargin; i < this.props.width; i = i + 100) {
+    for (var i = this.props.leftMargin; i < this.props.width; i = i + 100) {
       vertLines.push(React.createElement("line", { x1: i, y1: "0", x2: i, y2: this.props.height, className: "gridline" }));
     }
     var horLabels = [];
@@ -1468,11 +1468,13 @@ module.exports = React.createClass({
   displayName: 'exports',
 
 
+  hasReset: true,
+
   getInitialState: function getInitialState() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     var locationList = {};
-    for (i = 0; i < this.props.locations.length; i++) {
+    for (var i = 0; i < this.props.locations.length; i++) {
       locationList[this.props.locations[i].LocationId] = i;
     }
     return {
@@ -1480,19 +1482,20 @@ module.exports = React.createClass({
       locationList: locationList
     };
   },
-
   render: function render() {
+    var _this = this;
+
     var unscheduledSessions = this.state.sessionList.map(function (item) {
       if (item.SlotId == 0) {
-        return React.createElement(SchedulerUnscheduledSession, _extends({}, this.props, { session: item, key: item.SessionId }));
+        return React.createElement(SchedulerUnscheduledSession, _extends({}, _this.props, { session: item, key: item.SessionId }));
       } else {
         return null;
       }
     });
     var scheduleDays = [];
-    for (i = 1; i <= this.props.nrDays; i++) {
+    for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
-      for (j = 0; j < this.props.slots.length; j++) {
+      for (var j = 0; j < this.props.slots.length; j++) {
         var slot = this.props.slots[j];
         if (slot.DayNr == undefined | slot.DayNr == i) {
           daySlots.push(slot);
@@ -1522,10 +1525,11 @@ module.exports = React.createClass({
       )
     );
   },
-
   componentDidMount: function componentDidMount() {
+    var _this2 = this;
+
     $(document).ready(function () {
-      var hasReset = true;
+      var that = _this2;
       interact('.session').draggable({
         inertia: false,
         restrict: {
@@ -1540,9 +1544,8 @@ module.exports = React.createClass({
         accept: '.session',
         overlap: 0.5,
         ondropactivate: function ondropactivate(event) {
-          hasReset = false;
+          that.hasReset = false;
           $(event.relatedTarget).width(100);
-          $(event.relatedTarget).popover('hide');
         },
         ondragenter: function ondragenter(event) {
           var dropzoneElement = event.target;
@@ -1551,27 +1554,25 @@ module.exports = React.createClass({
         ondragleave: function ondragleave(event) {
           event.target.classList.remove('drop-target');
         },
-        ondrop: function (event) {
-          hasReset = true;
-          if (event.target === this.refs.unscheduledColumn.getDOMNode()) {
-            this.tryRemoveSession(event.relatedTarget);
+        ondrop: function ondrop(event) {
+          that.hasReset = true;
+          if (event.target === that.refs.unscheduledColumn.getDOMNode()) {
+            that.tryRemoveSession(event.relatedTarget);
           } else {
-            this.tryMoveSession(event.relatedTarget, event.target);
+            that.tryMoveSession(event.relatedTarget, event.target);
           }
-        }.bind(this),
-        ondropdeactivate: function (event) {
-          if (!hasReset) {
-            this.sessionPlace(event.relatedTarget);
-            hasReset = true;
+        },
+        ondropdeactivate: function ondropdeactivate(event) {
+          if (!that.hasReset) {
+            that.sessionPlace(event.relatedTarget);
+            that.hasReset = true;
           }
           event.target.classList.remove('drop-target');
-        }.bind(this)
+        }
       });
-      $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
-      $('[data-toggle="popover"]').popover({ html: true, trigger: 'hover' });
-    }.bind(this));
+      $(_this2.refs.unscheduledColumn.getDOMNode()).height(_this2.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
+    });
   },
-
   sessionPlace: function sessionPlace(session) {
     var jqSession = $(session);
     var sessionBox = session.getBoundingClientRect();
@@ -1599,25 +1600,27 @@ module.exports = React.createClass({
       session.setAttribute('data-y', '');
     }
   },
-
   tryRemoveSession: function tryRemoveSession(session) {
+    var _this3 = this;
+
     var sessionId = session.getAttribute('data-sessionid');
     this.service.tryRemoveSession(this.props.conference.ConferenceId, sessionId, function (data) {
-      hasReset = true;
-      this.setState({
+      _this3.hasReset = true;
+      _this3.setState({
         sessionList: data
       });
-    }.bind(this), function (data) {
+    }, function (data) {
       alert(data);
       $(session).css('width', 'auto');
-      this.sessionPlace(session);
-    }.bind(this));
+      _this3.sessionPlace(session);
+    });
     if (session.getAttribute('data-slotkey') != '') {
       $('[data-reactid="' + session.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
     }
   },
-
   tryMoveSession: function tryMoveSession(session, slot) {
+    var _this4 = this;
+
     var jqSession = $(session);
     var jqSlot = $(slot);
     var sessionId = jqSession.data('sessionid');
@@ -1626,20 +1629,19 @@ module.exports = React.createClass({
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
     this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, function (data) {
-      hasReset = true;
-      this.setState({
+      _this4.hasReset = true;
+      _this4.setState({
         sessionList: data
       });
-    }.bind(this), function (data) {
+    }, function (data) {
       alert(data);
       $(session).css('width', 'auto');
-      this.sessionPlace(session);
-    }.bind(this));
+      _this4.sessionPlace(session);
+    });
     if (jqSession.data('slotkey') != '') {
       $('[data-reactid="' + jqSession.data('slotkey') + '"]').attr('class', 'sessionSlot canDrop');
     }
   }
-
 });
 
 },{"./SchedulerDay.jsx":17,"./SchedulerUnscheduledSession.jsx":20}],17:[function(require,module,exports){
@@ -1668,7 +1670,7 @@ module.exports = React.createClass({
     var width = this.props.locations.length * 100;
     var viewBox = "0 0 " + (width + this.props.leftMargin).toString() + " " + height;
     var scheduledSessions = [];
-    for (i = 0; i < this.props.sessionList.length; i++) {
+    for (var i = 0; i < this.props.sessionList.length; i++) {
       var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0) {
         scheduledSessions.push(React.createElement(SchedulerScheduledSession, { session: session, sessionPlace: this.props.sessionPlace }));
@@ -1721,7 +1723,7 @@ module.exports = React.createClass({
 
   render: function render() {
     var vertLines = [];
-    for (i = this.props.leftMargin; i < this.props.width; i = i + 100) {
+    for (var i = this.props.leftMargin; i < this.props.width; i = i + 100) {
       vertLines.push(React.createElement("line", { x1: i, y1: "0", x2: i, y2: this.props.height, className: "gridline" }));
     }
     var horLabels = [];
@@ -1788,7 +1790,7 @@ module.exports = React.createClass({
     for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
-        for (j = 0; j < this.props.locations.length; j++) {
+        for (var j = 0; j < this.props.locations.length; j++) {
           var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(React.createElement("rect", { x: j * 100 + this.props.leftMargin, y: slot.StartMinutes - this.props.start, height: slot.DurationMins, width: "100", className: "sessionSlot canDrop",
             ref: refId, "data-slotid": slot.SlotId, "data-locationid": this.props.locations[j].LocationId, id: refId,
@@ -1843,8 +1845,7 @@ module.exports = React.createClass({
       { className: 'panel panel-default session scheduled', 'data-slotid': this.props.session.SlotId,
         'data-locationid': this.props.session.LocationId, 'data-plenary': this.props.session.IsPlenary,
         ref: 'Session', 'data-sessionid': this.props.session.SessionId, 'data-day': this.props.session.DayNr,
-        'data-toggle': 'popover', title: this.props.session.Title,
-        'data-content': this.props.session.Description + speakerList, style: divStyle },
+        style: divStyle },
       React.createElement(
         'div',
         { className: 'panel-body' },
@@ -1901,9 +1902,7 @@ module.exports = React.createClass({
       { className: 'panel panel-default session', 'data-slotkey': '', 'data-orig-x': '0', 'data-orig-y': '0',
         'data-sessionid': this.props.session.SessionId,
         'data-plenary': this.props.session.IsPlenary,
-        'data-toggle': 'popover', title: this.props.session.Title,
-        'data-content': this.props.session.Description + speakerList,
-        'data-placement': 'bottom', style: divStyle },
+        style: divStyle },
       React.createElement(
         'div',
         { className: 'panel-body' },

@@ -21,9 +21,7 @@ module.exports = React.createClass({
       <div className="panel panel-default session" data-slotkey="" data-orig-x="0" data-orig-y="0"
            data-sessionid={this.props.session.SessionId}
            data-plenary={this.props.session.IsPlenary}
-           data-toggle="popover" title={this.props.session.Title} 
-           data-content={this.props.session.Description + speakerList}
-           data-placement="bottom" style={divStyle}>
+           style={divStyle}>
         <div className="panel-body">
          <div className="speakers">{speakers}</div>
          {this.props.session.Title}          

@@ -3,11 +3,13 @@ var SchedulerDay = require('./SchedulerDay.jsx'),
 
 module.exports = React.createClass({
 
-  getInitialState: function() {
+  hasReset: true,
+
+  getInitialState() {
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     var locationList = {};
-    for (i=0;i<this.props.locations.length;i++)
+    for (var i=0;i<this.props.locations.length;i++)
     {
       locationList[this.props.locations[i].LocationId] = i;
     }
@@ -17,8 +19,8 @@ module.exports = React.createClass({
     }
   },
 
-  render: function() {
-    var unscheduledSessions = this.state.sessionList.map(function(item) {
+  render() {
+    var unscheduledSessions = this.state.sessionList.map((item) => {
       if (item.SlotId == 0) {
         return <SchedulerUnscheduledSession {...this.props} session={item} key={item.SessionId} />
       }
@@ -28,9 +30,9 @@ module.exports = React.createClass({
       }
     });
     var scheduleDays = [];
-    for (i = 1; i <= this.props.nrDays; i++) {
+    for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
-      for (j=0;j<this.props.slots.length;j++)
+      for (var j=0;j<this.props.slots.length;j++)
       {
         var slot = this.props.slots[j];
         if (slot.DayNr == undefined | slot.DayNr == i)
@@ -61,9 +63,9 @@ module.exports = React.createClass({
     );
   },
 
-  componentDidMount: function() {
-    $(document).ready(function() {
-      var hasReset = true;
+  componentDidMount() {
+    $(document).ready(() => {
+      var that = this;
       interact('.session')
         .draggable({
           inertia: false,
@@ -71,53 +73,51 @@ module.exports = React.createClass({
             endOnly: true
           },
           autoScroll: true,
-          onend: function(event) {}
+          onend(event) {}
         })
-        .on('dragmove', function(event) {
+        .on('dragmove', (event) => {
           moveObject(event.target, event.dx, event.dy);
         });
       interact('.canDrop')
         .dropzone({
           accept: '.session',
           overlap: 0.5,
-          ondropactivate: function(event) {
-            hasReset = false;
+          ondropactivate(event) {
+            that.hasReset = false;
             $(event.relatedTarget).width(100);
-            $(event.relatedTarget).popover('hide');
           },
-          ondragenter: function(event) {
+          ondragenter(event) {
             var dropzoneElement = event.target;
             dropzoneElement.classList.add('drop-target');
           },
-          ondragleave: function(event) {
+          ondragleave(event) {
             event.target.classList.remove('drop-target');
           },
-          ondrop: function(event) {
-            hasReset = true;
-            if (event.target === this.refs.unscheduledColumn.getDOMNode())
+          ondrop(event) {
+            that.hasReset = true;
+            if (event.target === that.refs.unscheduledColumn.getDOMNode())
             {
-              this.tryRemoveSession(event.relatedTarget);
+              that.tryRemoveSession(event.relatedTarget);
             }
             else
             {
-              this.tryMoveSession(event.relatedTarget, event.target);
+              that.tryMoveSession(event.relatedTarget, event.target);
             }
-          }.bind(this),
-          ondropdeactivate: function(event) {
-            if (!hasReset)
+          },
+          ondropdeactivate(event) {
+            if (!that.hasReset)
             {
-              this.sessionPlace(event.relatedTarget);
-              hasReset = true;
+              that.sessionPlace(event.relatedTarget);
+              that.hasReset = true;
             }
             event.target.classList.remove('drop-target');
-          }.bind(this)
+          }
         });
         $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
-        $('[data-toggle="popover"]').popover({html:true, trigger: 'hover'});
-    }.bind(this));
+    });
   },
 
-  sessionPlace: function(session) {
+  sessionPlace(session) {
     var jqSession = $(session);
     var sessionBox = session.getBoundingClientRect();
     var key = 'slot' + session.getAttribute('data-day') + 'x' + session.getAttribute('data-slotid');
@@ -151,24 +151,24 @@ module.exports = React.createClass({
     }
   },
 
-  tryRemoveSession: function(session) {
+  tryRemoveSession(session) {
     var sessionId = session.getAttribute('data-sessionid');
-    this.service.tryRemoveSession(this.props.conference.ConferenceId, sessionId, function(data) {
-      hasReset = true;
+    this.service.tryRemoveSession(this.props.conference.ConferenceId, sessionId, (data) => {
+      this.hasReset = true;
       this.setState({
         sessionList: data
       });
-    }.bind(this), function(data) {
+    }, (data) => {
       alert(data);
       $(session).css('width', 'auto');
       this.sessionPlace(session);
-    }.bind(this));
+    });
     if (session.getAttribute('data-slotkey') != '') {
       $('[data-reactid="' + session.getAttribute('data-slotkey') + '"]').attr('class', 'sessionSlot canDrop');
     }
   },
 
-  tryMoveSession: function(session, slot) {
+  tryMoveSession(session, slot) {
     var jqSession = $(session);
     var jqSlot = $(slot);
     var sessionId = jqSession.data('sessionid');
@@ -176,16 +176,16 @@ module.exports = React.createClass({
     var slotId = jqSlot.data('slotid');
     var locationId = jqSlot.data('locationid');
     var day = jqSlot.data('day');
-    this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, function(data) {
-      hasReset = true;
+    this.service.tryMoveSession(this.props.conference.ConferenceId, sessionId, day, slotId, locationId, false, (data) => {
+      this.hasReset = true;
       this.setState({
         sessionList: data
       });
-    }.bind(this), function(data) {
+    }, (data) => {
       alert(data);
       $(session).css('width', 'auto');
       this.sessionPlace(session);
-    }.bind(this));
+    });
     if (jqSession.data('slotkey') != '') {
       $('[data-reactid="' + jqSession.data('slotkey') + '"]').attr('class', 'sessionSlot canDrop');
     }

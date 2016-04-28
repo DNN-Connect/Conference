@@ -6,7 +6,7 @@ module.exports = React.createClass({
 
   render: function() {
     var vertLines = [];
-    for (i = this.props.leftMargin; i < this.props.width; i = i + 100) {
+    for (var i = this.props.leftMargin; i < this.props.width; i = i + 100) {
       vertLines.push(
         <line x1={i} y1="0" x2={i} y2={this.props.height} className="gridline" />
       );

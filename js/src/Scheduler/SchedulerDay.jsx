@@ -19,7 +19,7 @@ module.exports = React.createClass({
     var width = this.props.locations.length * 100;
     var viewBox = "0 0 " + (width + this.props.leftMargin).toString() + " " + height;
     var scheduledSessions = [];
-    for (i=0;i<this.props.sessionList.length;i++)
+    for (var i=0;i<this.props.sessionList.length;i++)
     {
       var session = this.props.sessionList[i];
       if (session.DayNr == this.props.day & session.SlotId > 0)

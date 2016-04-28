@@ -6,12 +6,12 @@ module.exports = React.createClass({
     this.resources = ConnectConference.modules[this.props.moduleId].resources;
     this.service = ConnectConference.modules[this.props.moduleId].service;
     var locationList = {};
-    for (i=0;i<this.props.locations.length;i++)
+    for (var i=0;i<this.props.locations.length;i++)
     {
       locationList[this.props.locations[i].LocationId] = i;
     }
     var slotList = {};
-    for (j=0;j<this.props.slots.length;j++)
+    for (var j=0;j<this.props.slots.length;j++)
     {
       slotList[this.props.slots[j].SlotId] = this.props.slots[j];
     }
@@ -24,9 +24,9 @@ module.exports = React.createClass({
 
   render: function() {
     var scheduleDays = [];
-    for (i = 1; i <= this.props.nrDays; i++) {
+    for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
-      for (j=0;j<this.props.slots.length;j++)
+      for (var j=0;j<this.props.slots.length;j++)
       {
         var slot = this.props.slots[j];
         if (slot.DayNr == undefined | slot.DayNr == i)

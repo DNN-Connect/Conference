@@ -6,7 +6,7 @@ module.exports = React.createClass({
 
   render: function() {
     var vertLines = [];
-    for (i = this.props.leftMargin; i < this.props.width; i = i + 100) {
+    for (var i = this.props.leftMargin; i < this.props.width; i = i + 100) {
       vertLines.push(
         <line x1={i} y1="0" x2={i} y2={this.props.height} className="gridline" />
       );
@@ -69,7 +69,7 @@ module.exports = React.createClass({
     for (var i = 0; i < this.props.slots.length; i++) {
       var slot = this.props.slots[i];
       if (slot.SlotType == 0) {
-        for (j = 0; j < this.props.locations.length; j++) {
+        for (var j = 0; j < this.props.locations.length; j++) {
           var refId = 'slot' + this.props.day + 'x' + slot.SlotId.toString() + 'x' + this.props.locations[j].LocationId.toString();
           slots.push(
             <rect x={j * 100 + this.props.leftMargin} y={slot.StartMinutes - this.props.start} height={slot.DurationMins} width="100" className="sessionSlot canDrop"

@@ -140,7 +140,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             session.DayNr = moveParams.Day;
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
         }
 
         [HttpPost]
@@ -157,7 +157,7 @@ namespace Connect.DNN.Modules.Conference.Api
             session.LocationId = null;
             session.DayNr = 0;
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Sort));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
         }
 
         [HttpPost]
