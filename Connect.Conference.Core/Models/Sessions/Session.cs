@@ -22,6 +22,8 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public System.DateTime? SessionDateAndTime { get; set; }
         [DataMember]
+        public System.DateTime? SessionEnd { get; set; }
+        [DataMember]
         public string LocationName { get; set; }
         [DataMember]
         public string SlotTitle { get; set; }

@@ -135,11 +135,20 @@
   <data name="Approved" xml:space="preserve">
     <value>Approved</value>
   </data>
+  <data name="Attendee" xml:space="preserve">
+    <value>Attendee</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ChooseLocation" xml:space="preserve">
     <value>&lt; Location &gt;</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
   </data>
   <data name="CommentDeleteConfirm" xml:space="preserve">
     <value>Do you wish to delete this comment?</value>
@@ -186,14 +195,23 @@
   <data name="More" xml:space="preserve">
     <value>More</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
   <data name="NewUrl" xml:space="preserve">
     <value>New Url</value>
+  </data>
+  <data name="ReceiveNotifications" xml:space="preserve">
+    <value>Receive Notifications</value>
   </data>
   <data name="ResourceDeleteConfirm" xml:space="preserve">
     <value>Do you wish to delete this resource?</value>
   </data>
   <data name="Resources" xml:space="preserve">
     <value>Resources</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save changes</value>

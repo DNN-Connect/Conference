@@ -1,0 +1,97 @@
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Attendees
+ADD AttCode NVARCHAR(50) NULL
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+AS
+SELECT
+ a.*,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ propPhoto.Visibility PhotoVisibility,
+ propPhoto.[FileName] PhotoFilename,
+ propPhoto.Folder PhotoFolder,
+ propPhoto.Width PhotoWidth,
+ propPhoto.Height PhotoHeight,
+ propPhoto.ContentType PhotoContentType,
+ propBio.PropertyValue Biography,
+ propCompany.PropertyValue ProfileCompany,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=a.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=a.UserId
+LEFT JOIN (
+SELECT
+ ppd.PortalID propPortalId,
+ up.UserID,
+ up.Visibility,
+ f.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+ INNER JOIN {databaseOwner}{objectQualifier}Files f ON up.PropertyValue=f.FileId
+WHERE ppd.PropertyName='Photo'
+) propPhoto ON propPhoto.propPortalId=c.PortalId AND propPhoto.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Biography'
+) propBio ON propBio.PortalID=c.PortalId AND propBio.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Company'
+) propCompany ON propCompany.PortalID=c.PortalId AND propCompany.UserID=u.UserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=a.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=a.LastModifiedByUserID
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+AS
+SELECT
+ s.*,
+ DATEADD(DAY, s.DayNr, c.StartDate) + CAST(sl.Start AS DATETIME) SessionDateAndTime,
+ DATEADD(MINUTE, sl.DurationMins, DATEADD(DAY, s.DayNr, c.StartDate) + CAST(sl.Start AS DATETIME)) SessionEnd,
+ l.Name LocationName,
+ sl.Title SlotTitle,
+ t.Title TrackTitle,
+ t.BackgroundColor,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees a WHERE a.SessionId=s.SessionId) NrAttendees,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss WHERE ss.SessionId=s.SessionId) NrSpeakers,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes sv WHERE sv.SessionId=s.SessionId) NrVotes,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionResources sr WHERE sr.SessionId=s.SessionId AND sr.Visibility=1) NrResources,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=s.ConferenceId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Locations l ON l.LocationId=s.LocationId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Slots sl ON sl.SlotId=s.SlotId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks t ON t.TrackId=s.TrackId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
+GO

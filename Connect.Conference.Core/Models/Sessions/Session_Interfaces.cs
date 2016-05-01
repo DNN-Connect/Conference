@@ -18,6 +18,7 @@ namespace Connect.Conference.Core.Models.Sessions
   {
    base.Fill(dr);
    SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
+   SessionEnd = (DateTime)(Null.SetNull(dr["SessionEnd"], SessionEnd));
    LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
    SlotTitle = Convert.ToString(Null.SetNull(dr["SlotTitle"], SlotTitle));
    TrackTitle = Convert.ToString(Null.SetNull(dr["TrackTitle"], TrackTitle));
@@ -41,6 +42,12 @@ namespace Connect.Conference.Core.Models.Sessions
          return "";
      };
      return ((DateTime)SessionDateAndTime).ToString(strFormat, formatProvider);
+    case "sessionend": // DateTime
+     if (SessionEnd == null)
+     {
+         return "";
+     };
+     return ((DateTime)SessionEnd).ToString(strFormat, formatProvider);
     case "locationname": // NVarChar
      if (LocationName == null)
      {

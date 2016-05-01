@@ -58,6 +58,7 @@ namespace Connect.Conference.Core.Models.Attendees
              res.Status = Status;
              res.ReceiveNotifications = ReceiveNotifications;
              res.Company = Company;
+             res.AttCode = AttCode;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

@@ -15,6 +15,44 @@ namespace Connect.DNN.Modules.Conference.Api
     public partial class AttendeesController : ConferenceApiController
     {
 
+        public class AttendResponse
+        {
+            public string Error { get; set; }
+            public string DisplayName { get; set; }
+            public string SessionTitle { get; set; }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage AttendSession(int conferenceId, int roomId, string rfid)
+        {
+            var res = new AttendResponse();
+            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, rfid);
+            if (attendee == null)
+            {
+                res.Error = "Attendee not found";
+            }
+            else
+            {
+                res.DisplayName = attendee.DisplayName;
+                var session = SessionRepository.Instance.GetSession(conferenceId, roomId, System.DateTime.Now.AddMinutes(15));
+                if (session == null)
+                {
+                    session = SessionRepository.Instance.GetSession(conferenceId, roomId, System.DateTime.Now);
+                }
+                if (session == null)
+                {
+                    res.Error = "Session not found";
+                }
+                else
+                {
+                    SessionAttendeeRepository.Instance.SetSessionAttendee(session.SessionId, attendee.UserId);
+                    res.SessionTitle = session.Title;
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
         public class ChangeStatusDTO
         {
             public int UserId { get; set; }
@@ -116,16 +154,39 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, userId));
         }
 
+        public class EditAttendeeDTO
+        {
+            public string Company { get; set; }
+            public string AttCode { get; set; }
+            public bool ReceiveNotifications { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Edit(int conferenceId, int id, [FromBody]EditAttendeeDTO data)
+        {
+            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, id);
+            if (attendee != null)
+            {
+                attendee.Company = data.Company;
+                attendee.AttCode = data.AttCode;
+                attendee.ReceiveNotifications = data.ReceiveNotifications;
+                AttendeeRepository.Instance.UpdateAttendee(attendee.GetAttendeeBase(), UserInfo.UserID);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, id));
+        }
+
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage Download(int conferenceId)
         {
             var res = new HttpResponseMessage(HttpStatusCode.OK);
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine("LastName,FirstName,DisplayName,Email,Company,Status,ReceiveNotifications");
+            sb.AppendLine("LastName,FirstName,DisplayName,Email,Company,Status,ReceiveNotifications,Code");
             foreach (var att in AttendeeRepository.Instance.GetAttendeesByConference(conferenceId).OrderBy(a => a.LastName))
             {
-                sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",{5},{6}", att.LastName, att.FirstName, att.DisplayName, att.Email, att.Company, att.Status, att.ReceiveNotifications));
+                sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",{5},{6},\"{7}\"", att.LastName, att.FirstName, att.DisplayName, att.Email, att.Company, att.Status, att.ReceiveNotifications, att.AttCode));
             }
             res.Content = new StringContent(sb.ToString());
             res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");

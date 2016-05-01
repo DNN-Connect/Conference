@@ -1,6 +1,245 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
+module.exports = React.createClass({
+  displayName: "exports",
+  render: function render() {
+    return React.createElement(
+      "tr",
+      null,
+      React.createElement(
+        "td",
+        { className: "nrcol" },
+        this.props.index + 1,
+        "."
+      ),
+      React.createElement(
+        "td",
+        null,
+        this.props.attendee.LastName,
+        ", ",
+        this.props.attendee.FirstName
+      ),
+      React.createElement(
+        "td",
+        null,
+        this.props.attendee.Email
+      ),
+      React.createElement(
+        "td",
+        null,
+        this.props.attendee.Company
+      ),
+      React.createElement(
+        "td",
+        null,
+        this.props.attendee.AttCode
+      ),
+      React.createElement(
+        "td",
+        { className: "btncol" },
+        React.createElement(
+          "a",
+          { href: "#", className: "btn btn-sm btn-default",
+            onClick: this.props.editClick.bind(null, this.props.attendee) },
+          React.createElement("span", { className: "glyphicon glyphicon-pencil" })
+        )
+      )
+    );
+  }
+});
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
+var AttendeeRow = require('./AttendeeRow.jsx');
+
+module.exports = React.createClass({
+  displayName: 'exports',
+
+
+  attendeeBeingEdited: null,
+
+  getInitialState: function getInitialState() {
+    return {
+      attendees: this.props.attendees
+    };
+  },
+  editClick: function editClick(attendee, e) {
+    e.preventDefault();
+    this.refs.txtCompany.getDOMNode().value = attendee.Company;
+    this.refs.txtAttCode.getDOMNode().value = attendee.AttCode;
+    this.refs.chkNotifications.getDOMNode().checked = attendee.ReceiveNotifications;
+    $('#editAttendee').modal('show');
+    this.attendeeBeingEdited = attendee;
+  },
+  updateAttendee: function updateAttendee(e) {
+    var _this = this;
+
+    var attendee = this.attendeeBeingEdited;
+    attendee.Company = this.refs.txtCompany.getDOMNode().value;
+    attendee.AttCode = this.refs.txtAttCode.getDOMNode().value;
+    attendee.ReceiveNotifications = this.refs.chkNotifications.getDOMNode().checked;
+    this.props.module.service.editAttendee(this.props.conferenceId, attendee, function (data) {
+      var newList = [];
+      for (var i = 0; i < _this.state.attendees.length; i++) {
+        var a = _this.state.attendees[i];
+        if (a.UserId == attendee.UserId) {
+          newList.push(data);
+        } else {
+          newList.push(a);
+        }
+      }
+      _this.setState({
+        attendees: newList
+      });
+    });
+    $('#editAttendee').modal('hide');
+  },
+  render: function render() {
+    var _this2 = this;
+
+    var attendees = this.state.attendees.map(function (item, i) {
+      return React.createElement(AttendeeRow, { module: _this2.props.module, attendee: item,
+        editClick: _this2.editClick, key: item.UserId,
+        index: i });
+    });
+    return React.createElement(
+      'div',
+      { 'class': 'container' },
+      React.createElement(
+        'div',
+        { className: 'row' },
+        React.createElement(
+          'div',
+          { className: 'col-sm-12' },
+          React.createElement(
+            'table',
+            { className: 'table table-responsive table-striped' },
+            React.createElement(
+              'thead',
+              null,
+              React.createElement(
+                'tr',
+                null,
+                React.createElement('th', null),
+                React.createElement(
+                  'th',
+                  null,
+                  this.props.module.resources.Name
+                ),
+                React.createElement(
+                  'th',
+                  null,
+                  this.props.module.resources.Email
+                ),
+                React.createElement(
+                  'th',
+                  null,
+                  this.props.module.resources.Company
+                ),
+                React.createElement(
+                  'th',
+                  null,
+                  this.props.module.resources.Code
+                ),
+                React.createElement('th', null)
+              )
+            ),
+            React.createElement(
+              'tbody',
+              null,
+              attendees
+            )
+          )
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'modal fade', id: 'editAttendee', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'editAttendeeLabel' },
+        React.createElement(
+          'div',
+          { className: 'modal-dialog', role: 'document' },
+          React.createElement(
+            'div',
+            { className: 'modal-content' },
+            React.createElement(
+              'div',
+              { className: 'modal-header' },
+              React.createElement(
+                'button',
+                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+                React.createElement(
+                  'span',
+                  { 'aria-hidden': 'true' },
+                  '×'
+                )
+              ),
+              React.createElement(
+                'h4',
+                { className: 'modal-title', id: 'editAttendeeLabel' },
+                this.props.module.resources.Attendee
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'modal-body' },
+              React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                  'label',
+                  { 'for': 'txtCompany' },
+                  this.props.module.resources.Company
+                ),
+                React.createElement('input', { type: 'text', className: 'form-control', ref: 'txtCompany', placeholder: this.props.module.resources.Company })
+              ),
+              React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                  'label',
+                  { 'for': 'txtAttCode' },
+                  this.props.module.resources.Code
+                ),
+                React.createElement('input', { type: 'text', className: 'form-control', ref: 'txtAttCode', placeholder: this.props.module.resources.Code })
+              ),
+              React.createElement(
+                'div',
+                { className: 'checkbox' },
+                React.createElement(
+                  'label',
+                  null,
+                  React.createElement('input', { type: 'checkbox', ref: 'chkNotifications' }),
+                  ' ',
+                  this.props.module.resources.ReceiveNotifications
+                )
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'modal-footer' },
+              React.createElement(
+                'button',
+                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+                this.props.module.resources.Cancel
+              ),
+              React.createElement(
+                'button',
+                { type: 'button', className: 'btn btn-primary', onClick: this.updateAttendee },
+                this.props.module.resources.Save
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+});
+
+},{"./AttendeeRow.jsx":1}],3:[function(require,module,exports){
+"use strict";
+
 var UserRow = require('./UserRow.jsx');
 
 module.exports = React.createClass({
@@ -157,7 +396,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./UserRow.jsx":2}],2:[function(require,module,exports){
+},{"./UserRow.jsx":4}],4:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -199,7 +438,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -275,7 +514,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -344,7 +583,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 var Comment = require('./Comment.jsx');
@@ -517,7 +756,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Comment.jsx":4}],6:[function(require,module,exports){
+},{"./Comment.jsx":6}],8:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
@@ -531,7 +770,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     Resources = require('./Resources/Resources.jsx'),
     BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
-    SessionManager = require('./SessionManager/SessionManager.jsx');
+    SessionManager = require('./SessionManager/SessionManager.jsx'),
+    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx');
 
 (function ($, window, document, undefined) {
 
@@ -668,6 +908,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
           conferenceId: $(el).data('conferenceid'),
           sessions: $(el).data('sessions') }), el);
       });
+      $('.attendeeTable').each(function (i, el) {
+        React.render(React.createElement(AttendeeTable, { module: ConnectConference.modules[$(el).data('moduleid')],
+          conferenceId: $(el).data('conferenceid'),
+          attendees: $(el).data('attendees') }), el);
+      });
     },
 
     formatString: function formatString(format) {
@@ -680,7 +925,7 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
   };
 })(jQuery, window, document);
 
-},{"./BulkAddUsers/BulkAddUsers.jsx":1,"./Buttons/SessionStatusButton.jsx":3,"./Comments/Comments.jsx":5,"./Resources/Resources.jsx":9,"./Schedule/Schedule.jsx":12,"./Scheduler/Scheduler.jsx":16,"./SessionManager/SessionManager.jsx":22,"./SessionVotes/SessionVotes.jsx":26,"./Speakers/Speakers.jsx":28,"./TagVotes/TagVotes.jsx":30,"./Tags/Tags.jsx":32,"./TimesheetEditor/TimesheetEditor.jsx":33}],7:[function(require,module,exports){
+},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./Resources/Resources.jsx":11,"./Schedule/Schedule.jsx":14,"./Scheduler/Scheduler.jsx":18,"./SessionManager/SessionManager.jsx":24,"./SessionVotes/SessionVotes.jsx":28,"./Speakers/Speakers.jsx":30,"./TagVotes/TagVotes.jsx":32,"./Tags/Tags.jsx":34,"./TimesheetEditor/TimesheetEditor.jsx":35}],9:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -744,7 +989,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var Icon = require('./Icon.jsx'),
@@ -854,7 +1099,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Icon.jsx":7,"./StatusApprovalButton.jsx":10}],9:[function(require,module,exports){
+},{"./Icon.jsx":9,"./StatusApprovalButton.jsx":12}],11:[function(require,module,exports){
 'use strict';
 
 var Resource = require('./Resource.jsx'),
@@ -1018,7 +1263,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Resource.jsx":8,"./Video.jsx":11}],10:[function(require,module,exports){
+},{"./Resource.jsx":10,"./Video.jsx":13}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1065,7 +1310,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1170,7 +1415,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 var ScheduleDay = require('./ScheduleDay.jsx');
@@ -1238,7 +1483,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleDay.jsx":13}],13:[function(require,module,exports){
+},{"./ScheduleDay.jsx":15}],15:[function(require,module,exports){
 'use strict';
 
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
@@ -1315,7 +1560,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleGrid.jsx":14,"./ScheduleScheduledSession.jsx":15}],14:[function(require,module,exports){
+},{"./ScheduleGrid.jsx":16,"./ScheduleScheduledSession.jsx":17}],16:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1400,7 +1645,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1456,7 +1701,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1644,7 +1889,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./SchedulerDay.jsx":17,"./SchedulerUnscheduledSession.jsx":20}],17:[function(require,module,exports){
+},{"./SchedulerDay.jsx":19,"./SchedulerUnscheduledSession.jsx":22}],19:[function(require,module,exports){
 'use strict';
 
 var SchedulerGrid = require('./SchedulerGrid.jsx'),
@@ -1710,7 +1955,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerGrid.jsx":18,"./SchedulerScheduledSession.jsx":19}],18:[function(require,module,exports){
+},{"./SchedulerGrid.jsx":20,"./SchedulerScheduledSession.jsx":21}],20:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1814,7 +2059,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1871,7 +2116,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1920,7 +2165,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var Status = require('./Status.jsx'),
@@ -1988,7 +2233,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Status.jsx":23,"./Track.jsx":24}],22:[function(require,module,exports){
+},{"./Status.jsx":25,"./Track.jsx":26}],24:[function(require,module,exports){
 "use strict";
 
 var Session = require('./Session.jsx');
@@ -2248,7 +2493,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Session.jsx":21}],23:[function(require,module,exports){
+},{"./Session.jsx":23}],25:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2304,7 +2549,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2364,7 +2609,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2466,7 +2711,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 var SessionVote = require('./SessionVote.jsx');
@@ -2575,7 +2820,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SessionVote.jsx":25}],27:[function(require,module,exports){
+},{"./SessionVote.jsx":27}],29:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2617,7 +2862,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 var Speaker = require('./Speaker.jsx');
@@ -2767,7 +3012,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Speaker.jsx":27}],29:[function(require,module,exports){
+},{"./Speaker.jsx":29}],31:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2828,7 +3073,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 
 var TagVote = require('./TagVote.jsx');
@@ -2981,7 +3226,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TagVote.jsx":29}],31:[function(require,module,exports){
+},{"./TagVote.jsx":31}],33:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2997,7 +3242,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 var Tag = require('./Tag.jsx');
@@ -3097,7 +3342,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Tag.jsx":31}],33:[function(require,module,exports){
+},{"./Tag.jsx":33}],35:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
@@ -3474,7 +3719,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TimesheetEditorSlot.jsx":34}],34:[function(require,module,exports){
+},{"./TimesheetEditorSlot.jsx":36}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3638,209 +3883,216 @@ module.exports = React.createClass({
 
 });
 
-},{}]},{},[6])
+},{}]},{},[8])
 
 
 window.ConferenceService = function($, mid) {
-  var moduleId = mid;
-  var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
+    var moduleId = mid;
+    var baseServicepath = $.dnnSF(moduleId).getServiceRoot('Connect/Conference');
 
-  this.ServicePath = function() {
-      return baseServicepath;
-    },
+    this.ServicePath = function() {
+            return baseServicepath;
+        },
 
-    this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
-      //showLoading();
-      var path = baseServicepath;
-      if (conferenceId != null) {
-        path += 'Conference/' + conferenceId + '/'
-      }
-      path = path + controller + '/' + action;
-      if (id != null) {
-        path += '/' + id
-      }
-      $.ajax({
-        type: method,
-        url: path,
-        beforeSend: $.dnnSF(moduleId).setModuleHeaders,
-        data: data
-      }).done(function(data) {
-        //hideLoading();
-        if (success != undefined) {
-          success(data);
+        this.apiCall = function(method, controller, action, conferenceId, id, data, success, fail) {
+            //showLoading();
+            var path = baseServicepath;
+            if (conferenceId != null) {
+                path += 'Conference/' + conferenceId + '/'
+            }
+            path = path + controller + '/' + action;
+            if (id != null) {
+                path += '/' + id
+            }
+            $.ajax({
+                type: method,
+                url: path,
+                beforeSend: $.dnnSF(moduleId).setModuleHeaders,
+                data: data
+            }).done(function(data) {
+                //hideLoading();
+                if (success != undefined) {
+                    success(data);
+                }
+            }).fail(function(xhr, status) {
+                //showError(xhr.responseText);
+                if (fail != undefined) {
+                    fail(xhr.responseText);
+                }
+            });
         }
-      }).fail(function(xhr, status) {
-        //showError(xhr.responseText);
-        if (fail != undefined) {
-          fail(xhr.responseText);
-        }
-      });
+
+    this.addAttendee = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+        this.apiCall('POST', 'Attendees', 'Add', conferenceId, null, {
+            Email: email,
+            FirstName: firstName,
+            LastName: lastName,
+            DisplayName: displayName,
+            Company: company
+        }, success, fail);
     }
-
-  this.addAttendee = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
-    this.apiCall('POST', 'Attendees', 'Add', conferenceId, null, {
-      Email: email,
-      FirstName: firstName,
-      LastName: lastName,
-      DisplayName: displayName,
-      Company: company
-    }, success, fail);
-  }
-  this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
-    this.apiCall('POST', 'Comments', 'Add', conferenceId, null, {
-      SessionId: sessionId,
-      Visibility: visibility,
-      Remarks: comment
-    }, success, fail);
-  }
-  this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
-      UserId: userId
-    }, success, fail);
-  }
-  this.addSpeaker = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
-    this.apiCall('POST', 'Speakers', 'Add', conferenceId, null, {
-      Email: email,
-      FirstName: firstName,
-      LastName: lastName,
-      DisplayName: displayName,
-      Company: company
-    }, success, fail);
-  }
-  this.addTag = function(conferenceId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Add', conferenceId, null, {
-      tagName: tagName
-    }, success, fail);
-  }
-  this.addUrl = function(conferenceId, sessionId, url, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
-  }
-  this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.changeAttendeeStatus = function(conferenceId, userId, newStatus, success, fail) {
-    this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
-      UserId: userId,
-      Status: newStatus
-    }, success, fail);
-  }
-  this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
-    this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
-  }
-  this.changeSessionTrack = function(conferenceId, sessionId, newTrack, success, fail) {
-    this.apiCall('POST', 'Sessions', 'ChangeTrack', conferenceId, sessionId, { newTrack: newTrack }, success, fail);
-  }
-  this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
-    this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits()}, success, fail);
-  }
-  this.deleteComment = function(conferenceId, commentId, success, fail) {
-    this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
-  }
-  this.deleteLocation = function(conferenceId, locationId, success, fail) {
-    this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
-  }
-  this.deleteResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Delete', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.deleteSession = function(conferenceId, sessionId, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Delete', conferenceId, sessionId, null, success, fail);
-  }
-  this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, {
-      UserId: userId
-    }, success, fail);
-  }
-  this.deleteSlot = function(conferenceId, slotId, success, fail) {
-    this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
-  }
-  this.deleteTag = function(conferenceId, tagId, success, fail) {
-    this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
-  }
-  this.deleteTrack = function(conferenceId, trackId, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
-  }
-  this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
-    this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource}, success, fail);
-  }
-  this.editTag = function(conferenceId, tagId, tagName, success, fail) {
-    this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, {
-      tagName: tagName
-    }, success, fail);
-  }
-  this.getConferenceSlots = function(conferenceId, success, fail) {
-    this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
-  }
-  this.getLocations = function(conferenceId, success, fail) {
-    this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
-  }
-  this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
-    this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
-      SessionId: sessionId,
-      Visibility: visibility,
-      PageIndex: pageIndex,
-      PageSize: pageSize
-    }, success, fail);
-  }
-  this.orderLocations = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderSessions = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
-    this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderSpeakers = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.orderTracks = function(conferenceId, newOrder, success, fail) {
-    this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
-  }
-  this.searchUsers = function(conferenceId, search, success, fail) {
-    this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, {
-      search: search
-    }, success, fail);
-  }
-  this.searchUsersByEmail = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Module', 'SearchUsers', conferenceId, null, {
-      field: 'email',
-      search: searchTerm
-    }, success, fail);
-  }
-  this.searchTags = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Tags', 'Search', conferenceId, null, {
-      search: searchTerm
-    }, success, fail);
-  }
-  this.searchTracks = function(conferenceId, searchTerm, success, fail) {
-    this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, {
-      search: searchTerm
-    }, success, fail);
-  }
-  this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, {
-      vote: vote
-    }, success, fail);
-  }
-  this.tagVote = function(conferenceId, tagId, vote, success, fail) {
-    this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, {
-      vote: vote
-    }, success, fail);
-  }
-  this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
-      Day: day,
-      SlotId: slotId,
-      LocationId: locationId,
-      DisplaceOthers: displaceOthers
-    }, success, fail);
-  }
-  this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
-    this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
-  }
-  this.updateSlot = function(conferenceId, slot, success, fail) {
-    this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
-  }
+    this.addComment = function(conferenceId, sessionId, visibility, comment, success, fail) {
+        this.apiCall('POST', 'Comments', 'Add', conferenceId, null, {
+            SessionId: sessionId,
+            Visibility: visibility,
+            Remarks: comment
+        }, success, fail);
+    }
+    this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+        this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
+            UserId: userId
+        }, success, fail);
+    }
+    this.addSpeaker = function(conferenceId, email, firstName, lastName, displayName, company, success, fail) {
+        this.apiCall('POST', 'Speakers', 'Add', conferenceId, null, {
+            Email: email,
+            FirstName: firstName,
+            LastName: lastName,
+            DisplayName: displayName,
+            Company: company
+        }, success, fail);
+    }
+    this.addTag = function(conferenceId, tagName, success, fail) {
+        this.apiCall('POST', 'Tags', 'Add', conferenceId, null, {
+            tagName: tagName
+        }, success, fail);
+    }
+    this.addUrl = function(conferenceId, sessionId, url, success, fail) {
+        this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
+    }
+    this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+        this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource }, success, fail);
+    }
+    this.changeAttendeeStatus = function(conferenceId, userId, newStatus, success, fail) {
+        this.apiCall('POST', 'Attendees', 'ChangeStatus', conferenceId, null, {
+            UserId: userId,
+            Status: newStatus
+        }, success, fail);
+    }
+    this.changeSessionStatus = function(conferenceId, sessionId, newStatus, success, fail) {
+        this.apiCall('POST', 'Sessions', 'ChangeStatus', conferenceId, sessionId, { newStatus: newStatus }, success, fail);
+    }
+    this.changeSessionTrack = function(conferenceId, sessionId, newTrack, success, fail) {
+        this.apiCall('POST', 'Sessions', 'ChangeTrack', conferenceId, sessionId, { newTrack: newTrack }, success, fail);
+    }
+    this.checkNewComments = function(conferenceId, sessionId, visibility, lastCheck, success, fail) {
+        this.apiCall('GET', 'Comments', 'Poll', conferenceId, null, { SessionId: sessionId, Visibility: visibility, LastCheck: lastCheck.toUTCDateTimeDigits() }, success, fail);
+    }
+    this.deleteComment = function(conferenceId, commentId, success, fail) {
+        this.apiCall('POST', 'Comments', 'Delete', conferenceId, commentId, null, success, fail);
+    }
+    this.deleteLocation = function(conferenceId, locationId, success, fail) {
+        this.apiCall('POST', 'Locations', 'Delete', conferenceId, locationId, null, success, fail);
+    }
+    this.deleteResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+        this.apiCall('POST', 'SessionResources', 'Delete', conferenceId, sessionId, { SessionResource: sessionResource }, success, fail);
+    }
+    this.deleteSession = function(conferenceId, sessionId, success, fail) {
+        this.apiCall('POST', 'Sessions', 'Delete', conferenceId, sessionId, null, success, fail);
+    }
+    this.deleteSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
+        this.apiCall('POST', 'SessionSpeakers', 'Delete', conferenceId, sessionId, {
+            UserId: userId
+        }, success, fail);
+    }
+    this.deleteSlot = function(conferenceId, slotId, success, fail) {
+        this.apiCall('POST', 'Slots', 'Delete', conferenceId, slotId, null, success, fail);
+    }
+    this.deleteTag = function(conferenceId, tagId, success, fail) {
+        this.apiCall('POST', 'Tags', 'Delete', conferenceId, tagId, null, success, fail);
+    }
+    this.deleteTrack = function(conferenceId, trackId, success, fail) {
+        this.apiCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
+    }
+    this.editAttendee = function(conferenceId, attendee, success, fail) {
+        this.apiCall('POST', 'Attendees', 'Edit', conferenceId, attendee.UserId, {
+            Company: attendee.Company,
+            AttCode: attendee.AttCode,
+            ReceiveNotifications: attendee.ReceiveNotifications
+        }, success, fail);
+    }
+    this.editResource = function(conferenceId, sessionId, sessionResource, success, fail) {
+        this.apiCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource }, success, fail);
+    }
+    this.editTag = function(conferenceId, tagId, tagName, success, fail) {
+        this.apiCall('POST', 'Tags', 'Edit', conferenceId, tagId, {
+            tagName: tagName
+        }, success, fail);
+    }
+    this.getConferenceSlots = function(conferenceId, success, fail) {
+        this.apiCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+    }
+    this.getLocations = function(conferenceId, success, fail) {
+        this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
+    }
+    this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
+        this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
+            SessionId: sessionId,
+            Visibility: visibility,
+            PageIndex: pageIndex,
+            PageSize: pageSize
+        }, success, fail);
+    }
+    this.orderLocations = function(conferenceId, newOrder, success, fail) {
+        this.apiCall('POST', 'Locations', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+    }
+    this.orderSessions = function(conferenceId, newOrder, success, fail) {
+        this.apiCall('POST', 'Sessions', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+    }
+    this.orderSessionSpeakers = function(conferenceId, sessionId, newOrder, success, fail) {
+        this.apiCall('POST', 'SessionSpeakers', 'Reorder', conferenceId, sessionId, JSON.stringify(newOrder), success, fail);
+    }
+    this.orderSpeakers = function(conferenceId, newOrder, success, fail) {
+        this.apiCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+    }
+    this.orderTracks = function(conferenceId, newOrder, success, fail) {
+        this.apiCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+    }
+    this.searchUsers = function(conferenceId, search, success, fail) {
+        this.apiCall('GET', 'Speakers', 'SearchUsers', conferenceId, null, {
+            search: search
+        }, success, fail);
+    }
+    this.searchUsersByEmail = function(conferenceId, searchTerm, success, fail) {
+        this.apiCall('GET', 'Module', 'SearchUsers', conferenceId, null, {
+            field: 'email',
+            search: searchTerm
+        }, success, fail);
+    }
+    this.searchTags = function(conferenceId, searchTerm, success, fail) {
+        this.apiCall('GET', 'Tags', 'Search', conferenceId, null, {
+            search: searchTerm
+        }, success, fail);
+    }
+    this.searchTracks = function(conferenceId, searchTerm, success, fail) {
+        this.apiCall('GET', 'Tracks', 'Search', conferenceId, null, {
+            search: searchTerm
+        }, success, fail);
+    }
+    this.sessionVote = function(conferenceId, sessionId, vote, success, fail) {
+        this.apiCall('POST', 'Sessions', 'Vote', conferenceId, sessionId, {
+            vote: vote
+        }, success, fail);
+    }
+    this.tagVote = function(conferenceId, tagId, vote, success, fail) {
+        this.apiCall('POST', 'Tags', 'Vote', conferenceId, tagId, {
+            vote: vote
+        }, success, fail);
+    }
+    this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
+        this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
+            Day: day,
+            SlotId: slotId,
+            LocationId: locationId,
+            DisplaceOthers: displaceOthers
+        }, success, fail);
+    }
+    this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
+        this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
+    }
+    this.updateSlot = function(conferenceId, slot, success, fail) {
+        this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
+    }
 
 }
 

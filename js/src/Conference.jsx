@@ -9,7 +9,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     Resources = require('./Resources/Resources.jsx'),
     BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
-    SessionManager = require('./SessionManager/SessionManager.jsx');
+    SessionManager = require('./SessionManager/SessionManager.jsx'),
+    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx');
 
 (function($, window, document, undefined) {
 
@@ -145,6 +146,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
                         tracks={$(el).data('tracks')}
                         conferenceId={$(el).data('conferenceid')}
                         sessions={$(el).data('sessions')} />, el);
+      });
+      $('.attendeeTable').each(function(i, el) {
+        React.render(<AttendeeTable module={ConnectConference.modules[$(el).data('moduleid')]}
+                        conferenceId={$(el).data('conferenceid')}
+                        attendees={$(el).data('attendees')} />, el);
       });
     },
 

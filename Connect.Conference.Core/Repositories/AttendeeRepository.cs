@@ -41,6 +41,15 @@ namespace Connect.Conference.Core.Repositories
                     conferenceId,userId);
             }
         }
+        public Attendee GetAttendee(int conferenceId, string attCode)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteSingleOrDefault<Attendee>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0 AND AttCode=@1",
+                    conferenceId, attCode);
+            }
+        }
         public void AddAttendee(AttendeeBase attendee, int userId)
         {
             Requires.NotNull(attendee);
@@ -113,6 +122,7 @@ namespace Connect.Conference.Core.Repositories
         IEnumerable<Attendee> GetAttendeesByConference(int conferenceId);
         IEnumerable<Attendee> GetAttendeesByUser(int userId);
         Attendee GetAttendee(int conferenceId, int userId);
+        Attendee GetAttendee(int conferenceId, string attCode);
         void AddAttendee(AttendeeBase attendee, int userId);
         void DeleteAttendee(AttendeeBase attendee);
         void DeleteAttendee(int conferenceId, int userId);

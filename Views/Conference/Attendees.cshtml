@@ -4,35 +4,18 @@
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    var attendees = AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).OrderBy(s => s.LastName);
-    var i = 1;
+    ConferenceModuleContext.AddBootstrapJs();
+    ConferenceModuleContext.AddEditScripts();
 }
 
+<div class="connectConference attendeeTable" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
+     data-conferenceid="@Model.ConferenceId"
+     data-attendees="@(Newtonsoft.Json.JsonConvert.SerializeObject(AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).OrderBy(s => s.LastName)))">
+</div>
+
 <div class="container">
- <div class="row">
-  <div class="col-sm-12">
-   <table class="table table-responsive table-striped">
-    <thead>
-     <tr>
-      <th></th>
-      <th>@Dnn.LocalizeString("Name")</th>
-      <th>@Dnn.LocalizeString("Email")</th>
-     </tr>
-    </thead>
-    <tbody>
-     @foreach (var att in attendees)
-     {
-     <tr>
-      <td>@(i).</td>
-      <td>@att.LastName, @att.FirstName</td>
-      <td>@att.Email</td>
-     </tr>
-      i++;
-     }
-    </tbody>
-   </table>
-  </div>
- </div>
  <div class="row">
   <div class="col-sm-12">
    <div class="right">
