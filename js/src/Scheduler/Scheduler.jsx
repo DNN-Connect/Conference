@@ -15,7 +15,8 @@ module.exports = React.createClass({
     }
     return {
       sessionList: this.props.sessions,
-      locationList: locationList
+      locationList: locationList,
+      selectedTab: 1
     }
   },
 
@@ -29,6 +30,7 @@ module.exports = React.createClass({
         return null;
       }
     });
+    var scheduleTabs = [];
     var scheduleDays = [];
     for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
@@ -40,6 +42,16 @@ module.exports = React.createClass({
           daySlots.push(slot);
         }
       }
+      var tabClass = (i==this.state.selectedTab) ? "active" : "";
+      var date = new Date(this.props.conference.StartDate);
+      date = date.addDays(i - 1);
+      var dateString = moment(date).format('dddd MMM Do');
+      scheduleTabs.push(
+        <li role="presentation" className={tabClass}>
+          <a href="#"
+             onClick={this.changeDay.bind(null, i)}>{dateString}</a>
+        </li>
+        );
       scheduleDays.push(
         <SchedulerDay conference={this.props.conference} day={i} slots={daySlots} 
            start={Math.floor(daySlots[0].StartMinutes/60) * 60 - 60}
@@ -48,7 +60,8 @@ module.exports = React.createClass({
            leftMargin={50}
            sessionList={this.state.sessionList}
            locations={this.props.locations}
-           sessionPlace={this.sessionPlace} />
+           sessionPlace={this.sessionPlace}
+           selectedTab={this.state.selectedTab} />
         );
     }
     return (
@@ -57,7 +70,12 @@ module.exports = React.createClass({
           {unscheduledSessions}
         </div>
         <div className="col-xs-12 col-md-10" ref="schedulerColumn">
-          {scheduleDays}
+          <ul className="nav nav-tabs" role="tablist" id="scheduleTabs">
+            {scheduleTabs}
+          </ul>
+          <div className="tab-content">
+            {scheduleDays}
+          </div>
         </div>
       </div>
     );
@@ -114,6 +132,14 @@ module.exports = React.createClass({
           }
         });
         $(this.refs.unscheduledColumn.getDOMNode()).height(this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
+    });
+  },
+
+  changeDay(day, e) {
+    e.preventDefault();
+    console.log(day);
+    this.setState({
+      selectedTab: day
     });
   },
 

@@ -29,12 +29,9 @@ module.exports = React.createClass({
           );
       }
     }
-    var date = new Date(this.props.conference.StartDate);
-    date = date.addDays(this.props.day - 1);
-    var dateString = moment(date).format('dddd MMM Do');
+    var panelClass = (this.props.day == this.props.selectedTab) ? "tab-pane active schedulePane" : "tab-pane schedulePane";
     return (
-      <div>
-        <h2>{dateString}</h2>
+      <div className={panelClass}>
         <svg xmlns="http://www.w3.org/2000/svg"
              className="schedulerDay" 
              viewBox={viewBox}>
@@ -49,9 +46,6 @@ module.exports = React.createClass({
         {scheduledSessions}
       </div>
     );
-  },
-
-  componentDidMount: function() {
   }
 
 });

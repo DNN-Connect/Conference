@@ -1724,7 +1724,8 @@ module.exports = React.createClass({
     }
     return {
       sessionList: this.props.sessions,
-      locationList: locationList
+      locationList: locationList,
+      selectedTab: 1
     };
   },
   render: function render() {
@@ -1737,6 +1738,7 @@ module.exports = React.createClass({
         return null;
       }
     });
+    var scheduleTabs = [];
     var scheduleDays = [];
     for (var i = 1; i <= this.props.nrDays; i++) {
       var daySlots = [];
@@ -1746,6 +1748,20 @@ module.exports = React.createClass({
           daySlots.push(slot);
         }
       }
+      var tabClass = i == this.state.selectedTab ? "active" : "";
+      var date = new Date(this.props.conference.StartDate);
+      date = date.addDays(i - 1);
+      var dateString = moment(date).format('dddd MMM Do');
+      scheduleTabs.push(React.createElement(
+        'li',
+        { role: 'presentation', className: tabClass },
+        React.createElement(
+          'a',
+          { href: '#',
+            onClick: this.changeDay.bind(null, i) },
+          dateString
+        )
+      ));
       scheduleDays.push(React.createElement(SchedulerDay, { conference: this.props.conference, day: i, slots: daySlots,
         start: Math.floor(daySlots[0].StartMinutes / 60) * 60 - 60,
         finish: 120 + Math.floor(daySlots[daySlots.length - 1].StartMinutes / 60) * 60,
@@ -1753,7 +1769,8 @@ module.exports = React.createClass({
         leftMargin: 50,
         sessionList: this.state.sessionList,
         locations: this.props.locations,
-        sessionPlace: this.sessionPlace }));
+        sessionPlace: this.sessionPlace,
+        selectedTab: this.state.selectedTab }));
     }
     return React.createElement(
       'div',
@@ -1766,7 +1783,16 @@ module.exports = React.createClass({
       React.createElement(
         'div',
         { className: 'col-xs-12 col-md-10', ref: 'schedulerColumn' },
-        scheduleDays
+        React.createElement(
+          'ul',
+          { className: 'nav nav-tabs', role: 'tablist', id: 'scheduleTabs' },
+          scheduleTabs
+        ),
+        React.createElement(
+          'div',
+          { className: 'tab-content' },
+          scheduleDays
+        )
       )
     );
   },
@@ -1816,6 +1842,13 @@ module.exports = React.createClass({
         }
       });
       $(_this2.refs.unscheduledColumn.getDOMNode()).height(_this2.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height);
+    });
+  },
+  changeDay: function changeDay(day, e) {
+    e.preventDefault();
+    console.log(day);
+    this.setState({
+      selectedTab: day
     });
   },
   sessionPlace: function sessionPlace(session) {
@@ -1921,17 +1954,10 @@ module.exports = React.createClass({
         scheduledSessions.push(React.createElement(SchedulerScheduledSession, { session: session, sessionPlace: this.props.sessionPlace }));
       }
     }
-    var date = new Date(this.props.conference.StartDate);
-    date = date.addDays(this.props.day - 1);
-    var dateString = moment(date).format('dddd MMM Do');
+    var panelClass = this.props.day == this.props.selectedTab ? "tab-pane active schedulePane" : "tab-pane schedulePane";
     return React.createElement(
       'div',
-      null,
-      React.createElement(
-        'h2',
-        null,
-        dateString
-      ),
+      { className: panelClass },
       React.createElement(
         'svg',
         { xmlns: 'http://www.w3.org/2000/svg',
@@ -1949,9 +1975,7 @@ module.exports = React.createClass({
       ),
       scheduledSessions
     );
-  },
-
-  componentDidMount: function componentDidMount() {}
+  }
 
 });
 
