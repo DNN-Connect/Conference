@@ -1,0 +1,32 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions
+AS
+SELECT
+ s.*,
+ DATEADD(DAY, s.DayNr-1, c.StartDate) + CAST(sl.Start AS DATETIME) SessionDateAndTime,
+ DATEADD(MINUTE, sl.DurationMins, DATEADD(DAY, s.DayNr-1, c.StartDate) + CAST(sl.Start AS DATETIME)) SessionEnd,
+ l.Name LocationName,
+ sl.Title SlotTitle,
+ t.Title TrackTitle,
+ t.BackgroundColor,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees a WHERE a.SessionId=s.SessionId) NrAttendees,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss WHERE ss.SessionId=s.SessionId) NrSpeakers,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionVotes sv WHERE sv.SessionId=s.SessionId) NrVotes,
+ (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionResources sr WHERE sr.SessionId=s.SessionId AND sr.Visibility=1) NrResources,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=s.ConferenceId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Locations l ON l.LocationId=s.LocationId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Slots sl ON sl.SlotId=s.SlotId
+ LEFT JOIN {databaseOwner}{objectQualifier}Connect_Conference_Tracks t ON t.TrackId=s.TrackId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
+GO

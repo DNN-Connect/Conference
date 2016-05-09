@@ -57,7 +57,7 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 return context.ExecuteSingleOrDefault<Session>(System.Data.CommandType.Text,
-                    "SELECT s.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s WHERE s.ConferenceId=@0 AND s.LocationId=@1 AND s.SessionDateAndTime>=@2 AND s.SessionEnd<=@2",
+                    "SELECT s.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s WHERE s.ConferenceId=@0 AND s.LocationId=@1 AND s.SessionDateAndTime<=@2 AND s.SessionEnd>=@2",
                     conferenceId, locationId, datime);
             }
         }
