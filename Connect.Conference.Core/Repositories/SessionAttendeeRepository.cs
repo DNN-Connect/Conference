@@ -43,8 +43,8 @@ namespace Connect.Conference.Core.Repositories
                 context.Execute(System.Data.CommandType.Text,
                     "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees " +
                     "WHERE SessionId=@0 AND UserId=@1) " +
-                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees (SessionId, UserId) " +
-                    "SELECT @0, @1", sessionId, userId);
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees (SessionId, UserId, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate) " +
+                    "SELECT @0, @1, @1, GETDATE(), @1, GETDATE()", sessionId, userId);
             }
         }
         public void SetSessionAttendees(int sessionId, List<int> sessionAttendees)
