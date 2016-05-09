@@ -8,8 +8,8 @@ using Connect.Conference.Core.Models.Attendees;
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class AttendeeRepository : ServiceLocator<IAttendeeRepository, AttendeeRepository>, IAttendeeRepository
- {
+    public class AttendeeRepository : ServiceLocator<IAttendeeRepository, AttendeeRepository>, IAttendeeRepository
+    {
         protected override Func<IAttendeeRepository> GetFactory()
         {
             return () => new AttendeeRepository();
@@ -38,7 +38,7 @@ namespace Connect.Conference.Core.Repositories
             {
                 return context.ExecuteSingleOrDefault<Attendee>(System.Data.CommandType.Text,
                     "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees WHERE ConferenceId=@0 AND UserId=@1",
-                    conferenceId,userId);
+                    conferenceId, userId);
             }
         }
         public Attendee GetAttendee(int conferenceId, string attCode)
@@ -74,13 +74,13 @@ namespace Connect.Conference.Core.Repositories
         }
         public void DeleteAttendee(int conferenceId, int userId)
         {
-             Requires.NotNull(conferenceId);
-             Requires.NotNull(userId);
+            Requires.NotNull(conferenceId);
+            Requires.NotNull(userId);
             using (var context = DataContext.Instance())
             {
                 context.Execute(System.Data.CommandType.Text,
                     "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees WHERE ConferenceId=@0 AND UserId=@1",
-                    conferenceId,userId);
+                    conferenceId, userId);
             }
         }
         public void DeleteAttendeesByConference(int conferenceId)
@@ -111,11 +111,11 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<AttendeeBase>();
-                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5, Company=@6 WHERE ConferenceId=@7 AND UserId=@8",
-                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate,attendee.Company, attendee.ConferenceId,attendee.UserId);
+                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5, Company=@6, AttCode=@7 WHERE ConferenceId=@8 AND UserId=@9",
+                          attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate, attendee.Company, attendee.AttCode, attendee.ConferenceId, attendee.UserId);
             }
-        } 
- }
+        }
+    }
 
     public interface IAttendeeRepository
     {
