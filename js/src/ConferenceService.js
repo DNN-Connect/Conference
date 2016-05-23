@@ -137,6 +137,9 @@ window.ConferenceService = function($, mid) {
     this.getLocations = function(conferenceId, success, fail) {
         this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
     }
+    this.getNextSessions = function(conferenceId, success, fail) {
+        this.apiCall('GET', 'Sessions', 'Next', conferenceId, null, null, success, fail);
+    }
     this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
         this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
             SessionId: sessionId,

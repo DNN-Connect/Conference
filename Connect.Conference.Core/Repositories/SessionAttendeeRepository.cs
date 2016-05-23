@@ -1,22 +1,27 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
-using DotNetNuke.Collections;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
-using Connect.Conference.Core.Data;
 using Connect.Conference.Core.Models.SessionAttendees;
 
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class SessionAttendeeRepository : ServiceLocator<ISessionAttendeeRepository, SessionAttendeeRepository>, ISessionAttendeeRepository
+    public class SessionAttendeeRepository : ServiceLocator<ISessionAttendeeRepository, SessionAttendeeRepository>, ISessionAttendeeRepository
  {
         protected override Func<ISessionAttendeeRepository> GetFactory()
         {
             return () => new SessionAttendeeRepository();
+        }
+        public IEnumerable<SessionAttendee> GetSessionAttendees(int conferenceId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<SessionAttendee>(System.Data.CommandType.Text,
+                    "SELECT sa.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees sa INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=sa.SessionId WHERE s.ConferenceId=@0",
+                    conferenceId);
+            }
         }
         public IEnumerable<SessionAttendee> GetSessionAttendeesBySession(int sessionId)
         {
@@ -91,6 +96,7 @@ namespace Connect.Conference.Core.Repositories
 
     public interface ISessionAttendeeRepository
     {
+        IEnumerable<SessionAttendee> GetSessionAttendees(int conferenceId);
         IEnumerable<SessionAttendee> GetSessionAttendeesBySession(int sessionId);
         IEnumerable<SessionAttendee> GetSessionAttendeesByUser(int userId);
         void SetSessionAttendee(int sessionId, int userId);

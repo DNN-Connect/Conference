@@ -10,7 +10,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
     SessionManager = require('./SessionManager/SessionManager.jsx'),
-    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx');
+    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx'),
+    LiveTicker = require('./LiveTicker/LiveTicker.jsx');
 
 (function($, window, document, undefined) {
 
@@ -151,6 +152,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
         React.render(<AttendeeTable module={ConnectConference.modules[$(el).data('moduleid')]}
                         conferenceId={$(el).data('conferenceid')}
                         attendees={$(el).data('attendees')} />, el);
+      });
+      $('.liveTicker').each(function(i, el) {
+        React.render(<LiveTicker module={ConnectConference.modules[$(el).data('moduleid')]}
+                        conferenceId={$(el).data('conferenceid')}
+                        locations={$(el).data('locations')} />, el);
       });
     },
 

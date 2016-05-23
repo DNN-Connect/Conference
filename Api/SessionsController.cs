@@ -11,6 +11,8 @@ using Connect.Conference.Core.Repositories;
 using DotNetNuke.Entities.Host;
 using Connect.Conference.Core.Models.SessionResources;
 using System.Net.Http.Headers;
+using Connect.Conference.Core.Models.Sessions;
+using Connect.Conference.Core.Models.SessionAttendees;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -246,6 +248,33 @@ namespace Connect.DNN.Modules.Conference.Api
             return res;
         }
 
+        public class NextResponse
+        {
+            public Dictionary<int, IEnumerable<Session>> Sessions { get; set; }
+            public Dictionary<int, IEnumerable<SessionAttendee>> Attendees { get; set; }
+        }
+
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage Next(int conferenceId)
+        {
+            var res = new NextResponse();
+            res.Sessions = new Dictionary<int, IEnumerable<Session>>();
+            res.Attendees = new Dictionary<int, IEnumerable<SessionAttendee>>();
+            var rooms = LocationRepository.Instance.GetLocations(conferenceId);
+            var sessions = SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.SessionEnd > System.DateTime.Now & s.SessionDateAndTime != null && ((System.DateTime)s.SessionDateAndTime).Date == System.DateTime.Now.Date);
+            var attendees = SessionAttendeeRepository.Instance.GetSessionAttendees(conferenceId);
+            foreach (var room in rooms)
+            {
+                res.Sessions.Add(room.LocationId, sessions.Where(s => s.LocationId == room.LocationId).OrderBy(s => s.SessionDateAndTime));
+            }
+            foreach (var session in sessions)
+            {
+                res.Attendees.Add(session.SessionId, attendees.Where(a => a.SessionId == session.SessionId).OrderBy(a => a.SessionAttendeeName));
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
     }
 }
 

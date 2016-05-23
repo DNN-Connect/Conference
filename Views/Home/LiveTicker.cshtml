@@ -1,0 +1,32 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Models.Speakers;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddEditScripts();
+    ConferenceModuleContext.AddBootstrapCss();
+    var rooms = LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort);
+    var colSize = (int)(12 / rooms.Count());
+    var sessions = SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.SessionEnd > DateTime.Now);
+}
+
+<div class="connectConference liveTicker"
+     data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
+     data-conferenceid="@Model.ConferenceId"
+     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))">
+</div>
+
+
+<script type="text/javascript">
+ $(document).ready(function () {
+  $('.topBar').remove();
+  $('.footer').remove();
+  $('.sidebar').remove();
+  $('.skinWidth').width('100%');
+  $('.content').width('100%');
+ });
+</script>
