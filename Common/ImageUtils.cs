@@ -45,15 +45,6 @@ namespace Connect.DNN.Modules.Conference.Common
                 format = PixelFormat.Format24bppRgb;
             }
 
-            float origZoom = 1;
-            if (original.Width > original.Height)
-            {
-                origZoom = (float)200 / (float)original.Height;
-            }
-            else
-            {
-                origZoom = (float)200 / (float)original.Width;
-            }
             var newImg = new Bitmap(imageSize, imageSize, format);
             newImg.SetResolution(original.HorizontalResolution, original.VerticalResolution);
             Graphics canvas = Graphics.FromImage(newImg);
@@ -67,7 +58,7 @@ namespace Connect.DNN.Modules.Conference.Common
                 canvas.FillRectangle(Brushes.White, 0, 0, imageSize, imageSize);
             }
 
-            canvas.DrawImage(original, -crop[0], -crop[1], original.Width * origZoom * zoom, original.Height * origZoom * zoom);
+            canvas.DrawImage(original, -crop[0] * zoom, -crop[1] * zoom, original.Width * zoom, original.Height * zoom);
 
             //newImg.Save
             var content = new MemoryStream();
