@@ -1,0 +1,47 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    var attendees = AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status > 1).OrderBy(a => a.LastName);
+}
+
+<div class="container">
+ <div class="row">
+  @foreach (var a in attendees)
+  {
+  <div class="col-xs-12 col-sm-4">
+   <div class="well attendeeCard">
+   <div class="row">
+    <div class="col-xs-3">
+     <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@a.UserId" class="img-circle" />
+    </div>
+    <div class="col-xs-9">
+     <h4 style="padding-top:0;margin-top:0;height:2em;overflow:hidden;">@(a.LastName), @a.FirstName</h4>
+     <h6>@a.Company &nbsp;</h6>
+     <h6>
+      &nbsp;
+@if (ConferenceModuleContext.Security.CanManage | Dnn.User.UserID == a.UserId)
+{
+<a href="@Url.Action("Edit", "Attendee", new { conferenceId = Model.ConferenceId, attendeeId = a.UserId, ret = "home" })" class="pull-right">
+ @Dnn.LocalizeString("EditProfile")
+</a>
+}
+     </h6>
+    </div>
+   </div>
+   </div>
+  </div>
+  }
+ </div>
+</div>
+
+
+
+<script type="text/javascript">
+ $(function () {
+  $(document).ready(function () {
+  });
+ });
+</script>
