@@ -771,7 +771,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     BulkAddUsers = require('./BulkAddUsers/BulkAddUsers.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
     SessionManager = require('./SessionManager/SessionManager.jsx'),
-    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx');
+    AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx'),
+    LiveTicker = require('./LiveTicker/LiveTicker.jsx');
 
 (function ($, window, document, undefined) {
 
@@ -913,6 +914,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
           conferenceId: $(el).data('conferenceid'),
           attendees: $(el).data('attendees') }), el);
       });
+      $('.liveTicker').each(function (i, el) {
+        React.render(React.createElement(LiveTicker, { module: ConnectConference.modules[$(el).data('moduleid')],
+          conferenceId: $(el).data('conferenceid'),
+          locations: $(el).data('locations') }), el);
+      });
     },
 
     formatString: function formatString(format) {
@@ -925,7 +931,198 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
   };
 })(jQuery, window, document);
 
-},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./Resources/Resources.jsx":11,"./Schedule/Schedule.jsx":14,"./Scheduler/Scheduler.jsx":18,"./SessionManager/SessionManager.jsx":24,"./SessionVotes/SessionVotes.jsx":28,"./Speakers/Speakers.jsx":30,"./TagVotes/TagVotes.jsx":32,"./Tags/Tags.jsx":34,"./TimesheetEditor/TimesheetEditor.jsx":35}],9:[function(require,module,exports){
+},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./LiveTicker/LiveTicker.jsx":9,"./Resources/Resources.jsx":14,"./Schedule/Schedule.jsx":17,"./Scheduler/Scheduler.jsx":21,"./SessionManager/SessionManager.jsx":27,"./SessionVotes/SessionVotes.jsx":31,"./Speakers/Speakers.jsx":33,"./TagVotes/TagVotes.jsx":35,"./Tags/Tags.jsx":37,"./TimesheetEditor/TimesheetEditor.jsx":38}],9:[function(require,module,exports){
+"use strict";
+
+var Location = require('./Location.jsx');
+
+module.exports = React.createClass({
+  displayName: "exports",
+  getInitialState: function getInitialState() {
+    if (this.props.pollingSeconds == undefined) {
+      this.pollingInterval = 10000;
+    } else {
+      this.pollingInterval = this.props.pollingSeconds * 1000;
+    }
+    return {
+      data: {
+        Sessions: []
+      }
+    };
+  },
+  componentDidMount: function componentDidMount() {
+    this.lastCheck = new Date();
+    this.pollServer();
+  },
+  render: function render() {
+    var _this = this;
+
+    var colSize = Math.floor(12 / this.props.locations.length);
+    var locations = this.props.locations.map(function (item) {
+      return React.createElement(Location, { location: item, module: _this.props.module,
+        colSize: colSize, key: item.LocationId,
+        data: _this.state.data });
+    });
+    return React.createElement(
+      "div",
+      { className: "container-fluid" },
+      React.createElement(
+        "div",
+        { className: "row" },
+        locations
+      )
+    );
+  },
+  pollServer: function pollServer() {
+    var _this2 = this;
+
+    setTimeout(function () {
+      _this2.props.module.service.getNextSessions(_this2.props.conferenceId, function (data) {
+        _this2.lastCheck = new Date(data.CheckTime);
+        _this2.setState({
+          data: data
+        });
+        _this2.pollServer();
+      });
+    }, this.pollingInterval);
+  }
+});
+
+},{"./Location.jsx":10}],10:[function(require,module,exports){
+"use strict";
+
+var Session = require('./Session.jsx');
+
+module.exports = React.createClass({
+  displayName: "exports",
+  render: function render() {
+    var _this = this;
+
+    var sessionList = this.props.data.Sessions[this.props.location.LocationId];
+    var sessions = null;
+    if (sessionList != undefined) {
+      sessions = sessionList.map(function (item) {
+        return React.createElement(Session, { session: item,
+          attendees: _this.props.data.Attendees[item.SessionId] });
+      });
+    }
+    return React.createElement(
+      "div",
+      { className: "col-md-" + this.props.colSize + " col-xs-12" },
+      React.createElement(
+        "h2",
+        null,
+        this.props.location.Name
+      ),
+      sessions
+    );
+  }
+});
+
+},{"./Session.jsx":11}],11:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+  displayName: "exports",
+  render: function render() {
+    var attendees = null;
+    if (this.props.attendees.length != 0) {
+      var attendeeList = this.props.attendees.map(function (item) {
+        return React.createElement(
+          "p",
+          null,
+          item.SessionAttendeeName
+        );
+      });
+      attendees = React.createElement(
+        "div",
+        { className: "attendees" },
+        React.createElement(
+          "h4",
+          null,
+          "Attending"
+        ),
+        attendeeList
+      );
+    }
+    var start = moment(this.props.session.SessionDateAndTime);
+    var end = moment(this.props.session.SessionEnd);
+    var speakers = this.props.session.Speakers.map(function (item) {
+      return React.createElement(
+        "span",
+        null,
+        item.Value
+      );
+    });
+    var subtitle = this.props.session.SubTitle == null ? null : React.createElement(
+      "div",
+      { className: "subTitle" },
+      this.props.session.SubTitle
+    );
+    var boxStyle = {
+      backgroundColor: this.props.session.BackgroundColor
+    };
+    var style1 = {
+      borderColor: this.props.session.BackgroundColor
+    };
+    var style2 = {
+      backgroundColor: this.props.session.BackgroundColor,
+      borderColor: this.props.session.BackgroundColor
+    };
+    var style3 = {
+      borderTopColor: this.props.session.BackgroundColor,
+      borderBottomColor: this.props.session.BackgroundColor
+    };
+    return React.createElement(
+      "div",
+      { className: "session" },
+      React.createElement(
+        "div",
+        { className: "panel panel-default", style: style1 },
+        React.createElement(
+          "div",
+          { className: "panel-heading", style: style2 },
+          React.createElement("span", { className: "glyphicon glyphicon-time" }),
+          " ",
+          React.createElement(
+            "span",
+            { className: "time" },
+            start.format('H:mm')
+          ),
+          " - ",
+          React.createElement(
+            "span",
+            { className: "time" },
+            end.format('H:mm')
+          ),
+          React.createElement(
+            "span",
+            { className: "pull-right headSub" },
+            start.fromNow()
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "panel-body", style: style3 },
+          React.createElement(
+            "div",
+            { className: "sessionTitle" },
+            this.props.session.Title,
+            subtitle
+          ),
+          React.createElement(
+            "div",
+            { className: "speakers" },
+            speakers
+          ),
+          attendees
+        )
+      )
+    );
+  }
+});
+
+},{}],12:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -989,7 +1186,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var Icon = require('./Icon.jsx'),
@@ -1099,7 +1296,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Icon.jsx":9,"./StatusApprovalButton.jsx":12}],11:[function(require,module,exports){
+},{"./Icon.jsx":12,"./StatusApprovalButton.jsx":15}],14:[function(require,module,exports){
 'use strict';
 
 var Resource = require('./Resource.jsx'),
@@ -1263,7 +1460,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Resource.jsx":10,"./Video.jsx":13}],12:[function(require,module,exports){
+},{"./Resource.jsx":13,"./Video.jsx":16}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1310,7 +1507,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1415,7 +1612,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 var ScheduleDay = require('./ScheduleDay.jsx');
@@ -1483,7 +1680,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleDay.jsx":15}],15:[function(require,module,exports){
+},{"./ScheduleDay.jsx":18}],18:[function(require,module,exports){
 'use strict';
 
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
@@ -1560,7 +1757,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleGrid.jsx":16,"./ScheduleScheduledSession.jsx":17}],16:[function(require,module,exports){
+},{"./ScheduleGrid.jsx":19,"./ScheduleScheduledSession.jsx":20}],19:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1645,7 +1842,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1701,7 +1898,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],18:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1922,7 +2119,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./SchedulerDay.jsx":19,"./SchedulerUnscheduledSession.jsx":22}],19:[function(require,module,exports){
+},{"./SchedulerDay.jsx":22,"./SchedulerUnscheduledSession.jsx":25}],22:[function(require,module,exports){
 'use strict';
 
 var SchedulerGrid = require('./SchedulerGrid.jsx'),
@@ -1979,7 +2176,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerGrid.jsx":20,"./SchedulerScheduledSession.jsx":21}],20:[function(require,module,exports){
+},{"./SchedulerGrid.jsx":23,"./SchedulerScheduledSession.jsx":24}],23:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2083,7 +2280,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2140,7 +2337,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],22:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2189,7 +2386,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var Status = require('./Status.jsx'),
@@ -2257,7 +2454,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Status.jsx":25,"./Track.jsx":26}],24:[function(require,module,exports){
+},{"./Status.jsx":28,"./Track.jsx":29}],27:[function(require,module,exports){
 "use strict";
 
 var Session = require('./Session.jsx');
@@ -2517,7 +2714,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Session.jsx":23}],25:[function(require,module,exports){
+},{"./Session.jsx":26}],28:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2573,7 +2770,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2633,7 +2830,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2735,7 +2932,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 
 var SessionVote = require('./SessionVote.jsx');
@@ -2844,7 +3041,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SessionVote.jsx":27}],29:[function(require,module,exports){
+},{"./SessionVote.jsx":30}],32:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2886,7 +3083,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 var Speaker = require('./Speaker.jsx');
@@ -3036,7 +3233,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Speaker.jsx":29}],31:[function(require,module,exports){
+},{"./Speaker.jsx":32}],34:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3097,7 +3294,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 var TagVote = require('./TagVote.jsx');
@@ -3250,7 +3447,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TagVote.jsx":31}],33:[function(require,module,exports){
+},{"./TagVote.jsx":34}],36:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3266,7 +3463,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 
 var Tag = require('./Tag.jsx');
@@ -3366,7 +3563,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Tag.jsx":33}],35:[function(require,module,exports){
+},{"./Tag.jsx":36}],38:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
@@ -3743,7 +3940,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TimesheetEditorSlot.jsx":36}],36:[function(require,module,exports){
+},{"./TimesheetEditorSlot.jsx":39}],39:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -4048,6 +4245,9 @@ window.ConferenceService = function($, mid) {
     }
     this.getLocations = function(conferenceId, success, fail) {
         this.apiCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);
+    }
+    this.getNextSessions = function(conferenceId, success, fail) {
+        this.apiCall('GET', 'Sessions', 'Next', conferenceId, null, null, success, fail);
     }
     this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
         this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
