@@ -67,6 +67,7 @@
     <Compile Include="Common\Globals.cs" />
     <Compile Include="Common\ResourceType.cs" />
     <Compile Include="Common\SessionStatus.cs" />
+    <Compile Include="Common\SlotType.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\DnnRoleController.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Models\Locations\LocationBase.cs" />
     <Compile Include="Models\Locations\LocationBase_Interfaces.cs" />
     <Compile Include="Models\Locations\Location_Interfaces.cs" />
+    <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\SessionAttendees\SessionAttendee.cs" />
     <Compile Include="Models\SessionAttendees\SessionAttendeeBase.cs" />
     <Compile Include="Models\SessionAttendees\SessionAttendeeBase_Interfaces.cs" />

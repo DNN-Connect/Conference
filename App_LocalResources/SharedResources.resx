@@ -354,4 +354,10 @@
   <data name="Submitted.Confirm" xml:space="preserve">
     <value>Do you wish to submit this session?</value>
   </data>
+  <data name="Date.Text" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Time.Text" xml:space="preserve">
+    <value>Time</value>
+  </data>
 </root>
