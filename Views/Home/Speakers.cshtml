@@ -9,13 +9,11 @@
 <div class="container">
  <div class="row">
   <div class="col-xs-12">
-   @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.Sort))
+   @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
    {
    <div class="panel panel-info speakerListDetail">
     <div class="panel-heading">
-     <h2 class="panel-title">
-      <a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">@s.DisplayName</a>
-     </h2>
+      <a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">@s.LastName, @s.FirstName</a>
     </div>
     <div class="panel-body">
      <div class="row">
