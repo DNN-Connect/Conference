@@ -14,52 +14,41 @@
  @foreach (Speaker speaker in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0))
  {
  <li>
- <div>
-   <div class="panel panel-info">
+  <div class="speakerCard">
+   <div class="panel panel-danger">
     <div class="panel-heading">
-     <h2 class="panel-title">@speaker.DisplayName</h2>
+     <h1>@speaker.DisplayName</h1>
     </div>
     <div class="panel-body">
      <div class="row">
-      <div class="col-xs-4 col-sm-2">
+      <div class="col-xs-4 col-sm-3">
        <div class="speaker">
-        <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@speaker.UserId" class="img-circle img-responsive" /><br />
-        @speaker.DisplayName
+        <div class="speaker-image">
+         <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=200&h=200&userId=@speaker.UserId" width="200" height="200" />
+        </div>
+        <div style="padding-top:230px">
+         @speaker.DisplayName<br />
+         @speaker.Company
+        </div>
        </div>
       </div>
-      <div class="col-xs-8 col-sm-10">
-       <p>@Html.Raw(speaker.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
+      <div class="col-xs-4 col-sm-4">
+       <p>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
+      </div>
+      <div class="col-xs-4 col-sm-5">
+      @foreach (var s in SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, speaker.UserId).Where(s => s.Status >= 2).OrderBy(s => s.SessionDateAndTime))
+      {
+      <div class="speaker-session">
+       <div class="session-title"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId })">@s.Title</a></div>
+       <div class="session-time">@(((DateTime)s.SessionDateAndTime).ToString("dddd HH:mm"))</div>
+       <div class="session-details">@Dnn.LocalizeString("Track"): @s.TrackTitle</div>
+       <div class="session-details">@Dnn.LocalizeString("Tags"): @string.Join(", ", s.Tags.Select(sp => sp.Value))</div>
+      </div>
+      }
       </div>
      </div>
     </div>
    </div>
- </div>
-  <div>
-      <h3>@Dnn.LocalizeString("Sessions")</h3>
-   @foreach (var s in SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, speaker.UserId).Where(s => s.Status >= 2).OrderBy(s => s.SessionDateAndTime))
-   {
-   <div class="panel panel-info speakerSession">
-    <div class="panel-heading">
-     <h2 class="panel-title"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId })">@s.Title</a></h2>
-    </div>
-    <div class="panel-body">
-     <p>
-     @if (s.SessionDateAndTime != null)
-     {
-     <strong>@(((DateTime)s.SessionDateAndTime).ToString("D")) @(((DateTime)s.SessionDateAndTime).ToString("t"))</strong>
-     }
-      <em>@s.TrackTitle</em>
-     </p>
-     <p>
-      @foreach (var sp in s.Speakers)
-      {
-      <span class="speaker">@sp.Value</span>
-      }
-     </p>
-     <p>@Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
-    </div>
-   </div>
-   }
   </div>
  </li>
  }
@@ -77,7 +66,8 @@
    randomStart: true,
    pager: false,
    controls: false,
-   auto: true
+   auto: true,
+   pause: 10000
   });
  });
 </script>
