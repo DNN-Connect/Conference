@@ -52,6 +52,13 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage Get(int conferenceId, int locationId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, LocationRepository.Instance.GetLocation(conferenceId, locationId));
+        }
+
     }
 }
 

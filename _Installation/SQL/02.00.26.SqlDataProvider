@@ -1,0 +1,24 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Locations'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Locations
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Locations
+AS
+SELECT
+ l.*,
+ c.Description ConferenceName,
+ c.StartDate,
+ c.EndDate,
+ (SELECT COUNT(s.SessionId) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s WHERE s.LocationId=l.LocationId AND s.Status>2) NrSessions,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=l.LocationId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=l.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=l.LastModifiedByUserID
+GO
+
