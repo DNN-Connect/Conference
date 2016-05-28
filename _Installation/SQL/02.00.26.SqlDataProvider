@@ -17,7 +17,7 @@ SELECT
  uc.DisplayName CreatedByUser,
  um.DisplayName LastModifiedByUser
 FROM {databaseOwner}{objectQualifier}Connect_Conference_Locations l
- INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=l.LocationId
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=l.ConferenceId
  LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=l.CreatedByUserID
  LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=l.LastModifiedByUserID
 GO
