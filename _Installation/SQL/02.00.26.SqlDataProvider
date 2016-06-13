@@ -10,7 +10,7 @@ CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Locations
 AS
 SELECT
  l.*,
- c.Description ConferenceName,
+ c.Name ConferenceName,
  c.StartDate,
  c.EndDate,
  (SELECT COUNT(s.SessionId) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s WHERE s.LocationId=l.LocationId AND s.Status>2) NrSessions,
