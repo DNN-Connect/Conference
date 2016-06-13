@@ -50,6 +50,8 @@ namespace Connect.Conference.Core.Models.Conferences
         public string Url { get; set; }
         [DataMember]
         public bool SubmittedSessionsPublic { get; set; }
+        [DataMember]
+        public string TimeZoneId { get; set; }
         #endregion
 
         #region Methods
@@ -91,6 +93,9 @@ namespace Connect.Conference.Core.Models.Conferences
                 Url = conference.Url;
 
             SubmittedSessionsPublic = conference.SubmittedSessionsPublic;
+
+            if (!String.IsNullOrEmpty(conference.TimeZoneId))
+                TimeZoneId = conference.TimeZoneId;
 
         }
         #endregion

@@ -52,6 +52,7 @@ namespace Connect.Conference.Core.Models.Conferences
              res.Location = Location;
              res.Url = Url;
              res.SubmittedSessionsPublic = SubmittedSessionsPublic;
+             res.TimeZoneId = TimeZoneId;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;

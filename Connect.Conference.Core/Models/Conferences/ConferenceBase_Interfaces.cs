@@ -30,6 +30,7 @@ namespace Connect.Conference.Core.Models.Conferences
    Location = Convert.ToString(Null.SetNull(dr["Location"], Location));
    Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
    SubmittedSessionsPublic = Convert.ToBoolean(Null.SetNull(dr["SubmittedSessionsPublic"], SubmittedSessionsPublic));
+   TimeZoneId = Convert.ToString(Null.SetNull(dr["TimeZoneId"], TimeZoneId));
         }
 
         [IgnoreColumn()]
@@ -95,6 +96,12 @@ namespace Connect.Conference.Core.Models.Conferences
      return PropertyAccess.FormatString(Url, strFormat);
     case "submittedsessionspublic": // Bit
      return SubmittedSessionsPublic.ToString();
+    case "timezoneid": // VarChar
+     if (TimeZoneId == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(TimeZoneId, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

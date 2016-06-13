@@ -17,6 +17,7 @@ namespace Connect.Conference.Core.Models.Sessions
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
+   TimeZoneId = Convert.ToString(Null.SetNull(dr["TimeZoneId"], TimeZoneId));
    SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
    SessionEnd = (DateTime)(Null.SetNull(dr["SessionEnd"], SessionEnd));
    LocationName = Convert.ToString(Null.SetNull(dr["LocationName"], LocationName));
@@ -36,6 +37,12 @@ namespace Connect.Conference.Core.Models.Sessions
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
+    case "timezoneid": // VarChar
+     if (TimeZoneId == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(TimeZoneId, strFormat);
     case "sessiondateandtime": // DateTime
      if (SessionDateAndTime == null)
      {

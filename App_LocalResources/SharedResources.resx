@@ -360,4 +360,10 @@
   <data name="Time.Text" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="None.Text" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="TimeZone.Text" xml:space="preserve">
+    <value>Time Zone</value>
+  </data>
 </root>

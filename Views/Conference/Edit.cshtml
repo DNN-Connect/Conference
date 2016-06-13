@@ -12,6 +12,12 @@
     {
      roles.Add(new System.Web.Mvc.SelectListItem { Text = r.RoleName, Value = r.RoleID.ToString() });
     }
+    var timezones = new List<System.Web.Mvc.SelectListItem>();
+    timezones.Add(new System.Web.Mvc.SelectListItem { Text = Dnn.LocalizeString("None"), Value = "" });
+    foreach (var tz in System.TimeZoneInfo.GetSystemTimeZones())
+    {
+     timezones.Add(new System.Web.Mvc.SelectListItem { Text = tz.DisplayName, Value = tz.Id });
+    }
 
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
@@ -53,6 +59,12 @@
    <label>@Dnn.LocalizeString("EndDate")</label>
   </div>
   @Html.TextBoxFor(m => m.EndDate, "{0:d}", new { data_editor = "date" })
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("TimeZone")</label>
+  </div>
+  @Html.DropDownListFor(m => m.TimeZoneId, timezones)
  </div>
  <div class="dnnFormItem">
   <div class="dnnLabel" style="position: relative;">

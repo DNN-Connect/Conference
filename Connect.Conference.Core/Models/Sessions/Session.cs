@@ -20,6 +20,8 @@ namespace Connect.Conference.Core.Models.Sessions
 
         #region Properties
         [DataMember]
+        public string TimeZoneId { get; set; }
+        [DataMember]
         public System.DateTime? SessionDateAndTime { get; set; }
         [DataMember]
         public System.DateTime? SessionEnd { get; set; }
