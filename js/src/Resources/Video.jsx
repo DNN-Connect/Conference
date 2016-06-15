@@ -19,6 +19,9 @@ module.exports = React.createClass({
       case 201:
         srcLink = "https://player.vimeo.com/video/" + this.props.resource.ResourceLink + "?rel=0";
         break;
+      case 202:
+        srcLink = "https://channel9.msdn.com/" + this.props.resource.ResourceLink + "/player";
+        break;
     }
     var deleteCol = null;
     if (this.props.canAdd) {

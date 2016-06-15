@@ -8,6 +8,7 @@
         Pdf = 3,
         Hyperlink = 100,
         YouTube = 200,
-        Vimeo = 201
+        Vimeo = 201,
+        Channel9 = 202
     }
 }

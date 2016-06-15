@@ -71,7 +71,7 @@ namespace Connect.DNN.Modules.Conference.Api
                 resource.ResourceDescription = fileName;
                 resource.ResourceLink = fileName;
                 resource.ResourceType = (int)contentType;
-                resource.Visibility = 0;
+                resource.Visibility = 1;
                 SessionResourceRepository.Instance.AddSessionResource(ref resource, UserInfo.UserID);
             }
             var path = PortalSettings.HomeDirectoryMapPath + "\\" + Connect.Conference.Core.Common.Globals.GetResourcesPath(conferenceId, id, "\\");
@@ -119,12 +119,18 @@ namespace Connect.DNN.Modules.Conference.Api
                 contentType = Connect.Conference.Core.Common.ResourceType.Vimeo;
                 url = m.Groups[1].Value;
             }
+            m = Regex.Match(url, "(?i)https?://channel9\\.msdn\\.com/(.+)(?-i)");
+            if (m.Success)
+            {
+                contentType = Connect.Conference.Core.Common.ResourceType.Channel9;
+                url = m.Groups[1].Value;
+            }
             var resource = new SessionResourceBase();
             resource.SessionId = id;
             resource.ResourceDescription = url;
             resource.ResourceLink = url;
             resource.ResourceType = (int)contentType;
-            resource.Visibility = 0;
+            resource.Visibility = 1;
             SessionResourceRepository.Instance.AddSessionResource(ref resource, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
         }
