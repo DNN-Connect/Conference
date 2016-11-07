@@ -154,8 +154,8 @@ $RECYCLE.BIN/
 # Specific
 # =========================
 
+.vs/*
 packages
-*.config
 _References
 _Development
 _Packages
