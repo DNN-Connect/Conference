@@ -7,6 +7,11 @@ using DotNetNuke.Web.Api;
 using DotNetNuke.Entities.Modules;
 using Newtonsoft.Json;
 using DotNetNuke.Entities.Portals;
+using DotNetNuke.Framework;
+using DotNetNuke.Framework.JavaScriptLibraries;
+using DotNetNuke.UI.Utilities;
+using System.Globalization;
+using System.Web.UI;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -70,11 +75,11 @@ namespace Connect.DNN.Modules.Conference.Common
         #region Css Files
         public void AddCss(string cssFile, string name, string version)
         {
-            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 9, "", name, version);
+            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 70, "", name, version);
         }
         public void AddCss(string cssFile)
         {
-            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 9);
+            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile));
         }
         public void AddBootstrapCss()
         {
@@ -97,7 +102,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddModuleService()
         {
-            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxScriptSupport();
+            RegisterAjaxScript();
             AddScript("ConferenceService.js");
         }
         public void AddBootstrapJs()
@@ -110,7 +115,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddEditScripts()
         {
-            DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxScriptSupport();
+            RegisterAjaxScript();
             AddJqueryUi();
             AddBootstrapJs();
             AddReactJs();
@@ -135,6 +140,41 @@ namespace Connect.DNN.Modules.Conference.Common
             throw new Exception("You do not have adequate permissions to view this resource. Please check your login status.");
         }
         #endregion
+
+        public void RegisterAjaxScript()
+        {
+            ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
+            RegisterAjaxAntiForgery();
+            var path = ServicesFramework.GetServiceFrameworkRoot();
+            if (String.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            JavaScript.RegisterClientReference(Page, ClientAPI.ClientNamespaceReferences.dnn);
+            ClientAPI.RegisterClientVariable(Page, "sf_siteRoot", path, /*overwrite*/ true);
+            ClientAPI.RegisterClientVariable(Page, "sf_tabId", PortalSettings.Current.ActiveTab.TabID.ToString(CultureInfo.InvariantCulture), /*overwrite*/ true);
+
+            string scriptPath;
+            if (HttpContextSource.Current.IsDebuggingEnabled)
+            {
+                scriptPath = "~/js/Debug/dnn.servicesframework.js";
+            }
+            else
+            {
+                scriptPath = "~/js/dnn.servicesframework.js";
+            }
+
+            ClientResourceManager.RegisterScript(Page, scriptPath);
+        }
+        public void RegisterAjaxAntiForgery()
+        {
+            var ctl = Page.FindControl("ClientResourcesFormBottom");
+            if (ctl != null)
+            {
+                ctl.Controls.Add(new LiteralControl(System.Web.Helpers.AntiForgery.GetHtml().ToHtmlString()));
+            }
+        }
 
     }
 }
