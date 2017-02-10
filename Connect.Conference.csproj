@@ -72,6 +72,10 @@
       <HintPath>_References\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="QRCoder, Version=1.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\QRCoder.1.1.7\lib\net40\QRCoder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -122,8 +126,13 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\QRCoder.1.1.7\lib\net40\UnityEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ConferencesController.cs" />
     <Compile Include="Api\ModuleController.cs" />
     <Compile Include="Api\AttendeesController.cs" />
     <Compile Include="Api\CommentsController.cs" />
@@ -135,6 +144,7 @@
     <Compile Include="Api\SpeakersController.cs" />
     <Compile Include="Api\TagsController.cs" />
     <Compile Include="Api\TracksController.cs" />
+    <Compile Include="Common\AppLink.cs" />
     <Compile Include="Common\AutoCompletePair.cs" />
     <Compile Include="Common\ConferenceApiController.cs" />
     <Compile Include="Common\ConferenceAuthorizeAttribute.cs" />
@@ -145,6 +155,7 @@
     <Compile Include="Common\ContextHelper.cs" />
     <Compile Include="Common\ContextSecurity.cs" />
     <Compile Include="Common\Globals.cs" />
+    <Compile Include="Common\HtmlHelperExtensions.cs" />
     <Compile Include="Common\ImageUtils.cs" />
     <Compile Include="Common\ModuleSettings.cs" />
     <Compile Include="Common\NakedBodyParameter.cs" />

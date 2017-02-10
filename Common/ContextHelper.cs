@@ -5,6 +5,8 @@ using DotNetNuke.Web.Client.ClientResourceManagement;
 using DotNetNuke.Web.Mvc.Framework.Controllers;
 using DotNetNuke.Web.Api;
 using DotNetNuke.Entities.Modules;
+using Newtonsoft.Json;
+using DotNetNuke.Entities.Portals;
 
 namespace Connect.DNN.Modules.Conference.Common
 {
@@ -53,14 +55,26 @@ namespace Connect.DNN.Modules.Conference.Common
             get { return _settings ?? (_settings = ModuleSettings.GetSettings(ModuleContext)); }
         }
 
+        public string AppLink()
+        {
+            if (Settings.Conference > 0)
+            {
+                return JsonConvert.SerializeObject(new AppLink(PortalSettings.Current, ModuleContext, Settings.Conference));
+            }
+            else
+            {
+                return JsonConvert.SerializeObject(new AppLink(PortalSettings.Current, ModuleContext, -1));
+            }
+        }
+
         #region Css Files
         public void AddCss(string cssFile, string name, string version)
         {
-            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 70, "", name, version);
+            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 9, "", name, version);
         }
         public void AddCss(string cssFile)
         {
-            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile));
+            ClientResourceManager.RegisterStyleSheet(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/css/{0}", cssFile), 9);
         }
         public void AddBootstrapCss()
         {
