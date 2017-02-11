@@ -172,6 +172,16 @@ namespace Connect.DNN.Modules.Conference.Common
             var ctl = Page.FindControl("ClientResourcesFormBottom");
             if (ctl != null)
             {
+                foreach (Control c in ctl.Controls)
+                {
+                    if (c.GetType().Name == "LiteralControl")
+                    {
+                        if (((LiteralControl)c).Text.Contains("__RequestVerificationToken"))
+                        {
+                            return;
+                        }
+                    }
+                }
                 ctl.Controls.Add(new LiteralControl(System.Web.Helpers.AntiForgery.GetHtml().ToHtmlString()));
             }
         }
