@@ -17,8 +17,8 @@
    <div class="sessionManager" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-conferenceid="@Model.ConferenceId"
         data-statusoptions="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.DNN.Modules.Conference.Common.Globals.SessionStatusOptions(ConferenceModuleContext.Security.CanManage)))"
-        data-tracks="@(Newtonsoft.Json.JsonConvert.SerializeObject(TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort)))"
-        data-sessions="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessions(Model.ConferenceId).OrderBy(s => s.Title)))">
+        data-tracks="@(Newtonsoft.Json.JsonConvert.SerializeObject(TrackRepository.Instance.GetTracksByConference(Model.ConferenceId).OrderBy(t => t.Sort)))"
+        data-sessions="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId).OrderBy(s => s.Title)))">
    </div>
  <div class="row">
   <div class="col-sm-12">

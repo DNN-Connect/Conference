@@ -16,7 +16,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage List(int conferenceId)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, SlotRepository.Instance.GetSlots(conferenceId));
+            return Request.CreateResponse(HttpStatusCode.OK, SlotRepository.Instance.GetSlotsByConference(conferenceId));
         }
         [HttpPost]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]

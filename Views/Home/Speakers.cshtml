@@ -9,7 +9,7 @@
 <div class="container">
  <div class="row">
   <div class="col-xs-12">
-   @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
+   @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
    {
    <div class="panel panel-info speakerListDetail">
     <div class="panel-heading">

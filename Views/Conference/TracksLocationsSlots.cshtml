@@ -22,7 +22,7 @@
      </tr>
     </thead>
     <tbody>
-     @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracks(Model.ConferenceId).OrderBy(t => t.Sort))
+     @foreach (var t in Connect.Conference.Core.Repositories.TrackRepository.Instance.GetTracksByConference(Model.ConferenceId).OrderBy(t => t.Sort))
      {
       var rowStyle = "";
       if (t.BackgroundColor != "")
@@ -53,7 +53,7 @@
      </tr>
     </thead>
     <tbody>
-     @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort))
+     @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocationsByConference(Model.ConferenceId).OrderBy(l => l.Sort))
      {
      <tr data-id="@l.LocationId" class="sortable">
       <td>@l.Name</td>
@@ -80,7 +80,7 @@
      </tr>
     </thead>
     <tbody>
-     @foreach (var t in Connect.Conference.Core.Repositories.TagRepository.Instance.GetTags(Model.ConferenceId).OrderByDescending(t => t.NrVotes))
+     @foreach (var t in Connect.Conference.Core.Repositories.TagRepository.Instance.GetTagsByConference(Model.ConferenceId).OrderByDescending(t => t.NrVotes))
      {
      <tr data-id="tag-@t.TagId">
       <td data-id="tagname-@t.TagId">@t.TagName</td>
@@ -117,8 +117,8 @@
 
 <h3>@Dnn.LocalizeString("Slots")</h3>
 <div class="connectConference timesheetEditor" data-moduleid="@Dnn.ModuleContext.ModuleId"
-     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlots(Model.ConferenceId).OrderBy(s => s.Start)))"
-     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))"
+     data-slots="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.SlotRepository.Instance.GetSlotsByConference(Model.ConferenceId).OrderBy(s => s.Start)))"
+     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocationsByConference(Model.ConferenceId).OrderBy(l => l.Sort)))"
      data-conference="@Model.ConferenceId" data-nrdays="@(Model.EndDate != null ? ((int)((DateTime)Model.EndDate).Subtract((DateTime)Model.StartDate).TotalDays) : 1)"
      data-resources="@SerializedResources()">
 </div>

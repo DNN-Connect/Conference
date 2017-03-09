@@ -48,8 +48,8 @@ namespace Connect.Conference.Core.Models
         public static Schedule Create(Conferences.Conference conference)
         {
             var res = new Schedule(conference);
-            var locations = LocationRepository.Instance.GetLocations(conference.ConferenceId).OrderBy(l => l.Sort);
-            var sessions = SessionRepository.Instance.GetSessions(conference.ConferenceId).Where(s => s.Status > 2 && s.SlotId > 0 && s.DayNr > 0);
+            var locations = LocationRepository.Instance.GetLocationsByConference(conference.ConferenceId).OrderBy(l => l.Sort);
+            var sessions = SessionRepository.Instance.GetSessionsByConference(conference.ConferenceId).Where(s => s.Status > 2 && s.SlotId > 0 && s.DayNr > 0);
             var locationList = new List<Locations.Location>();
             foreach (var location in locations)
             {
@@ -59,7 +59,7 @@ namespace Connect.Conference.Core.Models
                 }
             }
             res.Locations = locationList;
-            var slots = SlotRepository.Instance.GetSlots(conference.ConferenceId).OrderBy(s => s.StartMinutes);
+            var slots = SlotRepository.Instance.GetSlotsByConference(conference.ConferenceId).OrderBy(s => s.StartMinutes);
             var nrDays = (conference.EndDate != null ? ((int)((DateTime)conference.EndDate).Subtract((DateTime)conference.StartDate).TotalDays) : 1);
             for (int dayNr = 0; dayNr < nrDays; dayNr++)
             {

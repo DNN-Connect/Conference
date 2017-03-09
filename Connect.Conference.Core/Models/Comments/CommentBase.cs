@@ -2,7 +2,6 @@
 using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
-using Connect.Conference.Core.Common;
 using Connect.Conference.Core.Data;
 
 namespace Connect.Conference.Core.Models.Comments
@@ -10,7 +9,6 @@ namespace Connect.Conference.Core.Models.Comments
     [TableName("Connect_Conference_Comments")]
     [PrimaryKey("CommentId", AutoIncrement = true)]
     [DataContract]
-    [Scope("ConferenceId")]
     public partial class CommentBase     {
 
         #region .ctor

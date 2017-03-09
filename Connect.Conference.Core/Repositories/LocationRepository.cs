@@ -1,62 +1,18 @@
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using DotNetNuke.Collections;
-using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
-using Connect.Conference.Core.Data;
 using Connect.Conference.Core.Models.Locations;
 
 namespace Connect.Conference.Core.Repositories
 {
 
-	public class LocationRepository : ServiceLocator<ILocationRepository, LocationRepository>, ILocationRepository
- {
-        protected override Func<ILocationRepository> GetFactory()
-        {
-            return () => new LocationRepository();
-        }
-        public IEnumerable<Location> GetLocations(int conferenceId)
-        {
-            using (var context = DataContext.Instance())
-            {
-                var rep = context.GetRepository<Location>();
-                return rep.Get(conferenceId);
-            }
-        }
+    public partial class LocationRepository : ServiceLocator<ILocationRepository, LocationRepository>, ILocationRepository
+    {
         public Location GetLocation(int conferenceId, int locationId)
         {
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<Location>();
                 return rep.GetById(locationId, conferenceId);
-            }
-        }
-        public int AddLocation(ref LocationBase location, int userId)
-        {
-            Requires.NotNull(location);
-            Requires.PropertyNotNegative(location, "ConferenceId");
-            location.CreatedByUserID = userId;
-            location.CreatedOnDate = DateTime.Now;
-            location.LastModifiedByUserID = userId;
-            location.LastModifiedOnDate = DateTime.Now;
-            using (var context = DataContext.Instance())
-            {
-                var rep = context.GetRepository<LocationBase>();
-                rep.Insert(location);
-            }
-            return location.LocationId;
-        }
-        public void DeleteLocation(LocationBase location)
-        {
-            Requires.NotNull(location);
-            Requires.PropertyNotNegative(location, "LocationId");
-            using (var context = DataContext.Instance())
-            {
-                var rep = context.GetRepository<LocationBase>();
-                rep.Delete(location);
             }
         }
         public void DeleteLocation(int conferenceId, int locationId)
@@ -67,28 +23,12 @@ namespace Connect.Conference.Core.Repositories
                 rep.Delete("WHERE ConferenceId = @0 AND LocationId = @1", conferenceId, locationId);
             }
         }
-        public void UpdateLocation(LocationBase location, int userId)
-        {
-            Requires.NotNull(location);
-            Requires.PropertyNotNegative(location, "LocationId");
-            location.LastModifiedByUserID = userId;
-            location.LastModifiedOnDate = DateTime.Now;
-            using (var context = DataContext.Instance())
-            {
-                var rep = context.GetRepository<LocationBase>();
-                rep.Update(location);
-            }
-        } 
- }
+    }
 
-    public interface ILocationRepository
+    public partial interface ILocationRepository
     {
-        IEnumerable<Location> GetLocations(int conferenceId);
         Location GetLocation(int conferenceId, int locationId);
-        int AddLocation(ref LocationBase location, int userId);
-        void DeleteLocation(LocationBase location);
         void DeleteLocation(int conferenceId, int locationId);
-        void UpdateLocation(LocationBase location, int userId);
     }
 }
 

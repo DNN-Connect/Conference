@@ -2,7 +2,6 @@
 using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
-using Connect.Conference.Core.Common;
 using Connect.Conference.Core.Data;
 
 namespace Connect.Conference.Core.Models.Speakers
@@ -24,6 +23,8 @@ namespace Connect.Conference.Core.Models.Speakers
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
+        public string Company { get; set; }
+        [DataMember]
         public int? Sort { get; set; }
         [DataMember]
         public string Url { get; set; }
@@ -31,8 +32,6 @@ namespace Connect.Conference.Core.Models.Speakers
         public string Description { get; set; }
         [DataMember]
         public string DescriptionShort { get; set; }
-        [DataMember]
-        public string Company { get; set; }
         #endregion
 
         #region Methods
@@ -43,6 +42,9 @@ namespace Connect.Conference.Core.Models.Speakers
 
             if (speaker.UserId > -1)
                 UserId = speaker.UserId;
+
+            if (!String.IsNullOrEmpty(speaker.Company))
+                Company = speaker.Company;
 
             if (speaker.Sort > -1)
                 Sort = speaker.Sort;
@@ -55,9 +57,6 @@ namespace Connect.Conference.Core.Models.Speakers
 
             if (!String.IsNullOrEmpty(speaker.DescriptionShort))
                 DescriptionShort = speaker.DescriptionShort;
-
-            if (!String.IsNullOrEmpty(speaker.Company))
-                Company = speaker.Company;
 
         }
         #endregion

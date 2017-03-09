@@ -19,11 +19,11 @@ namespace Connect.Conference.Core.Models.Speakers
             FillAuditFields(dr);
    ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
    UserId = Convert.ToInt32(Null.SetNull(dr["UserId"], UserId));
+   Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
    Sort = Convert.ToInt32(Null.SetNull(dr["Sort"], Sort));
    Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
    Description = Convert.ToString(Null.SetNull(dr["Description"], Description));
    DescriptionShort = Convert.ToString(Null.SetNull(dr["DescriptionShort"], DescriptionShort));
-   Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
         }
 
         [IgnoreColumn()]
@@ -43,6 +43,12 @@ namespace Connect.Conference.Core.Models.Speakers
      return ConferenceId.ToString(strFormat, formatProvider);
     case "userid": // Int
      return UserId.ToString(strFormat, formatProvider);
+    case "company": // NVarChar
+     if (Company == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Company, strFormat);
     case "sort": // Int
      if (Sort == null)
      {
@@ -67,12 +73,6 @@ namespace Connect.Conference.Core.Models.Speakers
          return "";
      };
      return PropertyAccess.FormatString(DescriptionShort, strFormat);
-    case "company": // NVarChar
-     if (Company == null)
-     {
-         return "";
-     };
-     return PropertyAccess.FormatString(Company, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

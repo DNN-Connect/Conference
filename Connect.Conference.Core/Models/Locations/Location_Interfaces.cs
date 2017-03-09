@@ -30,11 +30,7 @@ namespace Connect.Conference.Core.Models.Locations
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
-    case "conferencename": // NVarCharMax
-     if (ConferenceName == null)
-     {
-         return "";
-     };
+    case "conferencename": // NVarChar
      return PropertyAccess.FormatString(ConferenceName, strFormat);
     case "startdate": // DateTime
      if (StartDate == null)

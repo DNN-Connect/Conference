@@ -142,7 +142,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             session.DayNr = moveParams.Day;
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
         }
 
         [HttpPost]
@@ -159,7 +159,7 @@ namespace Connect.DNN.Modules.Conference.Api
             session.LocationId = null;
             session.DayNr = 0;
             SessionRepository.Instance.UpdateSession(session.GetSessionBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title));
         }
 
         [HttpPost]
@@ -237,7 +237,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var res = new HttpResponseMessage(HttpStatusCode.OK);
             var sb = new System.Text.StringBuilder();
             sb.AppendLine("Title,SubTitle,Speakers,Status,Tags,Level,Track,Location,Votes,Plenary");
-            foreach (var session in SessionRepository.Instance.GetSessions(conferenceId).OrderBy(s => s.Title))
+            foreach (var session in SessionRepository.Instance.GetSessionsByConference(conferenceId).OrderBy(s => s.Title))
             {
                 sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",\"{5}\",\"{6}\",\"{7}\",{8},{9}", session.Title, session.SubTitle, string.Join(", ", session.Speakers.Select(sp => sp.Value)), session.Status, string.Join(", ", session.Tags.Select(t => t.Value)), session.Level, session.TrackTitle, session.LocationName, session.NrVotes, session.IsPlenary));
             }
@@ -262,8 +262,8 @@ namespace Connect.DNN.Modules.Conference.Api
             var res = new NextResponse();
             res.Sessions = new Dictionary<int, IEnumerable<Session>>();
             res.Attendees = new Dictionary<int, IEnumerable<SessionAttendee>>();
-            var rooms = LocationRepository.Instance.GetLocations(conferenceId);
-            var sessions = SessionRepository.Instance.GetSessions(conferenceId).Where(s => s.SessionEnd > System.DateTime.Now & s.SessionDateAndTime != null && ((System.DateTime)s.SessionDateAndTime).Date == System.DateTime.Now.Date);
+            var rooms = LocationRepository.Instance.GetLocationsByConference(conferenceId);
+            var sessions = SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.SessionEnd > System.DateTime.Now & s.SessionDateAndTime != null && ((System.DateTime)s.SessionDateAndTime).Date == System.DateTime.Now.Date);
             var attendees = SessionAttendeeRepository.Instance.GetSessionAttendees(conferenceId);
             foreach (var room in rooms)
             {

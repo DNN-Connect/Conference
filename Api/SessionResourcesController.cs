@@ -57,7 +57,7 @@ namespace Connect.DNN.Modules.Conference.Api
                     break;
             }
             var exists = false;
-            foreach (var r in SessionResourceRepository.Instance.GetSessionResources(id))
+            foreach (var r in SessionResourceRepository.Instance.GetSessionResourcesBySession(id))
             {
                 if (r.ResourceLink == fileName)
                 {
@@ -80,7 +80,7 @@ namespace Connect.DNN.Modules.Conference.Api
                 System.IO.Directory.CreateDirectory(path);
             }
             postedFile.SaveAs(path + fileName);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResourcesBySession(id));
         }
 
         public class AddDTO
@@ -132,7 +132,7 @@ namespace Connect.DNN.Modules.Conference.Api
             resource.ResourceType = (int)contentType;
             resource.Visibility = 1;
             SessionResourceRepository.Instance.AddSessionResource(ref resource, UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResourcesBySession(id));
         }
 
         public class EditDTO
@@ -148,7 +148,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var resource = SessionResourceRepository.Instance.GetSessionResource(id, data.SessionResource.SessionResourceId);
             resource.Visibility = (resource.Visibility == 0) ? 1 : 0;
             SessionResourceRepository.Instance.UpdateSessionResource(resource.GetSessionResourceBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResourcesBySession(id));
         }
 
         [HttpPost]
@@ -165,7 +165,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             var resource = SessionResourceRepository.Instance.GetSessionResource(id, data.SessionResource.SessionResourceId);
             SessionResourceRepository.Instance.DeleteSessionResource(resource.GetSessionResourceBase());
-            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResourcesBySession(id));
         }
 
         [HttpPost]
@@ -183,7 +183,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var resource = SessionResourceRepository.Instance.GetSessionResource(id, data.SessionResource.SessionResourceId);
             resource.ResourceDescription = data.SessionResource.ResourceDescription;
             SessionResourceRepository.Instance.UpdateSessionResource(resource.GetSessionResourceBase(), UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResources(id));
+            return Request.CreateResponse(HttpStatusCode.OK, SessionResourceRepository.Instance.GetSessionResourcesBySession(id));
         }
 
     }

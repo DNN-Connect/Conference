@@ -4,7 +4,7 @@
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    var speakers = SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.LastName);
+    var speakers = SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId).OrderBy(s => s.LastName);
 }
 
 <div class="container">

@@ -12,7 +12,7 @@
 
     var tracks = new List<System.Web.Mvc.SelectListItem>();
     tracks.Add(new System.Web.Mvc.SelectListItem { Text = Dnn.LocalizeString("SelectTrack"), Value = "-1" });
-    foreach (var t in TrackRepository.Instance.GetTracks(Model.ConferenceId))
+    foreach (var t in TrackRepository.Instance.GetTracksByConference(Model.ConferenceId))
     {
      tracks.Add(new System.Web.Mvc.SelectListItem { Text = t.Title, Value = t.TrackId.ToString() });
     }

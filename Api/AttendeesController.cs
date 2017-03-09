@@ -27,7 +27,7 @@ namespace Connect.DNN.Modules.Conference.Api
         public HttpResponseMessage AttendSession(int conferenceId, int roomId, string rfid)
         {
             var res = new AttendResponse();
-            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, rfid);
+            var attendee = AttendeeRepository.Instance.GetAttendeeByCode(conferenceId, rfid);
             if (attendee == null)
             {
                 res.Error = "Attendee not found";
