@@ -17,6 +17,7 @@ namespace Connect.Conference.Core.Models.ApiKeys
         public virtual void Fill(IDataReader dr)
         {
    ApiKey = Convert.ToString(Null.SetNull(dr["ApiKey"], ApiKey));
+   ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
    Expires = (DateTime)(Null.SetNull(dr["Expires"], Expires));
    CreatedByUserID = Convert.ToInt32(Null.SetNull(dr["CreatedByUserID"], CreatedByUserID));
    CreatedOnDate = (DateTime)(Null.SetNull(dr["CreatedOnDate"], CreatedOnDate));
@@ -37,6 +38,8 @@ namespace Connect.Conference.Core.Models.ApiKeys
             {
     case "apikey": // VarChar
      return PropertyAccess.FormatString(ApiKey, strFormat);
+    case "conferenceid": // Int
+     return ConferenceId.ToString(strFormat, formatProvider);
     case "expires": // DateTime
      if (Expires == null)
      {

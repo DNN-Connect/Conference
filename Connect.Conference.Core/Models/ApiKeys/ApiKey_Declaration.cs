@@ -30,6 +30,7 @@ namespace Connect.Conference.Core.Models.ApiKeys
         {
             ApiKeyBase res = new ApiKeyBase();
              res.ApiKey = ApiKey;
+             res.ConferenceId = ConferenceId;
              res.Expires = Expires;
              res.CreatedByUserID = CreatedByUserID;
              res.CreatedOnDate = CreatedOnDate;

@@ -23,6 +23,15 @@ namespace Connect.Conference.Core.Repositories
                 return rep.Get();
             }
         }
+        public IEnumerable<ApiKey> GetApiKeysByConference(int conferenceId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<ApiKey>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_ApiKeys WHERE ConferenceId=@0",
+                    conferenceId);
+            }
+        }
         public IEnumerable<ApiKey> GetApiKeysByUser(int createdByUserID)
         {
             using (var context = DataContext.Instance())
@@ -81,6 +90,7 @@ namespace Connect.Conference.Core.Repositories
     public partial interface IApiKeyRepository
     {
         IEnumerable<ApiKey> GetApiKeys();
+        IEnumerable<ApiKey> GetApiKeysByConference(int conferenceId);
         IEnumerable<ApiKey> GetApiKeysByUser(int createdByUserID);
         ApiKey GetApiKey(string apiKey);
         void AddApiKey(ref ApiKeyBase apiKey);

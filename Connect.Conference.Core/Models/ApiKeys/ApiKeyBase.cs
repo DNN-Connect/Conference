@@ -21,6 +21,8 @@ namespace Connect.Conference.Core.Models.ApiKeys
         [DataMember]
         public string ApiKey { get; set; }
         [DataMember]
+        public int ConferenceId { get; set; }
+        [DataMember]
         public DateTime? Expires { get; set; }
         [DataMember]
         public int CreatedByUserID { get; set; }
@@ -33,6 +35,9 @@ namespace Connect.Conference.Core.Models.ApiKeys
         {
             if (!String.IsNullOrEmpty(apiKey.ApiKey))
                 ApiKey = apiKey.ApiKey;
+
+            if (apiKey.ConferenceId > -1)
+                ConferenceId = apiKey.ConferenceId;
 
             if (apiKey.Expires != null)
             Expires = apiKey.Expires;
