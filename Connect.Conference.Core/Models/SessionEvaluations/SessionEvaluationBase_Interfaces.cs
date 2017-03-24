@@ -1,0 +1,71 @@
+
+using System;
+using System.Data;
+
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.ComponentModel.DataAnnotations;
+using DotNetNuke.Entities.Modules;
+using DotNetNuke.Services.Tokens;
+
+namespace Connect.Conference.Core.Models.SessionEvaluations
+{
+    public partial class SessionEvaluationBase : IHydratable, IPropertyAccess
+    {
+
+        #region IHydratable
+
+        public virtual void Fill(IDataReader dr)
+        {
+            FillAuditFields(dr);
+   SessionEvaluationId = Convert.ToInt32(Null.SetNull(dr["SessionEvaluationId"], SessionEvaluationId));
+   SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
+   UserId = Convert.ToInt32(Null.SetNull(dr["UserId"], UserId));
+   Stars = Convert.ToInt32(Null.SetNull(dr["Stars"], Stars));
+   Review = Convert.ToString(Null.SetNull(dr["Review"], Review));
+        }
+
+        [IgnoreColumn()]
+        public int KeyID
+        {
+            get { return SessionEvaluationId; }
+            set { SessionEvaluationId = value; }
+        }
+        #endregion
+
+        #region IPropertyAccess
+        public virtual string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
+        {
+            switch (strPropertyName.ToLower())
+            {
+    case "sessionevaluationid": // Int
+     return SessionEvaluationId.ToString(strFormat, formatProvider);
+    case "sessionid": // Int
+     return SessionId.ToString(strFormat, formatProvider);
+    case "userid": // Int
+     return UserId.ToString(strFormat, formatProvider);
+    case "stars": // Int
+     return Stars.ToString(strFormat, formatProvider);
+    case "review": // NVarCharMax
+     if (Review == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Review, strFormat);
+                default:
+                    propertyNotFound = true;
+                    break;
+            }
+
+            return Null.NullString;
+        }
+
+        [IgnoreColumn()]
+        public CacheLevel Cacheability
+        {
+            get { return CacheLevel.fullyCacheable; }
+        }
+        #endregion
+
+    }
+}
+

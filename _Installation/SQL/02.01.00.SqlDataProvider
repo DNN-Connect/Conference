@@ -41,3 +41,57 @@ FROM {databaseOwner}{objectQualifier}Connect_Conference_ApiKeys k
  INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=k.CreatedByUserID
 GO
 
+/***** Evaluations ****/
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations(
+ [SessionEvaluationId] [int] IDENTITY(1,1) NOT NULL,
+ [SessionId] [int] NOT NULL,
+ [UserId] [int] NOT NULL,
+ [Stars] [int] NOT NULL,
+ [Review] [nvarchar](max) NULL,
+ [CreatedByUserID] [int] NOT NULL,
+ [CreatedOnDate] [datetime] NOT NULL,
+ [LastModifiedByUserID] [int] NOT NULL,
+ [LastModifiedOnDate] [datetime] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionEvaluations PRIMARY KEY CLUSTERED 
+(
+ [SessionEvaluationId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionEvaluations_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionEvaluations_Sessions FOREIGN KEY([SessionId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Sessions ([SessionId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_SessionEvaluations_Sessions') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_SessionEvaluations_Sessions
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations
+AS
+SELECT
+ se.*,
+ u.DisplayName DisplayName,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations se
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=se.UserId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=se.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=se.LastModifiedByUserID
+GO
+

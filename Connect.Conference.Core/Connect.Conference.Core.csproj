@@ -103,6 +103,10 @@
     <Compile Include="Models\SessionAttendees\SessionAttendeeBase_Interfaces.cs" />
     <Compile Include="Models\SessionAttendees\SessionAttendee_Declaration.cs" />
     <Compile Include="Models\SessionAttendees\SessionAttendee_Interfaces.cs" />
+    <Compile Include="Models\SessionEvaluations\SessionEvaluationBase.cs" />
+    <Compile Include="Models\SessionEvaluations\SessionEvaluationBase_Interfaces.cs" />
+    <Compile Include="Models\SessionEvaluations\SessionEvaluation_Declaration.cs" />
+    <Compile Include="Models\SessionEvaluations\SessionEvaluation_Interfaces.cs" />
     <Compile Include="Models\SessionResources\SessionResource.cs" />
     <Compile Include="Models\SessionResources\SessionResourceBase.cs" />
     <Compile Include="Models\SessionResources\SessionResourceBase_Interfaces.cs" />
@@ -169,6 +173,8 @@
     <Compile Include="Repositories\LocationRepository_Core.cs" />
     <Compile Include="Repositories\SessionAttendeeRepository.cs" />
     <Compile Include="Repositories\SessionAttendeeRepository_Core.cs" />
+    <Compile Include="Repositories\SessionEvaluationRepository.cs" />
+    <Compile Include="Repositories\SessionEvaluationRepository_Core.cs" />
     <Compile Include="Repositories\SessionRepository.cs" />
     <Compile Include="Repositories\SessionRepository_Core.cs" />
     <Compile Include="Repositories\SessionResourceRepository.cs" />
