@@ -7,6 +7,7 @@ using Connect.Conference.Core.Data;
 namespace Connect.Conference.Core.Models.ApiKeys
 {
     [TableName("Connect_Conference_ApiKeys")]
+    [PrimaryKey("ApiKey", AutoIncrement = false)]
     [DataContract]
     public partial class ApiKeyBase     {
 

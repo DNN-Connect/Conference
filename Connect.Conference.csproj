@@ -167,6 +167,7 @@
     <Compile Include="Common\RouteMapper.cs" />
     <Compile Include="Common\SwitchButtonOption.cs" />
     <Compile Include="Common\WebApiDtos.cs" />
+    <Compile Include="Controllers\ApiKeyController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AttendeeController.cs" />
@@ -310,6 +311,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\AttendeesDefinitive.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\ApiKey\Keys.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

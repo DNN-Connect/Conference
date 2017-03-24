@@ -1,0 +1,37 @@
+﻿@inherits ConferenceWebPage<ApiKeyController.NewKeyDTO>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.DNN.Modules.Conference.Controllers;
+@using Connect.Conference.Core.Repositories;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+}
+
+<table class="table">
+ <thead>
+  <tr>
+   <th>Key</th>
+   <th>Expires</th>
+   <th></th>
+  </tr>
+ </thead>
+ <tbody>
+  @foreach (var k in ApiKeyRepository.Instance.GetApiKeysByUser(Dnn.User.UserID))
+  {
+      <tr>
+       <td>@k.ApiKey</td>
+       <td>@k.Expires</td>
+       <td>
+        @Html.ActionLink("Delete", "Delete", "ApiKey", new { apiKey = k.ApiKey }, new { @class = "btn btn-default" })
+       </td>
+      </tr>
+  }
+  <tr>
+   <td></td>
+   <td>
+    @Html.TextBoxFor(m => m.Expires, new { data_message = Dnn.LocalizeString("Required.Error"), data_required = "true", @class = "form-control" })
+   </td>
+   <td><button type="submit" class="btn btn-primary">Add</button></td>
+  </tr>
+ </tbody>
+</table>

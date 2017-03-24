@@ -7,6 +7,7 @@ namespace Connect.Conference.Core.Models.ApiKeys
 {
 
     [TableName("vw_Connect_Conference_ApiKeys")]
+    [PrimaryKey("ApiKey", AutoIncrement = false)]
     [DataContract]
     public partial class ApiKey  : ApiKeyBase 
     {
