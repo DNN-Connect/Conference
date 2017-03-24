@@ -20,31 +20,36 @@ namespace Connect.DNN.Modules.Conference.Controllers
         }
 
         [HttpGet]
-        public ActionResult Keys()
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public ActionResult Keys(int conferenceId)
         {
             DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
-            return View();
+            return View(ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId));
         }
+
         public class NewKeyDTO
         {
             public string Expires { get; set; }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Keys(NewKeyDTO data)
+        public ActionResult Keys(int conferenceId, NewKeyDTO data)
         {
-            var newKey = new ApiKeyBase();
+            var newKey = new ApiKeyBase()
+            {
+                ConferenceId = conferenceId,
+                ApiKey = Guid.NewGuid().ToString("N"),
+                CreatedByUserID = User.UserID,
+                CreatedOnDate = DateTime.Now
+            };
             if (!string.IsNullOrEmpty(data.Expires))
             {
                 DateTime expiryDate;
-                if (DateTime.TryParse(data.Expires, out expiryDate)) newKey.Expires=expiryDate;
+                if (DateTime.TryParse(data.Expires, out expiryDate)) newKey.Expires = expiryDate;
             }
-            newKey.ApiKey = Guid.NewGuid().ToString("N");
-            newKey.CreatedByUserID = User.UserID;
-            newKey.CreatedOnDate = DateTime.Now;
             ApiKeyRepository.Instance.AddApiKey(ref newKey);
             DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport();
-            return View();
+            return View(ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId));
         }
         public class DeleteDTO
         {
@@ -54,11 +59,11 @@ namespace Connect.DNN.Modules.Conference.Controllers
         public ActionResult Delete(string apiKey)
         {
             var key = ApiKeyRepository.Instance.GetApiKey(apiKey);
-            if (key.CreatedByUserID==User.UserID)
+            if (key.CreatedByUserID == User.UserID)
             {
                 ApiKeyRepository.Instance.DeleteApiKey(apiKey);
             }
-            return RedirectToAction("Keys", "ApiKey");
+            return Redirect(HttpContext.Request.UrlReferrer.PathAndQuery);
         }
     }
 }

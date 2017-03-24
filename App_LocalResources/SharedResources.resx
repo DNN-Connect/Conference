@@ -366,4 +366,13 @@
   <data name="TimeZone.Text" xml:space="preserve">
     <value>Time Zone</value>
   </data>
+  <data name="Delete.Confirm" xml:space="preserve">
+    <value>Do you wish to delete this item?</value>
+  </data>
+  <data name="Required.Error" xml:space="preserve">
+    <value>This is required</value>
+  </data>
+  <data name="Add.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
 </root>

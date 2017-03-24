@@ -170,5 +170,14 @@ namespace Connect.DNN.Modules.Conference.Common
             return res;
         }
 
+        public static string ToString(this DateTime? input, string format)
+        {
+            if (input == null)
+            {
+                return "";
+            }
+            return ((DateTime)input).ToString(format);
+        }
+
     }
 }

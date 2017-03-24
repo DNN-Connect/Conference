@@ -1,4 +1,5 @@
 ﻿using DotNetNuke.Common;
+using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Users;
 using DotNetNuke.Web.Api;
 
@@ -40,6 +41,15 @@ namespace Connect.DNN.Modules.Conference.Common
             }
             User = HttpContextSource.Current.Request.IsAuthenticated ? UserController.Instance.GetCurrentUserInfo() : new UserInfo();
             ContextSecurity security = new ContextSecurity(context.ActionContext.Request.FindModuleInfo());
+            if (User == null && HttpContextSource.Current.Request.Params["apikey"] != null)
+            {
+                var conferenceId = int.Parse(HttpContextSource.Current.Request.Params["conferenceid"]);
+                var apiKey = Connect.Conference.Core.Repositories.ApiKeyRepository.Instance.GetApiKey(HttpContextSource.Current.Request.Params["apikey"]);
+                if (apiKey != null && apiKey.ConferenceId == conferenceId)
+                {
+                    User = UserController.Instance.GetUserById(PortalSettings.Current.PortalId, apiKey.CreatedByUserID);
+                }
+            }
             switch (SecurityLevel)
             {
                 case SecurityAccessLevel.Authenticated:

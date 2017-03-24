@@ -1,17 +1,21 @@
-﻿@inherits ConferenceWebPage<ApiKeyController.NewKeyDTO>
+﻿@inherits ConferenceWebPage<Conference>
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.DNN.Modules.Conference.Controllers;
+@using Connect.Conference.Core.Models.Conferences;
 @using Connect.Conference.Core.Repositories;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
 }
+
+<h2>@string.Format(Dnn.LocalizeString("KeysFor"), Model.Name)</h2>
 
 <table class="table">
  <thead>
   <tr>
-   <th>Key</th>
-   <th>Expires</th>
+   <th>@Dnn.LocalizeString("Key")</th>
+   <th>@Dnn.LocalizeString("Expires")</th>
    <th></th>
   </tr>
  </thead>
@@ -20,18 +24,36 @@
   {
       <tr>
        <td>@k.ApiKey</td>
-       <td>@k.Expires</td>
+       <td>@k.Expires.ToString("d")</td>
        <td>
-        @Html.ActionLink("Delete", "Delete", "ApiKey", new { apiKey = k.ApiKey }, new { @class = "btn btn-default" })
+        @Html.ActionLink(Dnn.LocalizeString("Delete"), "Delete", "ApiKey", new { apiKey = k.ApiKey }, new { @class = "btn btn-default", data_action="delete" })
        </td>
       </tr>
   }
   <tr>
    <td></td>
    <td>
-    @Html.TextBoxFor(m => m.Expires, new { data_message = Dnn.LocalizeString("Required.Error"), data_required = "true", @class = "form-control" })
+    <input name="Expires" id="Expires" type="text" class="form-control" data-required="true" data-message="@Dnn.LocalizeString("Required.Error")" data-editor="date" />
    </td>
-   <td><button type="submit" class="btn btn-primary">Add</button></td>
+   <td><button type="submit" class="btn btn-primary">@Dnn.LocalizeString("Add")</button></td>
   </tr>
  </tbody>
 </table>
+
+<div>
+     <a href="@Url.Action("Manage", "Conference", new {conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("Return")" class="btn btn-default pull-right">
+     @Dnn.LocalizeString("Return")
+    </a>
+</div>
+
+<script type="text/javascript">
+ $(function () {
+  $('input[data-editor="date"]').datetimepicker({
+   locale: '@System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName',
+   format: 'l'
+  });
+  $('[data-action="delete"]').click(function () {
+   return confirm('@Dnn.LocalizeString("Delete.Confirm")');
+  });
+ });
+</script>
