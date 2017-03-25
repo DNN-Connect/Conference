@@ -51,6 +51,14 @@ namespace Connect.Conference.Core.Models.Conferences
         public bool SubmittedSessionsPublic { get; set; }
         [DataMember]
         public string TimeZoneId { get; set; }
+        [DataMember]
+        public string MqttBroker { get; set; }
+        [DataMember]
+        public string MqttBrokerUsername { get; set; }
+        [DataMember]
+        public string MqttBrokerPassword { get; set; }
+        [DataMember]
+        public string BaseTopicPath { get; set; }
         #endregion
 
         #region Methods
@@ -95,6 +103,18 @@ namespace Connect.Conference.Core.Models.Conferences
 
             if (!String.IsNullOrEmpty(conference.TimeZoneId))
                 TimeZoneId = conference.TimeZoneId;
+
+            if (!String.IsNullOrEmpty(conference.MqttBroker))
+                MqttBroker = conference.MqttBroker;
+
+            if (!String.IsNullOrEmpty(conference.MqttBrokerUsername))
+                MqttBrokerUsername = conference.MqttBrokerUsername;
+
+            if (!String.IsNullOrEmpty(conference.MqttBrokerPassword))
+                MqttBrokerPassword = conference.MqttBrokerPassword;
+
+            if (!String.IsNullOrEmpty(conference.BaseTopicPath))
+                BaseTopicPath = conference.BaseTopicPath;
 
         }
         #endregion

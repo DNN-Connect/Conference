@@ -100,6 +100,30 @@
   </div>
   @Html.DropDownListFor(m => m.SpeakerRole, roles)
  </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("MqttBroker")</label>
+  </div>
+  @Html.TextBoxFor(m => m.MqttBroker)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("MqttUsername")</label>
+  </div>
+  @Html.TextBoxFor(m => m.MqttBrokerUsername)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("MqttPassword")</label>
+  </div>
+  @Html.TextBoxFor(m => m.MqttBrokerPassword)
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("BaseTopicPath")</label>
+  </div>
+  @Html.TextBoxFor(m => m.BaseTopicPath)
+ </div>
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>
  <div class="right">

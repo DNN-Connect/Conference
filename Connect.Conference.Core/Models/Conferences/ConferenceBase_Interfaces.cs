@@ -31,6 +31,10 @@ namespace Connect.Conference.Core.Models.Conferences
    Url = Convert.ToString(Null.SetNull(dr["Url"], Url));
    SubmittedSessionsPublic = Convert.ToBoolean(Null.SetNull(dr["SubmittedSessionsPublic"], SubmittedSessionsPublic));
    TimeZoneId = Convert.ToString(Null.SetNull(dr["TimeZoneId"], TimeZoneId));
+   MqttBroker = Convert.ToString(Null.SetNull(dr["MqttBroker"], MqttBroker));
+   MqttBrokerUsername = Convert.ToString(Null.SetNull(dr["MqttBrokerUsername"], MqttBrokerUsername));
+   MqttBrokerPassword = Convert.ToString(Null.SetNull(dr["MqttBrokerPassword"], MqttBrokerPassword));
+   BaseTopicPath = Convert.ToString(Null.SetNull(dr["BaseTopicPath"], BaseTopicPath));
         }
 
         [IgnoreColumn()]
@@ -102,6 +106,30 @@ namespace Connect.Conference.Core.Models.Conferences
          return "";
      };
      return PropertyAccess.FormatString(TimeZoneId, strFormat);
+    case "mqttbroker": // VarChar
+     if (MqttBroker == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(MqttBroker, strFormat);
+    case "mqttbrokerusername": // NVarChar
+     if (MqttBrokerUsername == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(MqttBrokerUsername, strFormat);
+    case "mqttbrokerpassword": // NVarChar
+     if (MqttBrokerPassword == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(MqttBrokerPassword, strFormat);
+    case "basetopicpath": // NVarChar
+     if (BaseTopicPath == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(BaseTopicPath, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

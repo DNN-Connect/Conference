@@ -118,6 +118,13 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(ConferenceBase conference)
         {
+            conference.Location = conference.Location.Trim();
+            conference.MqttBroker = conference.MqttBroker.Trim();
+            conference.MqttBrokerPassword = conference.MqttBrokerPassword.Trim();
+            conference.MqttBrokerUsername = conference.MqttBrokerUsername.Trim();
+            conference.Name = conference.Name.Trim();
+            conference.Url = conference.Url.Trim();
+            conference.BaseTopicPath = conference.BaseTopicPath.TrimEnd('#').TrimEnd('/');
             var previousRecord = _repository.GetConference(PortalSettings.PortalId, conference.ConferenceId);
             if (previousRecord == null)
             {

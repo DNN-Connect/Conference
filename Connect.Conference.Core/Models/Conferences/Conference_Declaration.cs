@@ -54,6 +54,10 @@ namespace Connect.Conference.Core.Models.Conferences
              res.Url = Url;
              res.SubmittedSessionsPublic = SubmittedSessionsPublic;
              res.TimeZoneId = TimeZoneId;
+             res.MqttBroker = MqttBroker;
+             res.MqttBrokerUsername = MqttBrokerUsername;
+             res.MqttBrokerPassword = MqttBrokerPassword;
+             res.BaseTopicPath = BaseTopicPath;
   res.CreatedByUserID = CreatedByUserID;
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;
