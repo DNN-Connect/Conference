@@ -1,61 +1,84 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
 module.exports = React.createClass({
-  displayName: "exports",
+  displayName: 'exports',
+  editCompany: function editCompany() {
+    var value = this.refs.txtCompany.getDOMNode().value;
+    var oldValue = this.props.attendee.Company ? this.props.attendee.Company : '';
+    if (value != oldValue) {
+      var attendee = this.props.attendee;
+      attendee.Company = value;
+      this.props.update(this.props.attendee);
+    }
+  },
+  editCode: function editCode() {
+    var value = this.refs.txtCode.getDOMNode().value;
+    var oldValue = this.props.attendee.AttCode ? this.props.attendee.AttCode : '';
+    if (value != oldValue) {
+      var attendee = this.props.attendee;
+      attendee.AttCode = value;
+      this.props.update(this.props.attendee);
+    }
+  },
+  toggleReceive: function toggleReceive() {
+    var attendee = this.props.attendee;
+    attendee.ReceiveNotifications = !attendee.ReceiveNotifications;
+    this.props.update(this.props.attendee);
+  },
   render: function render() {
     return React.createElement(
-      "tr",
+      'tr',
       null,
       React.createElement(
-        "td",
-        { className: "nrcol" },
+        'td',
+        { className: 'nrcol' },
         this.props.index + 1,
-        "."
+        '.'
       ),
       React.createElement(
-        "td",
+        'td',
         null,
         this.props.attendee.LastName,
-        ", ",
+        ', ',
         this.props.attendee.FirstName
       ),
       React.createElement(
-        "td",
+        'td',
         null,
         this.props.attendee.Email
       ),
       React.createElement(
-        "td",
+        'td',
         null,
-        this.props.attendee.Company
+        React.createElement('input', { type: 'checkbox', checked: this.props.attendee.ReceiveNotifications,
+          onChange: this.toggleReceive.bind(null) })
       ),
       React.createElement(
-        "td",
+        'td',
         null,
-        this.props.attendee.AttCode
+        React.createElement('input', { type: 'text', className: 'form-control', value: this.props.attendee.Company,
+          tabIndex: 1000 + this.props.index, ref: 'txtCompany',
+          onBlur: this.editCompany.bind(null) })
       ),
       React.createElement(
-        "td",
-        { className: "btncol" },
-        React.createElement(
-          "a",
-          { href: "#", className: "btn btn-sm btn-default",
-            onClick: this.props.editClick.bind(null, this.props.attendee) },
-          React.createElement("span", { className: "glyphicon glyphicon-pencil" })
-        )
+        'td',
+        null,
+        React.createElement('input', { type: 'text', className: 'form-control', value: this.props.attendee.AttCode,
+          tabIndex: 2000 + this.props.index, ref: 'txtCode',
+          onBlur: this.editCode.bind(null) })
       )
     );
   }
 });
 
 },{}],2:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var AttendeeRow = require('./AttendeeRow.jsx');
 
 module.exports = React.createClass({
-  displayName: 'exports',
+  displayName: "exports",
 
 
   attendeeBeingEdited: null,
@@ -65,21 +88,9 @@ module.exports = React.createClass({
       attendees: this.props.attendees
     };
   },
-  editClick: function editClick(attendee, e) {
-    e.preventDefault();
-    this.refs.txtCompany.getDOMNode().value = attendee.Company;
-    this.refs.txtAttCode.getDOMNode().value = attendee.AttCode;
-    this.refs.chkNotifications.getDOMNode().checked = attendee.ReceiveNotifications;
-    $('#editAttendee').modal('show');
-    this.attendeeBeingEdited = attendee;
-  },
-  updateAttendee: function updateAttendee(e) {
+  updateAttendee: function updateAttendee(attendee) {
     var _this = this;
 
-    var attendee = this.attendeeBeingEdited;
-    attendee.Company = this.refs.txtCompany.getDOMNode().value;
-    attendee.AttCode = this.refs.txtAttCode.getDOMNode().value;
-    attendee.ReceiveNotifications = this.refs.chkNotifications.getDOMNode().checked;
     this.props.module.service.editAttendee(this.props.conferenceId, attendee, function (data) {
       var newList = [];
       for (var i = 0; i < _this.state.attendees.length; i++) {
@@ -94,141 +105,66 @@ module.exports = React.createClass({
         attendees: newList
       });
     });
-    $('#editAttendee').modal('hide');
   },
   render: function render() {
     var _this2 = this;
 
     var attendees = this.state.attendees.map(function (item, i) {
       return React.createElement(AttendeeRow, { module: _this2.props.module, attendee: item,
-        editClick: _this2.editClick, key: item.UserId,
+        key: item.UserId,
+        update: _this2.updateAttendee,
         index: i });
     });
     return React.createElement(
-      'div',
-      { 'class': 'container' },
+      "div",
+      { "class": "container" },
       React.createElement(
-        'div',
-        { className: 'row' },
+        "div",
+        { className: "row" },
         React.createElement(
-          'div',
-          { className: 'col-sm-12' },
+          "div",
+          { className: "col-sm-12" },
           React.createElement(
-            'table',
-            { className: 'table table-responsive table-striped' },
+            "table",
+            { className: "table table-responsive table-striped" },
             React.createElement(
-              'thead',
+              "thead",
               null,
               React.createElement(
-                'tr',
+                "tr",
                 null,
-                React.createElement('th', null),
+                React.createElement("th", null),
                 React.createElement(
-                  'th',
+                  "th",
                   null,
                   this.props.module.resources.Name
                 ),
                 React.createElement(
-                  'th',
+                  "th",
                   null,
                   this.props.module.resources.Email
                 ),
                 React.createElement(
-                  'th',
+                  "th",
+                  null,
+                  "N"
+                ),
+                React.createElement(
+                  "th",
                   null,
                   this.props.module.resources.Company
                 ),
                 React.createElement(
-                  'th',
+                  "th",
                   null,
                   this.props.module.resources.Code
-                ),
-                React.createElement('th', null)
+                )
               )
             ),
             React.createElement(
-              'tbody',
+              "tbody",
               null,
               attendees
-            )
-          )
-        )
-      ),
-      React.createElement(
-        'div',
-        { className: 'modal fade', id: 'editAttendee', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'editAttendeeLabel' },
-        React.createElement(
-          'div',
-          { className: 'modal-dialog', role: 'document' },
-          React.createElement(
-            'div',
-            { className: 'modal-content' },
-            React.createElement(
-              'div',
-              { className: 'modal-header' },
-              React.createElement(
-                'button',
-                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
-                React.createElement(
-                  'span',
-                  { 'aria-hidden': 'true' },
-                  '×'
-                )
-              ),
-              React.createElement(
-                'h4',
-                { className: 'modal-title', id: 'editAttendeeLabel' },
-                this.props.module.resources.Attendee
-              )
-            ),
-            React.createElement(
-              'div',
-              { className: 'modal-body' },
-              React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                  'label',
-                  { 'for': 'txtCompany' },
-                  this.props.module.resources.Company
-                ),
-                React.createElement('input', { type: 'text', className: 'form-control', ref: 'txtCompany', placeholder: this.props.module.resources.Company })
-              ),
-              React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement(
-                  'label',
-                  { 'for': 'txtAttCode' },
-                  this.props.module.resources.Code
-                ),
-                React.createElement('input', { type: 'text', className: 'form-control', ref: 'txtAttCode', placeholder: this.props.module.resources.Code })
-              ),
-              React.createElement(
-                'div',
-                { className: 'checkbox' },
-                React.createElement(
-                  'label',
-                  null,
-                  React.createElement('input', { type: 'checkbox', ref: 'chkNotifications' }),
-                  ' ',
-                  this.props.module.resources.ReceiveNotifications
-                )
-              )
-            ),
-            React.createElement(
-              'div',
-              { className: 'modal-footer' },
-              React.createElement(
-                'button',
-                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-                this.props.module.resources.Cancel
-              ),
-              React.createElement(
-                'button',
-                { type: 'button', className: 'btn btn-primary', onClick: this.updateAttendee },
-                this.props.module.resources.Save
-              )
             )
           )
         )
