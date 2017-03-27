@@ -26,6 +26,17 @@ namespace Connect.Conference.Core.Common
             return input.Replace(oldValue, newValue);
         }
 
+        public static string TrimSafeNull(this string input)
+        {
+            if (input == null) return null;
+            return input.Trim();
+        }
+
+        public static string UnNull(this  string input)
+        {
+            if (input == null) return "";
+            return input;
+        }
 
     }
 }

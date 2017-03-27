@@ -3,6 +3,7 @@ using DotNetNuke.Common;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Conferences;
+using Connect.Conference.Core.Common;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -118,13 +119,13 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public ActionResult Edit(ConferenceBase conference)
         {
-            conference.Location = conference.Location.Trim();
-            conference.MqttBroker = conference.MqttBroker.Trim();
-            conference.MqttBrokerPassword = conference.MqttBrokerPassword.Trim();
-            conference.MqttBrokerUsername = conference.MqttBrokerUsername.Trim();
+            conference.Location = conference.Location.TrimSafeNull();
+            conference.MqttBroker = conference.MqttBroker.TrimSafeNull();
+            conference.MqttBrokerPassword = conference.MqttBrokerPassword.TrimSafeNull();
+            conference.MqttBrokerUsername = conference.MqttBrokerUsername.TrimSafeNull();
             conference.Name = conference.Name.Trim();
-            conference.Url = conference.Url.Trim();
-            conference.BaseTopicPath = conference.BaseTopicPath.TrimEnd('#').TrimEnd('/');
+            conference.Url = conference.Url.TrimSafeNull();
+            if (conference.BaseTopicPath != null) conference.BaseTopicPath = conference.BaseTopicPath.TrimEnd('#').TrimEnd('/') + "/";
             var previousRecord = _repository.GetConference(PortalSettings.PortalId, conference.ConferenceId);
             if (previousRecord == null)
             {

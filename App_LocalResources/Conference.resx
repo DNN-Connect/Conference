@@ -120,6 +120,9 @@
   <data name="ApiKeys.Text" xml:space="preserve">
     <value>Api Keys</value>
   </data>
+  <data name="BaseTopicPath.Text" xml:space="preserve">
+    <value>MQTT Base Topic Path</value>
+  </data>
   <data name="DeleteConference.Confirm" xml:space="preserve">
     <value>Do you wish to delete this conference? Note this cannot be undone.</value>
   </data>
@@ -134,6 +137,15 @@
   </data>
   <data name="MaxCapacityInteger.Error" xml:space="preserve">
     <value>The maximum capacity should be an integer</value>
+  </data>
+  <data name="MqttBroker.Text" xml:space="preserve">
+    <value>MQTT Broker</value>
+  </data>
+  <data name="MqttPassword.Text" xml:space="preserve">
+    <value>MQTT Password</value>
+  </data>
+  <data name="MqttUsername.Text" xml:space="preserve">
+    <value>MQTT Username</value>
   </data>
   <data name="SelectRole.Text" xml:space="preserve">
     <value>-- Select Role --</value>

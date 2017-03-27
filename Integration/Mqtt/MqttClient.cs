@@ -1,4 +1,5 @@
-﻿using Connect.Conference.Core.Repositories;
+﻿using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Repositories;
 using System.IO;
 using System.Text;
 using uPLibrary.Networking.M2Mqtt.Messages;
@@ -18,7 +19,6 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
             Logger = new StreamWriter(logFile, true, Encoding.UTF8);
             if (!string.IsNullOrEmpty(conference.MqttBroker))
             {
-
                 string clientId = string.Format("Connect.Conference.{0}.{1}", DotNetNuke.Entities.Host.Host.GUID, conference.ConferenceId);
                 Client = new uPLibrary.Networking.M2Mqtt.MqttClient(conference.MqttBroker);
                 Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
@@ -30,16 +30,7 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
                 {
                     Client.Connect(clientId, conference.MqttBrokerUsername, conference.MqttBrokerPassword, false, 1000);
                 }
-                var topic = conference.BaseTopicPath;
-                if (string.IsNullOrEmpty(topic))
-                {
-                    topic = "#";
-                }
-                else
-                {
-                    topic += "/#";
-                }
-                Client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+                Client.Subscribe(new string[] { Conference.BaseTopicPath + "rfid/room/+" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
             }
         }
 
@@ -47,7 +38,7 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
         {
             Log(e);
             var msg = Encoding.UTF8.GetString(e.Message);
-            var topic = e.Topic.Substring(Conference.BaseTopicPath.Length);
+            var topic = e.Topic.Substring(Conference.BaseTopicPath.UnNull().Length);
             topic = topic.TrimStart('/');
             var topics = topic.Split('/');
             if (topics.Length == 0) return;
@@ -123,6 +114,7 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
         private void Log(string logText)
         {
             Logger.WriteLine(string.Format("{0:HH:mm:ss} {1}", System.DateTime.Now, logText));
+            Logger.Flush();
         }
     }
 }

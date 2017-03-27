@@ -60,7 +60,7 @@
       <th class="nrcol">@Dnn.LocalizeString("Sessions")</th>
      </tr>
     </thead>
-    @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
+    @foreach (var s in SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName))
     {
     <tr>
      <td><a href="@Url.Action("View", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId })">@s.DisplayName</a></td>
