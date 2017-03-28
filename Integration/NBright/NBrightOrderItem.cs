@@ -14,6 +14,7 @@
         public System.DateTime Departure { get; set; }
         public int? UserID { get; set; }
         public int? AttendeeStatus { get; set; }
+        public int? AttendeeUserId { get; set; }
         public int? AlternativeUserId { get; set; }
     }
 }

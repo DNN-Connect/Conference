@@ -50,6 +50,9 @@ window.ConferenceService = function($, mid) {
             Remarks: comment
         }, success, fail);
     }
+    this.addOrderAudit = function(itemId, message, success, fail) {
+        this.apiCall('POST', 'NBright', 'AddAudit', null, itemId, { Message: message }, success, fail);
+    }
     this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
         this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
             UserId: userId
@@ -140,6 +143,12 @@ window.ConferenceService = function($, mid) {
     this.getNextSessions = function(conferenceId, success, fail) {
         this.apiCall('GET', 'Sessions', 'Next', conferenceId, null, null, success, fail);
     }
+    this.getOrderDetails = function(conferenceId, itemId, success, fail) {
+        this.apiCall('GET', 'NBright', 'Details', conferenceId, itemId, null, success, fail);
+    }
+    this.getOrderAudit = function(conferenceId, itemId, success, fail) {
+        this.apiCall('GET', 'NBright', 'Audit', null, itemId, null, success, fail);
+    }
     this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
         this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
             SessionId: sessionId,
@@ -194,6 +203,9 @@ window.ConferenceService = function($, mid) {
             vote: vote
         }, success, fail);
     }
+    this.toggleParticipant = function(conferenceId, itemId, participant, success, fail) {
+        this.apiCall('POST', 'NBright', 'Participant', conferenceId, itemId, participant, success, fail);
+    }
     this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
         this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
             Day: day,
@@ -204,6 +216,9 @@ window.ConferenceService = function($, mid) {
     }
     this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
         this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
+    }
+    this.updateOrderStatus = function(itemId, newStatus, success, fail) {
+        this.apiCall('POST', 'NBright', 'OrderStatus', null, null, { ItemId: itemId, Status: newStatus }, success, fail);
     }
     this.updateSlot = function(conferenceId, slot, success, fail) {
         this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);

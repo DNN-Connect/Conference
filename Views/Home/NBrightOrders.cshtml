@@ -6,7 +6,7 @@
 @{
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
-    var orders = NBrightRepository.Instance.GetOrders();
+    var orders = NBrightRepository.Instance.GetOrders(Dnn.PortalSettings.PortalId);
 }
 
 <div class="connectConference nbright" data-moduleid="@Dnn.ModuleContext.ModuleId"

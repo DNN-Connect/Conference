@@ -39,6 +39,7 @@ where nb.TypeCode='ORDER'
  nbdata.*,
  u.UserID,
  a.Status AttendeeStatus,
+ a.UserId AttendeeUserId,
  (select top 1 u2.UserID from dbo.Users u2 where u2.FirstName=nbdata.FirstName AND u2.LastName=nbdata.LastName) AlternativeUserId
 from
 (select
@@ -71,10 +72,35 @@ where nbdata.ItemId = @1
             }
         }
 
+        public IEnumerable<NBrightAudit> GetOrderAudit(int itemId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                var sql = @"select * from
+(select
+ nb.ItemId,
+ T2.aud.value('date[1]', 'datetime') AuditDate,
+ T2.aud.value('type[1]', 'varchar(50)') AuditType,
+ T2.aud.value('username[1]', 'nvarchar(100)') Username,
+ T2.aud.value('status[1]', 'int') OrderStatus,
+ T2.aud.value('msg[1]', 'nvarchar(1000)') Message
+from dbo.NBrightBuy nb
+inner join dbo.Users u on u.UserID = nb.UserId
+cross apply nb.XMLData.nodes('genxml[1]/audit[1]/genxml') as T2(aud)
+where nb.TypeCode = 'ORDER'
+ and nb.ItemId = @0) x
+order by x.AuditDate
+";
+                return context.ExecuteQuery<NBrightAudit>(System.Data.CommandType.Text,
+                    sql, itemId);
+            }
+        }
+
     }
     public interface INBrightRepository
     {
-        IEnumerable<NBrightOrder> GetOrders();
+        IEnumerable<NBrightOrder> GetOrders(int portalId);
         IEnumerable<NBrightOrderItem> GetOrderItems(int conferenceId, int itemId);
+        IEnumerable<NBrightAudit> GetOrderAudit(int itemId);
     }
 }

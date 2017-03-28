@@ -75,6 +75,11 @@
       <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="NBrightBuy, Version=3.4.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_References\NBrightBuy.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>_References\Newtonsoft.Json.dll</HintPath>
@@ -183,6 +188,7 @@
     <Compile Include="Integration\Mqtt\MqttClient.cs" />
     <Compile Include="Integration\Mqtt\MqttClientRepository.cs" />
     <Compile Include="Integration\Mqtt\RfidMessage.cs" />
+    <Compile Include="Integration\NBright\NBrightAudit.cs" />
     <Compile Include="Integration\NBright\NBrightOrder.cs" />
     <Compile Include="Integration\NBright\NBrightOrderItem.cs" />
     <Compile Include="Integration\NBright\NBrightRepository.cs" />

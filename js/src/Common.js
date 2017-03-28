@@ -124,6 +124,10 @@ sort_by = function(field, reverse, primer) {
     }
 }
 
+colStyle = function(width) {
+    return { width: width.toString() + 'px' };
+}
+
 if (!Date.prototype.toUTCDateTimeDigits) {
     (function() {
         Date.prototype.toUTCDateTimeDigits = function() {

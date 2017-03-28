@@ -873,7 +873,7 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
   };
 })(jQuery, window, document);
 
-},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./LiveTicker/LiveTicker.jsx":9,"./NBright/OrderTable.jsx":12,"./Resources/Resources.jsx":17,"./Schedule/Schedule.jsx":20,"./Scheduler/Scheduler.jsx":24,"./SessionManager/SessionManager.jsx":30,"./SessionVotes/SessionVotes.jsx":34,"./Speakers/Speakers.jsx":36,"./TagVotes/TagVotes.jsx":39,"./Tags/Tags.jsx":41,"./TimesheetEditor/TimesheetEditor.jsx":42}],9:[function(require,module,exports){
+},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./LiveTicker/LiveTicker.jsx":9,"./NBright/OrderTable.jsx":13,"./Resources/Resources.jsx":20,"./Schedule/Schedule.jsx":23,"./Scheduler/Scheduler.jsx":27,"./SessionManager/SessionManager.jsx":33,"./SessionVotes/SessionVotes.jsx":37,"./Speakers/Speakers.jsx":39,"./TagVotes/TagVotes.jsx":42,"./Tags/Tags.jsx":44,"./TimesheetEditor/TimesheetEditor.jsx":45}],9:[function(require,module,exports){
 "use strict";
 
 var Location = require('./Location.jsx');
@@ -1067,8 +1067,86 @@ module.exports = React.createClass({
 },{}],12:[function(require,module,exports){
 'use strict';
 
+module.exports = React.createClass({
+    displayName: 'exports',
+    getInitialState: function getInitialState() {
+        return {
+            ItemId: -1
+        };
+    },
+    show: function show(itemId) {
+        var _this = this;
+
+        this.setState({
+            ItemId: itemId
+        }, function () {
+            $(_this.refs.popup.getDOMNode()).modal('show');
+        });
+    },
+    cmdSave: function cmdSave() {
+        $(this.refs.popup.getDOMNode()).modal('hide');
+        this.props.save(this.state.ItemId, this.refs.txtInput.getDOMNode().value);
+    },
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: 'modal fade', tabindex: '-1', role: 'dialog', ref: 'popup' },
+            React.createElement(
+                'div',
+                { className: 'modal-dialog' },
+                React.createElement(
+                    'div',
+                    { className: 'modal-content' },
+                    React.createElement(
+                        'div',
+                        { className: 'modal-header' },
+                        React.createElement(
+                            'button',
+                            { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+                            React.createElement(
+                                'span',
+                                { 'aria-hidden': 'true' },
+                                '×'
+                            )
+                        ),
+                        React.createElement(
+                            'h4',
+                            { className: 'modal-title' },
+                            'Title'
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'modal-body' },
+                        React.createElement('input', { type: 'text', className: 'form-control', ref: 'txtInput', placeholder: 'Audit Text' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'modal-footer' },
+                        React.createElement(
+                            'button',
+                            { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+                            'Cancel'
+                        ),
+                        React.createElement(
+                            'button',
+                            { type: 'button', className: 'btn btn-primary', onClick: this.cmdSave },
+                            'Save'
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
 var OrderTableRow = require('./OrderTableRow.jsx'),
-    ColumnHeader = require('../Tables/ColumnHeader.jsx');
+    ColumnHeader = require('../Tables/ColumnHeader.jsx'),
+    ShowDetails = require('./ShowDetails.jsx'),
+    AddAuditText = require('./AddAuditText.jsx');
 
 module.exports = React.createClass({
     displayName: 'exports',
@@ -1086,10 +1164,34 @@ module.exports = React.createClass({
         });
     },
     changeStatus: function changeStatus(order, newStatus) {
-        console.log(order, newStatus);
+        var _this = this;
+
+        this.props.module.service.updateOrderStatus(order.ItemId, newStatus.Id, function (data) {
+            var orders = _this.state.orders.map(function (o) {
+                if (o.ItemId == order.ItemId) {
+                    return data;
+                } else {
+                    return o;
+                }
+            });
+            _this.setState({
+                orders: orders
+            });
+        });
+    },
+    addAuditClick: function addAuditClick(itemId, e) {
+        e.preventDefault();
+        this.refs.AuditText.show(itemId);
+    },
+    addAuditText: function addAuditText(itemId, auditText) {
+        this.props.module.service.addOrderAudit(itemId, auditText, function () {});
+    },
+    showDetailsClick: function showDetailsClick(itemId, e) {
+        e.preventDefault();
+        this.refs.ShowDetails.show(itemId);
     },
     render: function render() {
-        var _this = this;
+        var _this2 = this;
 
         var statusOptions = [{ Id: 10, Color: "#bbb", Text: "Incomplete" }, { Id: 20, Color: "#2d3538", Text: "Waiting for Bank" }, { Id: 30, Color: "#bbb", Text: "Cancelled" }, { Id: 40, Color: "#acc413", Text: "Payment OK" }, { Id: 50, Color: "#c93200", Text: "Payment Not Verified" }, { Id: 60, Color: "#ea690b", Text: "Waiting for Payment" }, { Id: 70, Color: "#eb2659", Text: "Waiting for Stock" }, { Id: 80, Color: "#eb2659", Text: "Waiting" }, { Id: 90, Color: "#893658", Text: "Shipped" }, { Id: 100, Color: "#1aa8e3", Text: "Completed" }, { Id: 110, Color: "#bbb", Text: "Archived" }, { Id: 120, Color: "#eb2659", Text: "Being Manufactured" }];
         var orders = this.state.orders;
@@ -1097,7 +1199,7 @@ module.exports = React.createClass({
         switch (this.state.sortField) {
             case 'CreatedDate':
                 sortPrimer = function sortPrimer(a) {
-                    return moment(a).toISOString();
+                    return moment(a).format();
                 };
                 break;
             case 'OrderStatus':
@@ -1111,7 +1213,7 @@ module.exports = React.createClass({
         }
         orders.sort(sort_by(this.state.sortField, this.state.sortReverse, sortPrimer));
         var rows = orders.map(function (o) {
-            return React.createElement(OrderTableRow, { order: o, statusOptions: statusOptions, statusChange: _this.changeStatus });
+            return React.createElement(OrderTableRow, { order: o, statusOptions: statusOptions, statusChange: _this2.changeStatus, addAuditClick: _this2.addAuditClick, showDetailsClick: _this2.showDetailsClick });
         });
         return React.createElement(
             'div',
@@ -1132,7 +1234,9 @@ module.exports = React.createClass({
                         React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
                             Heading: 'By', ColumnName: 'OrderedBy', SortClick: this.sort }),
                         React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
-                            Heading: 'Status', ColumnName: 'OrderStatus', SortClick: this.sort })
+                            Heading: 'Status', ColumnName: 'OrderStatus', SortClick: this.sort }),
+                        React.createElement('th', null),
+                        React.createElement('th', null)
                     )
                 ),
                 React.createElement(
@@ -1140,12 +1244,14 @@ module.exports = React.createClass({
                     null,
                     rows
                 )
-            )
+            ),
+            React.createElement(AddAuditText, { ref: 'AuditText', save: this.addAuditText }),
+            React.createElement(ShowDetails, { ref: 'ShowDetails', module: this.props.module, conferenceId: this.props.conferenceId })
         );
     }
 });
 
-},{"../Tables/ColumnHeader.jsx":37,"./OrderTableRow.jsx":13}],13:[function(require,module,exports){
+},{"../Tables/ColumnHeader.jsx":40,"./AddAuditText.jsx":12,"./OrderTableRow.jsx":14,"./ShowDetails.jsx":16}],14:[function(require,module,exports){
 'use strict';
 
 var StatusButton = require('./StatusButton.jsx');
@@ -1163,12 +1269,12 @@ module.exports = React.createClass({
             null,
             React.createElement(
                 'td',
-                null,
+                { style: colStyle(75) },
                 moment(this.props.order.CreatedDate).format('l')
             ),
             React.createElement(
                 'td',
-                null,
+                { style: colStyle(150) },
                 this.props.order.OrderNr
             ),
             React.createElement(
@@ -1178,16 +1284,406 @@ module.exports = React.createClass({
             ),
             React.createElement(
                 'td',
-                null,
+                { style: colStyle(200) },
                 React.createElement(StatusButton, { options: this.props.statusOptions, onStatusChange: function onStatusChange(newStatus) {
                         return _this.props.statusChange(_this.props.order, newStatus);
                     }, selected: this.props.order.OrderStatus })
+            ),
+            React.createElement(
+                'td',
+                { style: colStyle(32) },
+                React.createElement(
+                    'button',
+                    { className: 'btn btn-default', onClick: function onClick(e) {
+                            return _this.props.addAuditClick(_this.props.order.ItemId, e);
+                        } },
+                    React.createElement('i', { className: 'glyphicon glyphicon-plus' })
+                )
+            ),
+            React.createElement(
+                'td',
+                { style: colStyle(32) },
+                React.createElement(
+                    'button',
+                    { className: 'btn btn-default', onClick: function onClick(e) {
+                            return _this.props.showDetailsClick(_this.props.order.ItemId, e);
+                        } },
+                    React.createElement('i', { className: 'glyphicon glyphicon-user' })
+                )
             )
         );
     }
 });
 
-},{"./StatusButton.jsx":14}],14:[function(require,module,exports){
+},{"./StatusButton.jsx":17}],15:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+    displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {};
+    },
+    render: function render() {
+        var _this = this;
+
+        var btn = null;
+        if (this.props.participant.ProductName == 'Attendee' && (this.props.participant.OrderStatus == 40 || this.props.participant.OrderStatus == 100)) {
+            if (this.props.participant.AttendeeUserId) {
+                btn = React.createElement(
+                    "button",
+                    { className: "btn btn-sm btn-warning", onClick: function onClick(e) {
+                            return _this.props.toggleParticipantRegistration(_this.props.participant, e);
+                        } },
+                    React.createElement("i", { className: "glyphicon glyphicon-minus" })
+                );
+            } else {
+                btn = React.createElement(
+                    "button",
+                    { className: "btn btn-sm btn-success", onClick: function onClick(e) {
+                            return _this.props.toggleParticipantRegistration(_this.props.participant, e);
+                        } },
+                    React.createElement("i", { className: "glyphicon glyphicon-plus" })
+                );
+            }
+        }
+        return React.createElement(
+            "tbody",
+            null,
+            React.createElement(
+                "tr",
+                null,
+                React.createElement(
+                    "td",
+                    { style: colStyle(50) },
+                    this.props.participant.ProductName
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.participant.FirstName
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.participant.LastName
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.participant.Email
+                ),
+                React.createElement(
+                    "td",
+                    { style: colStyle(32), rowSpan: 2 },
+                    btn
+                )
+            ),
+            React.createElement(
+                "tr",
+                null,
+                React.createElement(
+                    "td",
+                    { colSpan: 4 },
+                    React.createElement(
+                        "em",
+                        null,
+                        "Staying from ",
+                        moment(this.props.participant.Arrival).format('l'),
+                        " to ",
+                        moment(this.props.participant.Departure).format('l')
+                    )
+                )
+            )
+        );
+    }
+});
+
+},{}],16:[function(require,module,exports){
+"use strict";
+
+var ParticipantRow = require('./ParticipantRow.jsx');
+
+module.exports = React.createClass({
+    displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {
+            ItemId: -1,
+            Details: [],
+            Log: [],
+            FirstRec: {}
+        };
+    },
+    statusToText: function statusToText(status) {
+        switch (status) {
+            case 10:
+                return "Incomplete 010";
+            case 20:
+                return "Waiting for Bank 020";
+            case 30:
+                return "Cancelled 030";
+            case 40:
+                return "Payment OK 040";
+            case 50:
+                return "Payment Not Verified 050";
+            case 60:
+                return "Waiting for Payment 060";
+            case 70:
+                return "Waiting for Stock 070";
+            case 80:
+                return "Waiting 080";
+            case 90:
+                return "Shipped 090";
+            case 100:
+                return "Completed 100";
+            case 110:
+                return "Archived 110";
+            case 120:
+                return "Being Manufactured 120";
+        }
+    },
+    show: function show(itemId) {
+        var _this = this;
+
+        this.setState({
+            ItemId: itemId
+        }, function () {
+            _this.props.module.service.getOrderAudit(_this.props.conferenceId, itemId, function (data) {
+                _this.setState({
+                    Log: data
+                }, function () {
+                    _this.props.module.service.getOrderDetails(_this.props.conferenceId, itemId, function (data) {
+                        if (data.length > 0) {
+                            _this.setState({
+                                FirstRec: data[0]
+                            });
+                        }
+                        _this.setState({
+                            Details: data
+                        }, function () {
+                            $(_this.refs.popup.getDOMNode()).modal('show');
+                        });
+                    });
+                });
+            });
+        });
+    },
+    cmdSave: function cmdSave() {
+        $(this.refs.popup.getDOMNode()).modal('hide');
+        this.props.save(this.state.ItemId, this.refs.txtInput.getDOMNode().value);
+    },
+    toggleParticipantRegistration: function toggleParticipantRegistration(person, e) {
+        var _this2 = this;
+
+        e.preventDefault();
+        this.props.module.service.toggleParticipant(this.props.conferenceId, this.state.ItemId, person, function (data) {
+            _this2.setState({
+                Details: data
+            });
+        });
+    },
+    render: function render() {
+        var _this3 = this;
+
+        var rows = this.state.Details.map(function (person) {
+            return React.createElement(ParticipantRow, { participant: person, toggleParticipantRegistration: _this3.toggleParticipantRegistration });
+        });
+        var auditRows = this.state.Log.map(function (item) {
+            var msg = item.Message;
+            if (!msg && item.OrderStatus) {
+                msg = 'Status: ' + _this3.statusToText(item.OrderStatus);
+            }
+            return React.createElement(
+                "tr",
+                null,
+                React.createElement(
+                    "td",
+                    { style: colStyle(50) },
+                    moment(item.AuditDate).format('l')
+                ),
+                React.createElement(
+                    "td",
+                    { style: colStyle(75) },
+                    item.Username
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    msg
+                )
+            );
+        });
+        return React.createElement(
+            "div",
+            { className: "modal fade", tabindex: "-1", role: "dialog", ref: "popup" },
+            React.createElement(
+                "div",
+                { className: "modal-dialog" },
+                React.createElement(
+                    "div",
+                    { className: "modal-content" },
+                    React.createElement(
+                        "div",
+                        { className: "modal-header" },
+                        React.createElement(
+                            "button",
+                            { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
+                            React.createElement(
+                                "span",
+                                { "aria-hidden": "true" },
+                                "×"
+                            )
+                        ),
+                        React.createElement(
+                            "h4",
+                            { className: "modal-title" },
+                            "Details"
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "modal-body" },
+                        React.createElement(
+                            "dl",
+                            { className: "dl-horizontal" },
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Order Nr"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.state.FirstRec.OrderNr
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Order Date and Time"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                moment(this.state.FirstRec.CreatedDate).format('LLL')
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Ordered By"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.state.FirstRec.OrderedBy
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Status"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.statusToText(this.state.FirstRec.OrderStatus)
+                            )
+                        ),
+                        React.createElement(
+                            "h4",
+                            null,
+                            "Participants"
+                        ),
+                        React.createElement(
+                            "table",
+                            { className: "table table-responsive" },
+                            React.createElement(
+                                "thead",
+                                null,
+                                React.createElement(
+                                    "tr",
+                                    null,
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "Type"
+                                    ),
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "First"
+                                    ),
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "Last"
+                                    ),
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "Email"
+                                    ),
+                                    React.createElement("th", null)
+                                )
+                            ),
+                            rows
+                        ),
+                        React.createElement(
+                            "h4",
+                            null,
+                            "Audit"
+                        ),
+                        React.createElement(
+                            "table",
+                            { className: "table table-responsive" },
+                            React.createElement(
+                                "thead",
+                                null,
+                                React.createElement(
+                                    "tr",
+                                    null,
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "Date"
+                                    ),
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "User"
+                                    ),
+                                    React.createElement(
+                                        "th",
+                                        null,
+                                        "Message"
+                                    )
+                                )
+                            ),
+                            React.createElement(
+                                "tbody",
+                                null,
+                                auditRows
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "modal-footer" },
+                        React.createElement(
+                            "button",
+                            { type: "button", className: "btn btn-default", "data-dismiss": "modal" },
+                            "Cancel"
+                        ),
+                        React.createElement(
+                            "button",
+                            { type: "button", className: "btn btn-primary", onClick: this.cmdSave },
+                            "Save"
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
+},{"./ParticipantRow.jsx":15}],17:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1260,7 +1756,7 @@ module.exports = React.createClass({
     }
 });
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1324,7 +1820,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],16:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var Icon = require('./Icon.jsx'),
@@ -1434,7 +1930,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Icon.jsx":15,"./StatusApprovalButton.jsx":18}],17:[function(require,module,exports){
+},{"./Icon.jsx":18,"./StatusApprovalButton.jsx":21}],20:[function(require,module,exports){
 'use strict';
 
 var Resource = require('./Resource.jsx'),
@@ -1598,7 +2094,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Resource.jsx":16,"./Video.jsx":19}],18:[function(require,module,exports){
+},{"./Resource.jsx":19,"./Video.jsx":22}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1645,7 +2141,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],19:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1753,7 +2249,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 var ScheduleDay = require('./ScheduleDay.jsx');
@@ -1821,7 +2317,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleDay.jsx":21}],21:[function(require,module,exports){
+},{"./ScheduleDay.jsx":24}],24:[function(require,module,exports){
 'use strict';
 
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
@@ -1898,7 +2394,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleGrid.jsx":22,"./ScheduleScheduledSession.jsx":23}],22:[function(require,module,exports){
+},{"./ScheduleGrid.jsx":25,"./ScheduleScheduledSession.jsx":26}],25:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1983,7 +2479,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2039,7 +2535,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2260,7 +2756,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./SchedulerDay.jsx":25,"./SchedulerUnscheduledSession.jsx":28}],25:[function(require,module,exports){
+},{"./SchedulerDay.jsx":28,"./SchedulerUnscheduledSession.jsx":31}],28:[function(require,module,exports){
 'use strict';
 
 var SchedulerGrid = require('./SchedulerGrid.jsx'),
@@ -2317,7 +2813,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerGrid.jsx":26,"./SchedulerScheduledSession.jsx":27}],26:[function(require,module,exports){
+},{"./SchedulerGrid.jsx":29,"./SchedulerScheduledSession.jsx":30}],29:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2421,7 +2917,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2478,7 +2974,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2527,7 +3023,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 var Status = require('./Status.jsx'),
@@ -2595,7 +3091,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Status.jsx":31,"./Track.jsx":32}],30:[function(require,module,exports){
+},{"./Status.jsx":34,"./Track.jsx":35}],33:[function(require,module,exports){
 "use strict";
 
 var Session = require('./Session.jsx');
@@ -2855,7 +3351,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Session.jsx":29}],31:[function(require,module,exports){
+},{"./Session.jsx":32}],34:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2911,7 +3407,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2971,7 +3467,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3073,7 +3569,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 
 var SessionVote = require('./SessionVote.jsx');
@@ -3182,7 +3678,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SessionVote.jsx":33}],35:[function(require,module,exports){
+},{"./SessionVote.jsx":36}],38:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3224,7 +3720,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],36:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 var Speaker = require('./Speaker.jsx');
@@ -3374,7 +3870,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Speaker.jsx":35}],37:[function(require,module,exports){
+},{"./Speaker.jsx":38}],40:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3401,7 +3897,7 @@ module.exports = React.createClass({
     }
 });
 
-},{}],38:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3462,7 +3958,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],39:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 
 var TagVote = require('./TagVote.jsx');
@@ -3615,7 +4111,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TagVote.jsx":38}],40:[function(require,module,exports){
+},{"./TagVote.jsx":41}],43:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3631,7 +4127,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],41:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 var Tag = require('./Tag.jsx');
@@ -3731,7 +4227,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Tag.jsx":40}],42:[function(require,module,exports){
+},{"./Tag.jsx":43}],45:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
@@ -4108,7 +4604,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TimesheetEditorSlot.jsx":43}],43:[function(require,module,exports){
+},{"./TimesheetEditorSlot.jsx":46}],46:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -4327,6 +4823,9 @@ window.ConferenceService = function($, mid) {
             Remarks: comment
         }, success, fail);
     }
+    this.addOrderAudit = function(itemId, message, success, fail) {
+        this.apiCall('POST', 'NBright', 'AddAudit', null, itemId, { Message: message }, success, fail);
+    }
     this.addSessionSpeaker = function(conferenceId, sessionId, userId, success, fail) {
         this.apiCall('POST', 'SessionSpeakers', 'Add', conferenceId, sessionId, {
             UserId: userId
@@ -4417,6 +4916,12 @@ window.ConferenceService = function($, mid) {
     this.getNextSessions = function(conferenceId, success, fail) {
         this.apiCall('GET', 'Sessions', 'Next', conferenceId, null, null, success, fail);
     }
+    this.getOrderDetails = function(conferenceId, itemId, success, fail) {
+        this.apiCall('GET', 'NBright', 'Details', conferenceId, itemId, null, success, fail);
+    }
+    this.getOrderAudit = function(conferenceId, itemId, success, fail) {
+        this.apiCall('GET', 'NBright', 'Audit', null, itemId, null, success, fail);
+    }
     this.loadComments = function(conferenceId, sessionId, visibility, pageIndex, pageSize, success, fail) {
         this.apiCall('GET', 'Comments', 'List', conferenceId, null, {
             SessionId: sessionId,
@@ -4471,6 +4976,9 @@ window.ConferenceService = function($, mid) {
             vote: vote
         }, success, fail);
     }
+    this.toggleParticipant = function(conferenceId, itemId, participant, success, fail) {
+        this.apiCall('POST', 'NBright', 'Participant', conferenceId, itemId, participant, success, fail);
+    }
     this.tryMoveSession = function(conferenceId, sessionId, day, slotId, locationId, displaceOthers, success, fail) {
         this.apiCall('POST', 'Sessions', 'Move', conferenceId, sessionId, {
             Day: day,
@@ -4482,12 +4990,14 @@ window.ConferenceService = function($, mid) {
     this.tryRemoveSession = function(conferenceId, sessionId, success, fail) {
         this.apiCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
     }
+    this.updateOrderStatus = function(itemId, newStatus, success, fail) {
+        this.apiCall('POST', 'NBright', 'OrderStatus', null, null, { ItemId: itemId, Status: newStatus }, success, fail);
+    }
     this.updateSlot = function(conferenceId, slot, success, fail) {
         this.apiCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
     }
 
 }
-
 // Common functions for the module
 function showLoading() {
     if ($('#serviceStatus').length) {
@@ -4612,6 +5122,10 @@ sort_by = function(field, reverse, primer) {
     return function(a, b) {
         return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
     }
+}
+
+colStyle = function(width) {
+    return { width: width.toString() + 'px' };
 }
 
 if (!Date.prototype.toUTCDateTimeDigits) {

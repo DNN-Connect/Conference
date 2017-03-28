@@ -1,5 +1,7 @@
 var OrderTableRow = require('./OrderTableRow.jsx'),
-    ColumnHeader = require('../Tables/ColumnHeader.jsx');
+    ColumnHeader = require('../Tables/ColumnHeader.jsx'),
+    ShowDetails = require('./ShowDetails.jsx'),
+    AddAuditText = require('./AddAuditText.jsx');
 
 module.exports = React.createClass({
     getInitialState() {
@@ -18,7 +20,32 @@ module.exports = React.createClass({
     },
 
     changeStatus(order, newStatus) {
-        console.log(order, newStatus);
+        this.props.module.service.updateOrderStatus(order.ItemId, newStatus.Id, (data) => {
+            var orders = this.state.orders.map(o => {
+                if (o.ItemId == order.ItemId) {
+                    return data;
+                } else {
+                    return o;
+                }
+            });
+            this.setState({
+                orders: orders
+            });
+        });
+    },
+
+    addAuditClick(itemId, e) {
+        e.preventDefault();
+        this.refs.AuditText.show(itemId);
+    },
+
+    addAuditText(itemId, auditText) {
+        this.props.module.service.addOrderAudit(itemId, auditText, () => {});
+    },
+
+    showDetailsClick(itemId, e) {
+        e.preventDefault();
+        this.refs.ShowDetails.show(itemId);
     },
 
     render() {
@@ -40,7 +67,7 @@ module.exports = React.createClass({
         var sortPrimer = null;
         switch (this.state.sortField) {
             case 'CreatedDate':
-                sortPrimer = function (a) { return moment(a).toISOString() };
+                sortPrimer = function (a) { return moment(a).format() };
                 break;
             case 'OrderStatus':
                 sortPrimer = parseInt;
@@ -51,7 +78,7 @@ module.exports = React.createClass({
         }
         orders.sort(sort_by(this.state.sortField, this.state.sortReverse, sortPrimer));
         var rows = orders.map(o => {
-            return <OrderTableRow order={o} statusOptions={statusOptions} statusChange={this.changeStatus} />
+            return <OrderTableRow order={o} statusOptions={statusOptions} statusChange={this.changeStatus} addAuditClick={this.addAuditClick} showDetailsClick={this.showDetailsClick} />
         });
         return (
             <div>
@@ -66,12 +93,16 @@ module.exports = React.createClass({
                                 Heading="By" ColumnName="OrderedBy" SortClick={this.sort} />
                             <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse} 
                                 Heading="Status" ColumnName="OrderStatus" SortClick={this.sort} />
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {rows}
                     </tbody>
                 </table>
+                <AddAuditText ref="AuditText" save={this.addAuditText} />
+                <ShowDetails ref="ShowDetails" module={this.props.module} conferenceId={this.props.conferenceId} />
             </div>
         );
     }

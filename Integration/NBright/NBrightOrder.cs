@@ -2,6 +2,7 @@
 {
     public class NBrightOrder
     {
+        public int ItemId { get; set; }
         public string OrderedBy { get; set; }
         public string OrderNr { get; set; }
         public System.DateTime CreatedDate { get; set; }
