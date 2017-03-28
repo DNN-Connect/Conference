@@ -11,7 +11,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
     SessionManager = require('./SessionManager/SessionManager.jsx'),
     AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx'),
-    LiveTicker = require('./LiveTicker/LiveTicker.jsx');
+    LiveTicker = require('./LiveTicker/LiveTicker.jsx'),
+    NBrightOrders = require('./NBright/OrderTable.jsx');
 
 (function($, window, document, undefined) {
 
@@ -157,6 +158,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
         React.render(<LiveTicker module={ConnectConference.modules[$(el).data('moduleid')]}
                         conferenceId={$(el).data('conferenceid')}
                         locations={$(el).data('locations')} />, el);
+      });
+      $('.nbright').each(function(i, el) {
+        React.render(<NBrightOrders module={ConnectConference.modules[$(el).data('moduleid')]}
+                        conferenceId={$(el).data('conferenceid')}
+                        orders={$(el).data('orders')} />, el);
       });
     },
 

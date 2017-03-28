@@ -708,7 +708,8 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     SessionStatusButton = require('./Buttons/SessionStatusButton.jsx'),
     SessionManager = require('./SessionManager/SessionManager.jsx'),
     AttendeeTable = require('./AttendeeTable/AttendeeTable.jsx'),
-    LiveTicker = require('./LiveTicker/LiveTicker.jsx');
+    LiveTicker = require('./LiveTicker/LiveTicker.jsx'),
+    NBrightOrders = require('./NBright/OrderTable.jsx');
 
 (function ($, window, document, undefined) {
 
@@ -855,6 +856,11 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
           conferenceId: $(el).data('conferenceid'),
           locations: $(el).data('locations') }), el);
       });
+      $('.nbright').each(function (i, el) {
+        React.render(React.createElement(NBrightOrders, { module: ConnectConference.modules[$(el).data('moduleid')],
+          conferenceId: $(el).data('conferenceid'),
+          orders: $(el).data('orders') }), el);
+      });
     },
 
     formatString: function formatString(format) {
@@ -867,7 +873,7 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
   };
 })(jQuery, window, document);
 
-},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./LiveTicker/LiveTicker.jsx":9,"./Resources/Resources.jsx":14,"./Schedule/Schedule.jsx":17,"./Scheduler/Scheduler.jsx":21,"./SessionManager/SessionManager.jsx":27,"./SessionVotes/SessionVotes.jsx":31,"./Speakers/Speakers.jsx":33,"./TagVotes/TagVotes.jsx":35,"./Tags/Tags.jsx":37,"./TimesheetEditor/TimesheetEditor.jsx":38}],9:[function(require,module,exports){
+},{"./AttendeeTable/AttendeeTable.jsx":2,"./BulkAddUsers/BulkAddUsers.jsx":3,"./Buttons/SessionStatusButton.jsx":5,"./Comments/Comments.jsx":7,"./LiveTicker/LiveTicker.jsx":9,"./NBright/OrderTable.jsx":12,"./Resources/Resources.jsx":17,"./Schedule/Schedule.jsx":20,"./Scheduler/Scheduler.jsx":24,"./SessionManager/SessionManager.jsx":30,"./SessionVotes/SessionVotes.jsx":34,"./Speakers/Speakers.jsx":36,"./TagVotes/TagVotes.jsx":39,"./Tags/Tags.jsx":41,"./TimesheetEditor/TimesheetEditor.jsx":42}],9:[function(require,module,exports){
 "use strict";
 
 var Location = require('./Location.jsx');
@@ -1059,6 +1065,202 @@ module.exports = React.createClass({
 });
 
 },{}],12:[function(require,module,exports){
+'use strict';
+
+var OrderTableRow = require('./OrderTableRow.jsx'),
+    ColumnHeader = require('../Tables/ColumnHeader.jsx');
+
+module.exports = React.createClass({
+    displayName: 'exports',
+    getInitialState: function getInitialState() {
+        return {
+            orders: this.props.orders,
+            sortField: 'OrderNr',
+            sortReverse: false
+        };
+    },
+    sort: function sort(sortField, sortReverse) {
+        this.setState({
+            sortField: sortField,
+            sortReverse: sortReverse
+        });
+    },
+    changeStatus: function changeStatus(order, newStatus) {
+        console.log(order, newStatus);
+    },
+    render: function render() {
+        var _this = this;
+
+        var statusOptions = [{ Id: 10, Color: "#bbb", Text: "Incomplete" }, { Id: 20, Color: "#2d3538", Text: "Waiting for Bank" }, { Id: 30, Color: "#bbb", Text: "Cancelled" }, { Id: 40, Color: "#acc413", Text: "Payment OK" }, { Id: 50, Color: "#c93200", Text: "Payment Not Verified" }, { Id: 60, Color: "#ea690b", Text: "Waiting for Payment" }, { Id: 70, Color: "#eb2659", Text: "Waiting for Stock" }, { Id: 80, Color: "#eb2659", Text: "Waiting" }, { Id: 90, Color: "#893658", Text: "Shipped" }, { Id: 100, Color: "#1aa8e3", Text: "Completed" }, { Id: 110, Color: "#bbb", Text: "Archived" }, { Id: 120, Color: "#eb2659", Text: "Being Manufactured" }];
+        var orders = this.state.orders;
+        var sortPrimer = null;
+        switch (this.state.sortField) {
+            case 'CreatedDate':
+                sortPrimer = function sortPrimer(a) {
+                    return moment(a).toISOString();
+                };
+                break;
+            case 'OrderStatus':
+                sortPrimer = parseInt;
+                break;
+            case 'OrderedBy':
+                sortPrimer = function sortPrimer(a) {
+                    return a.toUpperCase();
+                };
+                break;
+        }
+        orders.sort(sort_by(this.state.sortField, this.state.sortReverse, sortPrimer));
+        var rows = orders.map(function (o) {
+            return React.createElement(OrderTableRow, { order: o, statusOptions: statusOptions, statusChange: _this.changeStatus });
+        });
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(
+                'table',
+                { className: 'table table-responsive' },
+                React.createElement(
+                    'thead',
+                    null,
+                    React.createElement(
+                        'tr',
+                        null,
+                        React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
+                            Heading: 'Date', ColumnName: 'CreatedDate', SortClick: this.sort }),
+                        React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
+                            Heading: 'Nr', ColumnName: 'OrderNr', SortClick: this.sort }),
+                        React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
+                            Heading: 'By', ColumnName: 'OrderedBy', SortClick: this.sort }),
+                        React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
+                            Heading: 'Status', ColumnName: 'OrderStatus', SortClick: this.sort })
+                    )
+                ),
+                React.createElement(
+                    'tbody',
+                    null,
+                    rows
+                )
+            )
+        );
+    }
+});
+
+},{"../Tables/ColumnHeader.jsx":37,"./OrderTableRow.jsx":13}],13:[function(require,module,exports){
+'use strict';
+
+var StatusButton = require('./StatusButton.jsx');
+
+module.exports = React.createClass({
+    displayName: 'exports',
+    getInitialState: function getInitialState() {
+        return {};
+    },
+    render: function render() {
+        var _this = this;
+
+        return React.createElement(
+            'tr',
+            null,
+            React.createElement(
+                'td',
+                null,
+                moment(this.props.order.CreatedDate).format('l')
+            ),
+            React.createElement(
+                'td',
+                null,
+                this.props.order.OrderNr
+            ),
+            React.createElement(
+                'td',
+                null,
+                this.props.order.OrderedBy
+            ),
+            React.createElement(
+                'td',
+                null,
+                React.createElement(StatusButton, { options: this.props.statusOptions, onStatusChange: function onStatusChange(newStatus) {
+                        return _this.props.statusChange(_this.props.order, newStatus);
+                    }, selected: this.props.order.OrderStatus })
+            )
+        );
+    }
+});
+
+},{"./StatusButton.jsx":14}],14:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+    displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {};
+    },
+    render: function render() {
+        var btnClass = "";
+        var btnText = "";
+        var options = [];
+        var style = {
+            color: "#fff"
+        };
+        var liStyle = {
+            listStyleType: "none"
+        };
+        btnClass = 'default';
+        for (var i = 0; i < this.props.options.length; i++) {
+            var opt = this.props.options[i];
+            if (opt.Id == this.props.selected) {
+                style.backgroundColor = opt.Color;
+                style.borderColor = opt.Color;
+                btnText = opt.Text;
+            } else {
+                options.push(React.createElement(
+                    "li",
+                    { style: liStyle },
+                    React.createElement(
+                        "a",
+                        { href: "#", "data-id": opt.Id,
+                            onClick: this.statusChange.bind(null, opt) },
+                        opt.Text
+                    )
+                ));
+            }
+        }
+        return React.createElement(
+            "div",
+            { className: "btn-group" },
+            React.createElement(
+                "button",
+                { type: "button", className: "btn btn-sm btn-" + btnClass, style: style },
+                btnText
+            ),
+            React.createElement(
+                "button",
+                { type: "button", className: "btn btn-sm btn-" + btnClass + " dropdown-toggle", style: style, "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+                " ",
+                React.createElement("span", { className: "caret" }),
+                React.createElement(
+                    "span",
+                    { className: "sr-only" },
+                    "Toggle Dropdown"
+                )
+            ),
+            React.createElement(
+                "ul",
+                { className: "dropdown-menu" },
+                options
+            )
+        );
+    },
+    statusChange: function statusChange(newStatus, e) {
+        e.preventDefault();
+        if (!confirm('Do you wish to change the status to ' + newStatus.Text + '?')) {
+            return;
+        }
+        this.props.onStatusChange(newStatus);
+    }
+});
+
+},{}],15:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1122,7 +1324,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var Icon = require('./Icon.jsx'),
@@ -1232,7 +1434,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Icon.jsx":12,"./StatusApprovalButton.jsx":15}],14:[function(require,module,exports){
+},{"./Icon.jsx":15,"./StatusApprovalButton.jsx":18}],17:[function(require,module,exports){
 'use strict';
 
 var Resource = require('./Resource.jsx'),
@@ -1396,7 +1598,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Resource.jsx":13,"./Video.jsx":16}],15:[function(require,module,exports){
+},{"./Resource.jsx":16,"./Video.jsx":19}],18:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1443,7 +1645,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],16:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1551,7 +1753,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 var ScheduleDay = require('./ScheduleDay.jsx');
@@ -1619,7 +1821,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleDay.jsx":18}],18:[function(require,module,exports){
+},{"./ScheduleDay.jsx":21}],21:[function(require,module,exports){
 'use strict';
 
 var ScheduleGrid = require('./ScheduleGrid.jsx'),
@@ -1696,7 +1898,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./ScheduleGrid.jsx":19,"./ScheduleScheduledSession.jsx":20}],19:[function(require,module,exports){
+},{"./ScheduleGrid.jsx":22,"./ScheduleScheduledSession.jsx":23}],22:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -1781,7 +1983,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -1837,7 +2039,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],21:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -2058,7 +2260,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./SchedulerDay.jsx":22,"./SchedulerUnscheduledSession.jsx":25}],22:[function(require,module,exports){
+},{"./SchedulerDay.jsx":25,"./SchedulerUnscheduledSession.jsx":28}],25:[function(require,module,exports){
 'use strict';
 
 var SchedulerGrid = require('./SchedulerGrid.jsx'),
@@ -2115,7 +2317,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SchedulerGrid.jsx":23,"./SchedulerScheduledSession.jsx":24}],23:[function(require,module,exports){
+},{"./SchedulerGrid.jsx":26,"./SchedulerScheduledSession.jsx":27}],26:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2219,7 +2421,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2276,7 +2478,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2325,7 +2527,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var Status = require('./Status.jsx'),
@@ -2393,7 +2595,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Status.jsx":28,"./Track.jsx":29}],27:[function(require,module,exports){
+},{"./Status.jsx":31,"./Track.jsx":32}],30:[function(require,module,exports){
 "use strict";
 
 var Session = require('./Session.jsx');
@@ -2653,7 +2855,7 @@ module.exports = React.createClass({
   }
 });
 
-},{"./Session.jsx":26}],28:[function(require,module,exports){
+},{"./Session.jsx":29}],31:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2709,7 +2911,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -2769,7 +2971,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -2871,7 +3073,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 var SessionVote = require('./SessionVote.jsx');
@@ -2980,7 +3182,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./SessionVote.jsx":30}],32:[function(require,module,exports){
+},{"./SessionVote.jsx":33}],35:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3022,7 +3224,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 var Speaker = require('./Speaker.jsx');
@@ -3172,7 +3374,34 @@ module.exports = React.createClass({
 
 });
 
-},{"./Speaker.jsx":32}],34:[function(require,module,exports){
+},{"./Speaker.jsx":35}],37:[function(require,module,exports){
+"use strict";
+
+module.exports = React.createClass({
+    displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {};
+    },
+    clicked: function clicked() {
+        if (this.props.SortField == this.props.ColumnName) {
+            this.props.SortClick(this.props.ColumnName, !this.props.SortReverse);
+        } else {
+            this.props.SortClick(this.props.ColumnName, false);
+        }
+    },
+    render: function render() {
+        var style = {
+            cursor: "pointer"
+        };
+        return React.createElement(
+            "th",
+            { onClick: this.clicked, style: style },
+            this.props.Heading
+        );
+    }
+});
+
+},{}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -3233,7 +3462,7 @@ module.exports = React.createClass({
 
 });
 
-},{}],35:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 var TagVote = require('./TagVote.jsx');
@@ -3386,7 +3615,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TagVote.jsx":34}],36:[function(require,module,exports){
+},{"./TagVote.jsx":38}],40:[function(require,module,exports){
 "use strict";
 
 module.exports = React.createClass({
@@ -3402,7 +3631,7 @@ module.exports = React.createClass({
   }
 });
 
-},{}],37:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 
 var Tag = require('./Tag.jsx');
@@ -3502,7 +3731,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./Tag.jsx":36}],38:[function(require,module,exports){
+},{"./Tag.jsx":40}],42:[function(require,module,exports){
 'use strict';
 
 var TimesheetEditorSlot = require('./TimesheetEditorSlot.jsx');
@@ -3879,7 +4108,7 @@ module.exports = React.createClass({
 
 });
 
-},{"./TimesheetEditorSlot.jsx":39}],39:[function(require,module,exports){
+},{"./TimesheetEditorSlot.jsx":43}],43:[function(require,module,exports){
 'use strict';
 
 module.exports = React.createClass({
@@ -4261,147 +4490,156 @@ window.ConferenceService = function($, mid) {
 
 // Common functions for the module
 function showLoading() {
-  if ($('#serviceStatus').length) {
-    $('#serviceStatus div:first-child').show();
-    $('#serviceStatus div:nth-child(2)').hide();
-    $('#serviceStatus').css('background', '#2FC1F3').show();
-  }
+    if ($('#serviceStatus').length) {
+        $('#serviceStatus div:first-child').show();
+        $('#serviceStatus div:nth-child(2)').hide();
+        $('#serviceStatus').css('background', '#2FC1F3').show();
+    }
 }
 
 function hideLoading() {
-  if ($('#serviceStatus').length) {
-    $('#serviceStatus').hide();
-  }
+    if ($('#serviceStatus').length) {
+        $('#serviceStatus').hide();
+    }
 }
 
 function showError(message) {
-  if ($('#serviceStatus').length) {
-    $('#serviceStatus div:first-child').hide();
-    $('#serviceStatus div:nth-child(2)').html(message).show();
-    $('#serviceStatus').css('background', '#F33B2F').show();
-    setTimeout(function() {
-      $('#serviceStatus').hide();
-    }, 3000);
-  }
+    if ($('#serviceStatus').length) {
+        $('#serviceStatus div:first-child').hide();
+        $('#serviceStatus div:nth-child(2)').html(message).show();
+        $('#serviceStatus').css('background', '#F33B2F').show();
+        setTimeout(function() {
+            $('#serviceStatus').hide();
+        }, 3000);
+    }
 }
 
 function isInt(value) {
-  return !isNaN(value) &&
-    parseInt(Number(value)) == value &&
-    !isNaN(parseInt(value, 10));
+    return !isNaN(value) &&
+        parseInt(Number(value)) == value &&
+        !isNaN(parseInt(value, 10));
 }
 
 function validateForm(form, submitButton, formErrorDiv) {
-  submitButton.click(function() {
-    var hasErrors = false;
-    formErrorDiv.empty().hide();
-    form.find('input[data-validator="integer"]').each(function(i, el) {
-      if (!isInt($(el).val()) & $(el).val() != '') {
-        hasErrors = true;
-        $(el).parent().addClass('error');
-        formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
-      }
+    submitButton.click(function() {
+        var hasErrors = false;
+        formErrorDiv.empty().hide();
+        form.find('input[data-validator="integer"]').each(function(i, el) {
+            if (!isInt($(el).val()) & $(el).val() != '') {
+                hasErrors = true;
+                $(el).parent().addClass('error');
+                formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+            }
+        });
+        form.find('input[data-required="true"]').each(function(i, el) {
+            if ($(el).val() == '') {
+                hasErrors = true;
+                $(el).parent().addClass('error');
+                formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
+            }
+        });
+        return !hasErrors;
     });
-    form.find('input[data-required="true"]').each(function(i, el) {
-      if ($(el).val() == '') {
-        hasErrors = true;
-        $(el).parent().addClass('error');
-        formErrorDiv.append('<span>' + $(el).attr('data-message') + '</span><br />').show();
-      }
-    });
-    return !hasErrors;
-  });
 }
 
 function getTableOrder(tableId) {
-  var res = [];
-  $('#' + tableId + ' tbody:first tr').each(function(i, el) {
-    res.push({
-      id: $(el).data('id'),
-      order: i
+    var res = [];
+    $('#' + tableId + ' tbody:first tr').each(function(i, el) {
+        res.push({
+            id: $(el).data('id'),
+            order: i
+        });
     });
-  });
-  return res;
+    return res;
 }
 
 function minutesToTime(mins) {
-  var hr = Math.floor(mins / 60);
-  var mn = mins - 60 * hr;
-  var res = mn.toString();
-  if (res.length == 1) {
-    res = "0" + res
-  }
-  res = hr.toString() + ":" + res;
-  return res;
+    var hr = Math.floor(mins / 60);
+    var mn = mins - 60 * hr;
+    var res = mn.toString();
+    if (res.length == 1) {
+        res = "0" + res
+    }
+    res = hr.toString() + ":" + res;
+    return res;
 }
 
 function moveObject(object, dx, dy) {
-  var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
-    y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
-  object.style.webkitTransform =
-    object.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
-  object.setAttribute('data-x', x);
-  object.setAttribute('data-y', y);
+    var x = (parseFloat(object.getAttribute('data-x')) || 0) + dx,
+        y = (parseFloat(object.getAttribute('data-y')) || 0) + dy;
+    object.style.webkitTransform =
+        object.style.transform =
+        'translate(' + x + 'px, ' + y + 'px)';
+    object.setAttribute('data-x', x);
+    object.setAttribute('data-y', y);
 }
 
 if (!String.prototype.startsWith) {
-  String.prototype.startsWith = function(searchString, position) {
-    position = position || 0;
-    return this.indexOf(searchString, position) === position;
-  };
+    String.prototype.startsWith = function(searchString, position) {
+        position = position || 0;
+        return this.indexOf(searchString, position) === position;
+    };
 }
 
 function pad(number) {
-  if (number < 10) {
-    return '0' + number;
-  }
-  return number;
+    if (number < 10) {
+        return '0' + number;
+    }
+    return number;
 }
 
 function getPastel() {
-  var red = Math.floor(Math.random() * 256);
-  var green = Math.floor(Math.random() * 256);
-  var blue = Math.floor(Math.random() * 256);
-  red = Math.floor((red + 255) / 2);
-  green = Math.floor((green + 255) / 2);
-  blue = Math.floor((blue + 255) / 2);
-  red = Math.floor((red + 255) / 2);
-  green = Math.floor((green + 255) / 2);
-  blue = Math.floor((blue + 255) / 2);
-  var res = ("00" + red.toString(16)).substr(-2);
-  res += ("00" + green.toString(16)).substr(-2);
-  res += ("00" + blue.toString(16)).substr(-2);
-  return res;
+    var red = Math.floor(Math.random() * 256);
+    var green = Math.floor(Math.random() * 256);
+    var blue = Math.floor(Math.random() * 256);
+    red = Math.floor((red + 255) / 2);
+    green = Math.floor((green + 255) / 2);
+    blue = Math.floor((blue + 255) / 2);
+    red = Math.floor((red + 255) / 2);
+    green = Math.floor((green + 255) / 2);
+    blue = Math.floor((blue + 255) / 2);
+    var res = ("00" + red.toString(16)).substr(-2);
+    res += ("00" + green.toString(16)).substr(-2);
+    res += ("00" + blue.toString(16)).substr(-2);
+    return res;
+}
+
+sort_by = function(field, reverse, primer) {
+    var key = primer ?
+        function(x) { return primer(x[field]) } :
+        function(x) { return x[field] };
+    reverse = !reverse ? 1 : -1;
+    return function(a, b) {
+        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+    }
 }
 
 if (!Date.prototype.toUTCDateTimeDigits) {
-  (function() {
-    Date.prototype.toUTCDateTimeDigits = function() {
-      return this.getUTCFullYear() + '-' +
-        pad(this.getUTCMonth() + 1) + '-' +
-        pad(this.getUTCDate()) +
-        'T' +
-        pad(this.getUTCHours()) + ':' +
-        pad(this.getUTCMinutes()) + ':' +
-        pad(this.getUTCSeconds()) +
-        'Z';
-    };
-  }());
+    (function() {
+        Date.prototype.toUTCDateTimeDigits = function() {
+            return this.getUTCFullYear() + '-' +
+                pad(this.getUTCMonth() + 1) + '-' +
+                pad(this.getUTCDate()) +
+                'T' +
+                pad(this.getUTCHours()) + ':' +
+                pad(this.getUTCMinutes()) + ':' +
+                pad(this.getUTCSeconds()) +
+                'Z';
+        };
+    }());
 }
 
-Date.prototype.addDays = function(days)
-{
+Date.prototype.addDays = function(days) {
     var dat = new Date(this.valueOf());
     dat.setDate(dat.getDate() + days);
     return dat;
 }
 
 $(document).ready(function() {
-  var el = $('.ModConnectConferenceC .container');
-  if (el != undefined) {
-    if (el.parent().closest('.container').length == 1) {
-      el.removeClass('container');
+    var el = $('.ModConnectConferenceC .container');
+    if (el != undefined) {
+        if (el.parent().closest('.container').length == 1) {
+            el.removeClass('container');
+        }
     }
-  }
 })

@@ -1,0 +1,17 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@using Connect.Conference.Core.Repositories;
+@using Connect.DNN.Modules.Conference.Integration.NBright;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+    var orders = NBrightRepository.Instance.GetOrders();
+}
+
+<div class="connectConference nbright" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-conferenceid="@Model.ConferenceId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
+     data-orders="@(Newtonsoft.Json.JsonConvert.SerializeObject(orders))">
+</div>
