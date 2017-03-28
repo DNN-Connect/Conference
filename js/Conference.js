@@ -1233,6 +1233,16 @@ module.exports = React.createClass({
                             Heading: 'Nr', ColumnName: 'OrderNr', SortClick: this.sort }),
                         React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
                             Heading: 'By', ColumnName: 'OrderedBy', SortClick: this.sort }),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Total'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Nr'
+                        ),
                         React.createElement(ColumnHeader, { SortField: this.state.sortField, SortReverse: this.state.sortReverse,
                             Heading: 'Status', ColumnName: 'OrderStatus', SortClick: this.sort }),
                         React.createElement('th', null),
@@ -1281,6 +1291,16 @@ module.exports = React.createClass({
                 'td',
                 null,
                 this.props.order.OrderedBy
+            ),
+            React.createElement(
+                'td',
+                { style: colStyle(50, true) },
+                this.props.order.Total.toFixed(2)
+            ),
+            React.createElement(
+                'td',
+                { style: colStyle(20, true) },
+                this.props.order.NrParticipants
             ),
             React.createElement(
                 'td',
@@ -1441,6 +1461,12 @@ module.exports = React.createClass({
                 return "Being Manufactured 120";
         }
     },
+    nullOrMoney: function nullOrMoney(amount) {
+        if (amount) {
+            return amount.toFixed(2);
+        }
+        return "";
+    },
     show: function show(itemId) {
         var _this = this;
 
@@ -1584,6 +1610,36 @@ module.exports = React.createClass({
                                 "dd",
                                 null,
                                 this.statusToText(this.state.FirstRec.OrderStatus)
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Subtotal"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.nullOrMoney(this.state.FirstRec.SubTotal)
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Discount"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.nullOrMoney(this.state.FirstRec.Discount)
+                            ),
+                            React.createElement(
+                                "dt",
+                                null,
+                                "Total"
+                            ),
+                            React.createElement(
+                                "dd",
+                                null,
+                                this.nullOrMoney(this.state.FirstRec.Total)
                             )
                         ),
                         React.createElement(
@@ -5124,8 +5180,12 @@ sort_by = function(field, reverse, primer) {
     }
 }
 
-colStyle = function(width) {
-    return { width: width.toString() + 'px' };
+colStyle = function(width, right) {
+    if (right) {
+        return { width: width.toString() + 'px', textAlign: "right" };
+    } else {
+        return { width: width.toString() + 'px' };
+    }
 }
 
 if (!Date.prototype.toUTCDateTimeDigits) {

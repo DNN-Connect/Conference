@@ -39,6 +39,13 @@ module.exports = React.createClass({
         }
     },
 
+    nullOrMoney(amount) {
+        if (amount) {
+            return amount.toFixed(2);
+        }
+        return "";
+    },
+
     show(itemId) {
         this.setState({
             ItemId: itemId
@@ -111,6 +118,12 @@ module.exports = React.createClass({
                                 <dd>{this.state.FirstRec.OrderedBy}</dd>
                                 <dt>Status</dt>
                                 <dd>{this.statusToText(this.state.FirstRec.OrderStatus)}</dd>
+                                <dt>Subtotal</dt>
+                                <dd>{this.nullOrMoney(this.state.FirstRec.SubTotal)}</dd>
+                                <dt>Discount</dt>
+                                <dd>{this.nullOrMoney(this.state.FirstRec.Discount)}</dd>
+                                <dt>Total</dt>
+                                <dd>{this.nullOrMoney(this.state.FirstRec.Total)}</dd>
                             </dl>
                             <h4>Participants</h4>
                             <table className="table table-responsive">

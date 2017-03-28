@@ -20,7 +20,11 @@ namespace Connect.DNN.Modules.Conference.Integration.NBright
  u.DisplayName OrderedBy,
  nb.XMLData.value('genxml[1]/ordernumber[1]', 'varchar(50)') OrderNr,
  nb.XMLData.value('genxml[1]/createddate[1]', 'datetime') CreatedDate,
- nb.XMLData.value('genxml[1]/audit[1]/genxml[status][last()]/status[1]', 'int') OrderStatus
+ nb.XMLData.value('genxml[1]/audit[1]/genxml[status][last()]/status[1]', 'int') OrderStatus,
+ nb.XMLData.value('genxml[1]/appliedsubtotal[1]', 'float') SubTotal,
+ nb.XMLData.value('genxml[1]/totalsalediscount[1]', 'float') Discount,
+ nb.XMLData.value('genxml[1]/appliedtotal[1]', 'float') Total,
+ nb.XMLData.value('count(genxml[1]/items[1]/genxml)', 'int') NrParticipants
 from dbo.NBrightBuy nb
 inner join dbo.Users u on u.UserID=nb.UserId
 where nb.TypeCode='ORDER'
@@ -48,6 +52,10 @@ from
  nb.XMLData.value('genxml[1]/ordernumber[1]', 'varchar(50)') OrderNr,
  nb.XMLData.value('genxml[1]/createddate[1]', 'datetime') CreatedDate,
  nb.XMLData.value('genxml[1]/audit[1]/genxml[status][last()]/status[1]', 'int') OrderStatus,
+ nb.XMLData.value('genxml[1]/appliedsubtotal[1]', 'float') SubTotal,
+ nb.XMLData.value('genxml[1]/totalsalediscount[1]', 'float') Discount,
+ nb.XMLData.value('genxml[1]/appliedtotal[1]', 'float') Total,
+ nb.XMLData.value('count(genxml[1]/items[1]/genxml)', 'int') NrParticipants,
  T2.prod.value('productname[1]', 'varchar(50)') ProductName,
  T2.prod.value('unitcost[1]', 'float') Cost,
  T2.prod.value('options[1]/option[optname=""Sharing preferences""][1]/optvalueid[1]', 'varchar(10)') Sharing,

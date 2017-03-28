@@ -11,6 +11,8 @@ module.exports = React.createClass({
                 <td style={colStyle(75)}>{moment(this.props.order.CreatedDate).format('l')}</td>
                 <td style={colStyle(150)}>{this.props.order.OrderNr}</td>
                 <td>{this.props.order.OrderedBy}</td>
+                <td style={colStyle(50, true)}>{this.props.order.Total.toFixed(2)}</td>
+                <td style={colStyle(20, true)}>{this.props.order.NrParticipants}</td>
                 <td style={colStyle(200)}>
                     <StatusButton options={this.props.statusOptions} onStatusChange={newStatus => this.props.statusChange(this.props.order, newStatus)} selected={this.props.order.OrderStatus} />
                 </td>

@@ -124,8 +124,12 @@ sort_by = function(field, reverse, primer) {
     }
 }
 
-colStyle = function(width) {
-    return { width: width.toString() + 'px' };
+colStyle = function(width, right) {
+    if (right) {
+        return { width: width.toString() + 'px', textAlign: "right" };
+    } else {
+        return { width: width.toString() + 'px' };
+    }
 }
 
 if (!Date.prototype.toUTCDateTimeDigits) {

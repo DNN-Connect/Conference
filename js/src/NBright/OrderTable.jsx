@@ -40,7 +40,7 @@ module.exports = React.createClass({
     },
 
     addAuditText(itemId, auditText) {
-        this.props.module.service.addOrderAudit(itemId, auditText, () => {});
+        this.props.module.service.addOrderAudit(itemId, auditText, () => { });
     },
 
     showDetailsClick(itemId, e) {
@@ -85,13 +85,15 @@ module.exports = React.createClass({
                 <table className="table table-responsive">
                     <thead>
                         <tr>
-                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse} 
+                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse}
                                 Heading="Date" ColumnName="CreatedDate" SortClick={this.sort} />
-                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse} 
+                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse}
                                 Heading="Nr" ColumnName="OrderNr" SortClick={this.sort} />
-                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse} 
+                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse}
                                 Heading="By" ColumnName="OrderedBy" SortClick={this.sort} />
-                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse} 
+                            <th>Total</th>
+                            <th>Nr</th>
+                            <ColumnHeader SortField={this.state.sortField} SortReverse={this.state.sortReverse}
                                 Heading="Status" ColumnName="OrderStatus" SortClick={this.sort} />
                             <th></th>
                             <th></th>
