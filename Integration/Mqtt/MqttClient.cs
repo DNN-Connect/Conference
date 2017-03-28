@@ -10,13 +10,19 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
     {
         private uPLibrary.Networking.M2Mqtt.MqttClient Client { get; set; }
         private Connect.Conference.Core.Models.Conferences.Conference Conference { get; set; }
-        private TextWriter Logger { get; set; }
+        private static TextWriter Logger { get; set; }
 
         public MqttClient(Connect.Conference.Core.Models.Conferences.Conference conference)
         {
             Conference = conference;
             var logFile = string.Format("{0}\\Portals\\_default\\Logs\\Connect.Conference.{1}.{2:yyyy-MM-dd}.resources", DotNetNuke.Common.Globals.ApplicationMapPath, Conference.ConferenceId, System.DateTime.Now);
-            Logger = new StreamWriter(logFile, true, Encoding.UTF8);
+            try
+            {
+                if (Logger == null) Logger = new StreamWriter(logFile, true, Encoding.UTF8);
+            }
+            catch (System.Exception)
+            {
+            }
             if (!string.IsNullOrEmpty(conference.MqttBroker))
             {
                 string clientId = string.Format("Connect.Conference.{0}.{1}", DotNetNuke.Entities.Host.Host.GUID, conference.ConferenceId);
