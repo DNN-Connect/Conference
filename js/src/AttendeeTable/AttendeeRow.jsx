@@ -1,5 +1,22 @@
 module.exports = React.createClass({
 
+  getInitialState() {
+    return {
+      code: this.props.attendee.AttCode,
+      company: this.props.attendee.Company
+    }
+  },
+  changeCompany(e) {
+    this.setState({
+      company: this.refs.txtCompany.getDOMNode().value
+    });
+  },
+  changeCode(e) {
+    this.setState({
+      code: this.refs.txtCode.getDOMNode().value
+    });
+  },
+
   editCompany() {
     var value = this.refs.txtCompany.getDOMNode().value;
     var oldValue = this.props.attendee.Company ? this.props.attendee.Company : '';
@@ -37,14 +54,16 @@ module.exports = React.createClass({
             onChange={this.toggleReceive.bind(null)} />
         </td>
         <td>
-          <input type="text" className="form-control" value={this.props.attendee.Company}
+          <input type="text" className="form-control" value={this.state.company}
             tabIndex={1000 + this.props.index} ref="txtCompany"
-            onBlur={this.editCompany.bind(null)} />
+            onBlur={this.editCompany.bind(null)}
+            onChange={this.changeCompany} />
         </td>
         <td>
-          <input type="text" className="form-control" value={this.props.attendee.AttCode}
+          <input type="text" className="form-control" value={this.state.code}
             tabIndex={2000 + this.props.index} ref="txtCode"
-            onBlur={this.editCode.bind(null)} />
+            onBlur={this.editCode.bind(null)}
+            onChange={this.changeCode} />
         </td>
       </tr>
     );
