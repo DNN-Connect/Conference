@@ -106,6 +106,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var userFolder = FolderManager.Instance.GetUserFolder(dnnUser);
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, attendee.ProfilePic.filename);
+                dnnUser.Profile.Photo = file.FileId.ToString();
                 FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 if (file != null & attendee.ProfilePic.crop.points != null)
                 {
@@ -121,10 +122,10 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
             if (!string.IsNullOrEmpty(attendee.Company))
             {
+                dnnUser.Profile.SetProfileProperty("Company", attendee.Company);
                 FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Company", attendee.Company);
             }
             UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
-            // DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);
             DotNetNuke.Common.Utilities.DataCache.ClearCache();
             if (GetRouteParameter() == "home")
             {
