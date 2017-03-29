@@ -5,6 +5,7 @@ using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Attendees;
 using DotNetNuke.Services.FileSystem;
 using DotNetNuke.Entities.Users;
+using Connect.Conference.Core.Data;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -105,13 +106,13 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var userFolder = FolderManager.Instance.GetUserFolder(dnnUser);
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, attendee.ProfilePic.filename);
-                dnnUser.Profile.Photo = file.FileId.ToString();
+                FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 if (file != null & attendee.ProfilePic.crop.points != null)
                 {
                     System.IO.MemoryStream sizedContent = null;
                     using (var content = FileManager.Instance.GetFileContent(file))
                     {
-                        sizedContent = ImageUtils.CreateImage(content, attendee.ProfilePic.crop.points, attendee.ProfilePic.crop.zoom, 200, file.Extension);
+                        sizedContent = ImageUtils.CreateImage(content, attendee.ProfilePic.crop.points, attendee.ProfilePic.crop.zoom, 200, 300, file.Extension);
                     }
                     FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
                     sizedContent.Dispose();
@@ -120,11 +121,19 @@ namespace Connect.DNN.Modules.Conference.Controllers
             }
             if (!string.IsNullOrEmpty(attendee.Company))
             {
-                dnnUser.Profile.SetProfileProperty("Company", attendee.Company);
+                FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Company", attendee.Company);
             }
             UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
-            DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);
-            return ReturnRoute(attendee.ConferenceId, View("View", _repository.GetAttendee(attendee.ConferenceId, attendee.UserId)));
+            // DotNetNuke.Entities.Profile.ProfileController.UpdateUserProfile(dnnUser);
+            DotNetNuke.Common.Utilities.DataCache.ClearCache();
+            if (GetRouteParameter() == "home")
+            {
+                return ReturnRoute("Home", "Index", "refreshcache=1");
+            }
+            else
+            {
+                return ReturnRoute(attendee.ConferenceId, View("View", _repository.GetAttendee(attendee.ConferenceId, attendee.UserId)));
+            }
         }
 
         public class AttendeeDTO : Attendee

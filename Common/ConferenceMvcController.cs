@@ -58,5 +58,18 @@ namespace Connect.DNN.Modules.Conference.Common
             return defaultRoute;
         }
 
+        public ActionResult ReturnRoute(string controllerName, string actionName, params string[] querystring)
+        {
+            RouteValueDictionary routeValues = new RouteValueDictionary();
+            routeValues["controller"] = controllerName;
+            routeValues["action"] = actionName;
+            foreach (var p in querystring)
+            {
+                var pp = p.Split('=');
+                routeValues.Add(pp[0], pp[1]);
+            }
+            return Redirect(ModuleRoutingProvider.Instance().GenerateUrl(routeValues, ModuleContext));
+        }
+
     }
 }

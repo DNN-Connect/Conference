@@ -36,7 +36,7 @@ namespace Connect.DNN.Modules.Conference.Common
             }
         }
 
-        public static MemoryStream CreateImage(Stream stream, float[] crop, float zoom, int imageSize, string extension)
+        public static MemoryStream CreateImage(Stream stream, float[] crop, float zoom, int viewportSize, int boundarySize, string extension)
         {
             var original = new Bitmap(stream);
             PixelFormat format = original.PixelFormat;
@@ -44,9 +44,17 @@ namespace Connect.DNN.Modules.Conference.Common
             {
                 format = PixelFormat.Format24bppRgb;
             }
+            float cropRatio = 1f;
+            if (original.Height > original.Width)
+            {
+                cropRatio = (float)boundarySize / (float)original.Height;
+            }
+            else
+            {
+                cropRatio = (float)boundarySize / (float)original.Width;
+            }
 
-            var newImg = new Bitmap(imageSize, imageSize, format);
-            newImg.SetResolution(original.HorizontalResolution, original.VerticalResolution);
+            var newImg = new Bitmap(viewportSize, viewportSize, format);
             Graphics canvas = Graphics.FromImage(newImg);
             canvas.SmoothingMode = SmoothingMode.None;
             canvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -55,10 +63,12 @@ namespace Connect.DNN.Modules.Conference.Common
             if (extension.ToLowerInvariant() != ".png")
             {
                 canvas.Clear(Color.White);
-                canvas.FillRectangle(Brushes.White, 0, 0, imageSize, imageSize);
+                canvas.FillRectangle(Brushes.White, 0, 0, viewportSize, viewportSize);
             }
 
-            canvas.DrawImage(original, -crop[0] * zoom, -crop[1] * zoom, original.Width * zoom, original.Height * zoom);
+            var drawWidth = crop[2] - crop[0];
+            var drawHeight = crop[3] - crop[1];
+            canvas.DrawImage(original, -crop[0], -crop[1], original.Width * cropRatio * zoom, original.Height * cropRatio * zoom);
 
             //newImg.Save
             var content = new MemoryStream();

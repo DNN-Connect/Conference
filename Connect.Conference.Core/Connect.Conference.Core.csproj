@@ -71,6 +71,7 @@
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\DnnRoleController.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
+    <Compile Include="Data\FixDnnController.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />
     <Compile Include="Models\ApiKeys\ApiKeyBase.cs" />
     <Compile Include="Models\ApiKeys\ApiKeyBase_Interfaces.cs" />
