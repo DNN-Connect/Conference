@@ -195,5 +195,15 @@ namespace Connect.DNN.Modules.Conference.Api
             return res;
         }
 
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference, AllowApiKeyAccess = true)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            var res = AttendeeRepository.Instance.GetAttendeesByConference(conferenceId)
+                .Where(a => !string.IsNullOrEmpty(a.AttCode))
+                .Select(a => new { Code = a.AttCode, Name = a.DisplayName });
+            return Request.CreateResponse(HttpStatusCode.OK, Newtonsoft.Json.JsonConvert.SerializeObject(res));
+        }
+
     }
 }

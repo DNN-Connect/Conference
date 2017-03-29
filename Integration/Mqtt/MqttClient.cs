@@ -15,16 +15,22 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
         public MqttClient(Connect.Conference.Core.Models.Conferences.Conference conference)
         {
             Conference = conference;
-            var logFile = string.Format("{0}\\Portals\\_default\\Logs\\Connect.Conference.{1}.{2:yyyy-MM-dd}.resources", DotNetNuke.Common.Globals.ApplicationMapPath, Conference.ConferenceId, System.DateTime.Now);
-            try
-            {
-                if (Logger == null) Logger = new StreamWriter(logFile, true, Encoding.UTF8);
-            }
-            catch (System.Exception)
-            {
-            }
             if (!string.IsNullOrEmpty(conference.MqttBroker))
             {
+                var filename = string.Format("{0}\\Portals\\_default\\Logs\\Connect.Conference.{1}.{2:yyyy-MM-dd}", DotNetNuke.Common.Globals.ApplicationMapPath, Conference.ConferenceId, System.DateTime.Now);
+                var i = 0;
+                while (true)
+                {
+                    try
+                    {
+                        if (Logger == null) Logger = new StreamWriter(string.Format("{0}-{1}.resources", filename, i), true, Encoding.UTF8);
+                        break;
+                    }
+                    catch (System.Exception)
+                    {
+                    }
+                    i++;
+                }
                 string clientId = string.Format("Connect.Conference.{0}.{1}", DotNetNuke.Entities.Host.Host.GUID, conference.ConferenceId);
                 Client = new uPLibrary.Networking.M2Mqtt.MqttClient(conference.MqttBroker);
                 Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
@@ -119,8 +125,15 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
         }
         private void Log(string logText)
         {
-            Logger.WriteLine(string.Format("{0:HH:mm:ss} {1}", System.DateTime.Now, logText));
-            Logger.Flush();
+            if (Logger == null) return;
+            try
+            {
+                Logger.WriteLine(string.Format("{0:HH:mm:ss} {1}", System.DateTime.Now, logText));
+                Logger.Flush();
+            }
+            catch (System.Exception)
+            {
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Connect.DNN.Modules.Conference.Common
     {
         public SecurityAccessLevel SecurityLevel { get; set; }
         public UserInfo User { get; set; }
+        public bool AllowApiKeyAccess { get; set; } = false;
 
         public ConferenceAuthorizeAttribute()
         {
@@ -40,16 +41,22 @@ namespace Connect.DNN.Modules.Conference.Common
                 return true;
             }
             User = HttpContextSource.Current.Request.IsAuthenticated ? UserController.Instance.GetCurrentUserInfo() : new UserInfo();
-            ContextSecurity security = new ContextSecurity(context.ActionContext.Request.FindModuleInfo());
-            if (User == null && HttpContextSource.Current.Request.Params["apikey"] != null)
+            if (AllowApiKeyAccess && User.UserID == -1 && HttpContextSource.Current.Request.Params["apikey"] != null)
             {
                 var conferenceId = int.Parse(HttpContextSource.Current.Request.Params["conferenceid"]);
                 var apiKey = Connect.Conference.Core.Repositories.ApiKeyRepository.Instance.GetApiKey(HttpContextSource.Current.Request.Params["apikey"]);
+                if (apiKey != null && apiKey.Expires != null && apiKey.Expires < System.DateTime.Now)
+                {
+                    Connect.Conference.Core.Repositories.ApiKeyRepository.Instance.DeleteApiKey(apiKey.GetApiKeyBase());
+                    apiKey = null;
+                }
                 if (apiKey != null && apiKey.ConferenceId == conferenceId)
                 {
                     User = UserController.Instance.GetUserById(PortalSettings.Current.PortalId, apiKey.CreatedByUserID);
+                    HttpContextSource.Current.Items["UserInfo"] = User; // Set thread user - this will expire after the request!
                 }
             }
+            ContextSecurity security = new ContextSecurity(context.ActionContext.Request.FindModuleInfo());
             switch (SecurityLevel)
             {
                 case SecurityAccessLevel.Authenticated:

@@ -61,7 +61,6 @@ namespace Connect.Conference.Core.Repositories
         public void DeleteApiKey(ApiKeyBase apiKey)
         {
             Requires.NotNull(apiKey);
-            Requires.PropertyNotNegative(apiKey, "ApiKeyId");
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<ApiKeyBase>();
@@ -79,7 +78,6 @@ namespace Connect.Conference.Core.Repositories
         public void UpdateApiKey(ApiKeyBase apiKey)
         {
             Requires.NotNull(apiKey);
-            Requires.PropertyNotNegative(apiKey, "ApiKeyId");
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<ApiKeyBase>();
