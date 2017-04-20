@@ -1,0 +1,62 @@
+﻿@inherits ConferenceWebPage<Connect.Conference.Core.Models.Conferences.Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Common;
+@using Connect.Conference.Core.Repositories;
+@{
+    ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddEditScripts();
+    var sessions = SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title);
+}
+
+<div class="container">
+ @foreach (var session in sessions)
+ {
+     var speakers = session.GetSpeakers();
+     <div class="row">
+      <div class="col-xs-12">
+       <div class="panel panel-info sessionDisplay">
+        <div class="panel-heading">
+         <h2 class="panel-title">@session.Title</h2>
+         @if (!string.IsNullOrEmpty(session.SubTitle))
+         {
+             <p><em>@session.SubTitle</em></p>
+         }
+        </div>
+        <div class="panel-body">
+         <div class="row">
+          <div class="col-xs-6 col-sm-2 speakerCol">
+           @foreach (var speaker in speakers)
+           {
+               <div class="speaker">
+                <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@speaker.SpeakerId" class="img-circle img-responsive" />
+                @speaker.DisplayName
+               </div>
+           }
+
+          </div>
+          <div class="col-xs-6 col-sm-10">
+           @if (!string.IsNullOrEmpty(Model.Description))
+           {
+               <div>@Html.Raw(session.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
+               <hr />
+           }
+           <h4>@Dnn.LocalizeString("AboutTheSpeakers")</h4>
+           <dl>
+            @foreach (var speaker in speakers)
+            {
+                <dt>@speaker.DisplayName</dt>
+                <dd class="speaker">@Html.Raw(speaker.Description.SafeReplace(Environment.NewLine, "<br />"))</dd>
+            }
+           </dl>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+ }
+</div>
+
+<script type="text/javascript">
+ window.sessionDetailUrl = '';
+</script>

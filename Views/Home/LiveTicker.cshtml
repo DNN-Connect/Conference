@@ -7,9 +7,9 @@
 @{
     ConferenceModuleContext.AddEditScripts();
     ConferenceModuleContext.AddBootstrapCss();
-    var rooms = LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort);
+    var rooms = LocationRepository.Instance.GetLocationsByConference(Model.ConferenceId).OrderBy(l => l.Sort);
     var colSize = (int)(12 / rooms.Count());
-    var sessions = SessionRepository.Instance.GetSessions(Model.ConferenceId).Where(s => s.SessionEnd > DateTime.Now);
+    var sessions = SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId).Where(s => s.SessionEnd > DateTime.Now);
 }
 
 <div class="connectConference liveTicker"
@@ -17,7 +17,7 @@
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
      data-conferenceid="@Model.ConferenceId"
-     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(LocationRepository.Instance.GetLocations(Model.ConferenceId).OrderBy(l => l.Sort)))">
+     data-locations="@(Newtonsoft.Json.JsonConvert.SerializeObject(LocationRepository.Instance.GetLocationsByConference(Model.ConferenceId).OrderBy(l => l.Sort)))">
 </div>
 
 
