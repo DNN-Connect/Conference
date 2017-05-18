@@ -37,6 +37,15 @@ namespace Connect.Conference.Core.Common
             if (input == null) return "";
             return input;
         }
+        public static int UnNull(this int? input, int defaultValue)
+        {
+            if (input == null) return defaultValue;
+            return (int)input;
+        }
+        public static int UnNull(this int? input)
+        {
+            return input.UnNull(-1);
+        }
 
     }
 }

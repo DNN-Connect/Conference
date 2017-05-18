@@ -1,6 +1,7 @@
 ﻿using Connect.Conference.Core.Common;
 using Connect.Conference.Core.Repositories;
 using System.IO;
+using System.Linq;
 using System.Text;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
@@ -63,6 +64,15 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
                         {
                             var roomId = int.Parse(topics[2]);
                             var checkin = Newtonsoft.Json.JsonConvert.DeserializeObject<RfidMessage>(msg);
+                            if (!string.IsNullOrEmpty(Conference.TimeZoneId))
+                            {
+                                var tz = System.TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.Id == Conference.TimeZoneId);
+                                if (tz != null)
+                                {
+                                    var offset = tz.GetUtcOffset(checkin.checkin);
+                                    checkin.checkin = checkin.checkin.Add(offset);
+                                }
+                            }
                             var attendee = AttendeeRepository.Instance.GetAttendeeByCode(Conference.ConferenceId, checkin.cardId);
                             if (attendee != null)
                             {
