@@ -16,6 +16,14 @@ namespace Connect.DNN.Modules.Conference.Api
     public partial class SessionEvaluationsController : ConferenceApiController
     {
 
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        public HttpResponseMessage Get(int conferenceId, int sessionId)
+        {
+            var res = SessionEvaluationRepository.Instance.GetSessionEvaluation(sessionId, UserInfo.UserID);
+            return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
         public class SetSessionEvaluationDTO
         {
             public int SessionId { get; set; }

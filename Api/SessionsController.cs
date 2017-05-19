@@ -22,10 +22,32 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage Get(int conferenceId, int sessionId)
+        {
+            var res = SessionRepository.Instance.GetSession(sessionId);
+            if (res.ConferenceId == conferenceId)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, res);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Bad request");
+            }
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage Agenda(int conferenceId)
         {
             var res = SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.Status > 2);
             return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage Schedule(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, Connect.Conference.Core.Models.Schedule.Create(PortalSettings.PortalId, conferenceId));
         }
 
         [HttpPost]
