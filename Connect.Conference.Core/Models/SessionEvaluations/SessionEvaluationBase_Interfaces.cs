@@ -17,7 +17,6 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         public virtual void Fill(IDataReader dr)
         {
             FillAuditFields(dr);
-   SessionEvaluationId = Convert.ToInt32(Null.SetNull(dr["SessionEvaluationId"], SessionEvaluationId));
    SessionId = Convert.ToInt32(Null.SetNull(dr["SessionId"], SessionId));
    UserId = Convert.ToInt32(Null.SetNull(dr["UserId"], UserId));
    Stars = Convert.ToInt32(Null.SetNull(dr["Stars"], Stars));
@@ -27,8 +26,8 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         [IgnoreColumn()]
         public int KeyID
         {
-            get { return SessionEvaluationId; }
-            set { SessionEvaluationId = value; }
+            get { return Null.NullInteger; }
+            set { }
         }
         #endregion
 
@@ -37,8 +36,6 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         {
             switch (strPropertyName.ToLower())
             {
-    case "sessionevaluationid": // Int
-     return SessionEvaluationId.ToString(strFormat, formatProvider);
     case "sessionid": // Int
      return SessionId.ToString(strFormat, formatProvider);
     case "userid": // Int

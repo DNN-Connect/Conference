@@ -7,7 +7,6 @@ using Connect.Conference.Core.Data;
 namespace Connect.Conference.Core.Models.SessionEvaluations
 {
     [TableName("Connect_Conference_SessionEvaluations")]
-    [PrimaryKey("SessionEvaluationId", AutoIncrement = true)]
     [DataContract]
     public partial class SessionEvaluationBase  : AuditableEntity 
     {
@@ -15,13 +14,10 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         #region .ctor
         public SessionEvaluationBase()
         {
-            SessionEvaluationId = -1;
         }
         #endregion
 
         #region Properties
-        [DataMember]
-        public int SessionEvaluationId { get; set; }
         [DataMember]
         public int SessionId { get; set; }
         [DataMember]
@@ -35,9 +31,6 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         #region Methods
         public void ReadSessionEvaluationBase(SessionEvaluationBase sessionEvaluation)
         {
-            if (sessionEvaluation.SessionEvaluationId > -1)
-                SessionEvaluationId = sessionEvaluation.SessionEvaluationId;
-
             if (sessionEvaluation.SessionId > -1)
                 SessionId = sessionEvaluation.SessionId;
 

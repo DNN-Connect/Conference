@@ -153,6 +153,7 @@
     <Compile Include="Api\NBrightController.cs" />
     <Compile Include="Api\SessionResourcesController.cs" />
     <Compile Include="Api\SessionsController.cs" />
+    <Compile Include="Api\SessionEvaluationsController.cs" />
     <Compile Include="Api\SessionSpeakersController.cs" />
     <Compile Include="Api\SlotsController.cs" />
     <Compile Include="Api\SpeakersController.cs" />

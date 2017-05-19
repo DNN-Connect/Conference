@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
@@ -15,14 +14,6 @@ namespace Connect.Conference.Core.Repositories
         {
             return () => new SessionEvaluationRepository();
         }
-        public IEnumerable<SessionEvaluation> GetSessionEvaluations()
-        {
-            using (var context = DataContext.Instance())
-            {
-                var rep = context.GetRepository<SessionEvaluation>();
-                return rep.Get();
-            }
-        }
         public IEnumerable<SessionEvaluation> GetSessionEvaluationsBySession(int sessionId)
         {
             using (var context = DataContext.Instance())
@@ -32,67 +23,78 @@ namespace Connect.Conference.Core.Repositories
                     sessionId);
             }
         }
-        public SessionEvaluation GetSessionEvaluation(int sessionEvaluationId)
+        public SessionEvaluation GetSessionEvaluation(int sessionId, int userId)
         {
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionEvaluation>();
-                return rep.GetById(sessionEvaluationId);
+                return context.ExecuteSingleOrDefault<SessionEvaluation>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations WHERE SessionId=@0 AND UserId=@1",
+                    sessionId,userId);
             }
         }
-        public int AddSessionEvaluation(ref SessionEvaluationBase sessionEvaluation, int userId)
+        public void AddSessionEvaluation(SessionEvaluationBase sessionEvaluation, int userId)
         {
             Requires.NotNull(sessionEvaluation);
+            Requires.NotNull(sessionEvaluation.SessionId);
             sessionEvaluation.CreatedByUserID = userId;
             sessionEvaluation.CreatedOnDate = DateTime.Now;
             sessionEvaluation.LastModifiedByUserID = userId;
             sessionEvaluation.LastModifiedOnDate = DateTime.Now;
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionEvaluationBase>();
-                rep.Insert(sessionEvaluation);
+                context.Execute(System.Data.CommandType.Text,
+                    "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations " +
+                    "WHERE SessionId=@0 AND UserId=@1) " +
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations (SessionId, UserId, Stars, Review, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7", sessionEvaluation.SessionId, sessionEvaluation.UserId, sessionEvaluation.Stars, sessionEvaluation.Review, sessionEvaluation.CreatedByUserID, sessionEvaluation.CreatedOnDate, sessionEvaluation.LastModifiedByUserID, sessionEvaluation.LastModifiedOnDate);
             }
-            return sessionEvaluation.SessionEvaluationId;
         }
         public void DeleteSessionEvaluation(SessionEvaluationBase sessionEvaluation)
         {
-            Requires.NotNull(sessionEvaluation);
-            Requires.PropertyNotNegative(sessionEvaluation, "SessionEvaluationId");
+            DeleteSessionEvaluation(sessionEvaluation.SessionId, sessionEvaluation.UserId);
+        }
+        public void DeleteSessionEvaluation(int sessionId, int userId)
+        {
+             Requires.NotNull(sessionId);
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionEvaluationBase>();
-                rep.Delete(sessionEvaluation);
+                context.Execute(System.Data.CommandType.Text,
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations WHERE SessionId=@0 AND UserId=@1",
+                    sessionId,userId);
             }
         }
-        public void DeleteSessionEvaluation(int sessionEvaluationId)
+        public void DeleteSessionEvaluationsBySession(int sessionId)
         {
             using (var context = DataContext.Instance())
             {
-                var rep = context.GetRepository<SessionEvaluationBase>();
-                rep.Delete("WHERE SessionEvaluationId = @0", sessionEvaluationId);
+                context.Execute(System.Data.CommandType.Text,
+                    "DELETE FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations WHERE SessionId=@0",
+                    sessionId);
             }
         }
         public void UpdateSessionEvaluation(SessionEvaluationBase sessionEvaluation, int userId)
         {
             Requires.NotNull(sessionEvaluation);
-            Requires.PropertyNotNegative(sessionEvaluation, "SessionEvaluationId");
+            Requires.NotNull(sessionEvaluation.SessionId);
             sessionEvaluation.LastModifiedByUserID = userId;
             sessionEvaluation.LastModifiedOnDate = DateTime.Now;
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<SessionEvaluationBase>();
-                rep.Update(sessionEvaluation);
+                rep.Update("SET Stars=@0, Review=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5 WHERE SessionId=@6 AND UserId=@7",
+                          sessionEvaluation.Stars,sessionEvaluation.Review,sessionEvaluation.CreatedByUserID,sessionEvaluation.CreatedOnDate,sessionEvaluation.LastModifiedByUserID,sessionEvaluation.LastModifiedOnDate, sessionEvaluation.SessionId,sessionEvaluation.UserId);
             }
         } 
-    }
+ }
+
     public partial interface ISessionEvaluationRepository
     {
-        IEnumerable<SessionEvaluation> GetSessionEvaluations();
         IEnumerable<SessionEvaluation> GetSessionEvaluationsBySession(int sessionId);
-        SessionEvaluation GetSessionEvaluation(int sessionEvaluationId);
-        int AddSessionEvaluation(ref SessionEvaluationBase sessionEvaluation, int userId);
+        SessionEvaluation GetSessionEvaluation(int sessionId, int userId);
+        void AddSessionEvaluation(SessionEvaluationBase sessionEvaluation, int userId);
         void DeleteSessionEvaluation(SessionEvaluationBase sessionEvaluation);
-        void DeleteSessionEvaluation(int sessionEvaluationId);
+        void DeleteSessionEvaluation(int sessionId, int userId);
+        void DeleteSessionEvaluationsBySession(int sessionId);
         void UpdateSessionEvaluation(SessionEvaluationBase sessionEvaluation, int userId);
     }
 }

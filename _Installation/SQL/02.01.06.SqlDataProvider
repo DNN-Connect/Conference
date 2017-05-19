@@ -1,0 +1,37 @@
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations
+DROP CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionEvaluations
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations
+DROP COLUMN SessionEvaluationId
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations
+ADD CONSTRAINT PK_{objectQualifier}Connect_Conference_SessionEvaluations PRIMARY KEY CLUSTERED 
+(
+ [SessionId] ASC,
+ [UserId] ASC
+)
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionEvaluations
+AS
+SELECT
+ se.*,
+ u.DisplayName DisplayName,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations se
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=se.UserId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=se.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=se.LastModifiedByUserID
+GO
+

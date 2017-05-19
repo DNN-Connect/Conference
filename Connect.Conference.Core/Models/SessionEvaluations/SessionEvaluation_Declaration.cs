@@ -7,7 +7,6 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
 {
 
     [TableName("vw_Connect_Conference_SessionEvaluations")]
-    [PrimaryKey("SessionEvaluationId", AutoIncrement = true)]
     [DataContract]
     public partial class SessionEvaluation  : SessionEvaluationBase 
     {
@@ -31,7 +30,6 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
         public SessionEvaluationBase GetSessionEvaluationBase()
         {
             SessionEvaluationBase res = new SessionEvaluationBase();
-             res.SessionEvaluationId = SessionEvaluationId;
              res.SessionId = SessionId;
              res.UserId = UserId;
              res.Stars = Stars;

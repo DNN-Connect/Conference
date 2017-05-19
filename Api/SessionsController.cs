@@ -20,6 +20,14 @@ namespace Connect.DNN.Modules.Conference.Api
     public partial class SessionsController : ConferenceApiController
     {
 
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage Agenda(int conferenceId)
+        {
+            var res = SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.Status > 2);
+            return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
