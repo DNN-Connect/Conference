@@ -14,8 +14,19 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 return context.ExecuteQuery<SessionAttendee>(System.Data.CommandType.Text,
-                    "SELECT sa.* FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees sa INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=sa.SessionId WHERE s.ConferenceId=@0",
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees WHERE ConferenceId=@0",
                     conferenceId);
+            }
+        }
+        public IEnumerable<SessionAttendee> GetSessionAttendeesByUser(int conferenceId, int userId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<SessionAttendee>(System.Data.CommandType.Text,
+                    "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees " +
+                    "WHERE ConferenceId=@0 AND UserId=@1",
+                    conferenceId,
+                    userId);
             }
         }
         public void DeleteSessionAttendee(SessionAttendeeBase sessionAttendee)
@@ -32,6 +43,8 @@ namespace Connect.Conference.Core.Repositories
     public partial interface ISessionAttendeeRepository
     {
         IEnumerable<SessionAttendee> GetSessionAttendees(int conferenceId);
+        IEnumerable<SessionAttendee> GetSessionAttendeesByUser(int conferenceId, int userId);
+        void DeleteSessionAttendee(SessionAttendeeBase sessionAttendee);
     }
 }
 

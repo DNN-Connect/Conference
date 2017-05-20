@@ -13,14 +13,14 @@ using Connect.Conference.Core.Models.SessionEvaluations;
 namespace Connect.DNN.Modules.Conference.Api
 {
 
-    public partial class SessionEvaluationsController : ConferenceApiController
+    public partial class SessionAttendeesController : ConferenceApiController
     {
 
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
-        public HttpResponseMessage Get(int conferenceId, int sessionId)
+        public HttpResponseMessage Attendances(int conferenceId)
         {
-            var res = SessionEvaluationRepository.Instance.GetSessionEvaluation(sessionId, UserInfo.UserID);
+            var res = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, res);
         }
 

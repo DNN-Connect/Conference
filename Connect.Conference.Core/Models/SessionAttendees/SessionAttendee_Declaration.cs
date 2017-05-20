@@ -21,6 +21,12 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         [DataMember]
         public string Title { get; set; }
         [DataMember]
+        public int ConferenceId { get; set; }
+        [DataMember]
+        public DateTime? SessionDateAndTime { get; set; }
+        [DataMember]
+        public DateTime? SessionEnd { get; set; }
+        [DataMember]
         public string SessionAttendeeName { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }

@@ -1,0 +1,25 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_SessionAttendees
+AS
+SELECT
+ sa.*,
+ s.Title,
+ s.ConferenceId,
+ s.SessionDateAndTime,
+ s.SessionEnd,
+ u.DisplayName SessionAttendeeName,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionAttendees sa
+ INNER JOIN {databaseOwner}{objectQualifier}vw_Connect_Conference_Sessions s ON s.SessionId=sa.SessionId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=sa.UserId
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=sa.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=sa.LastModifiedByUserID
+GO

@@ -151,6 +151,7 @@
     <Compile Include="Api\CommentsController.cs" />
     <Compile Include="Api\LocationsController.cs" />
     <Compile Include="Api\NBrightController.cs" />
+    <Compile Include="Api\SessionAttendeesController.cs" />
     <Compile Include="Api\SessionResourcesController.cs" />
     <Compile Include="Api\SessionsController.cs" />
     <Compile Include="Api\SessionEvaluationsController.cs" />

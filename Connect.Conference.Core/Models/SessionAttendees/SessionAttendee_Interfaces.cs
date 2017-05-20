@@ -18,6 +18,9 @@ namespace Connect.Conference.Core.Models.SessionAttendees
   {
    base.Fill(dr);
    Title = Convert.ToString(Null.SetNull(dr["Title"], Title));
+   ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
+   SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
+   SessionEnd = (DateTime)(Null.SetNull(dr["SessionEnd"], SessionEnd));
    SessionAttendeeName = Convert.ToString(Null.SetNull(dr["SessionAttendeeName"], SessionAttendeeName));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
@@ -34,6 +37,20 @@ namespace Connect.Conference.Core.Models.SessionAttendees
          return "";
      };
      return PropertyAccess.FormatString(Title, strFormat);
+    case "conferenceid": // Int
+     return ConferenceId.ToString(strFormat, formatProvider);
+    case "sessiondateandtime": // DateTime
+     if (SessionDateAndTime == null)
+     {
+         return "";
+     };
+     return ((DateTime)SessionDateAndTime).ToString(strFormat, formatProvider);
+    case "sessionend": // DateTime
+     if (SessionEnd == null)
+     {
+         return "";
+     };
+     return ((DateTime)SessionEnd).ToString(strFormat, formatProvider);
     case "sessionattendeename": // NVarChar
      return PropertyAccess.FormatString(SessionAttendeeName, strFormat);
     case "createdbyuser": // NVarChar
