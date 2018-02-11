@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Connect.Conference.Core.Repositories;
 using System.Linq;
 using System.Net.Http.Headers;
+using Connect.Conference.Core.Common;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -106,7 +107,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var res = new HttpResponseMessage(HttpStatusCode.OK);
             var sb = new System.Text.StringBuilder();
             sb.AppendLine("LastName,FirstName,DisplayName,Email,NrSessions,Company,DescriptionShort");
-            foreach (var sp in SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(conferenceId).OrderBy(s => s.LastName))
+            foreach (var sp in SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(conferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.LastName))
             {
                 sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",{3},{4},\"{5}\",\"{6}\"", sp.LastName, sp.FirstName, sp.DisplayName, sp.Email, sp.NrSessions, sp.Company, sp.DescriptionShort));
             }

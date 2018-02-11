@@ -2,9 +2,10 @@
 @using Connect.DNN.Modules.Conference.Common;
 @using Connect.Conference.Core.Models.Conferences;
 @using Connect.Conference.Core.Repositories;
+@using Connect.Conference.Core.Common;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    var speakers = SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId).OrderBy(s => s.LastName);
+    var speakers = SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.LastName);
 }
 
 <div class="container">

@@ -8,13 +8,13 @@ namespace Connect.Conference.Core.Repositories
 
     public partial class SpeakerRepository : ServiceLocator<ISpeakerRepository, SpeakerRepository>, ISpeakerRepository
     {
-        public IEnumerable<SpeakerWithNrSessions> GetSpeakersByConferenceWithNrSessions(int conferenceId)
+        public IEnumerable<SpeakerWithNrSessions> GetSpeakersByConferenceWithNrSessions(int conferenceId, int sessionStatusThreshold)
         {
             using (var context = DataContext.Instance())
             {
                 return context.ExecuteQuery<SpeakerWithNrSessions>(System.Data.CommandType.Text,
-                    "SELECT sp.*, (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=ss.SessionId WHERE ss.SpeakerId=sp.UserId AND s.ConferenceId=@0 AND s.Status>2) NrSessions FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers sp WHERE sp.ConferenceId=@0",
-                    conferenceId);
+                    "SELECT sp.*, (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Sessions s ON s.SessionId=ss.SessionId WHERE ss.SpeakerId=sp.UserId AND s.ConferenceId=@0 AND s.Status>=@1) NrSessions FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers sp WHERE sp.ConferenceId=@0",
+                    conferenceId, sessionStatusThreshold);
             }
         }
         public IEnumerable<DnnUser> SearchUsers(int portalId, string search)
@@ -28,7 +28,7 @@ namespace Connect.Conference.Core.Repositories
 
     public partial interface ISpeakerRepository
     {
-        IEnumerable<SpeakerWithNrSessions> GetSpeakersByConferenceWithNrSessions(int conferenceId);
+        IEnumerable<SpeakerWithNrSessions> GetSpeakersByConferenceWithNrSessions(int conferenceId, int sessionStatusThreshold);
         IEnumerable<DnnUser> SearchUsers(int portalId, string search);
     }
 }
