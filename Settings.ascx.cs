@@ -50,6 +50,7 @@ namespace Connect.DNN.Modules.Conference
                         ddConference.Items.FindByValue(ModSettings.Conference.ToString()).Selected = true;
                     }
                     catch { }
+                    chkEmitBootstrap.Checked = ModSettings.EmitBootstrap;
                 }
             }
             catch (Exception exc) //Module failed to load
@@ -64,6 +65,7 @@ namespace Connect.DNN.Modules.Conference
             {
                 ModSettings.View = ddView.SelectedValue;
                 ModSettings.Conference = int.Parse(ddConference.SelectedValue);
+                ModSettings.EmitBootstrap = chkEmitBootstrap.Checked;
                 ModSettings.SaveSettings(ModuleContext.Configuration);
             }
             catch (Exception exc) //Module failed to load

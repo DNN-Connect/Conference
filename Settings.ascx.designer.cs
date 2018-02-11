@@ -47,5 +47,23 @@ namespace Connect.DNN.Modules.Conference {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddConference;
+        
+        /// <summary>
+        /// lblEmitBootstrap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl lblEmitBootstrap;
+        
+        /// <summary>
+        /// chkEmitBootstrap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkEmitBootstrap;
     }
 }

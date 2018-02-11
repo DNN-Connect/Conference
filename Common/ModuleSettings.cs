@@ -9,6 +9,8 @@ namespace Connect.DNN.Modules.Conference.Common
         public int Conference { get; set; } = -1;
         [ModuleSetting]
         public string View { get; set; } = "Index";
+        [TabModuleSetting]
+        public bool EmitBootstrap { get; set; } = true;
 
         public static ModuleSettings GetSettings(ModuleInfo module)
         {

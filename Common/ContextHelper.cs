@@ -83,7 +83,10 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddBootstrapCss()
         {
-            AddCss("bootstrap.min.css", "bootstrap", "3.3.6");
+            if (Settings.EmitBootstrap)
+            {
+                AddCss("bootstrap.min.css", "bootstrap", "3.3.6");
+            }
         }
         #endregion
 
@@ -107,7 +110,10 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddBootstrapJs()
         {
-            AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
+            if (Settings.EmitBootstrap)
+            {
+                AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
+            }
         }
         public void AddReactJs()
         {

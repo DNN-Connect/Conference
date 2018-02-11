@@ -135,4 +135,10 @@
   <data name="None.Text" xml:space="preserve">
     <value>&lt;None&gt;</value>
   </data>
+  <data name="lblEmitBootstrap.Help" xml:space="preserve">
+    <value>If checked then the module will emit Bootstrap css and js for the UI</value>
+  </data>
+  <data name="lblEmitBootstrap.Text" xml:space="preserve">
+    <value>Emit Bootstrap</value>
+  </data>
 </root>
