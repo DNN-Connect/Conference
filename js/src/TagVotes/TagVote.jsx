@@ -30,7 +30,7 @@ module.exports = React.createClass({
     return (
       <tr>
        <td>{this.props.item.TagName}</td>
-       <td className="nrcol">{this.props.item.NrSessions}</td>
+       <td className="nrcol">{this.props.allowVote ? this.props.item.NrSubmittedSessions : this.props.item.NrAcceptedSessions}</td>
        <td className="nrcol">{this.props.item.NrVotes}</td>
        {voteCol}
       </tr>

@@ -103,6 +103,17 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
 
         public void SendPresence(int roomId, string locationName, string sessionName, string userDisplayName)
         {
+            Log("Send Presence");
+            if (Client == null)
+            {
+                Log("Client is null");
+                return;
+            }
+            if (Conference == null)
+            {
+                Log("Conference is null");
+                return;
+            }
             if (Client.IsConnected)
             {
                 var att = new AttendanceMessage()
@@ -113,9 +124,9 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
                 };
                 var txt = Newtonsoft.Json.JsonConvert.SerializeObject(att);
                 var msg = Encoding.UTF8.GetBytes(txt);
-                var topic = Conference.BaseTopicPath;
+                var topic = Conference.BaseTopicPath.UnNull();
                 if (topic.Length > 0) topic += "/";
-                topic += string.Format("checkin/room/{0}");
+                topic += string.Format("checkin/room/{0}", roomId);
                 Log("Sending Message:");
                 Log("Topic: {0}", topic);
                 Log("Message: {0}", txt);

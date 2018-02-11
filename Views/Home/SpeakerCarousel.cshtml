@@ -13,6 +13,8 @@
 <ul class="slidercontent">
  @foreach (Speaker speaker in SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).Where(s => s.NrSessions > 0))
  {
+  var bio = speaker.Description;
+  if (string.IsNullOrEmpty(bio)) { bio = speaker.Biography; } ;
  <li>
   <div class="speakerCard">
    <div class="panel panel-danger">
@@ -33,7 +35,7 @@
        </div>
       </div>
       <div class="col-xs-4 col-sm-4">
-       <p>@Html.Raw(Model.Description.SafeReplace(Environment.NewLine, "<br />"))</p>
+       <p style="font-size:large">@Html.Raw(bio.SafeReplace(Environment.NewLine, "<br />"))</p>
       </div>
       <div class="col-xs-4 col-sm-5">
       @foreach (var s in SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, speaker.UserId).Where(s => s.Status >= 2).OrderBy(s => s.SessionDateAndTime))

@@ -21,9 +21,11 @@ namespace Connect.Conference.Core.Models.Tags
 
         #region Properties
         [DataMember]
-        public int? NrSessions { get; set; }
+        public int NrSubmittedSessions { get; set; }
         [DataMember]
-        public int? NrVotes { get; set; }
+        public int NrAcceptedSessions { get; set; }
+        [DataMember]
+        public int NrVotes { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -41,6 +43,23 @@ namespace Connect.Conference.Core.Models.Tags
   res.CreatedOnDate = CreatedOnDate;
   res.LastModifiedByUserID = LastModifiedByUserID;
   res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
+        public Tag Clone()
+        {
+            Tag res = new Tag();
+            res.TagId = TagId;
+            res.ConferenceId = ConferenceId;
+            res.TagName = TagName;
+            res.NrSubmittedSessions = NrSubmittedSessions;
+            res.NrAcceptedSessions = NrAcceptedSessions;
+            res.NrVotes = NrVotes;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

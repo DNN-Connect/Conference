@@ -4017,7 +4017,7 @@ module.exports = React.createClass({
       React.createElement(
         'td',
         { className: 'nrcol' },
-        this.props.item.NrSessions
+        this.props.allowVote ? this.props.item.NrSubmittedSessions : this.props.item.NrAcceptedSessions
       ),
       React.createElement(
         'td',
@@ -4035,11 +4035,10 @@ module.exports = React.createClass({
 },{}],42:[function(require,module,exports){
 "use strict";
 
-var TagVote = require('./TagVote.jsx');
+var TagVote = require("./TagVote.jsx");
 
 module.exports = React.createClass({
   displayName: "exports",
-
 
   resources: null,
   service: null,
@@ -4055,7 +4054,13 @@ module.exports = React.createClass({
 
   render: function render() {
     var votes = this.state.votes.map(function (item) {
-      return React.createElement(TagVote, { moduleId: this.props.moduleId, item: item, key: item.TagId, allowVote: this.props.allowVote, onVote: this.onVote });
+      return React.createElement(TagVote, {
+        moduleId: this.props.moduleId,
+        item: item,
+        key: item.TagId,
+        allowVote: this.props.allowVote,
+        onVote: this.onVote
+      });
     }.bind(this));
     var voteCol = null;
     if (this.props.allowVote) {
@@ -4078,8 +4083,12 @@ module.exports = React.createClass({
           { className: "btncol" },
           React.createElement(
             "a",
-            { href: "#", className: "btn btn-default", onClick: this.onAddTag,
-              title: this.resources.Add },
+            {
+              href: "#",
+              className: "btn btn-default",
+              onClick: this.onAddTag,
+              title: this.resources.Add
+            },
             React.createElement("span", { className: "glyphicon glyphicon-plus" })
           )
         )
@@ -4172,7 +4181,7 @@ module.exports = React.createClass({
   onAddTag: function onAddTag(e) {
     e.preventDefault();
     this.service.addTag(this.props.conferenceId, this.refs.newTagName.getDOMNode().value, function (data) {
-      this.refs.newTagName.getDOMNode().value = '';
+      this.refs.newTagName.getDOMNode().value = "";
       data.Voted = 0;
       var newList = this.state.votes;
       newList.push(data);
@@ -4182,7 +4191,6 @@ module.exports = React.createClass({
       });
     }.bind(this));
   }
-
 });
 
 },{"./TagVote.jsx":41}],43:[function(require,module,exports){

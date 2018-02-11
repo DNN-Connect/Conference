@@ -75,7 +75,7 @@
      </tr>
     </thead>
     <tbody>
-     @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId).OrderBy(s => s.Sort))
+     @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.Sort))
      {
      <tr data-id="@s.UserId" class="sortable">
       <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@s.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
