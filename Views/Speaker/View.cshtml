@@ -37,7 +37,7 @@
        {
        <div class="speaker-session">
         <div class="session-title"><a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId })">@s.Title</a></div>
-        <div class="session-time">@(((DateTime)s.SessionDateAndTime).ToString("dddd HH:mm"))</div>
+        <div class="session-time">@(s.SessionDateAndTime == null ? "" : ((DateTime)s.SessionDateAndTime).ToString("dddd HH:mm"))</div>
         <div class="session-details">@Dnn.LocalizeString("Track"): @s.TrackTitle</div>
         <div class="session-details">@Dnn.LocalizeString("Tags"): @string.Join(", ", s.Tags.Select(sp => sp.Value))</div>
        </div>
