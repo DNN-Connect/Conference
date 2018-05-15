@@ -3,8 +3,8 @@
 @using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Conferences;
 @{
-    ConferenceModuleContext.AddBootstrapCss();
-    var schedule = Connect.Conference.Core.Models.Schedule.Create(Model);
+ ConferenceModuleContext.AddBootstrapCss();
+ var schedule = Connect.Conference.Core.Models.Schedule.Create(Model);
 }
 
 <div class="container">
@@ -17,7 +17,7 @@
       <th>@Dnn.LocalizeString("Time")</th>
       @foreach (var location in schedule.Locations)
       {
-      <th>@location.Name</th>
+       <th>@location.Name</th>
       }
      </tr>
     </thead>
@@ -27,85 +27,92 @@
       var isFirst = true;
       foreach (var slot in day.Value.Slots.Where(s => s.Value.Sessions.Count() > 0 | s.Value.Slot.SlotType == (int)SlotType.General))
       {
-      <tr class="@(isFirst ? "first" : "next")">
-       @if (isFirst)
-       {
-       <td class="agenda-date">
-        <div class="dayofmonth">@day.Value.Day.Day</div>
-        <div class="dayofweek">@day.Value.Day.ToString("dddd")</div>
-        <div class="shortdate text-muted">@day.Value.Day.ToString("MMM, yyyy")</div>
-       </td>
-        isFirst = false;
-       }
-       else
-       {
-       <td class="agenda-date"></td>
-       }
-       <td class="agenda-time">
-        @day.Value.Day.Add(slot.Value.Slot.Start).ToString("HH:mm")
-        -
-        @day.Value.Day.Add(slot.Value.Slot.Start).AddMinutes(slot.Value.Slot.DurationMins).ToString("HH:mm")
-       </td>
-       @if (slot.Value.Sessions.Count() > 0)
-       {
-        var plenarySession = slot.Value.Sessions.FirstOrDefault(s => s.Value.IsPlenary).Value;
-        if (plenarySession == null)
+       <tr class="@(isFirst ? "first" : "next")">
+        @if (isFirst)
         {
-         foreach (var location in schedule.Locations)
-         {
-          var session = slot.Value.Sessions.FirstOrDefault(s => s.Value.LocationId == location.LocationId).Value;
-          if (session == null)
-          {
-          <td class="agenda-events"></td>
-          }
-          else
-          {
-          <td class="agenda-events">
-           <div class="agenda-event">
-            <div class="event-speakers">
-             @string.Join(", ", session.Speakers.Select(sp => sp.Value))
-            </div>
-            <div class="event-title">
-             <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = session.SessionId })">
-              @session.Title
-             </a>
-            </div>
-            <div class="event-details">
-             @Dnn.LocalizeString("Track"): @session.TrackTitle<br />
-             @Dnn.LocalizeString("Tags"): @string.Join(", ", session.Tags.Select(sp => sp.Value))
-            </div>
-           </div>
-          </td>
-          }
-         }
+         <td class="agenda-date">
+          <div class="dayofmonth">@day.Value.Day.Day</div>
+          <div class="dayofweek">@day.Value.Day.ToString("dddd")</div>
+          <div class="shortdate text-muted">@day.Value.Day.ToString("MMM, yyyy")</div>
+         </td>
+         isFirst = false;
         }
         else
         {
-        <td class="agenda-events" colspan="@schedule.Locations.Count()">
-         <div class="agenda-event agenda-event-plenary">
-          <div class="event-title">
-           <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = plenarySession.SessionId })">
-            @plenarySession.Title
-           </a>
-          </div>
-          <div class="event-speakers">
-           @string.Join(", ", plenarySession.Speakers.Select(sp => sp.Value))
-          </div>
-         </div>
-        </td>
+         <td class="agenda-date"></td>
         }
-       }
-       else if (slot.Value.Slot.SlotType == (int)SlotType.General)
-       {
-       <td class="agenda-events" colspan="@schedule.Locations.Count()">
-        <div class="agenda-event agenda-event-plenary">
-         <div class="event-title">
-          @slot.Value.Slot.Title
-         </div>
-        </div>
-       </td>
-       }
-      </tr>
+        <td class="agenda-time">
+         @day.Value.Day.Add(slot.Value.Slot.Start).ToString("HH:mm")
+         -
+         @day.Value.Day.Add(slot.Value.Slot.Start).AddMinutes(slot.Value.Slot.DurationMins).ToString("HH:mm")
+        </td>
+        @if (slot.Value.Sessions.Count() > 0)
+        {
+         var plenarySession = slot.Value.Sessions.FirstOrDefault(s => s.Value.IsPlenary).Value;
+         if (plenarySession == null)
+         {
+          foreach (var location in schedule.Locations)
+          {
+           var session = slot.Value.Sessions.FirstOrDefault(s => s.Value.LocationId == location.LocationId).Value;
+           if (session == null)
+           {
+            <td class="agenda-events"></td>
+           }
+           else
+           {
+            <td class="agenda-events">
+             <div class="agenda-event">
+              <div class="agenda-trackbar" style="background-color:@(session.BackgroundColor)"></div>
+              <div class="event-speakers">
+               @string.Join(", ", session.Speakers.Select(sp => sp.Value))
+              </div>
+              <div class="event-title">
+               <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = session.SessionId })">
+                @session.Title
+               </a>
+              </div>
+              <div class="event-details">
+               @Dnn.LocalizeString("Track"): @session.TrackTitle<br />
+               @Dnn.LocalizeString("Tags"): @string.Join(", ", session.Tags.Select(sp => sp.Value))
+              </div>
+             </div>
+            </td>
+           }
+          }
+         }
+         else
+         {
+          <td class="agenda-events" colspan="@schedule.Locations.Count()">
+           <div class="agenda-event agenda-event-plenary">
+            <div class="event-title">
+             <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = plenarySession.SessionId })">
+              @plenarySession.Title
+             </a>
+            </div>
+            <div class="event-speakers">
+             @string.Join(", ", plenarySession.Speakers.Select(sp => sp.Value))
+            </div>
+           </div>
+          </td>
+         }
+        }
+        else if (slot.Value.Slot.SlotType == (int)SlotType.General)
+        {
+         <td class="agenda-events" colspan="@schedule.Locations.Count()">
+          <div class="agenda-event agenda-event-plenary">
+           <div class="event-title">
+            @slot.Value.Slot.Title
+           </div>
+           @if (!string.IsNullOrEmpty(slot.Value.Slot.Description))
+           {
+            <div class="event-subtitle">
+             @slot.Value.Slot.Description
+            </div>
+           }
+          </div>
+         </td>
+        }
+       </tr>
       }
      }
     </tbody>
@@ -114,4 +121,3 @@
  </div>
 </div>
 
-@Html.GenerateRelayQrCode(ConferenceModuleContext.AppLink(), 150, 150)
