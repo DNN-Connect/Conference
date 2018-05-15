@@ -106,7 +106,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, speaker.ProfilePic.filename);
                 dnnUser.Profile.Photo = file.FileId.ToString();
-                FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Photo", file.FileId.ToString());
+                var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
+                FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 if (file != null & speaker.ProfilePic.crop.points != null)
                 {
                     System.IO.MemoryStream sizedContent = null;

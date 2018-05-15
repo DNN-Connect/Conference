@@ -4,8 +4,9 @@
 @using Connect.Conference.Core.Repositories;
 @{
     ConferenceModuleContext.AddBootstrapCss();
-    var attendees = AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status > 1).OrderBy(a => a.LastName);
+    var attendees = AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status > 1).OrderBy(a => a.DisplayName);
     var imgUrlSuffix = HttpContext.Current.Request.Params["refreshcache"] == null ? "" : "&nocache=1";
+    var uc = new DotNetNuke.Entities.Users.UserController();
 }
 
 <div class="container">
@@ -16,10 +17,10 @@
    <div class="well attendeeCard">
     <div class="row">
      <div class="col-xs-3">
-      <img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=64&h=64&userId=@(a.UserId)@(imgUrlSuffix)" class="img-circle" />
+      <img src="@uc.GetUserProfilePictureUrl(a.UserId, 64, 64)@(imgUrlSuffix)" class="img-circle" />
      </div>
      <div class="col-xs-9">
-      <h4 style="padding-top:0;margin-top:0;height:2em;overflow:hidden;">@(a.LastName), @a.FirstName</h4>
+      <h4 style="padding-top:0;margin-top:0;height:2em;overflow:hidden;">@a.DisplayName</h4>
       <h6>@a.Company &nbsp;</h6>
       <h6>
        &nbsp;

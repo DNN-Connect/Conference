@@ -88,7 +88,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 _repository.UpdateAttendee(recordToUpdate, User.UserID);
             }
             // Now the DNN side of things
-            var dnnUser = DotNetNuke.Entities.Users.UserController.GetUserById(PortalSettings.PortalId, attendeeId);
+            var dnnUser = UserController.GetUserById(PortalSettings.PortalId, attendeeId);
             if (dnnUser == null)
             {
                 // create the user
@@ -96,7 +96,9 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 UserController.CreateUser(ref dnnUser);
             }
             dnnUser.FirstName = attendee.FirstName.Trim();
+            dnnUser.Profile.FirstName = attendee.FirstName.Trim();
             dnnUser.LastName = attendee.LastName.Trim();
+            dnnUser.Profile.LastName = attendee.LastName.Trim();
             dnnUser.DisplayName = attendee.DisplayName.Trim();
             dnnUser.Email = attendee.Email.Trim();
             // Handle the picture
@@ -107,7 +109,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, attendee.ProfilePic.filename);
                 dnnUser.Profile.Photo = file.FileId.ToString();
-                FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Photo", file.FileId.ToString());
+                var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
+                FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 if (file != null & attendee.ProfilePic.crop.points != null)
                 {
                     System.IO.MemoryStream sizedContent = null;
@@ -123,7 +126,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
             if (!string.IsNullOrEmpty(attendee.Company))
             {
                 dnnUser.Profile.SetProfileProperty("Company", attendee.Company);
-                FixDnnController.SetUserProfileProperty(PortalSettings.PortalId, dnnUser.UserID, "Company", attendee.Company);
+                var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
+                FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Company", attendee.Company);
             }
             UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
             DotNetNuke.Common.Utilities.DataCache.ClearCache();
@@ -173,8 +177,8 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 if (attendee.PhotoFilename != null)
                 {
                     ProfilePic.filename = attendee.PhotoFilename;
-                    ProfilePic.width = (int)attendee.PhotoWidth;
-                    ProfilePic.height = (int)attendee.PhotoHeight;
+                    ProfilePic.width = attendee.PhotoWidth != null ? (int)attendee.PhotoWidth : 0;
+                    ProfilePic.height = attendee.PhotoHeight != null ? (int)attendee.PhotoHeight : 0;
                 }
             }
         }
