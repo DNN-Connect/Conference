@@ -75,6 +75,9 @@ window.ConferenceService = function($, mid) {
     this.addUrl = function(conferenceId, sessionId, url, success, fail) {
         this.apiCall('POST', 'SessionResources', 'Add', conferenceId, sessionId, { url: url }, success, fail);
     }
+    this.attendSession = function(conferenceId, sessionId, codes, success, fail) {
+        this.apiCall('POST', 'SessionAttendees', 'AttendByCode', conferenceId, null, { SessionId: sessionId, Codes: codes }, success, fail);
+    }
     this.approveResource = function(conferenceId, sessionId, sessionResource, success, fail) {
         this.apiCall('POST', 'SessionResources', 'Approve', conferenceId, sessionId, { SessionResource: sessionResource }, success, fail);
     }
@@ -142,6 +145,9 @@ window.ConferenceService = function($, mid) {
     }
     this.getNextSessions = function(conferenceId, success, fail) {
         this.apiCall('GET', 'Sessions', 'Next', conferenceId, null, null, success, fail);
+    }
+    this.getSessionAttendees = function(conferenceId, sessionId, success, fail) {
+        this.apiCall('GET', 'SessionAttendees', 'SessionAttendees', conferenceId, sessionId, null, success, fail);
     }
     this.getOrderDetails = function(conferenceId, itemId, success, fail) {
         this.apiCall('GET', 'NBright', 'Details', conferenceId, itemId, null, success, fail);

@@ -4,6 +4,7 @@
 @using Connect.Conference.Core.Models.Conferences;
 @{
  ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddEditScripts();
  var schedule = Connect.Conference.Core.Models.Schedule.Create(Model);
 }
 
@@ -76,6 +77,11 @@
                @Dnn.LocalizeString("Tags"): @string.Join(", ", session.Tags.Select(sp => sp.Value))
               </div>
              </div>
+             @if (ConferenceModuleContext.Security.CanManage)
+             {
+              <div class="sessionAttendanceButton" data-moduleid="@Dnn.ModuleContext.ModuleId" data-session="@(Newtonsoft.Json.JsonConvert.SerializeObject(session))">
+              </div>
+             }
             </td>
            }
           }
@@ -93,6 +99,11 @@
              @string.Join(", ", plenarySession.Speakers.Select(sp => sp.Value))
             </div>
            </div>
+           @if (ConferenceModuleContext.Security.CanManage)
+           {
+            <div class="sessionAttendanceButton" data-moduleid="@Dnn.ModuleContext.ModuleId" data-session="@(Newtonsoft.Json.JsonConvert.SerializeObject(plenarySession))">
+            </div>
+           }
           </td>
          }
         }
@@ -121,3 +132,7 @@
  </div>
 </div>
 
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>

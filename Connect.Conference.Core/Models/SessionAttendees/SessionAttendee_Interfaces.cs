@@ -21,6 +21,10 @@ namespace Connect.Conference.Core.Models.SessionAttendees
    ConferenceId = Convert.ToInt32(Null.SetNull(dr["ConferenceId"], ConferenceId));
    SessionDateAndTime = (DateTime)(Null.SetNull(dr["SessionDateAndTime"], SessionDateAndTime));
    SessionEnd = (DateTime)(Null.SetNull(dr["SessionEnd"], SessionEnd));
+   DisplayName = Convert.ToString(Null.SetNull(dr["DisplayName"], DisplayName));
+   Email = Convert.ToString(Null.SetNull(dr["Email"], Email));
+   Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
+   AttCode = Convert.ToString(Null.SetNull(dr["AttCode"], AttCode));
    SessionAttendeeName = Convert.ToString(Null.SetNull(dr["SessionAttendeeName"], SessionAttendeeName));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
@@ -51,6 +55,26 @@ namespace Connect.Conference.Core.Models.SessionAttendees
          return "";
      };
      return ((DateTime)SessionEnd).ToString(strFormat, formatProvider);
+    case "displayname": // NVarChar
+     return PropertyAccess.FormatString(DisplayName, strFormat);
+    case "email": // NVarChar
+     if (Email == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Email, strFormat);
+    case "company": // NVarChar
+     if (Company == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(Company, strFormat);
+    case "attcode": // NVarChar
+     if (AttCode == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(AttCode, strFormat);
     case "sessionattendeename": // NVarChar
      return PropertyAccess.FormatString(SessionAttendeeName, strFormat);
     case "createdbyuser": // NVarChar

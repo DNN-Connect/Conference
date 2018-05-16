@@ -9,6 +9,7 @@ using System.Web;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Connect.Conference.Core.Models.SessionEvaluations;
+using System;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -22,6 +23,13 @@ namespace Connect.DNN.Modules.Conference.Api
         {
             var res = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID);
             return Request.CreateResponse(HttpStatusCode.OK, res);
+        }
+
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        public HttpResponseMessage SessionAttendees(int conferenceId, int id)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, SessionAttendeeRepository.Instance.GetSessionAttendeesBySession(id));
         }
 
         [HttpPost]
@@ -40,6 +48,32 @@ namespace Connect.DNN.Modules.Conference.Api
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Attendee did not attend this session");
             }
+        }
+
+        public class AttendByCodeDTO
+        {
+            public int SessionId { get; set; }
+            public string Codes { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage AttendByCode(int conferenceId, AttendByCodeDTO data)
+        {
+            var lines = data.Codes.Split('\n');
+            foreach (var code in lines)
+            {
+                if (!String.IsNullOrEmpty(code))
+                {
+                    var attendee = AttendeeRepository.Instance.GetAttendeeByCode(conferenceId, code);
+                    if (attendee != null)
+                    {
+                        SessionAttendeeRepository.Instance.SetSessionAttendee(data.SessionId, attendee.UserId);
+                    }
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, SessionAttendeeRepository.Instance.GetSessionAttendeesBySession(data.SessionId));
         }
 
     }
