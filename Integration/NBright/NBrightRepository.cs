@@ -42,8 +42,8 @@ where nb.TypeCode='ORDER'
                 var sql = @"select
  nbdata.*,
  u.UserID,
- a.Status AttendeeStatus,
- a.UserId AttendeeUserId,
+ ISNULL(a.Status, aa.Status) AttendeeStatus,
+ ISNULL(a.UserId, aa.UserId) AttendeeUserId,
  (select top 1 u2.UserID from dbo.Users u2 where u2.FirstName=nbdata.FirstName AND u2.LastName=nbdata.LastName) AlternativeUserId
 from
 (select
@@ -73,6 +73,7 @@ cross apply nb.XMLData.nodes('genxml[1]/items[1]/genxml') as T2(prod)
 where nb.TypeCode = 'ORDER') nbdata
   left join dbo.Users u on u.Email = nbdata.Email
 left join dbo.Connect_Conference_Attendees a on a.UserId = u.UserID and a.ConferenceId = @0
+left join dbo.Connect_Conference_Attendees aa on aa.UserId = (select top 1 u2.UserID from dbo.Users u2 where u2.FirstName=nbdata.FirstName AND u2.LastName=nbdata.LastName) and aa.ConferenceId = @0
 where nbdata.ItemId = @1
 ";
                 return context.ExecuteQuery<NBrightOrderItem>(System.Data.CommandType.Text,

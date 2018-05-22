@@ -1,6 +1,11 @@
 ﻿using Connect.Conference.Core.Common;
 using Connect.Conference.Core.Repositories;
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Users;
+using DotNetNuke.Security.Roles;
+using System;
+using System.Collections;
 
 namespace Connect.Conference.Core.Controllers
 {
@@ -9,6 +14,21 @@ namespace Connect.Conference.Core.Controllers
         public static int AddAttendee(int portalId, int conferenceId, int userId, string email, string firstName, string lastName, string displayName, string company, int updatingUserId)
         {
             var user = UserController.Instance.GetUserById(portalId, userId);
+            if (user == null && userId == -1)
+            {
+                var settings = UserController.GetUserSettings(portalId);
+                if (GetBoolSetting(settings, "Registration_UseEmailAsUserName"))
+                {
+                    user = UserController.GetUserByName(email);
+                    if (user != null)
+                    {
+                        UserController.AddUserPortal(portalId, user.UserID);
+                        user.PortalID = portalId;
+                        var thisPortal = PortalController.Instance.GetPortal(portalId);
+                        RoleController.Instance.AddUserRole(portalId, user.UserID, thisPortal.RegisteredRoleId, RoleStatus.Approved, false, Null.NullDate, Null.NullDate);
+                    }
+                }
+            }
             if (user == null)
             {
                 user = UserController.GetUserByEmail(portalId, email);
@@ -21,7 +41,7 @@ namespace Connect.Conference.Core.Controllers
                     var res = UserController.CreateUser(ref user);
                     if (res != DotNetNuke.Security.Membership.UserCreateStatus.Success)
                     {
-                        throw new System.Exception(res.ToString());
+                        throw new Exception(res.ToString());
                     }
                 }
             }
@@ -72,5 +92,11 @@ namespace Connect.Conference.Core.Controllers
             DnnRoleController.CheckSpeaker(portalId, conferenceId, user.UserID);
             return user.UserID;
         }
+
+        private static bool GetBoolSetting(Hashtable settings, string settingKey)
+        {
+            return settings[settingKey] != null && Convert.ToBoolean(settings[settingKey]);
+        }
+
     }
 }

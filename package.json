@@ -1,6 +1,6 @@
 {
     "name": "conference",
-    "version": "2.1.14",
+    "version": "2.1.15",
     "description": "Conference module",
     "dnnModule": {
         "fullName": "Connect.Conference",
