@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Connect.Conference.Core.Models.SessionEvaluations;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -61,7 +62,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage AttendByCode(int conferenceId, AttendByCodeDTO data)
         {
-            var lines = data.Codes.Split('\n');
+            var lines = GetCodes(data.Codes);
             foreach (var code in lines)
             {
                 if (!String.IsNullOrEmpty(code))
@@ -76,6 +77,34 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, SessionAttendeeRepository.Instance.GetSessionAttendeesBySession(data.SessionId));
         }
 
+        private List<string> GetCodes(string rawstring)
+        {
+            var res = new List<string>();
+            var lines = rawstring.Split('\n').Where(l => !string.IsNullOrEmpty(l)).ToArray();
+            var line = 0;
+            var m = Regex.Match(lines[line], "Total Counters = (\\d+)");
+            if (m.Success)
+            {
+                var count = int.Parse(m.Groups[1].Value);
+                if (lines.Count() != count + 1)
+                {
+                    throw new Exception("Nr codes does not equal total specified");
+                }
+                line++;
+            }
+            while (line < lines.Count())
+            {
+                var code = lines[line];
+                var lm = Regex.Match(code, "No\\.:(\\d+)");
+                if (lm.Success)
+                {
+                    code = lm.Groups[1].Value;
+                }
+                res.Add(code);
+                line++;
+            }
+            return res;
+        }
     }
 }
 
