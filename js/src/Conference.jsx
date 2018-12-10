@@ -16,7 +16,6 @@ var TimesheetEditor = require('./TimesheetEditor/TimesheetEditor.jsx'),
     AttendanceButton = require('./Attendance/AttendanceButton.jsx');
 
 (function($, window, document, undefined) {
-
   $(document).ready(function() {
     ConnectConference.loadData();
   });

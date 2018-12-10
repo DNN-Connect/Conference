@@ -132,6 +132,7 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddMainScript()
         {
+            AddModuleService();
             AddScript("Conference.js");
         }
         public void RequirePermissionLevel(bool level)
