@@ -6,7 +6,7 @@ import { AppManager } from "./AppManager";
 
 import AttendeeTable from "./AttendeeTable/AttendeeTable.jsx";
 import AttendanceButton from "./Attendance/AttendanceButton.jsx";
-import TimesheetEditor from "./TimesheetEditor/TimesheetEditor.jsx";
+import TimesheetEditor from "./TimesheetEditor/TimesheetEditor";
 import Comments from "./Comments/Comments.jsx";
 import Tags from "./Tags/Tags.jsx";
 import Speakers from "./Speakers/Speakers.jsx";

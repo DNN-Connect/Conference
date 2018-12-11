@@ -1,4 +1,26 @@
-export default class TimesheetEditorSlot extends React.Component {
+import * as React from "react";
+import * as Models from "../Models/";
+import * as interact from "interactjs";
+
+interface ITimeSheetEditorSlotProps {
+  slot: Models.ISlot;
+  onSlotUpdate: Function;
+  editSlot: (s: Models.ISlot) => void;
+}
+
+interface ITimeSheetEditorSlotState {}
+
+export default class TimeSheetEditorSlot extends React.Component<
+  ITimeSheetEditorSlotProps,
+  ITimeSheetEditorSlotState
+> {
+  interactable: interact.Interactable | null = null;
+
+  refs: {
+    timeText: HTMLSpanElement;
+    timeBar: HTMLSpanElement;
+  };
+
   render() {
     var start = this.props.slot.StartMinutes,
       startPixels = (start * 1152) / 1440,
@@ -34,7 +56,7 @@ export default class TimesheetEditorSlot extends React.Component {
           data-length={this.props.slot.DurationMins}
           style={barStyle}
           title={this.props.slot.Title}
-          onDoubleClick={this.doubleClicked}
+          onDoubleClick={e => this.doubleClicked()}
           ref="timeBar"
         >
           <strong>{this.props.slot.DayNr}</strong>{" "}
@@ -50,7 +72,7 @@ export default class TimesheetEditorSlot extends React.Component {
 
   componentDidMount() {
     var that = this;
-    this.interactable = interact(this.refs.timeBar.getDOMNode());
+    this.interactable = interact(this.refs.timeBar);
     this.interactable
       .draggable({
         inertia: false,
@@ -78,10 +100,10 @@ export default class TimesheetEditorSlot extends React.Component {
             parseInt(target.getAttribute("data-length"))
           );
         },
-        onend: that.updateSlot
+        onend: that.updateSlot.bind(that)
       })
       .resizable({
-        preserveAspectRatio: false,
+        // preserveAspectRatio: false,
         edges: {
           left: false,
           right: true,
@@ -90,7 +112,7 @@ export default class TimesheetEditorSlot extends React.Component {
         },
         onmove(event) {
           var target = event.target,
-            dragLen = event.rect.width,
+            dragLen = (event as any).rect.width,
             hour = parseFloat(target.getAttribute("data-scale")),
             scale = hour / 12,
             roundLen = Math.round(dragLen / scale) * scale,
@@ -104,12 +126,12 @@ export default class TimesheetEditorSlot extends React.Component {
             newMins
           );
         },
-        onend: that.updateSlot
+        onend: that.updateSlot.bind(that)
       });
   }
 
   componentWillUnmount() {
-    this.interactable.unset();
+    // this.interactable.unset();
     this.interactable = null;
   }
 
@@ -128,21 +150,23 @@ export default class TimesheetEditorSlot extends React.Component {
   }
 
   updateSlot(event) {
-    var timeBar = this.refs.timeBar.getDOMNode(),
-      timeText = this.refs.timeText.getDOMNode(),
+    var timeBar = this.refs.timeBar,
+      timeText = this.refs.timeText,
       slot = this.props.slot;
-    slot.DurationMins = parseInt(timeBar.getAttribute("data-length"));
-    slot.NewStartMinutes = parseInt(timeBar.getAttribute("data-start"));
-    this.props.onSlotUpdate(
-      slot,
-      function() {
-        timeBar.style.webkitTransform = timeBar.style.transform = null;
-        timeText.style.transform = null;
-        var len = this.props.slot.DurationMins,
-          lenPixels = (len * 1152) / 1440;
-        timeBar.style.width = lenPixels + "px";
-      }.bind(this)
-    );
+    slot.DurationMins = parseInt(timeBar.getAttribute("data-length") || "0");
+    slot.NewStartMinutes = parseInt(timeBar.getAttribute("data-start") || "0");
+    this.props.onSlotUpdate(slot, () => {
+      timeBar.style.webkitTransform = timeBar.style.transform = null;
+      timeText.style.transform = null;
+      var len = this.props.slot.DurationMins,
+        lenPixels = (len * 1152) / 1440;
+      timeBar.style.width = lenPixels + "px";
+    });
+    var target = event.target,
+      textSpan = target.nextElementSibling;
+    target.style.webkitTransform = target.style.transform =
+      "translate(0px, 0px)";
+    textSpan.style.transform = "translate(0px, 0px)";
     return false;
   }
 

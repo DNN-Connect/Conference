@@ -1,5 +1,5 @@
 // Common functions for the module
-function showLoading(): void {
+export function showLoading(): void {
   if ($("#serviceStatus").length) {
     $("#serviceStatus div:first-child").show();
     $("#serviceStatus div:nth-child(2)").hide();
@@ -9,13 +9,13 @@ function showLoading(): void {
   }
 }
 
-function hideLoading() {
+export function hideLoading() {
   if ($("#serviceStatus").length) {
     $("#serviceStatus").hide();
   }
 }
 
-function showError(message: string) {
+export function showError(message: string) {
   if ($("#serviceStatus").length) {
     $("#serviceStatus div:first-child").hide();
     $("#serviceStatus div:nth-child(2)")
@@ -30,7 +30,7 @@ function showError(message: string) {
   }
 }
 
-function isInt(value: any) {
+export function isInt(value: any) {
   return (
     !isNaN(value) &&
     parseInt(Number(value).toString()) == value &&
@@ -38,7 +38,7 @@ function isInt(value: any) {
   );
 }
 
-function validateForm(
+export function validateForm(
   form: JQuery<HTMLElement>,
   submitButton: JQuery<HTMLButtonElement>,
   formErrorDiv: JQuery<HTMLDivElement>
@@ -72,7 +72,7 @@ function validateForm(
   });
 }
 
-function getTableOrder(tableId: string) {
+export function getTableOrder(tableId: string) {
   var res: { id: string; order: number }[] = [];
   $("#" + tableId + " tbody:first tr").each(function(i, el) {
     res.push({
@@ -83,7 +83,7 @@ function getTableOrder(tableId: string) {
   return res;
 }
 
-function minutesToTime(mins: number): string {
+export function minutesToTime(mins: number): string {
   var hr = Math.floor(mins / 60);
   var mn = mins - 60 * hr;
   var res = mn.toString();
@@ -94,7 +94,7 @@ function minutesToTime(mins: number): string {
   return res;
 }
 
-function moveObject(object: HTMLElement, dx: number, dy: number) {
+export function moveObject(object: HTMLElement, dx: number, dy: number) {
   var x = (parseFloat(object.getAttribute("data-x") || "0") || 0) + dx,
     y = (parseFloat(object.getAttribute("data-y") || "0") || 0) + dy;
   object.style.webkitTransform = object.style.transform =
@@ -110,14 +110,14 @@ if (!String.prototype.startsWith) {
   };
 }
 
-function pad(number: number): string {
+export function pad(number: number): string {
   if (number < 10) {
     return "0" + number;
   }
   return number.toString();
 }
 
-function getPastel(): string {
+export function getPastel(): string {
   var red = Math.floor(Math.random() * 256);
   var green = Math.floor(Math.random() * 256);
   var blue = Math.floor(Math.random() * 256);
@@ -133,7 +133,7 @@ function getPastel(): string {
   return res;
 }
 
-var sort_by = function(field: string, reverse: boolean, primer: Function | null): Function {
+export function sort_by(field: string, reverse: boolean, primer: Function | null): Function {
   var key = primer
     ? function(x: any) {
         return primer(x[field]);
@@ -147,7 +147,7 @@ var sort_by = function(field: string, reverse: boolean, primer: Function | null)
   };
 };
 
-var colStyle = function(width: number, right: number): React.CSSProperties {
+export function colStyle(width: number, right: number): React.CSSProperties {
   if (right) {
     return { width: width.toString() + "px", textAlign: "right" };
   } else {
@@ -155,7 +155,7 @@ var colStyle = function(width: number, right: number): React.CSSProperties {
   }
 };
 
-interface Date {
+export interface Date {
     toUTCDateTimeDigits(): string;
     addDays(days: number): Date;
 }
