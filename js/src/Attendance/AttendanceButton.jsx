@@ -1,10 +1,11 @@
-module.exports = React.createClass({
-  getInitialState() {
-    return {
+export default class AttendanceButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       attendees: [],
       codes: ""
     };
-  },
+  }
 
   showDialog(e) {
     e.preventDefault();
@@ -23,7 +24,7 @@ module.exports = React.createClass({
       },
       () => {}
     );
-  },
+  }
 
   addAttendees(e) {
     e.preventDefault();
@@ -39,11 +40,11 @@ module.exports = React.createClass({
       },
       () => {}
     );
-  },
+  }
 
   handleChangedCodes(e) {
     this.setState({ codes: e.target.value });
-  },
+  }
 
   render() {
     var attendees = this.state.attendees.map(a => {
@@ -116,7 +117,7 @@ module.exports = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
   componentDidMount() {}
-});
+}

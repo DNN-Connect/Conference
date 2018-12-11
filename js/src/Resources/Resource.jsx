@@ -1,23 +1,22 @@
-var Icon = require('./Icon.jsx'),
-    StatusApprovalButton = require('./StatusApprovalButton.jsx');
+var Icon = require("./Icon.jsx"),
+  StatusApprovalButton = require("./StatusApprovalButton.jsx");
 
-module.exports = React.createClass({
-
-  getInitialState: function() {
-    this.resources = ConnectConference.modules[this.props.moduleId].resources;
-    this.security = ConnectConference.modules[this.props.moduleId].security;
-    return {
-      description: this.props.resource.ResourceDescription,
+export default class Resource extends React.Component {
+  constructor(props) {
+    super(props);
+    this.resources = ConnectConference.modules[props.moduleId].resources;
+    this.security = ConnectConference.modules[props.moduleId].security;
+    this.state = {
+      description: props.resource.ResourceDescription,
       dirty: false
-    }
-  },
+    };
+  }
 
-  render: function() {
+  render() {
     var icon = "file";
     var link = this.props.resourceDir + this.props.resource.ResourceLink;
     var linkClass = "btn btn-sm btn-success glyphicon glyphicon-download";
-    switch (this.props.resource.ResourceType)
-    {
+    switch (this.props.resource.ResourceType) {
       case 1:
         icon = "file-powerpoint";
         break;
@@ -37,53 +36,64 @@ module.exports = React.createClass({
     if (this.props.canAdd) {
       deleteCol = (
         <td className="iconCol">
-         <a href="#" onClick={this.props.deleteResource.bind(null, this.props.resource)} title={this.resources.Delete}>
-           <span className="btn btn-sm btn-danger glyphicon glyphicon-remove"></span>
-         </a>
+          <a
+            href="#"
+            onClick={this.props.deleteResource.bind(null, this.props.resource)}
+            title={this.resources.Delete}
+          >
+            <span className="btn btn-sm btn-danger glyphicon glyphicon-remove" />
+          </a>
         </td>
-        );
+      );
     }
     var okCol = null;
     if (this.security.CanManage | this.props.canAdd) {
       okCol = (
-        <StatusApprovalButton resource={this.props.resource} 
-                   approveResource={this.props.approveResource} 
-                   canManage={this.security.CanManage}
-                   moduleId={this.props.moduleId} />
-        );
+        <StatusApprovalButton
+          resource={this.props.resource}
+          approveResource={this.props.approveResource}
+          canManage={this.security.CanManage}
+          moduleId={this.props.moduleId}
+        />
+      );
     }
     var descriptionBox = this.props.resource.ResourceDescription;
     if (this.props.canAdd) {
       descriptionBox = (
-        <input type="text" value={this.state.description} className="form-control"
-                onBlur={this.onDescriptionChanged} onChange={this.onDescriptionChange} />
-        );
+        <input
+          type="text"
+          value={this.state.description}
+          className="form-control"
+          onBlur={this.onDescriptionChanged}
+          onChange={this.onDescriptionChange}
+        />
+      );
     }
     return (
       <tr>
-       <td className="iconCol">
-         <Icon type={icon} />
-       </td>
-       <td>{descriptionBox}</td>
-       {okCol}
-       {deleteCol}
-       <td className="iconCol">
-         <a href={link}>
-           <span className={linkClass}></span>
-         </a>
-       </td>
+        <td className="iconCol">
+          <Icon type={icon} />
+        </td>
+        <td>{descriptionBox}</td>
+        {okCol}
+        {deleteCol}
+        <td className="iconCol">
+          <a href={link}>
+            <span className={linkClass} />
+          </a>
+        </td>
       </tr>
     );
-  },
+  }
 
-  onDescriptionChange: function(e) {
+  onDescriptionChange(e) {
     this.setState({
       description: e.target.value,
       dirty: true
     });
-  },
+  }
 
-  onDescriptionChanged: function(e) {
+  onDescriptionChanged(e) {
     if (this.state.dirty) {
       var resource = this.props.resource;
       resource.ResourceDescription = e.target.value;
@@ -93,5 +103,4 @@ module.exports = React.createClass({
       });
     }
   }
-
-});
+}

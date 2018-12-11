@@ -1,19 +1,20 @@
 var TagVote = require("./TagVote.jsx");
 
-module.exports = React.createClass({
-  resources: null,
-  service: null,
+export default class TagVotes extends React.Component {
+  resources = null;
+  service = null;
 
-  getInitialState: function() {
-    this.resources = ConnectConference.modules[this.props.moduleId].resources;
-    this.service = ConnectConference.modules[this.props.moduleId].service;
-    this.props.voteList.sort(this.votesSort);
-    return {
-      votes: this.props.voteList
+  constructor(props) {
+    super(props);
+    this.resources = ConnectConference.modules[props.moduleId].resources;
+    this.service = ConnectConference.modules[props.moduleId].service;
+    props.voteList.sort(this.votesSort);
+    this.state = {
+      votes: props.voteList
     };
-  },
+  }
 
-  render: function() {
+  render() {
     var votes = this.state.votes.map(
       function(item) {
         return (
@@ -69,11 +70,11 @@ module.exports = React.createClass({
         </tbody>
       </table>
     );
-  },
+  }
 
-  componentDidMount: function() {},
+  componentDidMount() {}
 
-  onVote: function(tagVote, e) {
+  onVote(tagVote, e) {
     e.preventDefault();
     if (tagVote.Voted == 0) {
       this.service.tagVote(
@@ -98,9 +99,9 @@ module.exports = React.createClass({
         }.bind(this)
       );
     }
-  },
+  }
 
-  voteChanged: function(vote) {
+  voteChanged(vote) {
     var newList = [];
     for (var i = 0; i < this.state.votes.length; i++) {
       if (this.state.votes[i].TagId == vote.TagId) {
@@ -113,9 +114,9 @@ module.exports = React.createClass({
     this.setState({
       votes: newList
     });
-  },
+  }
 
-  votesSort: function(a, b) {
+  votesSort(a, b) {
     if (b.NrVotes - a.NrVotes == 0) {
       if (a.TagName < b.TagName) {
         return -1;
@@ -127,9 +128,9 @@ module.exports = React.createClass({
     } else {
       return b.NrVotes - a.NrVotes;
     }
-  },
+  }
 
-  onAddTag: function(e) {
+  onAddTag(e) {
     e.preventDefault();
     this.service.addTag(
       this.props.conferenceId,
@@ -146,4 +147,4 @@ module.exports = React.createClass({
       }.bind(this)
     );
   }
-});
+}

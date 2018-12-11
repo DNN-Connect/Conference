@@ -117,7 +117,8 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddReactJs()
         {
-            AddScript("react.min.js", "react", "0.13.3");
+            AddScript("react.min.js", "react", "16.6.3");
+            AddScript("react-dom.min.js", "react-dom", "16.6.3");
         }
         public void AddEditScripts()
         {
