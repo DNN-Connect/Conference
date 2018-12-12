@@ -17,8 +17,7 @@ namespace Connect.Conference.Core.Models.Tags
   public override void Fill(IDataReader dr)
   {
    base.Fill(dr);
-   NrSubmittedSessions = Convert.ToInt32(Null.SetNull(dr["NrSubmittedSessions"], NrSubmittedSessions));
-   NrAcceptedSessions = Convert.ToInt32(Null.SetNull(dr["NrAcceptedSessions"], NrAcceptedSessions));
+   NrSessions = Convert.ToInt32(Null.SetNull(dr["NrSessions"], NrSessions));
    NrVotes = Convert.ToInt32(Null.SetNull(dr["NrVotes"], NrVotes));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
@@ -29,18 +28,12 @@ namespace Connect.Conference.Core.Models.Tags
   public override string GetProperty(string strPropertyName, string strFormat, System.Globalization.CultureInfo formatProvider, DotNetNuke.Entities.Users.UserInfo accessingUser, DotNetNuke.Services.Tokens.Scope accessLevel, ref bool propertyNotFound)
   {
    switch (strPropertyName.ToLower()) {
-    case "nrsubmittedsessions": // Int
-     if (NrSubmittedSessions == null)
+    case "nrsessions": // Int
+     if (NrSessions == null)
      {
          return "";
      };
-     return ((int)NrSubmittedSessions).ToString(strFormat, formatProvider);
-    case "nracceptedsessions": // Int
-     if (NrAcceptedSessions == null)
-     {
-         return "";
-     };
-     return ((int)NrAcceptedSessions).ToString(strFormat, formatProvider);
+     return ((int)NrSessions).ToString(strFormat, formatProvider);
     case "nrvotes": // Int
      if (NrVotes == null)
      {

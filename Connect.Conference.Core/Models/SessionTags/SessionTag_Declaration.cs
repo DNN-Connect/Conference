@@ -34,6 +34,16 @@ namespace Connect.Conference.Core.Models.SessionTags
              res.TagId = TagId;
             return res;
         }
+        public SessionTag Clone()
+        {
+            SessionTag res = new SessionTag();
+            res.SessionId = SessionId;
+            res.TagId = TagId;
+            res.Title = Title;
+            res.TagName = TagName;
+            res.ConferenceId = ConferenceId;
+            return res;
+        }
         #endregion
 
     }

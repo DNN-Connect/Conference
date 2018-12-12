@@ -44,6 +44,25 @@ namespace Connect.Conference.Core.Models.Tracks
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Track Clone()
+        {
+            Track res = new Track();
+            res.TrackId = TrackId;
+            res.ConferenceId = ConferenceId;
+            res.SessionVoting = SessionVoting;
+            res.BackgroundColor = BackgroundColor;
+            res.Sort = Sort;
+            res.Title = Title;
+            res.Description = Description;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.NrSessions = NrSessions;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

@@ -47,6 +47,27 @@ namespace Connect.Conference.Core.Models.Slots
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Slot Clone()
+        {
+            Slot res = new Slot();
+            res.SlotId = SlotId;
+            res.ConferenceId = ConferenceId;
+            res.Start = Start;
+            res.DurationMins = DurationMins;
+            res.SlotType = SlotType;
+            res.Title = Title;
+            res.Description = Description;
+            res.DayNr = DayNr;
+            res.LocationId = LocationId;
+            res.LocationName = LocationName;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

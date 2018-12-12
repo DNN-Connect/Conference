@@ -73,6 +73,43 @@ namespace Connect.Conference.Core.Models.Sessions
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Session Clone()
+        {
+            Session res = new Session();
+            res.SessionId = SessionId;
+            res.ConferenceId = ConferenceId;
+            res.LocationId = LocationId;
+            res.Level = Level;
+            res.Sort = Sort;
+            res.Capacity = Capacity;
+            res.SlotId = SlotId;
+            res.Title = Title;
+            res.SubTitle = SubTitle;
+            res.Description = Description;
+            res.Status = Status;
+            res.IsPlenary = IsPlenary;
+            res.DayNr = DayNr;
+            res.Notes = Notes;
+            res.TrackId = TrackId;
+            res.TimeZoneId = TimeZoneId;
+            res.SessionDateAndTime = SessionDateAndTime;
+            res.SessionEnd = SessionEnd;
+            res.LocationName = LocationName;
+            res.SlotTitle = SlotTitle;
+            res.TrackTitle = TrackTitle;
+            res.BackgroundColor = BackgroundColor;
+            res.NrAttendees = NrAttendees;
+            res.NrSpeakers = NrSpeakers;
+            res.NrVotes = NrVotes;
+            res.NrResources = NrResources;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

@@ -36,6 +36,18 @@ namespace Connect.Conference.Core.Models.ApiKeys
              res.CreatedOnDate = CreatedOnDate;
             return res;
         }
+        public ApiKey Clone()
+        {
+            ApiKey res = new ApiKey();
+            res.ApiKey = ApiKey;
+            res.ConferenceId = ConferenceId;
+            res.Expires = Expires;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.CreatedByUser = CreatedByUser;
+            res.CreatedByUserName = CreatedByUserName;
+            return res;
+        }
         #endregion
 
     }

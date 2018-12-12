@@ -9,7 +9,6 @@ namespace Connect.Conference.Core.Models.Tags
     [TableName("vw_Connect_Conference_Tags")]
     [PrimaryKey("TagId", AutoIncrement = true)]
     [DataContract]
-    [Scope("ConferenceId")]
     public partial class Tag  : TagBase 
     {
 
@@ -21,11 +20,9 @@ namespace Connect.Conference.Core.Models.Tags
 
         #region Properties
         [DataMember]
-        public int NrSubmittedSessions { get; set; }
+        public int? NrSessions { get; set; }
         [DataMember]
-        public int NrAcceptedSessions { get; set; }
-        [DataMember]
-        public int NrVotes { get; set; }
+        public int? NrVotes { get; set; }
         [DataMember]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -39,10 +36,10 @@ namespace Connect.Conference.Core.Models.Tags
              res.TagId = TagId;
              res.ConferenceId = ConferenceId;
              res.TagName = TagName;
-  res.CreatedByUserID = CreatedByUserID;
-  res.CreatedOnDate = CreatedOnDate;
-  res.LastModifiedByUserID = LastModifiedByUserID;
-  res.LastModifiedOnDate = LastModifiedOnDate;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         public Tag Clone()
@@ -51,8 +48,7 @@ namespace Connect.Conference.Core.Models.Tags
             res.TagId = TagId;
             res.ConferenceId = ConferenceId;
             res.TagName = TagName;
-            res.NrSubmittedSessions = NrSubmittedSessions;
-            res.NrAcceptedSessions = NrAcceptedSessions;
+            res.NrSessions = NrSessions;
             res.NrVotes = NrVotes;
             res.CreatedByUser = CreatedByUser;
             res.LastModifiedByUser = LastModifiedByUser;

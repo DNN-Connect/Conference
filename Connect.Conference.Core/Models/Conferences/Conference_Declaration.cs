@@ -64,6 +64,40 @@ namespace Connect.Conference.Core.Models.Conferences
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Conference Clone()
+        {
+            Conference res = new Conference();
+            res.ConferenceId = ConferenceId;
+            res.PortalId = PortalId;
+            res.Name = Name;
+            res.Description = Description;
+            res.StartDate = StartDate;
+            res.EndDate = EndDate;
+            res.MaxCapacity = MaxCapacity;
+            res.SessionVoting = SessionVoting;
+            res.AttendeeRole = AttendeeRole;
+            res.SpeakerRole = SpeakerRole;
+            res.Location = Location;
+            res.Url = Url;
+            res.SubmittedSessionsPublic = SubmittedSessionsPublic;
+            res.TimeZoneId = TimeZoneId;
+            res.MqttBroker = MqttBroker;
+            res.MqttBrokerUsername = MqttBrokerUsername;
+            res.MqttBrokerPassword = MqttBrokerPassword;
+            res.BaseTopicPath = BaseTopicPath;
+            res.NrAttendees = NrAttendees;
+            res.NrSpeakers = NrSpeakers;
+            res.NrLocations = NrLocations;
+            res.NrTracks = NrTracks;
+            res.NrSessions = NrSessions;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

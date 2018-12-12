@@ -42,6 +42,23 @@ namespace Connect.Conference.Core.Models.SessionResources
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public SessionResource Clone()
+        {
+            SessionResource res = new SessionResource();
+            res.SessionResourceId = SessionResourceId;
+            res.SessionId = SessionId;
+            res.ResourceLink = ResourceLink;
+            res.ResourceDescription = ResourceDescription;
+            res.ResourceType = ResourceType;
+            res.Visibility = Visibility;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

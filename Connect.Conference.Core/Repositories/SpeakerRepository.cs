@@ -8,6 +8,19 @@ namespace Connect.Conference.Core.Repositories
 
     public partial class SpeakerRepository : ServiceLocator<ISpeakerRepository, SpeakerRepository>, ISpeakerRepository
     {
+        public IEnumerable<SpeakerWithNrSessions> GetSpeakersByConference(int conferenceId)
+        {
+            using (var context = DataContext.Instance())
+            {
+                return context.ExecuteQuery<SpeakerWithNrSessions>(System.Data.CommandType.Text,
+                    "SELECT sp.*," +
+                    " (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s" +
+                    "  INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss ON ss.SessionId=s.SessionId" +
+                    "  WHERE s.ConferenceId=@0 AND ss.SpeakerId=sp.UserId AND s.Status>2) NrSessions" +
+                    " FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers sp WHERE sp.ConferenceId=@0",
+                    conferenceId);
+            }
+        }
         public IEnumerable<SpeakerWithNrSessions> GetSpeakersByConferenceWithNrSessions(int conferenceId, int sessionStatusThreshold)
         {
             using (var context = DataContext.Instance())

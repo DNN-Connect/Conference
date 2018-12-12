@@ -50,6 +50,28 @@ namespace Connect.Conference.Core.Models.Locations
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Location Clone()
+        {
+            Location res = new Location();
+            res.LocationId = LocationId;
+            res.ConferenceId = ConferenceId;
+            res.Name = Name;
+            res.Description = Description;
+            res.Capacity = Capacity;
+            res.Sort = Sort;
+            res.BackgroundColor = BackgroundColor;
+            res.ConferenceName = ConferenceName;
+            res.StartDate = StartDate;
+            res.EndDate = EndDate;
+            res.NrSessions = NrSessions;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

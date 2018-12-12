@@ -14,19 +14,15 @@ namespace Connect.Conference.Core.Repositories
         {
             return () => new SpeakerRepository();
         }
-        public IEnumerable<SpeakerWithNrSessions> GetSpeakersByConference(int conferenceId)
-        {
-            using (var context = DataContext.Instance())
-            {
-                return context.ExecuteQuery<SpeakerWithNrSessions>(System.Data.CommandType.Text,
-                    "SELECT sp.*," +
-                    " (SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Sessions s" + 
-                    "  INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_SessionSpeakers ss ON ss.SessionId=s.SessionId" +
-                    "  WHERE s.ConferenceId=@0 AND ss.SpeakerId=sp.UserId AND s.Status>2) NrSessions" +
-                    " FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers sp WHERE sp.ConferenceId=@0",
-                    conferenceId);
-            }
-        }
+        //public IEnumerable<Speaker> GetSpeakersByConference(int conferenceId)
+        //{
+        //    using (var context = DataContext.Instance())
+        //    {
+        //        return context.ExecuteQuery<Speaker>(System.Data.CommandType.Text,
+        //            "SELECT * FROM {databaseOwner}{objectQualifier}vw_Connect_Conference_Speakers WHERE ConferenceId=@0",
+        //            conferenceId);
+        //    }
+        //}
         public IEnumerable<Speaker> GetSpeakersByUser(int userId)
         {
             using (var context = DataContext.Instance())

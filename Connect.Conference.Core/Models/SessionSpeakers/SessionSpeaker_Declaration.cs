@@ -55,6 +55,29 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public SessionSpeaker Clone()
+        {
+            SessionSpeaker res = new SessionSpeaker();
+            res.SpeakerId = SpeakerId;
+            res.SessionId = SessionId;
+            res.Sort = Sort;
+            res.Company = Company;
+            res.Description = Description;
+            res.DescriptionShort = DescriptionShort;
+            res.Url = Url;
+            res.DisplayName = DisplayName;
+            res.FirstName = FirstName;
+            res.LastName = LastName;
+            res.Email = Email;
+            res.Username = Username;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

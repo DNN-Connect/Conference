@@ -66,6 +66,36 @@ namespace Connect.Conference.Core.Models.Attendees
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public Attendee Clone()
+        {
+            Attendee res = new Attendee();
+            res.ConferenceId = ConferenceId;
+            res.UserId = UserId;
+            res.Status = Status;
+            res.ReceiveNotifications = ReceiveNotifications;
+            res.Company = Company;
+            res.AttCode = AttCode;
+            res.DisplayName = DisplayName;
+            res.FirstName = FirstName;
+            res.LastName = LastName;
+            res.Email = Email;
+            res.Username = Username;
+            res.PhotoVisibility = PhotoVisibility;
+            res.PhotoFilename = PhotoFilename;
+            res.PhotoFolder = PhotoFolder;
+            res.PhotoWidth = PhotoWidth;
+            res.PhotoHeight = PhotoHeight;
+            res.PhotoContentType = PhotoContentType;
+            res.Biography = Biography;
+            res.ProfileCompany = ProfileCompany;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

@@ -40,6 +40,22 @@ namespace Connect.Conference.Core.Models.SessionEvaluations
   res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
+        public SessionEvaluation Clone()
+        {
+            SessionEvaluation res = new SessionEvaluation();
+            res.SessionId = SessionId;
+            res.UserId = UserId;
+            res.Stars = Stars;
+            res.Review = Review;
+            res.DisplayName = DisplayName;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
         #endregion
 
     }

@@ -59,10 +59,40 @@ namespace Connect.Conference.Core.Models.Speakers
              res.Url = Url;
              res.Description = Description;
              res.DescriptionShort = DescriptionShort;
-  res.CreatedByUserID = CreatedByUserID;
-  res.CreatedOnDate = CreatedOnDate;
-  res.LastModifiedByUserID = LastModifiedByUserID;
-  res.LastModifiedOnDate = LastModifiedOnDate;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
+            return res;
+        }
+        public Speaker Clone()
+        {
+            Speaker res = new Speaker();
+            res.ConferenceId = ConferenceId;
+            res.UserId = UserId;
+            res.Company = Company;
+            res.Sort = Sort;
+            res.Url = Url;
+            res.Description = Description;
+            res.DescriptionShort = DescriptionShort;
+            res.DisplayName = DisplayName;
+            res.FirstName = FirstName;
+            res.LastName = LastName;
+            res.Email = Email;
+            res.Username = Username;
+            res.PhotoVisibility = PhotoVisibility;
+            res.PhotoFilename = PhotoFilename;
+            res.PhotoFolder = PhotoFolder;
+            res.PhotoWidth = PhotoWidth;
+            res.PhotoHeight = PhotoHeight;
+            res.PhotoContentType = PhotoContentType;
+            res.Biography = Biography;
+            res.CreatedByUser = CreatedByUser;
+            res.LastModifiedByUser = LastModifiedByUser;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         #endregion

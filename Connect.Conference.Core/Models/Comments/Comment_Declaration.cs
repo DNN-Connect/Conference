@@ -47,6 +47,24 @@ namespace Connect.Conference.Core.Models.Comments
              res.Visibility = Visibility;
             return res;
         }
+        public Comment Clone()
+        {
+            Comment res = new Comment();
+            res.CommentId = CommentId;
+            res.UserId = UserId;
+            res.ConferenceId = ConferenceId;
+            res.SessionId = SessionId;
+            res.Datime = Datime;
+            res.Remarks = Remarks;
+            res.Visibility = Visibility;
+            res.DisplayName = DisplayName;
+            res.Email = Email;
+            res.FirstName = FirstName;
+            res.LastName = LastName;
+            res.ConferenceName = ConferenceName;
+            res.SessionTitle = SessionTitle;
+            return res;
+        }
         #endregion
 
     }
