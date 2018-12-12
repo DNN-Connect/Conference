@@ -18,3 +18,5 @@ export * from './ITrack';
 export * from './IAppModule';
 export * from './IContextSecurity';
 export * from './IKeyedCollection';
+export * from './ISimpleUser';
+export * from './ISwitchButtonOption';

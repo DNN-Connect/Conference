@@ -1,42 +1,53 @@
-export default class AttendeeRow extends React.Component {
-  constructor(props) {
+import * as React from "react";
+import * as Models from "../Models/";
+
+interface IAttendeeRowProps {
+  module: Models.IAppModule;
+  attendee: Models.IAttendee;
+  update: (a: Models.IAttendee) => void;
+  index: number;
+}
+
+interface IAttendeeRowState {
+  code: string;
+  company: string;
+}
+
+export default class AttendeeRow extends React.Component<
+  IAttendeeRowProps,
+  IAttendeeRowState
+> {
+  refs: {
+    txtCompany: HTMLInputElement;
+    txtCode: HTMLInputElement;
+  };
+
+  constructor(props: IAttendeeRowProps) {
     super(props);
     this.state = {
       code: props.attendee.AttCode,
       company: props.attendee.Company
     };
   }
-  changeCompany(e) {
-    this.setState({
-      company: this.refs.txtCompany.getDOMNode().value
-    });
-  }
-  changeCode(e) {
-    this.setState({
-      code: this.refs.txtCode.getDOMNode().value
-    });
-  }
 
   editCompany() {
-    var value = this.refs.txtCompany.getDOMNode().value;
     var oldValue = this.props.attendee.Company
       ? this.props.attendee.Company
       : "";
-    if (value != oldValue) {
+    if (this.state.company != oldValue) {
       var attendee = this.props.attendee;
-      attendee.Company = value;
+      attendee.Company = this.state.company;
       this.props.update(this.props.attendee);
     }
   }
 
   editCode() {
-    var value = this.refs.txtCode.getDOMNode().value;
     var oldValue = this.props.attendee.AttCode
       ? this.props.attendee.AttCode
       : "";
-    if (value != oldValue) {
+    if (this.state.code != oldValue) {
       var attendee = this.props.attendee;
-      attendee.AttCode = value;
+      attendee.AttCode = this.state.code;
       this.props.update(this.props.attendee);
     }
   }
@@ -59,7 +70,7 @@ export default class AttendeeRow extends React.Component {
           <input
             type="checkbox"
             checked={this.props.attendee.ReceiveNotifications}
-            onChange={this.toggleReceive.bind(null)}
+            onChange={e => this.toggleReceive()}
           />
         </td>
         <td>
@@ -70,7 +81,11 @@ export default class AttendeeRow extends React.Component {
             tabIndex={1000 + this.props.index}
             ref="txtCompany"
             onBlur={this.editCompany.bind(null)}
-            onChange={this.changeCompany}
+            onChange={e =>
+              this.setState({
+                company: e.target.value
+              })
+            }
           />
         </td>
         <td>
@@ -80,8 +95,12 @@ export default class AttendeeRow extends React.Component {
             value={this.state.code || ""}
             tabIndex={2000 + this.props.index}
             ref="txtCode"
-            onBlur={this.editCode.bind(null)}
-            onChange={this.changeCode}
+            onBlur={e => this.editCode()}
+            onChange={e =>
+              this.setState({
+                code: e.target.value
+              })
+            }
           />
         </td>
       </tr>

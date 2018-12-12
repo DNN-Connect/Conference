@@ -1,11 +1,6 @@
 import * as $ from "jquery";
 import * as Models from "./Models";
-
-declare global {
-  interface Window {
-    ConferenceService: any;
-  }
-}
+import DataService from "./Service";
 
 export class AppManager {
   public static Modules = new Models.KeyedCollection<Models.IAppModule>();
@@ -22,7 +17,7 @@ export class AppManager {
           $(el).data("resources"),
           $(el).data("common"),
           $(el).data("security"),
-          new window.ConferenceService($, moduleId)
+          new DataService(moduleId)
         )
       );
     });

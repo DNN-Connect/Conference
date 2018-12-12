@@ -4,10 +4,10 @@ import * as $ from "jquery";
 
 import { AppManager } from "./AppManager";
 
-import AttendeeTable from "./AttendeeTable/AttendeeTable.jsx";
-import AttendanceButton from "./Attendance/AttendanceButton.jsx";
+import AttendeeTable from "./AttendeeTable/AttendeeTable";
+import AttendanceButton from "./Attendance/AttendanceButton";
 import TimesheetEditor from "./TimesheetEditor/TimesheetEditor";
-import Comments from "./Comments/Comments.jsx";
+import Comments from "./Comments/Comments";
 import Tags from "./Tags/Tags.jsx";
 import Speakers from "./Speakers/Speakers.jsx";
 import TagVotes from "./TagVotes/TagVotes.jsx";
@@ -15,10 +15,10 @@ import SessionVotes from "./SessionVotes/SessionVotes.jsx";
 import Scheduler from "./Scheduler/Scheduler.jsx";
 import Schedule from "./Schedule/Schedule.jsx";
 import Resources from "./Resources/Resources.jsx";
-import BulkAddUsers from "./BulkAddUsers/BulkAddUsers.jsx";
-import SessionStatusButton from "./Buttons/SessionStatusButton.jsx";
+import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
+import SessionStatusButton from "./Buttons/SessionStatusButton";
 import SessionManager from "./SessionManager/SessionManager.jsx";
-import LiveTicker from "./LiveTicker/LiveTicker.jsx";
+import LiveTicker from "./LiveTicker/LiveTicker";
 import NBrightOrders from "./NBright/OrderTable.jsx";
 
 export class ComponentLoader {

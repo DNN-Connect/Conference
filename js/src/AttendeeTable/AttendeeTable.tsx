@@ -1,7 +1,23 @@
-import AttendeeRow from "./AttendeeRow.jsx";
+import * as React from "react";
+import * as Models from "../Models/";
+import AttendeeRow from "./AttendeeRow";
 
-export default class AttendeeTable extends React.Component {
-  constructor(props) {
+interface IAttendeeTableProps {
+  module: Models.IAppModule;
+  attendees: Models.IAttendee[];
+  conferenceId: number;
+}
+
+interface IAttendeeTableState {
+  attendees: Models.IAttendee[];
+}
+
+export default class AttendeeTable extends React.Component<
+  IAttendeeTableProps,
+  IAttendeeTableState
+> {
+
+  constructor(props: IAttendeeTableProps) {
     super(props);
     this.state = {
       attendees: props.attendees
@@ -12,16 +28,10 @@ export default class AttendeeTable extends React.Component {
     this.props.module.service.editAttendee(
       this.props.conferenceId,
       attendee,
-      data => {
-        var newList = [];
-        for (var i = 0; i < this.state.attendees.length; i++) {
-          var a = this.state.attendees[i];
-          if (a.UserId == attendee.UserId) {
-            newList.push(data);
-          } else {
-            newList.push(a);
-          }
-        }
+      (data: Models.IAttendee) => {
+        var newList = this.state.attendees.map(a => {
+          return a.UserId === attendee.UserId ? data : a;
+        });
         this.setState({
           attendees: newList
         });

@@ -1,5 +1,26 @@
-export default class AttendanceButton extends React.Component {
-  constructor(props) {
+import * as React from "react";
+import * as Models from "../Models/";
+
+interface IAttendanceButtonProps {
+  module: Models.IAppModule;
+  session: Models.ISession;
+}
+
+interface IAttendanceButtonState {
+  attendees: Models.ISessionAttendee[];
+  codes: string;
+}
+
+export default class AttendanceButton extends React.Component<
+  IAttendanceButtonProps,
+  IAttendanceButtonState
+> {
+  refs: {
+    dialog: any;
+    codes: HTMLTextAreaElement;
+  };
+
+  constructor(props: IAttendanceButtonProps) {
     super(props);
     this.state = {
       attendees: [],
@@ -18,7 +39,7 @@ export default class AttendanceButton extends React.Component {
             attendees: data
           },
           () => {
-            $(this.refs.dialog.getDOMNode()).modal("show");
+            ($(this.refs.dialog) as any).modal("show");
           }
         );
       },
@@ -31,7 +52,7 @@ export default class AttendanceButton extends React.Component {
     this.props.module.service.attendSession(
       this.props.session.ConferenceId,
       this.props.session.SessionId,
-      this.refs.codes.getDOMNode().value,
+      this.refs.codes.value,
       data => {
         this.setState({
           codes: "",
@@ -63,7 +84,7 @@ export default class AttendanceButton extends React.Component {
         >
           <i className="glyphicon glyphicon-barcode" />
         </a>
-        <div className="modal fade" ref="dialog" tabindex="-1" role="dialog">
+        <div className="modal fade" ref="dialog" role="dialog">
           <div
             className="modal-dialog"
             role="document"
@@ -118,6 +139,4 @@ export default class AttendanceButton extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {}
 }

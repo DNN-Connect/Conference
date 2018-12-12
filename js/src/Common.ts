@@ -155,11 +155,6 @@ export function colStyle(width: number, right: number): React.CSSProperties {
   }
 };
 
-export interface Date {
-    toUTCDateTimeDigits(): string;
-    addDays(days: number): Date;
-}
-
 if (!Date.prototype.toUTCDateTimeDigits) {
   (function() {
     Date.prototype.toUTCDateTimeDigits = function() {

@@ -31,6 +31,7 @@ export interface ISession {
   NrResources?: number;
   CreatedByUser: string;
   LastModifiedByUser: string;
+  Speakers: IKeyValuePair[];
 }
 
 export class Session implements ISession {
@@ -66,16 +67,17 @@ export class Session implements ISession {
   NrResources?: number;
   CreatedByUser: string;
   LastModifiedByUser: string;
-    constructor() {
-  this.SessionId = -1;
-  this.ConferenceId = -1;
-  this.SlotId = -1;
-  this.IsPlenary = false;
-  this.DayNr = -1;
-  this.CreatedByUserID = -1;
-  this.CreatedOnDate = new Date();
-  this.LastModifiedByUserID = -1;
-  this.LastModifiedOnDate = new Date();
-   }
+  Speakers: IKeyValuePair[];
+  constructor() {
+    this.SessionId = -1;
+    this.ConferenceId = -1;
+    this.SlotId = -1;
+    this.IsPlenary = false;
+    this.DayNr = -1;
+    this.CreatedByUserID = -1;
+    this.CreatedOnDate = new Date();
+    this.LastModifiedByUserID = -1;
+    this.LastModifiedOnDate = new Date();
+    this.Speakers = [];
+  }
 }
-

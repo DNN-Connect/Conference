@@ -1,5 +1,5 @@
-//import DataService from "../Service";
 import { IContextSecurity } from "./index";
+import DataService from "Service";
 
 export interface IAppModule {
     moduleId: number;
@@ -8,7 +8,7 @@ export interface IAppModule {
     resources: any;
     common: any;
     security: IContextSecurity;
-    service: any;
+    service: DataService;
 }
 
 export class AppModule implements IAppModule {
@@ -19,7 +19,7 @@ export class AppModule implements IAppModule {
     public common: any;
     public security: IContextSecurity;
     public service: any;
-    constructor(moduleId: number, tabId: number, locale: string, resources: any, common: any, security: IContextSecurity, service: any) {
+    constructor(moduleId: number, tabId: number, locale: string, resources: any, common: any, security: IContextSecurity, service: DataService) {
         this.moduleId = moduleId;
         this.tabId = tabId;
         this.locale = locale;
