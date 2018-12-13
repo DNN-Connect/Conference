@@ -32,6 +32,7 @@ export interface ISession {
   CreatedByUser: string;
   LastModifiedByUser: string;
   Speakers: IKeyValuePair[];
+  Tags: IKeyValuePair[];
 }
 
 export class Session implements ISession {
@@ -68,6 +69,7 @@ export class Session implements ISession {
   CreatedByUser: string;
   LastModifiedByUser: string;
   Speakers: IKeyValuePair[];
+  Tags: IKeyValuePair[];
   constructor() {
     this.SessionId = -1;
     this.ConferenceId = -1;
@@ -79,5 +81,18 @@ export class Session implements ISession {
     this.LastModifiedByUserID = -1;
     this.LastModifiedOnDate = new Date();
     this.Speakers = [];
+    this.Tags = [];
+  }
+}
+
+export interface ISessionWithVote extends ISession {
+  Voted: number;
+}
+
+export class SessionWithVote extends Session implements ISessionWithVote {
+  Voted: number;
+  constructor() {
+    super();
+    this.Voted = 0;
   }
 }

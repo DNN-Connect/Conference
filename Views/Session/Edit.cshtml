@@ -41,7 +41,7 @@
   <div class="dnnLabel" style="position: relative;">
    <label>@Dnn.LocalizeString("Speakers")</label>
   </div>
-  <div class="speakersComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-name="EditSpeakers" data-speakers="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSpeakers()))">
+  <div class="speakersComponent form-box" data-moduleid="@Dnn.ActiveModule.ModuleID" data-conference="@Model.ConferenceId" data-session="@Model.SessionId" data-speakers="@(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSpeakers()))">
   </div>
  </div>
  <div class="dnnFormItem">

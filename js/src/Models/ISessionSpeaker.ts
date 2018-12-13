@@ -38,17 +38,16 @@ export class SessionSpeaker implements ISessionSpeaker {
   Username: string;
   CreatedByUser: string;
   LastModifiedByUser: string;
-    constructor() {
-  this.SpeakerId = -1;
-  this.SessionId = -1;
-  this.CreatedByUserID = -1;
-  this.CreatedOnDate = new Date();
-  this.LastModifiedByUserID = -1;
-  this.LastModifiedOnDate = new Date();
-  this.DisplayName = "";
-  this.FirstName = "";
-  this.LastName = "";
-  this.Username = "";
-   }
+  constructor() {
+    this.SpeakerId = -1;
+    this.SessionId = -1;
+    this.CreatedByUserID = -1;
+    this.CreatedOnDate = new Date();
+    this.LastModifiedByUserID = -1;
+    this.LastModifiedOnDate = new Date();
+    this.DisplayName = "";
+    this.FirstName = "";
+    this.LastName = "";
+    this.Username = "";
+  }
 }
-

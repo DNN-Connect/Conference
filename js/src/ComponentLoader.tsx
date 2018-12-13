@@ -8,10 +8,10 @@ import AttendeeTable from "./AttendeeTable/AttendeeTable";
 import AttendanceButton from "./Attendance/AttendanceButton";
 import TimesheetEditor from "./TimesheetEditor/TimesheetEditor";
 import Comments from "./Comments/Comments";
-import Tags from "./Tags/Tags.jsx";
-import Speakers from "./Speakers/Speakers.jsx";
+import Tags from "./Tags/Tags";
+import Speakers from "./Speakers/Speakers";
 import TagVotes from "./TagVotes/TagVotes";
-import SessionVotes from "./SessionVotes/SessionVotes.jsx";
+import SessionVotes from "./SessionVotes/SessionVotes";
 import Scheduler from "./Scheduler/Scheduler";
 import Resources from "./Resources/Resources";
 import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
@@ -70,7 +70,6 @@ export class ComponentLoader {
     });
     $(".tagsComponent").each(function(i, el) {
       var moduleId = $(el).data("moduleid");
-      var conferenceId = $(el).data("conference");
       var fieldName = $(el).data("name");
       var placeholder = $(el).data("placeholder");
       var tags = $(el).data("tags");
@@ -80,7 +79,6 @@ export class ComponentLoader {
           name={fieldName}
           tags={tags}
           placeholder={placeholder}
-          conferenceId={conferenceId}
         />,
         el
       );
@@ -89,12 +87,10 @@ export class ComponentLoader {
       var moduleId = $(el).data("moduleid");
       var conferenceId = $(el).data("conference");
       var sessionId = $(el).data("session");
-      var fieldName = $(el).data("name");
       var speakers = $(el).data("speakers");
       ReactDOM.render(
         <Speakers
           module={AppManager.Modules.Item(moduleId.toString())}
-          name={fieldName}
           speakers={speakers}
           sessionId={sessionId}
           conferenceId={conferenceId}
