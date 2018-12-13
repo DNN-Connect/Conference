@@ -12,8 +12,7 @@ import Tags from "./Tags/Tags.jsx";
 import Speakers from "./Speakers/Speakers.jsx";
 import TagVotes from "./TagVotes/TagVotes";
 import SessionVotes from "./SessionVotes/SessionVotes.jsx";
-import Scheduler from "./Scheduler/Scheduler.jsx";
-import Schedule from "./Schedule/Schedule";
+import Scheduler from "./Scheduler/Scheduler";
 import Resources from "./Resources/Resources";
 import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
 import SessionStatusButton from "./Buttons/SessionStatusButton";
@@ -145,27 +144,6 @@ export class ComponentLoader {
       var locations = $(el).data("locations");
       ReactDOM.render(
         <Scheduler
-          module={AppManager.Modules.Item(moduleId.toString())}
-          conference={conference}
-          locations={locations}
-          nrDays={nrDays}
-          slots={slots}
-          sessions={sessions}
-          gridHeight={gridHeight}
-        />,
-        el
-      );
-    });
-    $(".scheduleComponent").each(function(i, el) {
-      var moduleId = $(el).data("moduleid");
-      var conference = $(el).data("conference");
-      var nrDays = $(el).data("nrdays");
-      var slots = $(el).data("slots");
-      var sessions = $(el).data("sessions");
-      var gridHeight = $(el).data("gridheight");
-      var locations = $(el).data("locations");
-      ReactDOM.render(
-        <Schedule
           module={AppManager.Modules.Item(moduleId.toString())}
           conference={conference}
           locations={locations}

@@ -1,13 +1,38 @@
-var SchedulerDay = require("./SchedulerDay.jsx"),
-  SchedulerUnscheduledSession = require("./SchedulerUnscheduledSession.jsx");
+import * as React from "react";
+import * as Models from "../Models/";
+import * as moment from "moment";
+import * as interact from "interactjs";
+import SchedulerUnscheduledSession from "./SchedulerUnscheduledSession";
+import SchedulerDay from "./SchedulerDay";
+import { moveObject } from "../Common";
 
-export default class Scheduler extends React.Component {
-  hasReset = true;
+interface ISchedulerProps {
+  module: Models.IAppModule;
+  conference: Models.IConference;
+  nrDays: number;
+  slots: Models.ISlot[];
+  sessions: Models.ISession[];
+  locations: Models.ILocation[];
+  gridHeight: number;
+}
 
-  constructor(props) {
+interface ISchedulerState {
+  sessionList: Models.ISession[];
+  locationList: object;
+  selectedTab: number;
+}
+
+export default class Scheduler extends React.Component<
+  ISchedulerProps,
+  ISchedulerState
+> {
+  refs: {
+    unscheduledColumn: HTMLDivElement;
+    schedulerColumn: HTMLDivElement;
+  };
+
+  constructor(props: ISchedulerProps) {
     super(props);
-    this.resources = ConnectConference.modules[props.moduleId].resources;
-    this.service = ConnectConference.modules[props.moduleId].service;
     var locationList = {};
     for (var i = 0; i < props.locations.length; i++) {
       locationList[props.locations[i].LocationId] = i;
@@ -18,6 +43,8 @@ export default class Scheduler extends React.Component {
       selectedTab: 1
     };
   }
+
+  hasReset = true;
 
   render() {
     var unscheduledSessions = this.state.sessionList.map(item => {
@@ -33,30 +60,37 @@ export default class Scheduler extends React.Component {
         return null;
       }
     });
-    var scheduleTabs = [];
-    var scheduleDays = [];
+    var scheduleTabs: JSX.Element[] = [];
+    var scheduleDays: JSX.Element[] = [];
     for (var i = 1; i <= this.props.nrDays; i++) {
-      var daySlots = [];
+      var daySlots: Models.ISlot[] = [];
       for (var j = 0; j < this.props.slots.length; j++) {
         var slot = this.props.slots[j];
-        if ((slot.DayNr == undefined) | (slot.DayNr == i)) {
+        if (slot.DayNr === undefined || slot.DayNr === i) {
           daySlots.push(slot);
         }
       }
       var tabClass = i == this.state.selectedTab ? "active" : "";
-      var date = new Date(this.props.conference.StartDate);
+      var date = new Date(this.props.conference.StartDate || new Date());
       date = date.addDays(i - 1);
       var dateString = moment(date).format("dddd MMM Do");
       scheduleTabs.push(
         <li role="presentation" className={tabClass}>
-          <a href="#" onClick={this.changeDay.bind(null, i)}>
+          <a
+            href="#"
+            onClick={e => {
+              e.preventDefault();
+              this.setState({
+                selectedTab: i
+              });
+            }}
+          >
             {dateString}
           </a>
         </li>
       );
       scheduleDays.push(
         <SchedulerDay
-          conference={this.props.conference}
           day={i}
           slots={daySlots}
           start={Math.floor(daySlots[0].StartMinutes / 60) * 60 - 60}
@@ -122,7 +156,7 @@ export default class Scheduler extends React.Component {
         },
         ondrop(event) {
           that.hasReset = true;
-          if (event.target === that.refs.unscheduledColumn.getDOMNode()) {
+          if (event.target === that.refs.unscheduledColumn) {
             that.tryRemoveSession(event.relatedTarget);
           } else {
             that.tryMoveSession(event.relatedTarget, event.target);
@@ -136,17 +170,9 @@ export default class Scheduler extends React.Component {
           event.target.classList.remove("drop-target");
         }
       });
-      $(this.refs.unscheduledColumn.getDOMNode()).height(
-        this.refs.schedulerColumn.getDOMNode().getBoundingClientRect().height
+      $(this.refs.unscheduledColumn).height(
+        this.refs.schedulerColumn.getBoundingClientRect().height
       );
-    });
-  }
-
-  changeDay(day, e) {
-    e.preventDefault();
-    console.log(day);
-    this.setState({
-      selectedTab: day
     });
   }
 
@@ -163,7 +189,6 @@ export default class Scheduler extends React.Component {
     }
     var slot = document.getElementById(key);
     if (slot != null) {
-      var jqSlot = $(slot);
       var slotBox = slot.getBoundingClientRect();
       jqSession.width(slotBox.width - 12);
       jqSession.height(slotBox.height - 12);
@@ -188,7 +213,7 @@ export default class Scheduler extends React.Component {
 
   tryRemoveSession(session) {
     var sessionId = session.getAttribute("data-sessionid");
-    this.service.tryRemoveSession(
+    this.props.module.service.tryRemoveSession(
       this.props.conference.ConferenceId,
       sessionId,
       data => {
@@ -215,11 +240,10 @@ export default class Scheduler extends React.Component {
     var jqSession = $(session);
     var jqSlot = $(slot);
     var sessionId = jqSession.data("sessionid");
-    var isPlenary = jqSession.data("plenary");
     var slotId = jqSlot.data("slotid");
     var locationId = jqSlot.data("locationid");
     var day = jqSlot.data("day");
-    this.service.tryMoveSession(
+    this.props.module.service.tryMoveSession(
       this.props.conference.ConferenceId,
       sessionId,
       day,
