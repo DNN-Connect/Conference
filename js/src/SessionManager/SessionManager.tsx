@@ -1,16 +1,31 @@
-var Session = require("./Session.jsx");
+import * as React from "react";
+import * as Models from "../Models/";
+import Session from "./Session";
 
-export default class SessionManager extends React.Component {
-  constructor(props) {
+interface ISessionManagerProps {
+  module: Models.IAppModule;
+  conferenceId: number;
+  tracks: Models.ITrack[];
+  sessions: Models.ISession[];
+  statusOptions: Models.ISwitchButtonOption[];
+}
+
+interface ISessionManagerState {
+  sessions: Models.ISession[];
+  tracks: Models.ITrack[];
+  sort: string;
+  sortOrder: string;
+}
+
+export default class SessionManager extends React.Component<
+  ISessionManagerProps,
+  ISessionManagerState
+> {
+
+  constructor(props: ISessionManagerProps) {
     super(props);
     var tracks = props.tracks;
-    tracks.unshift({
-      TrackId: -1,
-      Sort: -1,
-      Title: "None",
-      NrSessions: 0,
-      BackgroundColor: "#ffffff"
-    });
+    tracks.unshift(new Models.Track());
     this.state = {
       sessions: props.sessions,
       tracks: tracks,
@@ -21,7 +36,7 @@ export default class SessionManager extends React.Component {
 
   sortSessions(newSort) {
     var newSortOrder =
-      (newSort == this.state.sort) & (this.state.sortOrder == "asc")
+      newSort === this.state.sort && this.state.sortOrder === "asc"
         ? "desc"
         : "asc";
     var newList = this.state.sessions;
@@ -48,14 +63,14 @@ export default class SessionManager extends React.Component {
     var speakerTotals = {};
     var nrSpeakers = 0;
     var sessions = this.state.sessions.map(item => {
-      statusTotals[item.Status] =
-        statusTotals[item.Status] == undefined
+      statusTotals[item.Status || 0] =
+        statusTotals[item.Status || 0] == undefined
           ? 1
-          : statusTotals[item.Status] + 1;
+          : statusTotals[item.Status || 0] + 1;
       var trackId = item.TrackId == null ? -1 : item.TrackId;
       trackTotals[trackId] =
         trackTotals[trackId] == undefined ? 1 : trackTotals[trackId] + 1;
-      if (item.Status > 2) {
+      if (item.Status || 0 > 2) {
         trackTotalsAccepted[trackId] =
           trackTotalsAccepted[trackId] == undefined
             ? 1
@@ -70,17 +85,16 @@ export default class SessionManager extends React.Component {
       }
       return (
         <Session
-          module={this.props.module}
           session={item}
           statusOptions={this.props.statusOptions}
           tracks={this.state.tracks}
           key={item.SessionId}
-          changeStatus={this.changeSessionStatus}
-          changeTrack={this.changeSessionTrack}
+          changeStatus={(se, st) => this.changeSessionStatus(se, st)}
+          changeTrack={(s, t) => this.changeSessionTrack(s, t)}
         />
       );
     });
-    var statusList = [];
+    var statusList: JSX.Element[] = [];
     for (var i = 0; i < this.props.statusOptions.length; i++) {
       var so = this.props.statusOptions[i];
       if (statusTotals[so.Id] != undefined) {
@@ -88,7 +102,7 @@ export default class SessionManager extends React.Component {
         statusList.push(<dd>{statusTotals[so.Id]}</dd>);
       }
     }
-    var trackList = [];
+    var trackList: JSX.Element[] = [];
     for (var i = 0; i < this.state.tracks.length; i++) {
       var tr = this.state.tracks[i];
       trackList.push(<dt>{tr.Title}</dt>);
@@ -103,7 +117,7 @@ export default class SessionManager extends React.Component {
         </dd>
       );
     }
-    var speakerList = [];
+    var speakerList: JSX.Element[] = [];
     for (var key in speakerTotals) {
       if (speakerTotals.hasOwnProperty(key)) {
         nrSpeakers++;
@@ -169,8 +183,7 @@ export default class SessionManager extends React.Component {
     );
   }
 
-  changeSessionStatus(session, newStatus, e) {
-    e.preventDefault();
+  changeSessionStatus(session: Models.ISession, newStatus: Models.ISwitchButtonOption) {
     if (newStatus.Confirm != undefined) {
       if (!confirm(newStatus.Confirm)) {
         return;
@@ -180,15 +193,10 @@ export default class SessionManager extends React.Component {
       this.props.conferenceId,
       session.SessionId,
       newStatus.Id,
-      data => {
-        var newList = [];
-        for (var i = 0; i < this.state.sessions.length; i++) {
-          var s = this.state.sessions[i];
-          if (s.SessionId == session.SessionId) {
-            s = data;
-          }
-          newList.push(s);
-        }
+      (data: Models.ISession) => {
+        var newList = this.state.sessions.map(s => {
+          return s.SessionId === data.SessionId ? data : s;
+        });
         this.setState({
           sessions: newList
         });
@@ -196,21 +204,15 @@ export default class SessionManager extends React.Component {
     );
   }
 
-  changeSessionTrack(session, newTrack, e) {
-    e.preventDefault();
+  changeSessionTrack(session: Models.ISession, newTrack: Models.ITrack) {
     this.props.module.service.changeSessionTrack(
       this.props.conferenceId,
       session.SessionId,
       newTrack.TrackId,
-      data => {
-        var newList = [];
-        for (var i = 0; i < this.state.sessions.length; i++) {
-          var s = this.state.sessions[i];
-          if (s.SessionId == session.SessionId) {
-            s = data;
-          }
-          newList.push(s);
-        }
+      (data: Models.ISession) => {
+        var newList = this.state.sessions.map(s => {
+          return s.SessionId == data.SessionId ? data : s;
+        });
         this.setState({
           sessions: newList
         });

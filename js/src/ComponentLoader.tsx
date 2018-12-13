@@ -16,7 +16,7 @@ import Scheduler from "./Scheduler/Scheduler";
 import Resources from "./Resources/Resources";
 import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
 import SessionStatusButton from "./Buttons/SessionStatusButton";
-import SessionManager from "./SessionManager/SessionManager.jsx";
+import SessionManager from "./SessionManager/SessionManager";
 import LiveTicker from "./LiveTicker/LiveTicker";
 import NBrightOrders from "./NBright/OrderTable";
 
