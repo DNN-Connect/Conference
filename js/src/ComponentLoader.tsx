@@ -13,7 +13,7 @@ import Speakers from "./Speakers/Speakers.jsx";
 import TagVotes from "./TagVotes/TagVotes";
 import SessionVotes from "./SessionVotes/SessionVotes.jsx";
 import Scheduler from "./Scheduler/Scheduler.jsx";
-import Schedule from "./Schedule/Schedule.jsx";
+import Schedule from "./Schedule/Schedule";
 import Resources from "./Resources/Resources";
 import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
 import SessionStatusButton from "./Buttons/SessionStatusButton";

@@ -1,10 +1,31 @@
-var ScheduleDay = require("./ScheduleDay.jsx");
+import * as React from "react";
+import * as Models from "../Models/";
+import ScheduleDay from "./ScheduleDay";
 
-export default class Schedule extends React.Component {
-  constructor(props) {
+interface IScheduleProps {
+  module: Models.IAppModule;
+  conference: Models.IConference;
+  locations: Models.ILocation[];
+  slots: Models.ISlot[];
+  sessions: Models.ISession[];
+  nrDays: number;
+  gridHeight: number;
+}
+
+interface IScheduleState {
+  sessionList: Models.ISession[];
+  locationList: object;
+  slotList: object;
+}
+
+export default class Schedule extends React.Component<
+  IScheduleProps,
+  IScheduleState
+> {
+  refs: {};
+
+  constructor(props: IScheduleProps) {
     super(props);
-    this.resources = ConnectConference.modules[props.moduleId].resources;
-    this.service = ConnectConference.modules[props.moduleId].service;
     var locationList = {};
     for (var i = 0; i < props.locations.length; i++) {
       locationList[props.locations[i].LocationId] = i;
@@ -21,12 +42,12 @@ export default class Schedule extends React.Component {
   }
 
   render() {
-    var scheduleDays = [];
+    var scheduleDays: JSX.Element[] = [];
     for (var i = 1; i <= this.props.nrDays; i++) {
-      var daySlots = [];
+      var daySlots: Models.ISlot[] = [];
       for (var j = 0; j < this.props.slots.length; j++) {
         var slot = this.props.slots[j];
-        if ((slot.DayNr == undefined) | (slot.DayNr == i)) {
+        if (slot.DayNr === undefined || slot.DayNr === i) {
           daySlots.push(slot);
         }
       }
@@ -60,16 +81,18 @@ export default class Schedule extends React.Component {
   componentDidMount() {
     $(document).ready(
       function() {
-        $('[data-toggle="popover"]').popover({
+        ($('[data-toggle="popover"]') as any).popover({
           html: true,
           trigger: "hover",
           container: "body"
         });
-        $("div.embedded").each(function(i, el) {
+        $("div.embedded").each((i, el) => {
           $(el).height(
-            $(el)
-              .parent()
-              .attr("height") - 12
+            parseInt(
+              $(el)
+                .parent()
+                .attr("height") || "0"
+            ) - 12
           );
         });
       }.bind(this)
