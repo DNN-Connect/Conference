@@ -1,17 +1,40 @@
-var ParticipantRow = require("./ParticipantRow.jsx");
+import * as React from "react";
+import * as moment from "moment";
+import * as Models from "../Models/";
+import ParticipantRow from "./ParticipantRow";
+import { colStyle } from "../Common";
 
-export default class ShowDetails extends React.Component {
-  constructor(props) {
+interface IShowDetailsProps {
+  module: Models.IAppModule;
+  conferenceId: number;
+}
+
+interface IShowDetailsState {
+  ItemId: number;
+  Details: Models.INBrightOrderItem[];
+  Log: Models.INBrightAudit[];
+  FirstRec: Models.INBrightOrderItem;
+}
+
+export default class ShowDetails extends React.Component<
+  IShowDetailsProps,
+  IShowDetailsState
+> {
+  refs: {
+    popup: any;
+  };
+
+  constructor(props: IShowDetailsProps) {
     super(props);
     this.state = {
       ItemId: -1,
       Details: [],
       Log: [],
-      FirstRec: {}
+      FirstRec: new Models.NBrightOrderItem()
     };
   }
 
-  statusToText(status) {
+  statusToText(status: number): string {
     switch (status) {
       case 10:
         return "Incomplete 010";
@@ -37,17 +60,19 @@ export default class ShowDetails extends React.Component {
         return "Archived 110";
       case 120:
         return "Being Manufactured 120";
+      default:
+        return "";
     }
   }
 
-  nullOrMoney(amount) {
+  nullOrMoney(amount: number): string {
     if (amount) {
       return amount.toFixed(2);
     }
     return "";
   }
 
-  show(itemId) {
+  show(itemId: number): void {
     this.setState(
       {
         ItemId: itemId
@@ -76,7 +101,7 @@ export default class ShowDetails extends React.Component {
                         Details: data
                       },
                       () => {
-                        $(this.refs.popup.getDOMNode()).modal("show");
+                        ($(this.refs.popup) as any).modal("show");
                       }
                     );
                   }
@@ -89,18 +114,12 @@ export default class ShowDetails extends React.Component {
     );
   }
 
-  cmdSave() {
-    $(this.refs.popup.getDOMNode()).modal("hide");
-    this.props.save(this.state.ItemId, this.refs.txtInput.getDOMNode().value);
-  }
-
-  toggleParticipantRegistration(person, e) {
-    e.preventDefault();
+  toggleParticipantRegistration(person: Models.INBrightOrderItem) {
     this.props.module.service.toggleParticipant(
       this.props.conferenceId,
       this.state.ItemId,
       person,
-      data => {
+      (data: Models.INBrightOrderItem[]) => {
         this.setState({
           Details: data
         });
@@ -112,8 +131,12 @@ export default class ShowDetails extends React.Component {
     var rows = this.state.Details.map(person => {
       return (
         <ParticipantRow
+          module={this.props.module}
           participant={person}
-          toggleParticipantRegistration={this.toggleParticipantRegistration}
+          toggleParticipantRegistration={e => {
+            e.preventDefault();
+            this.toggleParticipantRegistration;
+          }}
         />
       );
     });
@@ -131,7 +154,7 @@ export default class ShowDetails extends React.Component {
       );
     });
     return (
-      <div className="modal fade" tabindex="-1" role="dialog" ref="popup">
+      <div className="modal fade" role="dialog" ref="popup">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -193,14 +216,7 @@ export default class ShowDetails extends React.Component {
                 className="btn btn-default"
                 data-dismiss="modal"
               >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.cmdSave}
-              >
-                Save
+                Close
               </button>
             </div>
           </div>

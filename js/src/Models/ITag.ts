@@ -24,14 +24,25 @@ export class Tag implements ITag {
   NrVotes?: number;
   CreatedByUser: string;
   LastModifiedByUser: string;
-    constructor() {
-  this.TagId = -1;
-  this.ConferenceId = -1;
-  this.TagName = "";
-  this.CreatedByUserID = -1;
-  this.CreatedOnDate = new Date();
-  this.LastModifiedByUserID = -1;
-  this.LastModifiedOnDate = new Date();
-   }
+  constructor() {
+    this.TagId = -1;
+    this.ConferenceId = -1;
+    this.TagName = "";
+    this.CreatedByUserID = -1;
+    this.CreatedOnDate = new Date();
+    this.LastModifiedByUserID = -1;
+    this.LastModifiedOnDate = new Date();
+  }
 }
 
+export interface ITagWithVote extends ITag {
+  Voted: number;
+}
+
+export class TagWithVote extends Tag implements ITagWithVote {
+  Voted: number;
+  constructor() {
+    super();
+    this.Voted = 0;
+  }
+}

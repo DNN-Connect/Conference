@@ -20,3 +20,6 @@ export * from './IContextSecurity';
 export * from './IKeyedCollection';
 export * from './ISimpleUser';
 export * from './ISwitchButtonOption';
+export * from './INBrightOrder';
+export * from './INBrightAudit';
+export * from './INBrightOrderItem';

@@ -1,4 +1,4 @@
-import { ISessionResource, ISlot } from "Models";
+import { ISessionResource, ISlot, INBrightOrderItem } from "Models";
 
 export default class DataService {
     private moduleId: number = -1;
@@ -216,7 +216,7 @@ export default class DataService {
             vote: vote
         }, success, fail);
     }
-    public toggleParticipant(conferenceId: number, itemId: number, participant: any, success: Function, fail?: Function) {
+    public toggleParticipant(conferenceId: number, itemId: number, participant: INBrightOrderItem, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'NBright', 'Participant', conferenceId, itemId, participant, success, fail);
     }
     public tryMoveSession(conferenceId: number, sessionId: number, day, slotId: number, locationId: number, displaceOthers, success: Function, fail?: Function) {

@@ -58,6 +58,7 @@ module.exports = {
   externals: {
     react: "React",
     "react-dom": "ReactDOM",
+    "simple-ajax-uploader": "simple-ajax-uploader",
     jquery: "jQuery"
   },
   plugins: [

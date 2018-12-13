@@ -10,16 +10,16 @@ import TimesheetEditor from "./TimesheetEditor/TimesheetEditor";
 import Comments from "./Comments/Comments";
 import Tags from "./Tags/Tags.jsx";
 import Speakers from "./Speakers/Speakers.jsx";
-import TagVotes from "./TagVotes/TagVotes.jsx";
+import TagVotes from "./TagVotes/TagVotes";
 import SessionVotes from "./SessionVotes/SessionVotes.jsx";
 import Scheduler from "./Scheduler/Scheduler.jsx";
 import Schedule from "./Schedule/Schedule.jsx";
-import Resources from "./Resources/Resources.jsx";
+import Resources from "./Resources/Resources";
 import BulkAddUsers from "./BulkAddUsers/BulkAddUsers";
 import SessionStatusButton from "./Buttons/SessionStatusButton";
 import SessionManager from "./SessionManager/SessionManager.jsx";
 import LiveTicker from "./LiveTicker/LiveTicker";
-import NBrightOrders from "./NBright/OrderTable.jsx";
+import NBrightOrders from "./NBright/OrderTable";
 
 export class ComponentLoader {
   public static load(): void {
@@ -179,7 +179,6 @@ export class ComponentLoader {
     });
     $(".resourcesComponent").each(function(i, el) {
       var moduleId = $(el).data("moduleid");
-      var tabId = $(el).data("tabid");
       var conferenceId = $(el).data("conferenceid");
       var sessionId = $(el).data("sessionid");
       var resources = $(el).data("resources");
@@ -191,7 +190,6 @@ export class ComponentLoader {
           conferenceId={conferenceId}
           resources={resources}
           canAdd={canAdd}
-          tabId={tabId}
           sessionId={sessionId}
           resourceDir={resourceDir}
         />,
@@ -255,6 +253,7 @@ export class ComponentLoader {
           module={AppManager.Modules.Item(moduleId.toString())}
           conferenceId={$(el).data("conferenceid")}
           locations={$(el).data("locations")}
+          pollingSeconds={$(el).data("polling-seconds")}
         />,
         el
       );

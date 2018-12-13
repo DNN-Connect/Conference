@@ -133,7 +133,7 @@ export function getPastel(): string {
   return res;
 }
 
-export function sort_by(field: string, reverse: boolean, primer: Function | null): Function {
+export function sort_by<T>(field: string, reverse: boolean, primer: Function | null): Function {
   var key = primer
     ? function(x: any) {
         return primer(x[field]);
@@ -142,12 +142,12 @@ export function sort_by(field: string, reverse: boolean, primer: Function | null
         return x[field];
       };
   var reverseInt = !reverse ? 1 : -1;
-  return function(a: any, b: any) {
+  return function(a: T, b: T) {
     return (a = key(a)), (b = key(b)), reverseInt * ((a > b ? 1 : 0) - (b > a ? 1 : 0));
   };
 };
 
-export function colStyle(width: number, right: number): React.CSSProperties {
+export function colStyle(width: number, right?: boolean): React.CSSProperties {
   if (right) {
     return { width: width.toString() + "px", textAlign: "right" };
   } else {

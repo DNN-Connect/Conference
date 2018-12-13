@@ -5,7 +5,7 @@ import Location from "./Location";
 interface ILiveTickerProps {
   module: Models.IAppModule;
   conferenceId: number;
-  pollingSeconds: number;
+  pollingSeconds?: number;
   locations: Models.ILocation[];
 }
 
