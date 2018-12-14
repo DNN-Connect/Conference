@@ -17,13 +17,20 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
   var vertLines: JSX.Element[] = [];
   for (var i = props.leftMargin; i < props.width; i = i + 100) {
     vertLines.push(
-      <line x1={i} y1="0" x2={i} y2={props.height} className="gridline" />
+      <line
+        x1={i}
+        y1="0"
+        x2={i}
+        y2={props.height}
+        className="gridline"
+        key={'vertLine' + i}
+      />
     );
   }
   var horLabels: JSX.Element[] = [];
   for (var i = 0; i < props.locations.length; i++) {
     horLabels.push(
-      <text x={6 + i * 100 + props.leftMargin} y="20" className="gridLabel">
+      <text x={6 + i * 100 + props.leftMargin} y="20" className="gridLabel" key={'horLabel' + i}>
         {props.locations[i].Name}
       </text>
     );
@@ -37,18 +44,26 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
         x2={props.width + props.leftMargin}
         y2={i}
         className="gridline"
+        key={'horLines' + i}
       />
     );
   }
   var vertLabels: JSX.Element[] = [];
   for (var i = 60; i < props.height; i = i + 60) {
     vertLabels.push(
-      <text x="6" y={i + 12} className="gridLabel">
+      <text x="6" y={i + 12} className="gridLabel" key={'vertLabel' + i}>
         {minutesToTime(i + props.start)}
       </text>
     );
     horLines.push(
-      <line x1="0" y1={i} x2={props.width} y2={i} className="gridline" />
+      <line
+        x1="0"
+        y1={i}
+        x2={props.width}
+        y2={i}
+        className="gridline"
+        key={'horLine' + i}
+      />
     );
   }
   var slotBands: JSX.Element[] = [];
@@ -68,7 +83,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           data-locationid="-1"
           data-day={props.day}
           fill="url(#Pattern)"
-          ref={refId}
+          key={'slotb' + slot.SlotId}
         />
       );
     } else if (slot.SlotType == 1) {
@@ -78,6 +93,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           y={slot.StartMinutes - props.start}
           width={props.width}
           height={slot.DurationMins}
+          key={'slotb' + slot.SlotId}
         >
           <div className="panel panel-default closedSlot">
             <div className="panel-body embedded">{slot.Title}</div>
@@ -91,6 +107,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           y={slot.StartMinutes - props.start}
           width="100"
           height={slot.DurationMins}
+          key={'slotb' + slot.SlotId}
         >
           <div className="panel panel-default closedSlot">
             <div className="panel-body embedded">{slot.Title}</div>
@@ -118,11 +135,11 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
             height={slot.DurationMins}
             width="100"
             className="sessionSlot canDrop"
-            ref={refId}
             data-slotid={slot.SlotId}
             data-locationid={props.locations[j].LocationId}
             id={refId}
             data-day={props.day}
+            key={'slot' + slot.SlotId + 'loc' + props.locations[j].LocationId}
           />
         );
       }

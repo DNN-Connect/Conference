@@ -3,14 +3,14 @@ import * as Models from "../Models/";
 
 interface ISchedulerScheduledSessionProps {
   session: Models.ISession;
-  sessionPlace: any;
+  sessionPlace: (s: HTMLElement) => void;
 }
 
 const SchedulerScheduledSession: React.SFC<
   ISchedulerScheduledSessionProps
 > = props => {
   var speakers = props.session.Speakers.map(function(item) {
-    return <span className="speaker">{item.Value}</span>;
+    return <span className="speaker" key={item.Key}>{item.Value}</span>;
   });
   var divStyle = {
     backgroundColor: props.session.BackgroundColor
@@ -21,7 +21,6 @@ const SchedulerScheduledSession: React.SFC<
       data-slotid={props.session.SlotId}
       data-locationid={props.session.LocationId}
       data-plenary={props.session.IsPlenary}
-      ref="Session"
       data-sessionid={props.session.SessionId}
       data-day={props.session.DayNr}
       style={divStyle}

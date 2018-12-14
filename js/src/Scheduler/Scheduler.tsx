@@ -75,7 +75,7 @@ export default class Scheduler extends React.Component<
       date = date.addDays(i - 1);
       var dateString = moment(date).format("dddd MMM Do");
       scheduleTabs.push(
-        <li role="presentation" className={tabClass}>
+        <li role="presentation" className={tabClass} key={'tab'+ i}>
           <a
             href="#"
             onClick={e => {
@@ -104,6 +104,7 @@ export default class Scheduler extends React.Component<
           locations={this.props.locations}
           sessionPlace={this.sessionPlace}
           selectedTab={this.state.selectedTab}
+          key={i}
         />
       );
     }

@@ -1,34 +1,34 @@
-import * as React from 'react';
-import * as Models from '../Models/';
-import SchedulerScheduledSession from './SchedulerScheduledSession';
-import SchedulerGrid from './SchedulerGrid';
+import * as React from "react";
+import * as Models from "../Models/";
+import SchedulerScheduledSession from "./SchedulerScheduledSession";
+import SchedulerGrid from "./SchedulerGrid";
 
 interface ISchedulerDayProps {
-    locations: Models.ILocation[];
-    locationList: object;
-    slots: Models.ISlot[];
-    sessionList: Models.ISession[];
-    start: number;
-    finish: number;
-    leftMargin: number;
-    day: number;
-    sessionPlace: any;
-    selectedTab: number;
-};
+  locations: Models.ILocation[];
+  locationList: object;
+  slots: Models.ISlot[];
+  sessionList: Models.ISession[];
+  start: number;
+  finish: number;
+  leftMargin: number;
+  day: number;
+  sessionPlace: (s: HTMLElement) => void;
+  selectedTab: number;
+}
 
 const SchedulerDay: React.SFC<ISchedulerDayProps> = props => {
   var height = props.finish - props.start;
   var width = props.locations.length * 100;
-  var viewBox =
-    "0 0 " + (width + props.leftMargin).toString() + " " + height;
+  var viewBox = "0 0 " + (width + props.leftMargin).toString() + " " + height;
   var scheduledSessions: JSX.Element[] = [];
   for (var i = 0; i < props.sessionList.length; i++) {
     var session = props.sessionList[i];
-    if ((session.DayNr === props.day) && (session.SlotId > 0)) {
+    if (session.DayNr === props.day && session.SlotId > 0) {
       scheduledSessions.push(
         <SchedulerScheduledSession
           session={session}
-          sessionPlace={props.sessionPlace}
+          sessionPlace={s => props.sessionPlace(s)}
+          key={session.SessionId}
         />
       );
     }
@@ -74,7 +74,7 @@ const SchedulerDay: React.SFC<ISchedulerDayProps> = props => {
       </svg>
       {scheduledSessions}
     </div>
-  );}
+  );
+};
 
 export default SchedulerDay;
-
