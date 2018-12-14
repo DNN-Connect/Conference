@@ -1,8 +1,10 @@
 import * as React from "react";
 import * as Models from "../Models/";
-import * as ss from "simple-ajax-uploader"
+// import * as ss from "simple-ajax-uploader"
 import Video from "./Video";
 import Resource from "./Resource";
+
+declare const ss: any;
 
 interface IResourcesProps {
   module: Models.IAppModule;
