@@ -66,7 +66,7 @@ export default class Scheduler extends React.Component<
       var daySlots: Models.ISlot[] = [];
       for (var j = 0; j < this.props.slots.length; j++) {
         var slot = this.props.slots[j];
-        if (slot.DayNr === undefined || slot.DayNr === i) {
+        if (slot.DayNr === null || slot.DayNr === i) {
           daySlots.push(slot);
         }
       }
@@ -74,6 +74,7 @@ export default class Scheduler extends React.Component<
       var date = new Date(this.props.conference.StartDate || new Date());
       date = date.addDays(i - 1);
       var dateString = moment(date).format("dddd MMM Do");
+      let ii = i;
       scheduleTabs.push(
         <li role="presentation" className={tabClass} key={'tab'+ i}>
           <a
@@ -81,7 +82,7 @@ export default class Scheduler extends React.Component<
             onClick={e => {
               e.preventDefault();
               this.setState({
-                selectedTab: i
+                selectedTab: ii
               });
             }}
           >
@@ -102,7 +103,7 @@ export default class Scheduler extends React.Component<
           leftMargin={50}
           sessionList={this.state.sessionList}
           locations={this.props.locations}
-          sessionPlace={this.sessionPlace}
+          sessionPlace={s => this.sessionPlace(s)}
           selectedTab={this.state.selectedTab}
           key={i}
         />
@@ -177,7 +178,7 @@ export default class Scheduler extends React.Component<
     });
   }
 
-  sessionPlace(session) {
+  sessionPlace(session: HTMLDivElement) {
     var jqSession = $(session);
     var sessionBox = session.getBoundingClientRect();
     var key =
@@ -198,9 +199,9 @@ export default class Scheduler extends React.Component<
         slotBox.left - sessionBox.left + 4,
         slotBox.top - sessionBox.top + 4
       );
-      session.setAttribute("data-orig-x", slotBox.left - sessionBox.left + 4);
-      session.setAttribute("data-orig-y", slotBox.top - sessionBox.top + 4);
-      session.setAttribute("data-slotkey", slot.getAttribute("data-reactid"));
+      session.setAttribute("data-orig-x", (slotBox.left - sessionBox.left + 4).toString());
+      session.setAttribute("data-orig-y", (slotBox.top - sessionBox.top + 4).toString());
+      session.setAttribute("data-slotkey", slot.getAttribute("data-reactid") || "");
       slot.classList.remove("canDrop");
     } else {
       session.setAttribute("data-orig-x", "");

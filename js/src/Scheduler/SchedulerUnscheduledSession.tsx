@@ -6,8 +6,8 @@ interface ISchedulerUnscheduledSessionProps {
 };
 
 const SchedulerUnscheduledSession: React.SFC<ISchedulerUnscheduledSessionProps> = props => {
-  var speakers = props.session.Speakers.map(function(item) {
-    return <span className="speaker">{item.Value}</span>;
+  var speakers = props.session.Speakers.map((item) => {
+    return <span className="speaker" key={item.Key}>{item.Value}</span>;
   });
   var divStyle = {
     backgroundColor: props.session.BackgroundColor

@@ -69,8 +69,8 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
   var slotBands: JSX.Element[] = [];
   for (var i = 0; i < props.slots.length; i++) {
     var slot = props.slots[i];
+    var refId = "slot" + props.day + "x" + slot.SlotId.toString();
     if (slot.SlotType == 0) {
-      var refId = "slot" + props.day + "x" + slot.SlotId.toString();
       slotBands.push(
         <rect
           x={props.leftMargin}
@@ -83,7 +83,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           data-locationid="-1"
           data-day={props.day}
           fill="url(#Pattern)"
-          key={'slotb' + slot.SlotId}
+          key={refId}
         />
       );
     } else if (slot.SlotType == 1) {
@@ -93,7 +93,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           y={slot.StartMinutes - props.start}
           width={props.width}
           height={slot.DurationMins}
-          key={'slotb' + slot.SlotId}
+          key={refId}
         >
           <div className="panel panel-default closedSlot">
             <div className="panel-body embedded">{slot.Title}</div>
@@ -107,7 +107,7 @@ const SchedulerGrid: React.SFC<ISchedulerGridProps> = props => {
           y={slot.StartMinutes - props.start}
           width="100"
           height={slot.DurationMins}
-          key={'slotb' + slot.SlotId}
+          key={refId}
         >
           <div className="panel panel-default closedSlot">
             <div className="panel-body embedded">{slot.Title}</div>

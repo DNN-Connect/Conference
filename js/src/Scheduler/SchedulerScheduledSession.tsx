@@ -3,48 +3,61 @@ import * as Models from "../Models/";
 
 interface ISchedulerScheduledSessionProps {
   session: Models.ISession;
-  sessionPlace: (s: HTMLElement) => void;
+  sessionPlace: (s: HTMLDivElement) => void;
 }
 
-const SchedulerScheduledSession: React.SFC<
-  ISchedulerScheduledSessionProps
-> = props => {
-  var speakers = props.session.Speakers.map(function(item) {
-    return <span className="speaker" key={item.Key}>{item.Value}</span>;
-  });
-  var divStyle = {
-    backgroundColor: props.session.BackgroundColor
+interface ISchedulerScheduledSessionState {}
+
+export default class SchedulerScheduledSession extends React.Component<
+  ISchedulerScheduledSessionProps,
+  ISchedulerScheduledSessionState
+> {
+  refs: {
+    Session: HTMLDivElement;
   };
-  return (
-    <div
-      className="panel panel-default session scheduled"
-      data-slotid={props.session.SlotId}
-      data-locationid={props.session.LocationId}
-      data-plenary={props.session.IsPlenary}
-      data-sessionid={props.session.SessionId}
-      data-day={props.session.DayNr}
-      style={divStyle}
-    >
-      <div className="panel-body">
-        <div className="speakers">{speakers}</div>
-        {props.session.Title}
+
+  constructor(props: ISchedulerScheduledSessionProps) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    $(document).ready(() => {
+      this.props.sessionPlace(this.refs.Session);
+    });
+  }
+
+  componentDidUpdate() {
+    this.props.sessionPlace(this.refs.Session);
+  }
+
+  public render(): JSX.Element {
+    var speakers = this.props.session.Speakers.map((item) => {
+      return (
+        <span className="speaker" key={item.Key}>
+          {item.Value}
+        </span>
+      );
+    });
+    var divStyle = {
+      backgroundColor: this.props.session.BackgroundColor
+    };
+    return (
+      <div
+        className="panel panel-default session scheduled"
+        data-slotid={this.props.session.SlotId}
+        data-locationid={this.props.session.LocationId}
+        data-plenary={this.props.session.IsPlenary}
+        data-sessionid={this.props.session.SessionId}
+        data-day={this.props.session.DayNr}
+        style={divStyle}
+        ref="Session"
+      >
+        <div className="panel-body">
+          <div className="speakers">{speakers}</div>
+          {this.props.session.Title}
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default SchedulerScheduledSession;
-
-// export  class SchedulerScheduledSessionasdfasdf extends React.Component {
-//   componentDidMount() {
-//     $(document).ready(
-//       function() {
-//         props.sessionPlace(this.refs.Session);
-//       }.bind(this)
-//     );
-//   }
-
-//   componentDidUpdate() {
-//     props.sessionPlace(this.refs.Session);
-//   }
-// }
+    );
+  }
+}

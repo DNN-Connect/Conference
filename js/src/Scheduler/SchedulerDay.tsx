@@ -12,7 +12,7 @@ interface ISchedulerDayProps {
   finish: number;
   leftMargin: number;
   day: number;
-  sessionPlace: (s: HTMLElement) => void;
+  sessionPlace: (s: HTMLDivElement) => void;
   selectedTab: number;
 }
 
