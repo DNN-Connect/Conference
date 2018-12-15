@@ -76,7 +76,7 @@ export default class Scheduler extends React.Component<
       var dateString = moment(date).format("dddd MMM Do");
       let ii = i;
       scheduleTabs.push(
-        <li role="presentation" className={tabClass} key={'tab'+ i}>
+        <li role="presentation" className={tabClass} key={"tab" + i}>
           <a
             href="#"
             onClick={e => {
@@ -128,54 +128,52 @@ export default class Scheduler extends React.Component<
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      var that = this;
-      interact(".session")
-        .draggable({
-          inertia: false,
-          restrict: {
-            endOnly: true
-          },
-          autoScroll: true,
-          onend(event) {}
-        })
-        .on("dragmove", event => {
-          moveObject(event.target, event.dx, event.dy);
-        });
-      interact(".canDrop").dropzone({
-        accept: ".session",
-        overlap: 0.5,
-        ondropactivate(event) {
-          that.hasReset = false;
-          $(event.relatedTarget).width(100);
+    var that = this;
+    interact(".session")
+      .draggable({
+        inertia: false,
+        restrict: {
+          endOnly: true
         },
-        ondragenter(event) {
-          var dropzoneElement = event.target;
-          dropzoneElement.classList.add("drop-target");
-        },
-        ondragleave(event) {
-          event.target.classList.remove("drop-target");
-        },
-        ondrop(event) {
-          that.hasReset = true;
-          if (event.target === that.refs.unscheduledColumn) {
-            that.tryRemoveSession(event.relatedTarget);
-          } else {
-            that.tryMoveSession(event.relatedTarget, event.target);
-          }
-        },
-        ondropdeactivate(event) {
-          if (!that.hasReset) {
-            that.sessionPlace(event.relatedTarget);
-            that.hasReset = true;
-          }
-          event.target.classList.remove("drop-target");
-        }
+        autoScroll: true,
+        onend(event) {}
+      })
+      .on("dragmove", event => {
+        moveObject(event.target, event.dx, event.dy);
       });
-      $(this.refs.unscheduledColumn).height(
-        this.refs.schedulerColumn.getBoundingClientRect().height
-      );
+    interact(".canDrop").dropzone({
+      accept: ".session",
+      overlap: 0.5,
+      ondropactivate(event) {
+        that.hasReset = false;
+        $(event.relatedTarget).width(100);
+      },
+      ondragenter(event) {
+        var dropzoneElement = event.target;
+        dropzoneElement.classList.add("drop-target");
+      },
+      ondragleave(event) {
+        event.target.classList.remove("drop-target");
+      },
+      ondrop(event) {
+        that.hasReset = true;
+        if (event.target === that.refs.unscheduledColumn) {
+          that.tryRemoveSession(event.relatedTarget);
+        } else {
+          that.tryMoveSession(event.relatedTarget, event.target);
+        }
+      },
+      ondropdeactivate(event) {
+        if (!that.hasReset) {
+          that.sessionPlace(event.relatedTarget);
+          that.hasReset = true;
+        }
+        event.target.classList.remove("drop-target");
+      }
     });
+    $(this.refs.unscheduledColumn).height(
+      this.refs.schedulerColumn.getBoundingClientRect().height
+    );
   }
 
   sessionPlace(session: HTMLDivElement) {
@@ -199,9 +197,18 @@ export default class Scheduler extends React.Component<
         slotBox.left - sessionBox.left + 4,
         slotBox.top - sessionBox.top + 4
       );
-      session.setAttribute("data-orig-x", (slotBox.left - sessionBox.left + 4).toString());
-      session.setAttribute("data-orig-y", (slotBox.top - sessionBox.top + 4).toString());
-      session.setAttribute("data-slotkey", slot.getAttribute("data-reactid") || "");
+      session.setAttribute(
+        "data-orig-x",
+        (slotBox.left - sessionBox.left + 4).toString()
+      );
+      session.setAttribute(
+        "data-orig-y",
+        (slotBox.top - sessionBox.top + 4).toString()
+      );
+      session.setAttribute(
+        "data-slotkey",
+        slot.getAttribute("data-reactid") || ""
+      );
       slot.classList.remove("canDrop");
     } else {
       session.setAttribute("data-orig-x", "");

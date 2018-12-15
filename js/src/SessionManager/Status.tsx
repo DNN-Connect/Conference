@@ -20,18 +20,19 @@ const Status: React.SFC<IStatusProps> = props => {
       btnClass = opt.ClassName;
       btnText = opt.Text;
     } else {
+      let opt2 = opt;
       options.push(
         <li>
           <a
             href="#"
-            data-id={opt.Id}
-            data-confirm={opt.Confirm}
+            data-id={opt2.Id}
+            data-confirm={opt2.Confirm}
             onClick={e => {
               e.preventDefault();
-              props.changeStatus(props.session, opt);
+              props.changeStatus(props.session, opt2);
             }}
           >
-            {opt.Text}
+            {opt2.Text}
           </a>
         </li>
       );

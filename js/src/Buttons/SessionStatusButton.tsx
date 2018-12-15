@@ -34,15 +34,16 @@ export default class SessionStatusButton extends React.Component<
         btnClass = opt.ClassName;
         btnText = opt.Text;
       } else {
+        let opt2 = opt;
         options.push(
-          <li key={opt.Id}>
+          <li key={opt2.Id}>
             <a
               href="#"
-              data-id={opt.Id}
-              data-confirm={opt.Confirm}
-              onClick={e => this.statusChange(opt, e)}
+              data-id={opt2.Id}
+              data-confirm={opt2.Confirm}
+              onClick={e => this.statusChange(opt2, e)}
             >
-              {opt.Text}
+              {opt2.Text}
             </a>
           </li>
         );

@@ -4,6 +4,7 @@ import Tag from "./Tag";
 
 interface ITagsProps {
   module: Models.IAppModule;
+  conferenceId: number;
   tags: Models.ITag[];
   name: string;
   placeholder: string;
@@ -57,24 +58,20 @@ export default class Tags extends React.Component<ITagsProps, ITagsState> {
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      ($(this.refs.newTag) as any).autocomplete({
-        minLength: 1,
-        source: function(request, response) {
-          this.service.searchTags(
-            this.props.conferenceId,
-            request.term,
-            function(data) {
-              response(data);
-            }
-          );
-        },
-        select: function(e, ui) {
-          e.preventDefault();
-          this.addTag(ui.item.label, ui.item.value);
-          this.refs.newTag.value = "";
-        }
-      });
+    ($(this.refs.newTag) as any).autocomplete({
+      minLength: 1,
+      source: (request, response) => {
+        this.props.module.service.searchTags(this.props.conferenceId, request.term, function(
+          data
+        ) {
+          response(data);
+        });
+      },
+      select: (e, ui) => {
+        e.preventDefault();
+        this.addTag(ui.item.label, ui.item.value);
+        this.refs.newTag.value = "";
+      }
     });
   }
 

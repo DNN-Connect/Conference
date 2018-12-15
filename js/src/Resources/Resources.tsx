@@ -111,50 +111,46 @@ export default class Resources extends React.Component<
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      var uploader = new ss.SimpleUpload({
-        button: $(".cmdUpload"),
-        dropzone: $(".dropPanel"),
-        url:
-          this.props.module.service.baseServicepath +
-          "Conference/" +
-          this.props.conferenceId +
-          "/SessionResources/Upload/" +
-          this.props.sessionId,
-        customHeaders: {
-          ModuleId: this.props.module.moduleId,
-          TabId: this.props.module.tabId,
-          RequestVerificationToken: $(
-            '[name="__RequestVerificationToken"]'
-          ).val()
-        },
-        name: "resource",
-        multipart: true,
-        hoverClass: "hover",
-        focusClass: "focus",
-        responseType: "json",
-        startXHR() {},
-        onSubmit: () => {
-          this.refs.msgBox.innerHTML = this.props.module.resources.Uploading;
-        },
-        onComplete: (filename, response) => {
-          this.refs.msgBox.innerHTML = this.props.module.resources.DropHere;
-          this.setState({
-            resources: response
-          });
-        },
-        onError: (
-          filename,
-          errorType,
-          status,
-          statusText,
-          response,
-          uploadBtn,
-          fileSize
-        ) => {
-          this.refs.msgBox.innerHTML = "Error uploading file: " + response;
-        }
-      });
+    var uploader = new ss.SimpleUpload({
+      button: $(".cmdUpload"),
+      dropzone: $(".dropPanel"),
+      url:
+        this.props.module.service.baseServicepath +
+        "Conference/" +
+        this.props.conferenceId +
+        "/SessionResources/Upload/" +
+        this.props.sessionId,
+      customHeaders: {
+        ModuleId: this.props.module.moduleId,
+        TabId: this.props.module.tabId,
+        RequestVerificationToken: $('[name="__RequestVerificationToken"]').val()
+      },
+      name: "resource",
+      multipart: true,
+      hoverClass: "hover",
+      focusClass: "focus",
+      responseType: "json",
+      startXHR() {},
+      onSubmit: () => {
+        this.refs.msgBox.innerHTML = this.props.module.resources.Uploading;
+      },
+      onComplete: (filename, response) => {
+        this.refs.msgBox.innerHTML = this.props.module.resources.DropHere;
+        this.setState({
+          resources: response
+        });
+      },
+      onError: (
+        filename,
+        errorType,
+        status,
+        statusText,
+        response,
+        uploadBtn,
+        fileSize
+      ) => {
+        this.refs.msgBox.innerHTML = "Error uploading file: " + response;
+      }
     });
   }
 

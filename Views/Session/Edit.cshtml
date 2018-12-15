@@ -8,6 +8,7 @@
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddJqueryUi();
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
 
     var tracks = new List<System.Web.Mvc.SelectListItem>();
@@ -113,6 +114,6 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
+  Common.validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
  });
 </script>

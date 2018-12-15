@@ -22,9 +22,7 @@ export default class SchedulerScheduledSession extends React.Component<
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      this.props.sessionPlace(this.refs.Session);
-    });
+    this.props.sessionPlace(this.refs.Session);
   }
 
   componentDidUpdate() {
@@ -32,7 +30,7 @@ export default class SchedulerScheduledSession extends React.Component<
   }
 
   public render(): JSX.Element {
-    var speakers = this.props.session.Speakers.map((item) => {
+    var speakers = this.props.session.Speakers.map(item => {
       return (
         <span className="speaker" key={item.Key}>
           {item.Value}

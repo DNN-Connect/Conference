@@ -6,6 +6,7 @@
 
     RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions | ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
     ConferenceModuleContext.AddCss("croppie.css", "croppie", "1.0.3");
     ConferenceModuleContext.AddScript("croppie.min.js", "croppie", "1.0.3");
@@ -122,9 +123,10 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
-
-  $('#cmdChangePhoto').click(function () {
+  Common.validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
+  
+  $('#cmdChangePhoto').click(function (e) {
+   e.preventDefault();
    $('#spanPhoto').hide();
    $('#spanPhotoEdit').show();
    var crop = $('#photoCrop').croppie({

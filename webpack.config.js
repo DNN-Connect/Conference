@@ -7,35 +7,14 @@ var isProduction =
 var sourcePath = path.join(__dirname, "./js/src");
 var outPath = path.join(__dirname, "./js");
 
-module.exports = {
+var commonConfig = {
   context: sourcePath,
-  entry: {
-    app: "./App.ts"
-  },
-  output: {
-    path: outPath,
-    filename: "conference.js"
-  },
   target: "web",
-  resolve: {
-    extensions: [".js", ".ts", ".tsx"],
-    mainFields: ["module", "browser", "main"],
-    alias: {
-      app: path.resolve(__dirname, "src/app/")
-    }
-  },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         exclude: [/node_modules/, /_Development/],
-        // use: [
-        //   !isProduction && {
-        //     loader: "babel-loader",
-        //     options: {}
-        //   },
-        //   "ts-loader"
-        // ].filter(Boolean),
         use: {
           loader: "babel-loader",
           options: {
@@ -68,3 +47,32 @@ module.exports = {
     })
   ]
 };
+
+var mainAppConfig = Object.assign({}, commonConfig, {
+  entry: {
+    conference: "./App.ts"
+  },
+  output: {
+    path: outPath,
+    filename: "[name].js"
+  },
+  resolve: {
+    extensions: [".js", ".ts", ".tsx"],
+    mainFields: ["module", "browser", "main"],
+    alias: {
+      app: path.resolve(__dirname, "src/app/")
+    }
+  }
+});
+
+var libConfig = Object.assign({}, commonConfig, {
+  entry: "./Common.ts",
+  output: {
+    path: outPath,
+    filename: "common.js",
+    libraryTarget: "var",
+    library: "Common"
+  }
+});
+
+module.exports = [mainAppConfig, libConfig];

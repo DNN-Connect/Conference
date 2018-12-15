@@ -20,6 +20,7 @@
     }
 
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
 }
 
@@ -141,7 +142,7 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editConference'), $('#cmdSave'), $('#formErrors'));
+  Common.validateForm($('#editConference'), $('#cmdSave'), $('#formErrors'));
   $('.cmdDelete').click(function () {
    return confirm('@Dnn.LocalizeString("DeleteConference.Confirm")');
   });

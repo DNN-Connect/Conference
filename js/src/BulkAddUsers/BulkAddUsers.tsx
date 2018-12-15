@@ -107,36 +107,34 @@ export default class BulkAddUsers extends React.Component<
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      ($(this.refs.txtEmail) as any).autocomplete({
-        minLength: 1,
-        source: (request, response) => {
-          this.props.module.service.searchUsersByEmail(
-            this.props.conferenceId,
-            request.term,
-            data => {
-              response(
-                data.map(item => {
-                  return {
-                    label: item.Email,
-                    value: item.UserId,
-                    item: item
-                  };
-                })
-              );
-            }
-          );
-        },
-        select: (e, ui) => {
-          e.preventDefault();
-          var u = new Models.Attendee();
-          u.Email = ui.item.item.Email;
-          u.FirstName = ui.item.item.FirstName;
-          u.LastName = ui.item.item.LastName;
-          u.DisplayName = ui.item.item.DisplayName;
-          this.setState({ newUser: u });
-        }
-      });
+    ($(this.refs.txtEmail) as any).autocomplete({
+      minLength: 1,
+      source: (request, response) => {
+        this.props.module.service.searchUsersByEmail(
+          this.props.conferenceId,
+          request.term,
+          data => {
+            response(
+              data.map(item => {
+                return {
+                  label: item.Email,
+                  value: item.UserId,
+                  item: item
+                };
+              })
+            );
+          }
+        );
+      },
+      select: (e, ui) => {
+        e.preventDefault();
+        var u = new Models.Attendee();
+        u.Email = ui.item.item.Email;
+        u.FirstName = ui.item.item.FirstName;
+        u.LastName = ui.item.item.LastName;
+        u.DisplayName = ui.item.item.DisplayName;
+        this.setState({ newUser: u });
+      }
     });
   }
 

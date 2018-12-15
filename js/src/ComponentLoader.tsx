@@ -79,6 +79,7 @@ export class ComponentLoader {
           name={fieldName}
           tags={tags}
           placeholder={placeholder}
+          conferenceId={$(el).data("conference")}
         />,
         el
       );

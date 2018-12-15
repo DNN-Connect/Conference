@@ -79,44 +79,42 @@ export default class Speakers extends React.Component<
   }
 
   componentDidMount() {
-    $(document).ready(() => {
-      if (this.props.module.security.CanManage) {
-        ($(this.refs.newSpeaker) as any).autocomplete({
-          minLength: 1,
-          source: (request, response) => {
-            this.refs.newSpeakerId.value = "";
-            this.props.module.service.searchUsers(
-              this.props.conferenceId,
-              request.term,
-              function(data) {
-                response(
-                  data.map(function(item) {
-                    return {
-                      label: item.DisplayName,
-                      value: item.UserId
-                    };
-                  })
-                );
-              }
-            );
-          },
-          select: (e, ui) => {
-            e.preventDefault();
-            this.refs.newSpeakerId.value = ui.item.value;
-            this.refs.newSpeaker.value = ui.item.label;
-          }
-        });
-      }
-      ($(this.refs.speakersTable) as any).sortable({
-        update: (event, ui) => {
-          this.props.module.service.orderSessionSpeakers(
+    if (this.props.module.security.CanManage) {
+      ($(this.refs.newSpeaker) as any).autocomplete({
+        minLength: 1,
+        source: (request, response) => {
+          this.refs.newSpeakerId.value = "";
+          this.props.module.service.searchUsers(
             this.props.conferenceId,
-            this.props.sessionId,
-            getTableOrder("speakersTable"),
-            () => {}
+            request.term,
+            function(data) {
+              response(
+                data.map(function(item) {
+                  return {
+                    label: item.DisplayName,
+                    value: item.UserId
+                  };
+                })
+              );
+            }
           );
+        },
+        select: (e, ui) => {
+          e.preventDefault();
+          this.refs.newSpeakerId.value = ui.item.value;
+          this.refs.newSpeaker.value = ui.item.label;
         }
       });
+    }
+    ($(this.refs.speakersTable) as any).sortable({
+      update: (event, ui) => {
+        this.props.module.service.orderSessionSpeakers(
+          this.props.conferenceId,
+          this.props.sessionId,
+          getTableOrder("speakersTable"),
+          () => {}
+        );
+      }
     });
   }
 
@@ -151,7 +149,7 @@ export default class Speakers extends React.Component<
         this.props.conferenceId,
         this.props.sessionId,
         parseInt(this.refs.newSpeakerId.value),
-        (data) => {
+        data => {
           this.refs.newSpeakerId.value = "";
           this.refs.newSpeaker.value = "";
           var newList = this.state.speakers;

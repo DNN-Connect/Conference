@@ -6,6 +6,7 @@
 
     RequirePermissionLevel(ConferenceModuleContext.Security.CanAttend);
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
     ConferenceModuleContext.AddCss("croppie.css", "croppie", "1.0.3");
     ConferenceModuleContext.AddScript("croppie.min.js", "croppie", "1.0.3");
@@ -109,7 +110,7 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
+  Common.validateForm($('#editProfile'), $('#cmdSave'), $('#formErrors'));
 
   $('#cmdSave').click(function() {
    $('#ProfilePicDTO').val(JSON.stringify(currentImageSettings));

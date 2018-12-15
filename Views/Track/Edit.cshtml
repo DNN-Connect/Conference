@@ -5,6 +5,7 @@
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
     ConferenceModuleContext.AddBootstrapCss();
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
 }
 
@@ -49,7 +50,7 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
+  Common.validateForm($('#editTrack'), $('#cmdSave'), $('#formErrors'));
   $('#BackgroundColor').css('background-color', $('#BackgroundColor').val());
   $('.cmdRefresh').click(function (e) {
    e.preventDefault();

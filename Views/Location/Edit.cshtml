@@ -4,6 +4,7 @@
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
     RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+    ConferenceModuleContext.AddScript("common.js");
     ConferenceModuleContext.AddEditScripts();
 }
 
@@ -42,6 +43,6 @@
   $('input[data-editor="date"]').datetimepicker({
    format: 'MM/DD/YYYY'
   });
-  validateForm($('#editLocation'), $('#cmdSave'), $('#formErrors'));
+  Common.validateForm($('#editLocation'), $('#cmdSave'), $('#formErrors'));
  });
 </script>
