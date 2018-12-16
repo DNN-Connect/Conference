@@ -144,6 +144,9 @@
   <data name="ChooseLocation" xml:space="preserve">
     <value>&lt; Location &gt;</value>
   </data>
+  <data name="ClickOrDropImageHere" xml:space="preserve">
+    <value>Click or drop image ...</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -173,9 +176,6 @@
   </data>
   <data name="DropHere" xml:space="preserve">
     <value>Drop files here</value>
-  </data>
-  <data name="DropImageHere" xml:space="preserve">
-    <value>Drop Image Here ...</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>

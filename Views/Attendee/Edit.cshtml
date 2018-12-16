@@ -20,6 +20,10 @@
   userFolder = DotNetNuke.Services.FileSystem.FolderManager.Instance.GetUserFolder(user).FolderPath;
  }
 }
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+     data-resources="@SerializedResources()"
+     data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
+</div>
 
 <fieldset id="editProfile">
  <div class="dnnFormItem">

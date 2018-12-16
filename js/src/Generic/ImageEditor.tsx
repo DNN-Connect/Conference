@@ -27,6 +27,7 @@ export default class ImageEditor extends React.Component<
   refs: {
     canvas: HTMLCanvasElement;
     dialog: any;
+    filePicker: HTMLInputElement;
   };
 
   constructor(props: IImageEditorProps) {
@@ -44,6 +45,13 @@ export default class ImageEditor extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.updateCanvas();
+  }
+  componentDidUpdate() {
+    this.updateCanvas();
+  }
+
   public show(): void {
     this.setState(
       {
@@ -58,17 +66,6 @@ export default class ImageEditor extends React.Component<
         dragY: 0
       },
       () => {
-        var ctx = this.refs.canvas.getContext("2d");
-        if (ctx) {
-          ctx.font = "20px sans-serif";
-          ctx.textBaseline = "middle";
-          ctx.textAlign = "center";
-          ctx.fillText(
-            this.props.module.resources.DropImageHere,
-            this.props.width / 2,
-            this.props.height / 2
-          );
-        }
         ($(this.refs.dialog) as any).modal("show");
       }
     );
@@ -139,16 +136,18 @@ export default class ImageEditor extends React.Component<
     reader.readAsDataURL(img);
   }
   private renderImage(): void {
-    var ctx = this.refs.canvas.getContext("2d");
-    if (ctx) {
-      ctx.clearRect(0, 0, this.props.width, this.props.height);
-      ctx.drawImage(
-        this.state.img,
-        this.state.left + this.state.dragX - this.state.startX,
-        this.state.top + this.state.dragY - this.state.startY,
-        this.state.img.width * this.state.zoomLevel,
-        this.state.img.height * this.state.zoomLevel
-      );
+    if (this.state.img.src !== "") {
+      var ctx = this.refs.canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, this.props.width, this.props.height);
+        ctx.drawImage(
+          this.state.img,
+          this.state.left + this.state.dragX - this.state.startX,
+          this.state.top + this.state.dragY - this.state.startY,
+          this.state.img.width * this.state.zoomLevel,
+          this.state.img.height * this.state.zoomLevel
+        );
+      }
     }
   }
   private cropAndCenterImage(): void {
@@ -177,7 +176,25 @@ export default class ImageEditor extends React.Component<
   private update(e: React.MouseEvent<HTMLAnchorElement>): void {
     e.preventDefault();
     ($(this.refs.dialog) as any).modal("hide");
-    this.props.update(this.refs.canvas.toDataURL("image/png"));
+    if (this.state.img.src !== "")
+      this.props.update(this.refs.canvas.toDataURL("image/png"));
+  }
+
+  updateCanvas() {
+    const ctx = this.refs.canvas.getContext("2d");
+    if (this.state.img.src === "") {
+      if (ctx) {
+        ctx.clearRect(0, 0, this.props.width, this.props.height);
+        ctx.font = "14px sans-serif";
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          this.props.module.resources.ClickOrDropImageHere,
+          this.props.width / 2,
+          this.props.height / 2
+        );
+      }
+    }
   }
 
   public render(): JSX.Element {
@@ -219,6 +236,9 @@ export default class ImageEditor extends React.Component<
                 onMouseMove={e => this.onMouseMove(e)}
                 onMouseUp={e => this.onMouseUp(e)}
                 onMouseOut={e => this.onMouseOut(e)}
+                onClick={e => {
+                  if (this.state.img.src === "") this.refs.filePicker.click();
+                }}
               />
               <input
                 type="range"
@@ -235,13 +255,19 @@ export default class ImageEditor extends React.Component<
                   )
                 }
               />
+              <input
+                type="file"
+                ref="filePicker"
+                style={{ display: "none" }}
+                onChange={e => {
+                  if (e.target.files && e.target.files.length === 1) {
+                    this.loadImage(e.target.files[0]);
+                  }
+                }}
+              />
             </div>
             <div className="modal-footer">
-              <a
-                href="#"
-                className="btn btn-default"
-                data-dismiss="modal"
-              >
+              <a href="#" className="btn btn-default" data-dismiss="modal">
                 {this.props.module.resources.Cancel}
               </a>
               <a
@@ -263,6 +289,7 @@ export default class ImageEditor extends React.Component<
 
 var styles = {
   canvas: {
-    backgroundColor: "#eee"
+    backgroundColor: "#eee",
+    borderRadius: "10px"
   }
 };

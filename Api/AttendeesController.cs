@@ -105,7 +105,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
-        public HttpResponseMessage UploadPicture(int conferenceId, int id, UpdateImageDTO data)
+        public HttpResponseMessage UpdateImage(int conferenceId, int id, UpdateImageDTO data)
         {
             if (!ConferenceModuleContext.Security.CanManage)
             {
