@@ -98,30 +98,15 @@ namespace Connect.DNN.Modules.Conference.Api
             }
         }
 
+        public class UpdateImageDTO
+        {
+            public string Image { get; set; }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
-        public HttpResponseMessage UploadPicture(int conferenceId, int id)
+        public HttpResponseMessage UploadPicture(int conferenceId, int id, UpdateImageDTO data)
         {
-            HttpPostedFile postedFile = HttpContext.Current.Request.Files["profilepic"];
-            var fileName = System.IO.Path.GetFileName(postedFile.FileName).RemoveIllegalCharacters();
-            var extension = System.IO.Path.GetExtension(fileName);
-            var contentType = "";
-            switch (extension.ToLower())
-            {
-                case ".jpg":
-                    contentType = "image/jpg";
-                    break;
-                case ".png":
-                    contentType = "image/png";
-                    break;
-                default:
-                    return ServiceError("Unsupported File Format");
-            }
-            if (postedFile.ContentLength > 1000000)
-            {
-                return ServiceError("File too big");
-            }
             if (!ConferenceModuleContext.Security.CanManage)
             {
                 if (id != UserInfo.UserID)
@@ -129,10 +114,17 @@ namespace Connect.DNN.Modules.Conference.Api
                     ConferenceModuleContext.ThrowAccessViolation();
                 }
             }
-            var user = DotNetNuke.Entities.Users.UserController.GetUserById(PortalSettings.PortalId, id);
-            var userFolder = DotNetNuke.Services.FileSystem.FolderManager.Instance.GetUserFolder(user);
-            var file = DotNetNuke.Services.FileSystem.FileManager.Instance.AddFile(userFolder, fileName, postedFile.InputStream, true, false, contentType, UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, "");
+            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, id);
+            var file = ImageUtils.SaveUserProfilePic(PortalSettings.PortalId, id, data.Image, UserInfo.UserID);
+            if (file != null)
+            {
+                attendee.PhotoFolder = file.Folder;
+                attendee.PhotoFilename = file.FileName;
+                attendee.PhotoContentType = file.ContentType;
+                attendee.PhotoHeight = file.Height;
+                attendee.PhotoWidth = file.Width;
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, attendee);
         }
 
         public class UserDTO

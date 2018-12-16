@@ -19,6 +19,8 @@ import SessionStatusButton from "./Buttons/SessionStatusButton";
 import SessionManager from "./SessionManager/SessionManager";
 import LiveTicker from "./LiveTicker/LiveTicker";
 import NBrightOrders from "./NBright/OrderTable";
+import SpeakerImage from "./Speakers/SpeakerImage";
+import AttendeeImage from "./Attendance/AttendeeImage";
 
 export class ComponentLoader {
   public static load(): void {
@@ -250,6 +252,30 @@ export class ComponentLoader {
         <AttendanceButton
           module={AppManager.Modules.Item(moduleId.toString())}
           session={$(el).data("session")}
+        />,
+        el
+      );
+    });
+    $(".speakerImage").each((i, el) => {
+      var moduleId = $(el).data("moduleid");
+      ReactDOM.render(
+        <SpeakerImage
+          module={AppManager.Modules.Item(moduleId.toString())}
+          speaker={$(el).data("speaker")}
+          fieldName={$(el).data("field")}
+          homeDir={$(el).data("homedir")}
+        />,
+        el
+      );
+    });
+    $(".attendeeImage").each((i, el) => {
+      var moduleId = $(el).data("moduleid");
+      ReactDOM.render(
+        <AttendeeImage
+          module={AppManager.Modules.Item(moduleId.toString())}
+          attendee={$(el).data("attendee")}
+          fieldName={$(el).data("field")}
+          homeDir={$(el).data("homedir")}
         />,
         el
       );

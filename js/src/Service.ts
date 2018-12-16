@@ -230,10 +230,16 @@ export default class DataService {
     public tryRemoveSession(conferenceId: number, sessionId: number, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'Sessions', 'Remove', conferenceId, sessionId, null, success, fail);
     }
+    public updateAttendeeImage(conferenceId: number, userId: number, image: string, success: Function, fail?: Function): void {
+        this.ajaxCall('POST', 'Attendees', 'UpdateImage', conferenceId, userId, { Image: image }, success, fail);
+    }
     public updateOrderStatus(itemId: number, newStatus: number, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'NBright', 'OrderStatus', null, null, { ItemId: itemId, Status: newStatus }, success, fail);
     }
     public updateSlot(conferenceId: number, slot: ISlot, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'Slots', 'Update', conferenceId, slot.SlotId, slot, success, fail);
+    }
+    public updateSpeakerImage(conferenceId: number, userId: number, image: string, success: Function, fail?: Function): void {
+        this.ajaxCall('POST', 'Speakers', 'UpdateImage', conferenceId, userId, { Image: image }, success, fail);
     }
 }

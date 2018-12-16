@@ -108,19 +108,11 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var userFolder = FolderManager.Instance.GetUserFolder(dnnUser);
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, attendee.ProfilePic.filename);
-                dnnUser.Profile.Photo = file.FileId.ToString();
-                var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
-                FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
-                if (file != null & attendee.ProfilePic.crop.points != null)
+                if (file != null)
                 {
-                    System.IO.MemoryStream sizedContent = null;
-                    using (var content = FileManager.Instance.GetFileContent(file))
-                    {
-                        sizedContent = ImageUtils.CreateImage(content, attendee.ProfilePic.crop.points, attendee.ProfilePic.crop.zoom, 200, 300, file.Extension);
-                    }
-                    FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
-                    sizedContent.Dispose();
-                    ImageUtils.CreateThumbnails(file.FileId);
+                    dnnUser.Profile.Photo = file.FileId.ToString();
+                    var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
+                    FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 }
             }
             if (!string.IsNullOrEmpty(attendee.Company))
@@ -130,7 +122,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Company", attendee.Company);
             }
             UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
-            DotNetNuke.Common.Utilities.DataCache.ClearCache();
+            // DotNetNuke.Common.Utilities.DataCache.ClearCache();
             if (GetRouteParameter() == "home")
             {
                 return ReturnRoute("Home", "Index", "refreshcache=1");

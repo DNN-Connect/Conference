@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
-using DotNetNuke.Common;
-using Connect.DNN.Modules.Conference.Common;
-using Connect.Conference.Core.Repositories;
+﻿using Connect.Conference.Core.Data;
 using Connect.Conference.Core.Models.Speakers;
+using Connect.Conference.Core.Repositories;
+using Connect.DNN.Modules.Conference.Common;
+using DotNetNuke.Common;
 using DotNetNuke.Services.FileSystem;
-using Connect.Conference.Core.Data;
+using System.Web.Mvc;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -105,23 +105,15 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 var userFolder = FolderManager.Instance.GetUserFolder(dnnUser);
                 var folderManager = FolderManager.Instance;
                 file = FileManager.Instance.GetFile(userFolder, speaker.ProfilePic.filename);
-                dnnUser.Profile.Photo = file.FileId.ToString();
-                var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
-                FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
-                if (file != null & speaker.ProfilePic.crop.points != null)
+                if (file != null)
                 {
-                    System.IO.MemoryStream sizedContent = null;
-                    using (var content = FileManager.Instance.GetFileContent(file))
-                    {
-                        sizedContent = ImageUtils.CreateImage(content, speaker.ProfilePic.crop.points, speaker.ProfilePic.crop.zoom, 200, 300, file.Extension);
-                    }
-                    FileManager.Instance.AddFile(userFolder, file.FileName, sizedContent, true, false, file.ContentType);
-                    sizedContent.Dispose();
-                    ImageUtils.CreateThumbnails(file.FileId);
+                    dnnUser.Profile.Photo = file.FileId.ToString();
+                    var portalId = dnnUser.IsSuperUser ? -1 : PortalSettings.PortalId;
+                    FixDnnController.SetUserProfileProperty(portalId, dnnUser.UserID, "Photo", file.FileId.ToString());
                 }
             }
             DotNetNuke.Entities.Users.UserController.UpdateUser(PortalSettings.PortalId, dnnUser);
-            DotNetNuke.Common.Utilities.DataCache.ClearCache();
+            // DotNetNuke.Common.Utilities.DataCache.ClearCache();
             return ReturnRoute(speaker.ConferenceId, View("View", _repository.GetSpeaker(speaker.ConferenceId, recordToUpdate.UserId)));
         }
 
@@ -161,23 +153,12 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 if (speaker.PhotoFilename != null)
                 {
                     ProfilePic.filename = speaker.PhotoFilename;
-                    ProfilePic.width = (int)speaker.PhotoWidth;
-                    ProfilePic.height = (int)speaker.PhotoHeight;
                 }
             }
         }
         public class ImageDTO
         {
             public string filename { get; set; } = "";
-            public int width { get; set; } = 0;
-            public int height { get; set; } = 0;
-            public int smallestSide { get; set; } = 0;
-            public CropDTO crop { get; set; } = new CropDTO();
-        }
-        public class CropDTO
-        {
-            public float[] points { get; set; }
-            public float zoom { get; set; } = 0;
         }
 
     }

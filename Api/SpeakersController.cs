@@ -1,15 +1,17 @@
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using DotNetNuke.Web.Api;
+using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;
-using System.Web;
+using DotNetNuke.Services.FileSystem;
+using DotNetNuke.Web.Api;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Connect.Conference.Core.Repositories;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using Connect.Conference.Core.Common;
+using System.Web;
+using System.Web.Http;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -37,30 +39,15 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
+        public class UpdateImageDTO
+        {
+            public string Image { get; set; }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.SessionSubmit)]
-        public HttpResponseMessage UploadPicture(int conferenceId, int id)
+        public HttpResponseMessage UpdateImage(int conferenceId, int id, UpdateImageDTO data)
         {
-            HttpPostedFile postedFile = HttpContext.Current.Request.Files["profilepic"];
-            var fileName = System.IO.Path.GetFileName(postedFile.FileName).RemoveIllegalCharacters();
-            var extension = System.IO.Path.GetExtension(fileName);
-            var contentType = "";
-            switch (extension.ToLower())
-            {
-                case ".jpg":
-                    contentType = "image/jpg";
-                    break;
-                case ".png":
-                    contentType = "image/png";
-                    break;
-                default:
-                    return ServiceError("Unsupported File Format");
-            }
-            if (postedFile.ContentLength > 1000000)
-            {
-                return ServiceError("File too big");
-            }
             if (!ConferenceModuleContext.Security.CanManage)
             {
                 if (id != UserInfo.UserID)
@@ -68,10 +55,16 @@ namespace Connect.DNN.Modules.Conference.Api
                     ConferenceModuleContext.ThrowAccessViolation();
                 }
             }
-            var user = DotNetNuke.Entities.Users.UserController.GetUserById(PortalSettings.PortalId, id);
-            var userFolder = DotNetNuke.Services.FileSystem.FolderManager.Instance.GetUserFolder(user);
-            var file = DotNetNuke.Services.FileSystem.FileManager.Instance.AddFile(userFolder, fileName, postedFile.InputStream, true, false, contentType, UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, "");
+            var speaker = SpeakerRepository.Instance.GetSpeaker(conferenceId, id);
+            var file = ImageUtils.SaveUserProfilePic(PortalSettings.PortalId, id, data.Image, UserInfo.UserID);
+            if (file != null) {
+                speaker.PhotoFolder = file.Folder;
+                speaker.PhotoFilename = file.FileName;
+                speaker.PhotoContentType = file.ContentType;
+                speaker.PhotoHeight = file.Height;
+                speaker.PhotoWidth = file.Width;
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, speaker);
         }
 
         [HttpGet]
@@ -117,6 +110,7 @@ namespace Connect.DNN.Modules.Conference.Api
             res.Content.Headers.ContentDisposition.FileName = "Speakers.csv";
             return res;
         }
+
 
     }
 }

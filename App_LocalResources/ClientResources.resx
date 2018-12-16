@@ -174,6 +174,12 @@
   <data name="DropHere" xml:space="preserve">
     <value>Drop files here</value>
   </data>
+  <data name="DropImageHere" xml:space="preserve">
+    <value>Drop Image Here ...</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -222,6 +228,9 @@
   <data name="Sessions" xml:space="preserve">
     <value>Sessions</value>
   </data>
+  <data name="SetPicture" xml:space="preserve">
+    <value>Set Picture</value>
+  </data>
   <data name="Slot" xml:space="preserve">
     <value>Slot</value>
   </data>
@@ -260,6 +269,9 @@
   </data>
   <data name="Unapproved" xml:space="preserve">
     <value>Unapproved</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
   </data>
   <data name="Upload" xml:space="preserve">
     <value>Upload</value>

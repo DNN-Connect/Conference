@@ -36,6 +36,8 @@ export default class Resources extends React.Component<
     };
   }
 
+  uploader: any;
+
   render() {
     var uploadPanel = this.props.canAdd ? (
       <div className="dropPanel">
@@ -111,7 +113,7 @@ export default class Resources extends React.Component<
   }
 
   componentDidMount() {
-    var uploader = new ss.SimpleUpload({
+    this.uploader = new ss.SimpleUpload({
       button: $(".cmdUpload"),
       dropzone: $(".dropPanel"),
       url:
