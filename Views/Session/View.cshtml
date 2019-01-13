@@ -128,7 +128,7 @@
   <div class="col-xs-12">
    <div class="resourcesComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-tabid="@Dnn.ModuleContext.TabId"
         data-conferenceid="@Model.ConferenceId" data-sessionid="@Model.SessionId"
-        data-resourcedir="@(Dnn.PortalSettings.HomeDirectory)@(Model.GetResourcesPath("/"))"
+        data-resourcedir="@(Dnn.PortalSettings.HomeDirectory)@(Model.GetSessionResourcesPath("/"))"
         data-resources="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionResourceRepository.Instance.GetSessionResourcesBySession(Model.SessionId).Where(r => r.Visibility == 1 | isPresenter | ConferenceModuleContext.Security.CanManage)))"
         data-canadd="@((isPresenter | ConferenceModuleContext.Security.CanManage).ToString().ToLower())">
    </div>

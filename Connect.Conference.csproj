@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -158,6 +159,7 @@
     <Compile Include="Api\SessionSpeakersController.cs" />
     <Compile Include="Api\SlotsController.cs" />
     <Compile Include="Api\SpeakersController.cs" />
+    <Compile Include="Api\SponsorsController.cs" />
     <Compile Include="Api\TagsController.cs" />
     <Compile Include="Api\TracksController.cs" />
     <Compile Include="Common\AppLink.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="Common\SwitchButtonOption.cs" />
     <Compile Include="Common\WebApiDtos.cs" />
     <Compile Include="Controllers\ApiKeyController.cs" />
+    <Compile Include="Controllers\SponsorController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\AttendeeController.cs" />
@@ -342,6 +345,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\AcceptedSessions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Sponsor\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Sponsor\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

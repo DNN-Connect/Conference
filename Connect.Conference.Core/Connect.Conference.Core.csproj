@@ -70,6 +70,7 @@
     <Compile Include="Common\SlotType.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\DnnRoleController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Data\AuditableEntity.cs" />
     <Compile Include="Data\FixDnnController.cs" />
     <Compile Include="Data\RepositoryImpl.cs" />
@@ -147,6 +148,12 @@
     <Compile Include="Models\Speakers\SpeakerWithNrSessions.cs" />
     <Compile Include="Models\Speakers\Speaker_Declaration.cs" />
     <Compile Include="Models\Speakers\Speaker_Interfaces.cs" />
+    <Compile Include="Models\Sponsors\Extensions.cs" />
+    <Compile Include="Models\Sponsors\Sponsor.cs" />
+    <Compile Include="Models\Sponsors\SponsorBase.cs" />
+    <Compile Include="Models\Sponsors\SponsorBase_Interfaces.cs" />
+    <Compile Include="Models\Sponsors\Sponsor_Declaration.cs" />
+    <Compile Include="Models\Sponsors\Sponsor_Interfaces.cs" />
     <Compile Include="Models\Tags\TagWithVote.cs" />
     <Compile Include="Models\Tags\Tag.cs" />
     <Compile Include="Models\Tags\TagBase.cs" />
@@ -190,6 +197,8 @@
     <Compile Include="Repositories\SlotRepository_Core.cs" />
     <Compile Include="Repositories\SpeakerRepository.cs" />
     <Compile Include="Repositories\SpeakerRepository_Core.cs" />
+    <Compile Include="Repositories\SponsorRepository.cs" />
+    <Compile Include="Repositories\SponsorRepository_Core.cs" />
     <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\TagRepository_Core.cs" />
     <Compile Include="Repositories\TagVoteRepository.cs" />

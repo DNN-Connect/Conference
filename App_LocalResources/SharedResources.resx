@@ -375,4 +375,16 @@
   <data name="Add.Text" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="Sponsor.Text" xml:space="preserve">
+    <value>Sponsor</value>
+  </data>
+  <data name="SponsorLevel.Text" xml:space="preserve">
+    <value>Sponsor Level</value>
+  </data>
+  <data name="Sponsors.Text" xml:space="preserve">
+    <value>Sponsors</value>
+  </data>
+  <data name="Logo.Text" xml:space="preserve">
+    <value>Logo</value>
+  </data>
 </root>

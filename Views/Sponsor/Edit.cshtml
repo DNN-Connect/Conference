@@ -1,0 +1,63 @@
+@inherits ConferenceWebPage<SponsorBase>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Sponsors;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+ RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddScript("common.js");
+ ConferenceModuleContext.AddEditScripts();
+}
+
+<fieldset>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Name")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Name, new { placeholder = Dnn.LocalizeString("Name") })
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Url")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Url, new { placeholder = Dnn.LocalizeString("Url") })
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Description")</label>
+  </div>
+  @Html.TextBoxFor(m => m.Description, new { placeholder = Dnn.LocalizeString("Description") })
+ </div>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("SponsorLevel")</label>
+  </div>
+  @Html.TextBoxFor(m => m.SponsorLevel, new { placeholder = Dnn.LocalizeString("SponsorLevel") })
+ </div>
+ <div>
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Logo")</label>
+  </div>
+  @if (Model.SponsorId > 0)
+  {
+   <img src="@DotNetNuke.Common.Globals.ApplicationPath/DesktopModules/Connect/Conference/API/Conference/@Model.ConferenceId/Sponsors/Image/@Model.SponsorId?size=200" alt="@Model.Name" width="200" height="200" />
+  }
+ </div>
+ <p>&nbsp;</p>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>&nbsp;</label>
+  </div>
+  <input type="file" name="image" />
+ </div>
+ <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
+ </div>
+ <div class="right">
+  @ReturnLink(Dnn.LocalizeString("Cancel"), "Sponsor", "Index", new { conferenceId = Model.ConferenceId, ret = "c-m" }, new { @class = "btn btn-default" }, Model.ConferenceId)
+  @if (Model.SponsorId > 0)
+  {
+   @Html.ActionLink(Dnn.LocalizeString("Delete"), "Delete", "Sponsor", new { SponsorId = Model.SponsorId }, new { @class = "btn btn-default cmdDelete" })
+  }
+  <button type="submit" class="btn btn-primary" id="cmdSave">@Dnn.LocalizeString("Save")</button>
+ </div>
+</fieldset>

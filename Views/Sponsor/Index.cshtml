@@ -1,0 +1,46 @@
+@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Repositories;
+@using Connect.Conference.Core.Models.Conferences;
+@using DotNetNuke.Web.Mvc.Helpers;
+@{
+ var sponsors = SponsorRepository.Instance.GetSponsorsByConference(Model.ConferenceId).OrderBy(s => s.ViewOrder);
+ RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddScript("common.js");
+ ConferenceModuleContext.AddEditScripts();
+}
+
+<table class="table">
+ <thead>
+  <tr>
+   <th></th>
+   <th>@Dnn.LocalizeString("Sponsor")</th>
+   <th>@Dnn.LocalizeString("SponsorLevel")</th>
+   <th></th>
+  </tr>
+ </thead>
+ <tbody>
+  @foreach (var s in sponsors)
+  {
+   <tr>
+    <td>
+     <img src="@DotNetNuke.Common.Globals.ApplicationPath/DesktopModules/Connect/Conference/API/Conference/@s.ConferenceId/Sponsors/Image/@s.SponsorId?size=32" alt="@s.Name" width="32" height="32" />
+    </td>
+    <td>@s.Name</td>
+    <td>@s.SponsorLevel</td>
+    <td style="width:24px">
+     <a href="@Url.Action("Edit", "Sponsor", new {sponsorId = s.SponsorId, conferenceId = Model.ConferenceId})" class="btn btn-sm">
+      <i class="glyphicon glyphicon-pencil"></i>
+     </a>
+    </td>
+   </tr>
+  }
+ </tbody>
+</table>
+
+<div class="right">
+ <a href="@Url.Action("Edit", "Sponsor", new {sponsorId = -1, conferenceId = Model.ConferenceId})" title="@Dnn.LocalizeString("New")" class="btn btn-primary">
+  @Dnn.LocalizeString("New")
+ </a>
+</div>

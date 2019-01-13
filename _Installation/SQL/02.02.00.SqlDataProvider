@@ -1,0 +1,52 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Sponsors') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sponsors(
+ [SponsorId] [int] IDENTITY(1,1) NOT NULL,
+ [ConferenceId] [int] NOT NULL,
+ [Name] [nvarchar](200) NOT NULL,
+ [Url] [varchar](300) NULL,
+ [Description] [nvarchar](max) NULL,
+ [ViewOrder] [int] NOT NULL,
+ [SponsorLevel] [nvarchar](100) NULL,
+ [CreatedByUserID] [int] NOT NULL,
+ [CreatedOnDate] [datetime] NOT NULL,
+ [LastModifiedByUserID] [int] NOT NULL,
+ [LastModifiedOnDate] [datetime] NOT NULL,
+ CONSTRAINT PK_{objectQualifier}Connect_Conference_Sponsors PRIMARY KEY CLUSTERED 
+(
+ [SponsorId] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Sponsors_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Sponsors'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sponsors  WITH CHECK ADD  CONSTRAINT FK_{objectQualifier}Connect_Conference_Sponsors_Conferences FOREIGN KEY([ConferenceId])
+REFERENCES {databaseOwner}{objectQualifier}Connect_Conference_Conferences ([ConferenceId])
+ON DELETE CASCADE
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}Connect_Conference_Sponsors_Conferences') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}Connect_Conference_Sponsors'))
+ALTER TABLE {databaseOwner}{objectQualifier}Connect_Conference_Sponsors CHECK CONSTRAINT FK_{objectQualifier}Connect_Conference_Sponsors_Conferences
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Sponsors'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sponsors
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Sponsors
+AS
+SELECT
+ s.*,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Sponsors s
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=s.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=s.LastModifiedByUserID
+GO
+

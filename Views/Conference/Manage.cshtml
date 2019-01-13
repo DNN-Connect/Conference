@@ -59,6 +59,9 @@
       <a href="@Url.Action("Attendees", "Conference", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Attendees")" class="btn btn-default">
        @Dnn.LocalizeString("Attendees")
       </a>
+      <a href="@Url.Action("Index", "Sponsor", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("Sponsors")" class="btn btn-default">
+       @Dnn.LocalizeString("Sponsors")
+      </a>
       <a href="@Url.Action("Keys", "ApiKey", new {conferenceId = Model.ConferenceId, ret = "c-m"})" title="@Dnn.LocalizeString("ApiKeys")" class="btn btn-default">
        @Dnn.LocalizeString("ApiKeys")
       </a>

@@ -74,7 +74,7 @@ namespace Connect.DNN.Modules.Conference.Api
                 resource.Visibility = 1;
                 SessionResourceRepository.Instance.AddSessionResource(ref resource, UserInfo.UserID);
             }
-            var path = PortalSettings.HomeDirectoryMapPath + "\\" + Connect.Conference.Core.Common.Globals.GetResourcesPath(conferenceId, id, "\\");
+            var path = PortalSettings.HomeDirectoryMapPath + "\\" + Connect.Conference.Core.Common.Globals.GetSessionResourcesPath(conferenceId, id, "\\");
             if (!System.IO.Directory.Exists(path))
             {
                 System.IO.Directory.CreateDirectory(path);
