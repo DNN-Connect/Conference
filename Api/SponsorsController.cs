@@ -10,11 +10,19 @@ using System.Net.Http.Headers;
 using System.Web;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
 	public partial class SponsorsController : ConferenceApiController
 	{
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, SponsorRepository.Instance.GetSponsorsByConference(conferenceId).OrderBy(s => s.ViewOrder));
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public HttpResponseMessage Image(int conferenceId, int id, int size)
