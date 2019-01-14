@@ -11,7 +11,7 @@
  ConferenceModuleContext.AddEditScripts();
 }
 
-<table class="table">
+<table class="table" id="tblSponsors">
  <thead>
   <tr>
    <th></th>
@@ -23,7 +23,7 @@
  <tbody>
   @foreach (var s in sponsors)
   {
-   <tr>
+   <tr data-id="@s.SponsorId" class="sortable" >
     <td>
      <img src="@DotNetNuke.Common.Globals.ApplicationPath/DesktopModules/Connect/Conference/API/Conference/@s.ConferenceId/Sponsors/Image/@s.SponsorId?size=32" alt="@s.Name" width="32" height="32" />
     </td>
@@ -44,3 +44,21 @@
   @Dnn.LocalizeString("New")
  </a>
 </div>
+
+<script type="text/javascript">
+ $(function () {
+
+  $(document).ready(function() {
+
+   var moduleConferenceService = new Common.ConferenceService(@Dnn.ModuleContext.ModuleId);
+
+   $('#tblSponsors tbody:first').sortable({
+    update: function (event, ui) {
+     moduleConferenceService.orderSponsors(@Model.ConferenceId, Common.getTableOrder('tblSponsors'));
+    }
+   });
+
+  });
+
+ });
+</script>

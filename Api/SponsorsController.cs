@@ -5,7 +5,11 @@ using System.IO;
 using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Models.Sponsors;
+using DotNetNuke.Web.Api;
 using System.Net.Http.Headers;
+using System.Web;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -36,6 +40,27 @@ namespace Connect.DNN.Modules.Conference.Api
             };
             return res;
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
+        public HttpResponseMessage Reorder(int conferenceId)
+        {
+            var raw = new StreamReader(HttpContext.Current.Request.InputStream).ReadToEnd();
+            var data = JsonConvert.DeserializeObject<List<Order>>(raw);
+            ISponsorRepository _repository = SponsorRepository.Instance;
+            foreach (Order no in data)
+            {
+                var sponsor = _repository.GetSponsor(no.id);
+                if (sponsor != null)
+                {
+                    sponsor.ViewOrder = no.order;
+                    _repository.UpdateSponsor(sponsor.GetSponsorBase(), UserInfo.UserID);
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, "");
+        }
+
     }
 }
 
