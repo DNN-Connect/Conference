@@ -18,6 +18,12 @@ namespace Connect.DNN.Modules.Conference.Api
 
     public partial class SpeakersController : ConferenceApiController
     {
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(conferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.LastName));
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

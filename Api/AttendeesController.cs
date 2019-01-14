@@ -1,19 +1,29 @@
+using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Models.Attendees;
+using Connect.Conference.Core.Repositories;
+using Connect.DNN.Modules.Conference.Common;
+using DotNetNuke.Web.Api;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using DotNetNuke.Web.Api;
-using Connect.DNN.Modules.Conference.Common;
-using Connect.Conference.Core.Repositories;
-using Connect.Conference.Core.Models.Attendees;
-using System.Web;
-using System.Linq;
 using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
 
     public partial class AttendeesController : ConferenceApiController
     {
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage All(int conferenceId)
+        {
+            if (AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID) == null)
+            {
+                return AccessViolation("You must be logged in and attending to see the list of attendees");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendeesByConference(conferenceId).Where(a => a.Status >= (int)AttendeeStatus.Confirmed).OrderBy(a => a.LastName));
+        }
 
         public class AttendResponse
         {

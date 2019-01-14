@@ -15,7 +15,14 @@ namespace Connect.DNN.Modules.Conference.Api
 
     public partial class TracksController : ConferenceApiController
     {
-        [HttpGet()]
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, TrackRepository.Instance.GetTracksByConference(conferenceId).OrderBy(t => t.Sort));
+        }
+
+        [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage Search(int conferenceId, string search)
         {

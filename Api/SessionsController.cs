@@ -8,17 +8,22 @@ using System.Web;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Connect.Conference.Core.Repositories;
-using DotNetNuke.Entities.Host;
-using Connect.Conference.Core.Models.SessionResources;
 using System.Net.Http.Headers;
 using Connect.Conference.Core.Models.Sessions;
 using Connect.Conference.Core.Models.SessionAttendees;
+using Connect.Conference.Core.Common;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
 
     public partial class SessionsController : ConferenceApiController
     {
+        [HttpGet]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage List(int conferenceId)
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, SessionRepository.Instance.GetSessionsByConference(conferenceId).Where(s => s.Status.UnNull(0) >= (int)SessionStatus.Accepted).OrderBy(s => s.Title));
+        }
 
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
