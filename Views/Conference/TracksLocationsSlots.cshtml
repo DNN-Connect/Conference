@@ -3,9 +3,10 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
-    ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddEditScripts();
+ RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddEditScripts();
+ ConferenceModuleContext.AddScript("common.js");
 }
 
 <h3>@Model.Name</h3>
@@ -55,12 +56,12 @@
     <tbody>
      @foreach (var l in Connect.Conference.Core.Repositories.LocationRepository.Instance.GetLocationsByConference(Model.ConferenceId).OrderBy(l => l.Sort))
      {
-     <tr data-id="@l.LocationId" class="sortable">
-      <td>@l.Name</td>
-      <td class="nrcol">@l.Capacity</td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-      <td class="btncol"><a href="#" class="deleteLocation btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
-     </tr>
+      <tr data-id="@l.LocationId" class="sortable">
+       <td>@l.Name</td>
+       <td class="nrcol">@l.Capacity</td>
+       <td class="btncol"><a href="@Url.Action("Edit", "Location", new { conferenceId = Model.ConferenceId, locationId = l.LocationId, ret = "c-tls" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+       <td class="btncol"><a href="#" class="deleteLocation btn btn-sm btn-default glyphicon glyphicon-remove" title="@Dnn.LocalizeString("Delete")"></a></td>
+      </tr>
      }
     </tbody>
     <tr>
@@ -82,22 +83,22 @@
     <tbody>
      @foreach (var t in Connect.Conference.Core.Repositories.TagRepository.Instance.GetTagsByConference(Model.ConferenceId).OrderByDescending(t => t.NrVotes))
      {
-     <tr data-id="tag-@t.TagId">
-      <td data-id="tagname-@t.TagId">@t.TagName</td>
-      <td class="nrcol">@t.NrSessions</td>
-      <td class="btncol">
-       <a href="#" class="btn btn-default cmdEditTag" title="@Dnn.LocalizeString("Edit")"
-          data-id="@t.TagId">
-        <span class="glyphicon glyphicon-pencil"></span>
-       </a>
-      </td>
-      <td class="btncol">
-       <a href="#" class="btn btn-default cmdDeleteTag" title="@Dnn.LocalizeString("Delete")"
-          data-id="@t.TagId">
-        <span class="glyphicon glyphicon-remove"></span>
-       </a>
-      </td>
-     </tr>
+      <tr data-id="tag-@t.TagId">
+       <td data-id="tagname-@t.TagId">@t.TagName</td>
+       <td class="nrcol">@t.NrSessions</td>
+       <td class="btncol">
+        <a href="#" class="btn btn-default cmdEditTag" title="@Dnn.LocalizeString("Edit")"
+           data-id="@t.TagId">
+         <span class="glyphicon glyphicon-pencil"></span>
+        </a>
+       </td>
+       <td class="btncol">
+        <a href="#" class="btn btn-default cmdDeleteTag" title="@Dnn.LocalizeString("Delete")"
+           data-id="@t.TagId">
+         <span class="glyphicon glyphicon-remove"></span>
+        </a>
+       </td>
+      </tr>
      }
      <tr>
       <td class="dnnFormItem" colspan="3">
@@ -151,16 +152,16 @@
 
   $(document).ready(function() {
 
-   var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  var moduleConferenceService = new Common.ConferenceService(@Dnn.ModuleContext.ModuleId);
 
    $('#tblTracks tbody:first').sortable({
     update: function (event, ui) {
-     moduleConferenceService.orderTracks(@Model.ConferenceId, getTableOrder('tblTracks'));
+     moduleConferenceService.orderTracks(@Model.ConferenceId, Common.getTableOrder('tblTracks'));
     }
    });
    $('#tblLocations tbody:first').sortable({
     update: function (event, ui) {
-     moduleConferenceService.orderLocations(@Model.ConferenceId, getTableOrder('tblLocations'));
+     moduleConferenceService.orderLocations(@Model.ConferenceId, Common.getTableOrder('tblLocations'));
     }
    });
    $('.deleteTrack').click(function() {

@@ -1,3 +1,5 @@
+import DataService from "./Service";
+
 // Common functions for the module
 export function showLoading(): void {
   if ($("#serviceStatus").length) {
@@ -175,6 +177,10 @@ if (!Date.prototype.toUTCDateTimeDigits) {
     };
   })();
 }
+
+export function ConferenceService(mid: number): DataService {
+  return new DataService(mid);
+};
 
 Date.prototype.addDays = function(days: number) {
   var dat = new Date(this.valueOf());

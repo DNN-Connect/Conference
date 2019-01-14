@@ -103,11 +103,6 @@ namespace Connect.DNN.Modules.Conference.Common
         {
             ClientResourceManager.RegisterScript(Page, string.Format("~/DesktopModules/MVC/Connect/Conference/js/{0}", scriptName));
         }
-        public void AddModuleService()
-        {
-            RegisterAjaxScript();
-            AddScript("ConferenceService.js");
-        }
         public void AddBootstrapJs()
         {
             if (Settings.EmitBootstrap)
@@ -133,7 +128,6 @@ namespace Connect.DNN.Modules.Conference.Common
         }
         public void AddMainScript()
         {
-            AddModuleService();
             AddScript("Conference.js");
         }
         public void RequirePermissionLevel(bool level)

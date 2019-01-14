@@ -5,11 +5,11 @@
 @using Connect.Conference.Core.Models.Sessions;
 @using Connect.Conference.Core.Repositories;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
-    ConferenceModuleContext.AddModuleService();
+ RequirePermissionLevel(ConferenceModuleContext.Security.CanSubmitSessions);
 
-    IEnumerable<Session> mySessions = SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, Dnn.User.UserID);
-    ConferenceModuleContext.AddBootstrapCss();
+ IEnumerable<Session> mySessions = SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, Dnn.User.UserID);
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddScript("common.js");
 }
 
 @foreach (Session s in mySessions)
@@ -43,15 +43,15 @@
     </a>
     @if (s.Status > 0)
     {
-    <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="0">
-     @Dnn.LocalizeString("Retract")
-    </a>
+     <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="0">
+      @Dnn.LocalizeString("Retract")
+     </a>
     }
     @if (s.Status == 0)
     {
-    <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="1">
-     @Dnn.LocalizeString("Submit")
-    </a>
+     <a href="#" class="btn btn-info cmdWorkflow" data-sessionid="@s.SessionId" data-workflow="1">
+      @Dnn.LocalizeString("Submit")
+     </a>
     }
    </div>
   </div>
@@ -71,15 +71,15 @@
  </a>
  @if (mySessions.Count() > 0)
  {
- <a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = Dnn.User.UserID })" title="@Dnn.LocalizeString("EditProfile")" class="btn btn-default">
-  @Dnn.LocalizeString("EditProfile")
- </a>
+  <a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = Dnn.User.UserID })" title="@Dnn.LocalizeString("EditProfile")" class="btn btn-default">
+   @Dnn.LocalizeString("EditProfile")
+  </a>
  }
 </div>
 
 <script type="text/javascript">
  $(function () {
-  var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  var moduleConferenceService = new Common.ConferenceService(@Dnn.ModuleContext.ModuleId);
   $(document).ready(function () {
    $('.cmdDelete').click(function (e) {
     e.preventDefault();

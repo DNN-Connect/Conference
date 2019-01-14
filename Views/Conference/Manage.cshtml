@@ -3,8 +3,9 @@
 @using Connect.Conference.Core.Models.Conferences;
 @using DotNetNuke.Web.Mvc.Helpers;
 @{
-    ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddEditScripts();
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddEditScripts();
+ ConferenceModuleContext.AddScript("common.js");
 }
 
 <div class="container">
@@ -84,16 +85,16 @@
 
   $(document).ready(function() {
 
-   var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  var moduleConferenceService = new Common.ConferenceService(@Dnn.ModuleContext.ModuleId);
 
    $('#tblSessions tbody:first').sortable({
     update: function (event, ui) {
-     moduleConferenceService.orderSessions(@Model.ConferenceId, getTableOrder('tblSessions'));
+     moduleConferenceService.orderSessions(@Model.ConferenceId, Common.getTableOrder('tblSessions'));
     }
    });
    $('#tblSpeakers tbody:first').sortable({
     update: function (event, ui) {
-     moduleConferenceService.orderSpeakers(@Model.ConferenceId, getTableOrder('tblSpeakers'));
+     moduleConferenceService.orderSpeakers(@Model.ConferenceId, Common.getTableOrder('tblSpeakers'));
     }
    });
 

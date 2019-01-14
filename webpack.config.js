@@ -72,6 +72,9 @@ var libConfig = Object.assign({}, commonConfig, {
     filename: "common.js",
     libraryTarget: "var",
     library: "Common"
+  },
+  resolve: {
+    extensions: [".js", ".ts", ".tsx"]
   }
 });
 

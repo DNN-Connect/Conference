@@ -3,8 +3,8 @@
 @using Connect.Conference.Core.Common;
 @using Connect.Conference.Core.Models.Conferences;
 @{
-    RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
-    var allSessions = Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId);
+ RequirePermissionLevel(ConferenceModuleContext.Security.CanManage);
+ var allSessions = Connect.Conference.Core.Repositories.SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId);
 }
 
 <div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
@@ -18,14 +18,14 @@
    <h2>@Model.Name</h2>
    @if (Model.StartDate != null)
    {
-   <div class="panel panel-info">
-    <div class="panel-body">
-     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("d MMMM") : "")
-     - @((Model.EndDate != null) ? ((System.DateTime)Model.EndDate).ToString("d MMMM") : "")
-     @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("yyyy") : "")
-     @Model.Location
+    <div class="panel panel-info">
+     <div class="panel-body">
+      @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("d MMMM") : "")
+      - @((Model.EndDate != null) ? ((System.DateTime)Model.EndDate).ToString("d MMMM") : "")
+      @((Model.StartDate != null) ? ((System.DateTime)Model.StartDate).ToString("yyyy") : "")
+      @Model.Location
+     </div>
     </div>
-   </div>
    }
    <p class="lead">@Model.Description</p>
   </div>
@@ -42,25 +42,25 @@
     <tbody>
      @foreach (var s in allSessions.OrderByDescending(s => s.NrVotes))
      {
-     <tr data-id="@s.SessionId">
-      <td>
-       <span class="sessionTitle" data-id="@s.SessionId">@s.Title</span><br />
-       <span class="details">@string.Join(", ", s.Speakers.Select(sp => sp.Value))</span><br />
-       <span class="details">@string.Join(", ", s.Tags.Select(t => t.Value))</span><br />
-       <span class="details">@Dnn.LocalizeString("NrVotes"): @s.NrVotes</span>
-       <div class="details sessionAbstract" data-visible="false" data-id="@s.SessionId">@Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
-      </td>
-      <td class="ctlColumn">
-       <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a>
-       <a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a><br />
-         <span class="sessionStatusButton"
-          data-conferenceid="@Model.ConferenceId"
-          data-sessionid="@s.SessionId"
-          data-moduleid="@Dnn.ModuleContext.ModuleId"
-          data-options="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.DNN.Modules.Conference.Common.Globals.SessionStatusOptions(ConferenceModuleContext.Security.CanManage)))"
-          data-selected="@s.Status"></span>
-      </td>
-     </tr>
+      <tr data-id="@s.SessionId">
+       <td>
+        <span class="sessionTitle" data-id="@s.SessionId">@s.Title</span><br />
+        <span class="details">@string.Join(", ", s.Speakers.Select(sp => sp.Value))</span><br />
+        <span class="details">@string.Join(", ", s.Tags.Select(t => t.Value))</span><br />
+        <span class="details">@Dnn.LocalizeString("NrVotes"): @s.NrVotes</span>
+        <div class="details sessionAbstract" data-visible="false" data-id="@s.SessionId">@Html.Raw(s.Description.SafeReplace(Environment.NewLine, "<br />"))</div>
+       </td>
+       <td class="ctlColumn">
+        <a href="@Url.Action("View", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-eye-open" title="@Dnn.LocalizeString("View")"></a>
+        <a href="@Url.Action("Edit", "Session", new { conferenceId = Model.ConferenceId, sessionId = s.SessionId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a><br />
+        <span class="sessionStatusButton"
+              data-conferenceid="@Model.ConferenceId"
+              data-sessionid="@s.SessionId"
+              data-moduleid="@Dnn.ModuleContext.ModuleId"
+              data-options="@(Newtonsoft.Json.JsonConvert.SerializeObject(Connect.DNN.Modules.Conference.Common.Globals.SessionStatusOptions(ConferenceModuleContext.Security.CanManage)))"
+              data-selected="@s.Status"></span>
+       </td>
+      </tr>
      }
     </tbody>
    </table>
@@ -77,12 +77,12 @@
     <tbody>
      @foreach (var s in Connect.Conference.Core.Repositories.SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(Model.ConferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.Sort))
      {
-     <tr data-id="@s.UserId" class="sortable">
-      <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@s.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
-      <td>@s.DisplayName</td>
-      <td class="nrcol">@s.NrSessions</td>
-      <td class="btncol"><a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
-     </tr>
+      <tr data-id="@s.UserId" class="sortable">
+       <td class="btncol"><img src="@DotNetNuke.Common.Globals.ApplicationPath/DnnImageHandler.ashx?mode=profilepic&w=32&h=32&userId=@s.UserId" width="32" height="32" class="img-circle img-responsive" /></td>
+       <td>@s.DisplayName</td>
+       <td class="nrcol">@s.NrSessions</td>
+       <td class="btncol"><a href="@Url.Action("Edit", "Speaker", new { conferenceId = Model.ConferenceId, speakerId = s.UserId, ret = "c-ss" })" class="btn btn-sm btn-default glyphicon glyphicon-pencil" title="@Dnn.LocalizeString("Edit")"></a></td>
+      </tr>
      }
     </tbody>
    </table>
@@ -107,8 +107,9 @@
 
 
 @{
-    ConferenceModuleContext.AddBootstrapCss();
-    ConferenceModuleContext.AddEditScripts();
+ ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.AddEditScripts();
+ ConferenceModuleContext.AddScript("common.js");
 }
 
 <script type="text/javascript">
@@ -116,11 +117,11 @@
 
   $(document).ready(function() {
 
-   var moduleConferenceService = new ConferenceService($, @Dnn.ModuleContext.ModuleId);
+  var moduleConferenceService = new Common.ConferenceService(@Dnn.ModuleContext.ModuleId);
 
    $('#tblSpeakers tbody:first').sortable({
     update: function (event, ui) {
-     moduleConferenceService.orderSpeakers(@Model.ConferenceId, getTableOrder('tblSpeakers'));
+     moduleConferenceService.orderSpeakers(@Model.ConferenceId, Common.getTableOrder('tblSpeakers'));
     }
    });
 

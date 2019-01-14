@@ -182,6 +182,9 @@ export default class DataService {
     public orderSpeakers(conferenceId: number, newOrder: any, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'Speakers', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
     }
+    public orderSponsors(conferenceId: number, newOrder: any, success: Function, fail?: Function) {
+        this.ajaxCall('POST', 'Sponsors', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
+    }
     public orderTracks(conferenceId: number, newOrder: any, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'Tracks', 'Reorder', conferenceId, null, JSON.stringify(newOrder), success, fail);
     }
