@@ -18,7 +18,7 @@ namespace Connect.Conference.Core.Common
 
         public static string GetConferenceImagePath(int conferenceId, string slash)
         {
-            return string.Format("Connect{0}Conferences{0}{1}{0}Images{0}", slash, conferenceId);
+            return string.Format("Connect{0}Conferences{0}{1}{0}MainImage{0}", slash, conferenceId);
         }
 
         public static IEnumerable<SimpleUser> SearchUsers(int portalId, string field, string searchString)

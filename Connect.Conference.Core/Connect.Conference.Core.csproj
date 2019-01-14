@@ -94,6 +94,7 @@
     <Compile Include="Models\Conferences\ConferenceBase_Interfaces.cs" />
     <Compile Include="Models\Conferences\Conference_Declaration.cs" />
     <Compile Include="Models\Conferences\Conference_Interfaces.cs" />
+    <Compile Include="Models\Conferences\Extensions.cs" />
     <Compile Include="Models\Locations\Location.cs" />
     <Compile Include="Models\Locations\LocationBase.cs" />
     <Compile Include="Models\Locations\LocationBase_Interfaces.cs" />

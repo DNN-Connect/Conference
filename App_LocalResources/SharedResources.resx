@@ -387,4 +387,7 @@
   <data name="Logo.Text" xml:space="preserve">
     <value>Logo</value>
   </data>
+  <data name="Image.Text" xml:space="preserve">
+    <value>Image</value>
+  </data>
 </root>

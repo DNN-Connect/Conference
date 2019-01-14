@@ -4,6 +4,7 @@ using Connect.DNN.Modules.Conference.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.Conference.Core.Models.Conferences;
 using Connect.Conference.Core.Common;
+using System.Web;
 
 namespace Connect.DNN.Modules.Conference.Controllers
 {
@@ -117,7 +118,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
-        public ActionResult Edit(ConferenceBase conference)
+        public ActionResult Edit(ConferenceBase conference, HttpPostedFileBase image)
         {
             conference.Location = conference.Location.TrimSafeNull();
             conference.MqttBroker = conference.MqttBroker.TrimSafeNull();
@@ -137,6 +138,10 @@ namespace Connect.DNN.Modules.Conference.Controllers
                 conference.CreatedOnDate = previousRecord.CreatedOnDate;
                 conference.CreatedByUserID = previousRecord.CreatedByUserID;
                 _repository.UpdateConference(conference, User.UserID);
+            }
+            if (image != null)
+            {
+                conference.SaveLogo(PortalSettings, image.InputStream, System.IO.Path.GetExtension(image.FileName));
             }
             return RedirectToDefaultRoute();
         }

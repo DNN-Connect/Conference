@@ -125,6 +125,22 @@
   </div>
   @Html.TextBoxFor(m => m.BaseTopicPath)
  </div>
+ <div>
+  <div class="dnnLabel" style="position: relative;">
+   <label>@Dnn.LocalizeString("Image")</label>
+  </div>
+  @if (Model.ConferenceId > 0)
+  {
+   <img src="@DotNetNuke.Common.Globals.ApplicationPath/DesktopModules/Connect/Conference/API/Conference/@Model.ConferenceId/Conferences/Image?size=200" alt="@Model.Name" width="200" height="200" />
+  }
+ </div>
+ <p>&nbsp;</p>
+ <div class="dnnFormItem">
+  <div class="dnnLabel" style="position: relative;">
+   <label>&nbsp;</label>
+  </div>
+  <input type="file" name="image" />
+ </div>
  <div id="formErrors" class="dnnFormMessage dnnFormValidationSummary" style="display:none;">
  </div>
  <div class="right">

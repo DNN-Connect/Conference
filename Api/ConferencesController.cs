@@ -7,6 +7,9 @@ using Connect.Conference.Core.Models.Comments;
 using Connect.Conference.Core.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using Connect.Conference.Core.Models.Conferences;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -113,6 +116,32 @@ namespace Connect.DNN.Modules.Conference.Api
             {
                 return ServiceError(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage Image(int conferenceId, int size)
+        {
+            var conference = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
+            var imageName = conference.GetLogo(PortalSettings, size);
+            if (imageName == "")
+            {
+                imageName = string.Format("{0}images\\no-content.png", DotNetNuke.Common.Globals.ApplicationMapPath);
+            }
+            var res = new HttpResponseMessage(HttpStatusCode.OK);
+            var mem = new MemoryStream();
+            using (var sr = new FileStream(imageName, FileMode.Open, FileAccess.Read))
+            {
+                sr.CopyTo(mem);
+            }
+            mem.Seek(0, SeekOrigin.Begin);
+            res.Content = new StreamContent(mem);
+            res.Content.Headers.ContentType = new MediaTypeHeaderValue("image/" + Path.GetExtension(imageName));
+            res.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = Path.GetFileName(imageName)
+            };
+            return res;
         }
     }
 }
