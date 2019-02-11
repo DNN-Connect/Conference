@@ -128,25 +128,29 @@ export default class ShowDetails extends React.Component<
   }
 
   render() {
+    var i = 0;
     var rows = this.state.Details.map(person => {
+      i++;
       return (
         <ParticipantRow
+          key={i}
           module={this.props.module}
           participant={person}
-          toggleParticipantRegistration={e => {
-            e.preventDefault();
-            this.toggleParticipantRegistration;
+          toggleParticipantRegistration={participant => {
+            this.toggleParticipantRegistration(participant);
           }}
         />
       );
     });
+    i = 0;
     var auditRows = this.state.Log.map(item => {
       var msg = item.Message;
       if (!msg && item.OrderStatus) {
         msg = "Status: " + this.statusToText(item.OrderStatus);
       }
+      i++;
       return (
-        <tr>
+        <tr key={i}>
           <td style={colStyle(50)}>{moment(item.AuditDate).format("l")}</td>
           <td style={colStyle(75)}>{item.Username}</td>
           <td>{msg}</td>

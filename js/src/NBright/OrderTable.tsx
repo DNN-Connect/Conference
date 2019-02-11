@@ -121,6 +121,7 @@ export default class OrderTable extends React.Component<
     var rows = orders.map(o => {
       return (
         <OrderTableRow
+          key={o.ItemId}
           order={o}
           statusOptions={statusOptions}
           statusChange={(o, s) => this.changeStatus(o, s)}

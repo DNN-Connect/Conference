@@ -82,7 +82,10 @@ export default class AddAuditText extends React.Component<
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.cmdSave}
+                onClick={e => {
+                  e.preventDefault();
+                  this.cmdSave();
+                }}
               >
                 {this.props.module.resources.Save}
               </button>
