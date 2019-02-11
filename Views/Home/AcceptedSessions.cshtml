@@ -5,7 +5,7 @@
 @{
     ConferenceModuleContext.AddBootstrapCss();
     ConferenceModuleContext.AddEditScripts();
-    var sessions = SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId).Where(s => s.Status > 2).OrderBy(s => s.Title);
+    var sessions = SessionRepository.Instance.GetSessionsByConference(Model.ConferenceId).Where(s => s.Status >= (Model.SubmittedSessionsPublic ? 1 : 3)).OrderBy(s => s.Title);
 }
 
 <div class="container">
