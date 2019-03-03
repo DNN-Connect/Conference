@@ -9,6 +9,7 @@
 
  IEnumerable<Session> mySessions = SessionRepository.Instance.GetSessionsBySpeaker(Model.ConferenceId, Dnn.User.UserID);
  ConferenceModuleContext.AddBootstrapCss();
+ ConferenceModuleContext.RegisterAjaxScript();
  ConferenceModuleContext.AddScript("common.js");
 }
 
