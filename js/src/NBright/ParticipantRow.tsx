@@ -12,7 +12,7 @@ interface IParticipantRowProps {
 const ParticipantRow: React.SFC<IParticipantRowProps> = props => {
   var btn: JSX.Element | null = null;
   if (
-    props.participant.ProductName == "Attendee" &&
+    (props.participant.ProductName as string).substring(0, 8) == "Attendee" &&
     (props.participant.OrderStatus == 40 ||
       props.participant.OrderStatus == 100)
   ) {
