@@ -13,8 +13,13 @@ const SessionVote: React.SFC<ISessionVoteProps> = props => {
     <td className="btncol">
       <a
         href="#"
-        className={props.item.Voted === 0 ? "btn btn-default":"btn btn-primary" }
-        onClick={props.onVote.bind(null, props.item)}
+        className={
+          props.item.Voted === 0 ? "btn btn-default" : "btn btn-primary"
+        }
+        onClick={e => {
+          e.preventDefault();
+          props.onVote(props.item);
+        }}
         title={props.module.resources.Vote}
       >
         <span className="glyphicon glyphicon-thumbs-up" />

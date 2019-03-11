@@ -59,7 +59,10 @@ export default class TagVotes extends React.Component<
           <a
             href="#"
             className="btn btn-default"
-            onClick={this.onAddTag}
+            onClick={e => {
+              e.preventDefault();
+              this.onAddTag();
+            }}
             title={this.props.module.resources.Add}
           >
             <span className="glyphicon glyphicon-plus" />
@@ -135,8 +138,7 @@ export default class TagVotes extends React.Component<
     }
   }
 
-  onAddTag(e) {
-    e.preventDefault();
+  onAddTag() {
     this.props.module.service.addTag(
       this.props.conferenceId,
       this.state.newTagName,
