@@ -163,6 +163,7 @@ namespace Connect.DNN.Modules.Conference.Controllers
                     var tagToAdd = tag.GetTagBase();
                     if (tag.TagId < 0)
                     {
+                        tagToAdd.TagName = tagToAdd.TagName.Trim();
                         tagToAdd.TagName = tagToAdd.TagName.Substring(0, 1).ToUpper() + tagToAdd.TagName.Substring(1);
                         tagToAdd.ConferenceId = session.ConferenceId;
                         TagRepository.Instance.AddTag(ref tagToAdd, User.UserID);

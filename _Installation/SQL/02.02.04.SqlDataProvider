@@ -1,0 +1,3 @@
+UPDATE {databaseOwner}{objectQualifier}Connect_Conference_Tags
+SET TagName = LTRIM(RTRIM(TagName))
+GO
