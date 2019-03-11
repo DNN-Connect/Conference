@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.SessionAttendees
 {
@@ -19,8 +20,10 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 
         #region Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int SessionId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int UserId { get; set; }
         #endregion
 

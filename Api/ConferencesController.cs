@@ -1,21 +1,52 @@
+using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Models.Comments;
+using Connect.Conference.Core.Models.Conferences;
+using Connect.Conference.Core.Repositories;
+using Connect.DNN.Modules.Conference.Common;
+using DotNetNuke.Web.Api;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using DotNetNuke.Web.Api;
-using Connect.DNN.Modules.Conference.Common;
-using Connect.Conference.Core.Models.Comments;
-using Connect.Conference.Core.Repositories;
-using System.Collections.Generic;
-using System.Linq;
-using Connect.Conference.Core.Models.Conferences;
-using System.IO;
 using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
 
     public partial class ConferencesController : ConferenceApiController
     {
+
+        [HttpGet]
+        [DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]
+        public HttpResponseMessage Complete(int id)
+        {
+            var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, id);
+            conf.LoadComplete();
+            var level = WebApiSecurityLevel.Public;
+            if (ConferenceModuleContext.Security.CanManage)
+            {
+                level = WebApiSecurityLevel.Management;
+            }
+            else
+            {
+                if (AttendeeRepository.Instance.GetAttendee(id, UserInfo.UserID) != null)
+                {
+                    level = WebApiSecurityLevel.Attendee;
+                }
+            }
+            var res = JsonConvert.SerializeObject(conf,
+                            Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new WebApiJsonContractResolver(level)
+                            });
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(res, System.Text.Encoding.UTF8, "application/json");
+            return response;
+        }
 
         [HttpGet]
         [DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]

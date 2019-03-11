@@ -41,6 +41,10 @@
       <HintPath>..\_References\DotNetNuke.Web.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_References\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -68,6 +72,8 @@
     <Compile Include="Common\ResourceType.cs" />
     <Compile Include="Common\SessionStatus.cs" />
     <Compile Include="Common\SlotType.cs" />
+    <Compile Include="Common\WebApiJsonContractResolver.cs" />
+    <Compile Include="Common\WebApiSecurityAttribute.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\DnnRoleController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -92,6 +98,7 @@
     <Compile Include="Models\Conferences\Conference.cs" />
     <Compile Include="Models\Conferences\ConferenceBase.cs" />
     <Compile Include="Models\Conferences\ConferenceBase_Interfaces.cs" />
+    <Compile Include="Models\Conferences\Conference_Complete.cs" />
     <Compile Include="Models\Conferences\Conference_Declaration.cs" />
     <Compile Include="Models\Conferences\Conference_Interfaces.cs" />
     <Compile Include="Models\Conferences\Extensions.cs" />
@@ -121,6 +128,7 @@
     <Compile Include="Models\SessionSpeakers\SessionSpeaker_Declaration.cs" />
     <Compile Include="Models\SessionSpeakers\SessionSpeaker_Interfaces.cs" />
     <Compile Include="Models\Sessions\SessionBase_Custom.cs" />
+    <Compile Include="Models\Sessions\Session_Complete.cs" />
     <Compile Include="Models\Sessions\SessionWithVote.cs" />
     <Compile Include="Models\Sessions\Session_Custom.cs" />
     <Compile Include="Models\Sessions\Session.cs" />
@@ -147,6 +155,7 @@
     <Compile Include="Models\Speakers\SpeakerBase.cs" />
     <Compile Include="Models\Speakers\SpeakerBase_Interfaces.cs" />
     <Compile Include="Models\Speakers\SpeakerWithNrSessions.cs" />
+    <Compile Include="Models\Speakers\Speaker_Complete.cs" />
     <Compile Include="Models\Speakers\Speaker_Declaration.cs" />
     <Compile Include="Models\Speakers\Speaker_Interfaces.cs" />
     <Compile Include="Models\Sponsors\Extensions.cs" />

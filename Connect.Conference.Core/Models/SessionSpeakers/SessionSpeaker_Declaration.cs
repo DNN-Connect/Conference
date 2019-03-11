@@ -1,6 +1,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.SessionSpeakers
@@ -21,10 +22,12 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         [DataMember]
         public string Company { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Description { get; set; }
         [DataMember]
         public string DescriptionShort { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Url { get; set; }
         [DataMember]
         public string DisplayName { get; set; }
@@ -33,12 +36,16 @@ namespace Connect.Conference.Core.Models.SessionSpeakers
         [DataMember]
         public string LastName { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Email { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Username { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         #endregion
 

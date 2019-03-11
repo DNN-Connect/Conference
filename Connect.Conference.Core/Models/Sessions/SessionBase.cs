@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.Sessions
 {
@@ -25,6 +26,7 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int SessionId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int ConferenceId { get; set; }
         [DataMember]
         public int? LocationId { get; set; }
@@ -49,6 +51,7 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int DayNr { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Notes { get; set; }
         [DataMember]
         public int? TrackId { get; set; }

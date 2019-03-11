@@ -1,18 +1,17 @@
-
-using System;
-using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Connect.Conference.Core.Models.Attendees
 {
 
     [TableName("vw_Connect_Conference_Attendees")]
     [DataContract]
-    public partial class Attendee  : AttendeeBase 
+    public partial class Attendee : AttendeeBase
     {
 
         #region .ctor
-        public Attendee()  : base() 
+        public Attendee() : base()
         {
         }
         #endregion
@@ -25,8 +24,10 @@ namespace Connect.Conference.Core.Models.Attendees
         [DataMember]
         public string LastName { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Email { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Username { get; set; }
         [DataMember]
         public int? PhotoVisibility { get; set; }
@@ -45,8 +46,10 @@ namespace Connect.Conference.Core.Models.Attendees
         [DataMember]
         public string ProfileCompany { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         #endregion
 
@@ -54,16 +57,16 @@ namespace Connect.Conference.Core.Models.Attendees
         public AttendeeBase GetAttendeeBase()
         {
             AttendeeBase res = new AttendeeBase();
-             res.ConferenceId = ConferenceId;
-             res.UserId = UserId;
-             res.Status = Status;
-             res.ReceiveNotifications = ReceiveNotifications;
-             res.Company = Company;
-             res.AttCode = AttCode;
-  res.CreatedByUserID = CreatedByUserID;
-  res.CreatedOnDate = CreatedOnDate;
-  res.LastModifiedByUserID = LastModifiedByUserID;
-  res.LastModifiedOnDate = LastModifiedOnDate;
+            res.ConferenceId = ConferenceId;
+            res.UserId = UserId;
+            res.Status = Status;
+            res.ReceiveNotifications = ReceiveNotifications;
+            res.Company = Company;
+            res.AttCode = AttCode;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         public Attendee Clone()

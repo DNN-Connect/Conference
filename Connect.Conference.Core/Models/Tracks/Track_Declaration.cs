@@ -1,6 +1,6 @@
-using System;
-using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Connect.Conference.Core.Models.Tracks
 {
@@ -9,19 +9,21 @@ namespace Connect.Conference.Core.Models.Tracks
     [PrimaryKey("TrackId", AutoIncrement = true)]
     [DataContract]
     [Scope("ConferenceId")]
-    public partial class Track  : TrackBase 
+    public partial class Track : TrackBase
     {
 
         #region .ctor
-        public Track()  : base() 
+        public Track() : base()
         {
         }
         #endregion
 
         #region Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         [DataMember]
         public int? NrSessions { get; set; }
@@ -31,17 +33,17 @@ namespace Connect.Conference.Core.Models.Tracks
         public TrackBase GetTrackBase()
         {
             TrackBase res = new TrackBase();
-             res.TrackId = TrackId;
-             res.ConferenceId = ConferenceId;
-             res.SessionVoting = SessionVoting;
-             res.BackgroundColor = BackgroundColor;
-             res.Sort = Sort;
-             res.Title = Title;
-             res.Description = Description;
-  res.CreatedByUserID = CreatedByUserID;
-  res.CreatedOnDate = CreatedOnDate;
-  res.LastModifiedByUserID = LastModifiedByUserID;
-  res.LastModifiedOnDate = LastModifiedOnDate;
+            res.TrackId = TrackId;
+            res.ConferenceId = ConferenceId;
+            res.SessionVoting = SessionVoting;
+            res.BackgroundColor = BackgroundColor;
+            res.Sort = Sort;
+            res.Title = Title;
+            res.Description = Description;
+            res.CreatedByUserID = CreatedByUserID;
+            res.CreatedOnDate = CreatedOnDate;
+            res.LastModifiedByUserID = LastModifiedByUserID;
+            res.LastModifiedOnDate = LastModifiedOnDate;
             return res;
         }
         public Track Clone()

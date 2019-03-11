@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.Locations
 {
@@ -24,6 +25,7 @@ namespace Connect.Conference.Core.Models.Locations
         [DataMember]
         public int LocationId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int ConferenceId { get; set; }
         [DataMember]
         public string Name { get; set; }

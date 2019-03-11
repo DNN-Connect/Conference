@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.Sponsors
 {
@@ -23,6 +24,7 @@ namespace Connect.Conference.Core.Models.Sponsors
         [DataMember]
         public int SponsorId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int ConferenceId { get; set; }
         [DataMember]
         public string Name { get; set; }

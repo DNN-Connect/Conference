@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.Speakers
 {
@@ -19,6 +20,7 @@ namespace Connect.Conference.Core.Models.Speakers
 
         #region Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int ConferenceId { get; set; }
         [DataMember]
         public int UserId { get; set; }

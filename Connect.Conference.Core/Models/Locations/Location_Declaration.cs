@@ -1,6 +1,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.Locations
@@ -20,16 +21,21 @@ namespace Connect.Conference.Core.Models.Locations
 
         #region Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string ConferenceName { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public DateTime? StartDate { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public DateTime? EndDate { get; set; }
         [DataMember]
         public int? NrSessions { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         #endregion
 

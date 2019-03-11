@@ -1,15 +1,16 @@
 
+using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Data;
+using DotNetNuke.ComponentModel.DataAnnotations;
 using System;
 using System.Runtime.Serialization;
-using DotNetNuke.ComponentModel.DataAnnotations;
-using Connect.Conference.Core.Data;
 
 namespace Connect.Conference.Core.Models.Tracks
 {
     [TableName("Connect_Conference_Tracks")]
     [PrimaryKey("TrackId", AutoIncrement = true)]
     [DataContract]
-    public partial class TrackBase  : AuditableEntity 
+    public partial class TrackBase : AuditableEntity
     {
 
         #region .ctor
@@ -23,6 +24,7 @@ namespace Connect.Conference.Core.Models.Tracks
         [DataMember]
         public int TrackId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int ConferenceId { get; set; }
         [DataMember]
         public bool SessionVoting { get; set; }
@@ -40,25 +42,36 @@ namespace Connect.Conference.Core.Models.Tracks
         public void ReadTrackBase(TrackBase track)
         {
             if (track.TrackId > -1)
+            {
                 TrackId = track.TrackId;
+            }
 
             if (track.ConferenceId > -1)
+            {
                 ConferenceId = track.ConferenceId;
+            }
 
             SessionVoting = track.SessionVoting;
 
             if (!String.IsNullOrEmpty(track.BackgroundColor))
+            {
                 BackgroundColor = track.BackgroundColor;
+            }
 
             if (track.Sort > -1)
+            {
                 Sort = track.Sort;
+            }
 
             if (!String.IsNullOrEmpty(track.Title))
+            {
                 Title = track.Title;
+            }
 
             if (!String.IsNullOrEmpty(track.Description))
+            {
                 Description = track.Description;
-
+            }
         }
         #endregion
 

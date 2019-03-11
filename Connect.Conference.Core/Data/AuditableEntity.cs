@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.Common.Utilities;
 
 namespace Connect.Conference.Core.Data
@@ -32,12 +33,16 @@ namespace Connect.Conference.Core.Data
 
         #region Public Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int CreatedByUserID { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public DateTime CreatedOnDate { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int LastModifiedByUserID { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public DateTime LastModifiedOnDate { get; set; }
         #endregion
 

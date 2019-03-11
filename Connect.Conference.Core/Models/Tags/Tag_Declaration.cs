@@ -1,6 +1,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.Tags
@@ -24,8 +25,10 @@ namespace Connect.Conference.Core.Models.Tags
         [DataMember]
         public int? NrVotes { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         #endregion
 

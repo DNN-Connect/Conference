@@ -1,6 +1,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
 
 namespace Connect.Conference.Core.Models.SessionAttendees
@@ -19,26 +20,34 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 
         #region Properties
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Title { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int ConferenceId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public DateTime? SessionDateAndTime { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public DateTime? SessionEnd { get; set; }
         [DataMember]
         public string DisplayName { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Email { get; set; }
         [DataMember]
         public string Company { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string AttCode { get; set; }
         [DataMember]
         public string SessionAttendeeName { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string LastModifiedByUser { get; set; }
         #endregion
 
