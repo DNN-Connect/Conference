@@ -37,7 +37,7 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public int? Capacity { get; set; }
         [DataMember]
-        public int SlotId { get; set; }
+        public int SlotId { get; set; } = 0;
         [DataMember]
         public string Title { get; set; }
         [DataMember]
@@ -49,7 +49,7 @@ namespace Connect.Conference.Core.Models.Sessions
         [DataMember]
         public bool IsPlenary { get; set; }
         [DataMember]
-        public int DayNr { get; set; }
+        public int DayNr { get; set; } = 0;
         [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Notes { get; set; }

@@ -38,24 +38,18 @@ namespace Connect.Conference.Core.Models.Conferences
         [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Attendee)]
         public IEnumerable<Attendee> Attendees { get; private set; }
-        public void LoadComplete()
+        public Conference LoadComplete()
         {
             Locations = LocationRepository.Instance.GetLocationsByConference(ConferenceId)
                 .OrderBy(l => l.Sort);
             Sessions = SessionRepository.Instance.GetSessionsByConference(ConferenceId)
                 .Where(s => s.Status > 2)
-                .OrderBy(s => s.Title);
-            foreach (var s in Sessions)
-            {
-                s.LoadComplete();
-            }
+                .OrderBy(s => s.Title)
+                .Select(s => s.LoadComplete());
             Speakers = SpeakerRepository.Instance.GetSpeakersByConference(ConferenceId)
                 .Where(s => s.NrSessions > 0)
-                .OrderBy(s => s.Sort);
-            foreach (var s in Speakers)
-            {
-                s.LoadComplete();
-            }
+                .OrderBy(s => s.Sort)
+                .Select(s => s.LoadComplete());
             Sponsors = SponsorRepository.Instance.GetSponsorsByConference(ConferenceId)
                 .OrderBy(s => s.ViewOrder);
             Tracks = TrackRepository.Instance.GetTracksByConference(ConferenceId)
@@ -65,6 +59,7 @@ namespace Connect.Conference.Core.Models.Conferences
                 .OrderBy(t => t.TagName);
             Attendees = AttendeeRepository.Instance.GetAttendeesByConference(ConferenceId)
                 .OrderBy(a => a.LastName);
+            return this;
         }
     }
 }

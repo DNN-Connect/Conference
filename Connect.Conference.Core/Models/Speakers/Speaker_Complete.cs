@@ -12,16 +12,17 @@ namespace Connect.Conference.Core.Models.Speakers
         [DataMember]
         public IEnumerable<SessionExtract> Sessions { get; private set; }
 
-        public void LoadComplete()
+        public Speaker LoadComplete()
         {
             Sessions = SessionRepository.Instance.GetSessionsBySpeaker(ConferenceId, UserId)
-                .Where(s => s.Status > 3)
+                .Where(s => s.Status > 2)
                 .Select(s => new SessionExtract()
                 {
                     SessionId = s.SessionId,
                     Title = s.Title,
                     SubTitle = s.SubTitle
                 });
+            return this;
         }
 
         public class SessionExtract

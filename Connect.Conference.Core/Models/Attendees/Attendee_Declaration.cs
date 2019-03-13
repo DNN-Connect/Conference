@@ -30,16 +30,22 @@ namespace Connect.Conference.Core.Models.Attendees
         [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string Username { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int? PhotoVisibility { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string PhotoFilename { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string PhotoFolder { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int? PhotoWidth { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int? PhotoHeight { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string PhotoContentType { get; set; }
         [DataMember]
         public string Biography { get; set; }
