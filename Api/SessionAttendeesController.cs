@@ -42,10 +42,14 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
-        public HttpResponseMessage Attend(int conferenceId, int sessionId)
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
+        public HttpResponseMessage Attend(int conferenceId, int id)
         {
-            SessionAttendeeRepository.Instance.SetSessionAttendee(sessionId, UserInfo.UserID);
+            var confAtt = AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID);
+            if (confAtt != null)
+            {
+                SessionAttendeeRepository.Instance.SetSessionAttendee(id, UserInfo.UserID);
+            }
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
 
