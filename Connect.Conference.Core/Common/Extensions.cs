@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Connect.Conference.Core.Repositories;
+﻿using Connect.Conference.Core.Repositories;
+using System;
+using System.Linq;
 
 namespace Connect.Conference.Core.Common
 {
@@ -22,29 +23,62 @@ namespace Connect.Conference.Core.Common
 
         public static string SafeReplace(this string input, string oldValue, string newValue)
         {
-            if (string.IsNullOrEmpty(input)) return "";
+            if (string.IsNullOrEmpty(input))
+            {
+                return "";
+            }
+
             return input.Replace(oldValue, newValue);
         }
 
         public static string TrimSafeNull(this string input)
         {
-            if (input == null) return null;
+            if (input == null)
+            {
+                return null;
+            }
+
             return input.Trim();
         }
 
-        public static string UnNull(this  string input)
+        public static string UnNull(this string input)
         {
-            if (input == null) return "";
+            if (input == null)
+            {
+                return "";
+            }
+
             return input;
         }
         public static int UnNull(this int? input, int defaultValue)
         {
-            if (input == null) return defaultValue;
+            if (input == null)
+            {
+                return defaultValue;
+            }
+
             return (int)input;
         }
         public static int UnNull(this int? input)
         {
             return input.UnNull(-1);
+        }
+        public static bool IsBefore(this DateTime? input, DateTime compare)
+        {
+            if (input == null)
+            {
+                return false;
+            }
+
+            var i = (DateTime)input;
+            return i.CompareTo(compare) < 0;
+        }
+        public static bool IsBetween(this DateTime input, DateTime? start, DateTime? end)
+        {
+            if (start == null | end == null) return false;
+            var s = (DateTime)start;
+            var e = (DateTime)end;
+            return (input.CompareTo(s) > 0 && input.CompareTo(e) < 0);
         }
 
     }

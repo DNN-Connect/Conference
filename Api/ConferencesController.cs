@@ -5,6 +5,7 @@ using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;
 using DotNetNuke.Web.Api;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,33 +19,36 @@ namespace Connect.DNN.Modules.Conference.Api
 
     public partial class ConferencesController : ConferenceApiController
     {
-
         [HttpGet]
         [DnnModuleAuthorize(AccessLevel = DotNetNuke.Security.SecurityAccessLevel.View)]
         public HttpResponseMessage Complete(int id)
         {
             var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, id);
             conf.LoadComplete();
+            var isAttending = false;
             var level = WebApiSecurityLevel.Public;
+            var att = AttendeeRepository.Instance.GetAttendee(id, UserInfo.UserID);
+            if (att != null)
+            {
+                if (att.Status >= (int)AttendeeStatus.Confirmed)
+                {
+                    level = WebApiSecurityLevel.Attendee;
+                    isAttending = true;
+                }
+            }
             if (ConferenceModuleContext.Security.CanManage)
             {
                 level = WebApiSecurityLevel.Management;
             }
-            else
-            {
-                if (AttendeeRepository.Instance.GetAttendee(id, UserInfo.UserID) != null)
-                {
-                    level = WebApiSecurityLevel.Attendee;
-                }
-            }
-            var res = JsonConvert.SerializeObject(conf,
-                            Formatting.None,
-                            new JsonSerializerSettings
-                            {
-                                ContractResolver = new WebApiJsonContractResolver(level)
-                            });
+            var serializerSettings = new JsonSerializerSettings { ContractResolver = new WebApiJsonContractResolver(level) };
+            var serializer = JsonSerializer.CreateDefault(serializerSettings);
+            var cc = JObject.FromObject(conf, serializer);
+            cc.Add("Security", JObject.FromObject(ConferenceModuleContext.Security));
+            cc.Add("IsAttending", isAttending);
+            cc.Add("Closed", conf.EndDate.IsBefore(System.DateTime.Now));
+            cc.Add("OnGoing", System.DateTime.Now.IsBetween(conf.StartDate, conf.EndDate));
             var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(res, System.Text.Encoding.UTF8, "application/json");
+            response.Content = new StringContent(cc.ToString(), System.Text.Encoding.UTF8, "application/json");
             return response;
         }
 

@@ -1,19 +1,18 @@
-
-using System;
-using System.Runtime.Serialization;
 using Connect.Conference.Core.Common;
 using DotNetNuke.ComponentModel.DataAnnotations;
+using System;
+using System.Runtime.Serialization;
 
 namespace Connect.Conference.Core.Models.SessionAttendees
 {
 
     [TableName("vw_Connect_Conference_SessionAttendees")]
     [DataContract]
-    public partial class SessionAttendee  : SessionAttendeeBase 
+    public partial class SessionAttendee : SessionAttendeeBase
     {
 
         #region .ctor
-        public SessionAttendee()  : base() 
+        public SessionAttendee() : base()
         {
         }
         #endregion
@@ -44,6 +43,8 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         [DataMember]
         public string SessionAttendeeName { get; set; }
         [DataMember]
+        public int ReviewStars { get; set; }
+        [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -55,8 +56,8 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         public SessionAttendeeBase GetSessionAttendeeBase()
         {
             SessionAttendeeBase res = new SessionAttendeeBase();
-             res.SessionId = SessionId;
-             res.UserId = UserId;
+            res.SessionId = SessionId;
+            res.UserId = UserId;
             res.CreatedByUserID = CreatedByUserID;
             res.CreatedOnDate = CreatedOnDate;
             res.LastModifiedByUserID = LastModifiedByUserID;
@@ -77,6 +78,7 @@ namespace Connect.Conference.Core.Models.SessionAttendees
             res.Company = Company;
             res.AttCode = AttCode;
             res.SessionAttendeeName = SessionAttendeeName;
+            res.ReviewStars = ReviewStars;
             res.CreatedByUser = CreatedByUser;
             res.LastModifiedByUser = LastModifiedByUser;
             res.CreatedByUserID = CreatedByUserID;

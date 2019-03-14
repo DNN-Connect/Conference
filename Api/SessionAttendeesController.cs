@@ -1,16 +1,16 @@
+using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Models.SessionEvaluations;
+using Connect.Conference.Core.Repositories;
+using Connect.DNN.Modules.Conference.Common;
+using DotNetNuke.Web.Api;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using DotNetNuke.Web.Api;
-using Connect.DNN.Modules.Conference.Common;
-using Connect.Conference.Core.Repositories;
-using System.Web;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Connect.Conference.Core.Models.SessionEvaluations;
-using System;
 using System.Text.RegularExpressions;
+using System.Web.Http;
 
 namespace Connect.DNN.Modules.Conference.Api
 {
@@ -22,8 +22,15 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
         public HttpResponseMessage Attendances(int conferenceId)
         {
-            var res = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID);
-            return Request.CreateResponse(HttpStatusCode.OK, res);
+            var res = JsonConvert.SerializeObject(SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID),
+                            Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new WebApiJsonContractResolver(WebApiSecurityLevel.Attendee)
+                            });
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(res, System.Text.Encoding.UTF8, "application/json");
+            return response;
         }
 
         [HttpGet]

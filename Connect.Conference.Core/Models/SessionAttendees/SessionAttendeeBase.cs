@@ -1,15 +1,12 @@
-
-using System;
-using System.Runtime.Serialization;
-using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
-using Connect.Conference.Core.Common;
+using DotNetNuke.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Connect.Conference.Core.Models.SessionAttendees
 {
     [TableName("Connect_Conference_SessionAttendees")]
     [DataContract]
-    public partial class SessionAttendeeBase  : AuditableEntity 
+    public partial class SessionAttendeeBase : AuditableEntity
     {
 
         #region .ctor
@@ -20,10 +17,8 @@ namespace Connect.Conference.Core.Models.SessionAttendees
 
         #region Properties
         [DataMember]
-        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int SessionId { get; set; }
         [DataMember]
-        [WebApiSecurity(WebApiSecurityLevel.Management)]
         public int UserId { get; set; }
         #endregion
 
@@ -31,11 +26,14 @@ namespace Connect.Conference.Core.Models.SessionAttendees
         public void ReadSessionAttendeeBase(SessionAttendeeBase sessionAttendee)
         {
             if (sessionAttendee.SessionId > -1)
+            {
                 SessionId = sessionAttendee.SessionId;
+            }
 
             if (sessionAttendee.UserId > -1)
+            {
                 UserId = sessionAttendee.UserId;
-
+            }
         }
         #endregion
 
