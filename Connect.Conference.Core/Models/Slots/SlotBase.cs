@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization;
 using DotNetNuke.ComponentModel.DataAnnotations;
 using Connect.Conference.Core.Data;
+using Connect.Conference.Core.Common;
 
 namespace Connect.Conference.Core.Models.Slots
 {
@@ -24,6 +25,7 @@ namespace Connect.Conference.Core.Models.Slots
         [DataMember]
         public int SlotId { get; set; }
         [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int ConferenceId { get; set; }
         [DataMember]
         public TimeSpan Start { get; set; }

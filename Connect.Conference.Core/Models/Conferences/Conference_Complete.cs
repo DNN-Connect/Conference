@@ -2,6 +2,7 @@
 using Connect.Conference.Core.Models.Attendees;
 using Connect.Conference.Core.Models.Locations;
 using Connect.Conference.Core.Models.Sessions;
+using Connect.Conference.Core.Models.Slots;
 using Connect.Conference.Core.Models.Speakers;
 using Connect.Conference.Core.Models.Sponsors;
 using Connect.Conference.Core.Models.Tags;
@@ -18,10 +19,16 @@ namespace Connect.Conference.Core.Models.Conferences
     {
         [IgnoreColumn]
         [DataMember]
+        public List<ConferenceDay> Days { get; private set; }
+        [IgnoreColumn]
+        [DataMember]
         public IEnumerable<Location> Locations { get; private set; }
         [IgnoreColumn]
         [DataMember]
         public IEnumerable<Session> Sessions { get; private set; }
+        [IgnoreColumn]
+        [DataMember]
+        public IEnumerable<Slot> Slots { get; private set; }
         [IgnoreColumn]
         [DataMember]
         public IEnumerable<Speaker> Speakers { get; private set; }
@@ -40,12 +47,32 @@ namespace Connect.Conference.Core.Models.Conferences
         public IEnumerable<Attendee> Attendees { get; private set; }
         public Conference LoadComplete()
         {
+            Days = new List<ConferenceDay>();
+            if (StartDate != null)
+            {
+                var i = 1;
+                var start = (System.DateTime)StartDate;
+                if (EndDate != null)
+                {
+                    while (start <= EndDate)
+                    {
+                        Days.Add(new ConferenceDay()
+                        {
+                            DayNr = i,
+                            DayDate = start
+                        });
+                        start = start.AddDays(1);
+                        i++;
+                    }
+                }
+            }
             Locations = LocationRepository.Instance.GetLocationsByConference(ConferenceId)
                 .OrderBy(l => l.Sort);
             Sessions = SessionRepository.Instance.GetSessionsByConference(ConferenceId)
                 .Where(s => s.Status > 2)
                 .OrderBy(s => s.Title)
                 .Select(s => s.LoadComplete());
+            Slots = SlotRepository.Instance.GetSlotsByConference(ConferenceId);
             Speakers = SpeakerRepository.Instance.GetSpeakersByConference(ConferenceId)
                 .Where(s => s.NrSessions > 0)
                 .OrderBy(s => s.Sort)
@@ -60,6 +87,11 @@ namespace Connect.Conference.Core.Models.Conferences
             Attendees = AttendeeRepository.Instance.GetAttendeesByConference(ConferenceId)
                 .OrderBy(a => a.LastName);
             return this;
+        }
+        public class ConferenceDay
+        {
+            public int DayNr { get; set; }
+            public System.DateTime DayDate { get; set; }
         }
     }
 }
