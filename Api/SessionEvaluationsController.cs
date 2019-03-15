@@ -1,14 +1,11 @@
+using Connect.Conference.Core.Models.SessionEvaluations;
+using Connect.Conference.Core.Repositories;
+using Connect.DNN.Modules.Conference.Common;
+using DotNetNuke.Web.Api;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using DotNetNuke.Web.Api;
-using Connect.DNN.Modules.Conference.Common;
-using Connect.Conference.Core.Repositories;
-using System.Web;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Connect.Conference.Core.Models.SessionEvaluations;
 
 namespace Connect.DNN.Modules.Conference.Api
 {

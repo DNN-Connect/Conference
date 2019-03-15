@@ -83,7 +83,7 @@ namespace Connect.DNN.Modules.Conference.Integration.Mqtt
                                 }
                                 if (session != null)
                                 {
-                                    SessionAttendeeRepository.Instance.SetSessionAttendee(session.SessionId, attendee.UserId);
+                                    SessionAttendeeRepository.Instance.SetSessionAttendee(session.SessionId, attendee.UserId, attendee.UserId);
                                     SendPresence(roomId, session.LocationName, session.Title, attendee.DisplayName);
                                 }
                             }

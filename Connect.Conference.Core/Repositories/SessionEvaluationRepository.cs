@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using DotNetNuke.Common;
+using Connect.Conference.Core.Models.SessionEvaluations;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
-using Connect.Conference.Core.Models.SessionEvaluations;
+using System;
 
 namespace Connect.Conference.Core.Repositories
 {
-	public partial class SessionEvaluationRepository : ServiceLocator<ISessionEvaluationRepository, SessionEvaluationRepository>, ISessionEvaluationRepository
+    public partial class SessionEvaluationRepository : ServiceLocator<ISessionEvaluationRepository, SessionEvaluationRepository>, ISessionEvaluationRepository
     {
         public void SetSessionEvaluation(SessionEvaluationBase sessionEvaluation, int userId)
         {
@@ -25,7 +22,7 @@ namespace Connect.Conference.Core.Repositories
                     "SELECT @0, @1, @2, @3, @4, @5, @6, @7 " +
                     "ELSE " +
                     "UPDATE {databaseOwner}{objectQualifier}Connect_Conference_SessionEvaluations " +
-                    "SET Stars=@2, Review=@4, LastModifiedByUserID=@6, LastModifiedOnDate=@7 " + 
+                    "SET Stars=@2, Review=@3, LastModifiedByUserID=@6, LastModifiedOnDate=@7 " +
                     "WHERE SessionId=@0 AND UserId=@1", sessionEvaluation.SessionId, sessionEvaluation.UserId, sessionEvaluation.Stars, sessionEvaluation.Review, sessionEvaluation.CreatedByUserID, sessionEvaluation.CreatedOnDate, sessionEvaluation.LastModifiedByUserID, sessionEvaluation.LastModifiedOnDate);
             }
         }

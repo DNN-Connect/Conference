@@ -3,6 +3,7 @@ using Connect.Conference.Core.Models.Attendees;
 using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;
 using DotNetNuke.Web.Api;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,11 +19,20 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage All(int conferenceId)
         {
-            if (AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID) == null)
+            if (!ConferenceModuleContext.Security.CanManage && AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID) == null)
             {
                 return AccessViolation("You must be logged in and attending to see the list of attendees");
             }
-            return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendeesByConference(conferenceId).Where(a => a.Status >= (int)AttendeeStatus.Confirmed).OrderBy(a => a.LastName));
+            var resObject = AttendeeRepository.Instance.GetAttendeesByConference(conferenceId).Where(a => a.Status >= (int)AttendeeStatus.Confirmed).OrderBy(a => a.LastName);
+            var res = JsonConvert.SerializeObject(resObject,
+                            Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new WebApiJsonContractResolver(ConferenceModuleContext.Security.CanManage ? WebApiSecurityLevel.Management : WebApiSecurityLevel.Attendee)
+                            });
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(res, System.Text.Encoding.UTF8, "application/json");
+            return response;
         }
 
         public class AttendResponse
@@ -56,7 +66,7 @@ namespace Connect.DNN.Modules.Conference.Api
                 }
                 else
                 {
-                    SessionAttendeeRepository.Instance.SetSessionAttendee(session.SessionId, attendee.UserId);
+                    SessionAttendeeRepository.Instance.SetSessionAttendee(session.SessionId, attendee.UserId, UserInfo.UserID);
                     res.SessionTitle = session.Title;
                 }
             }

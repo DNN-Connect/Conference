@@ -46,7 +46,6 @@ namespace Connect.DNN.Modules.Conference.Api
             cc.Add("Security", JObject.FromObject(ConferenceModuleContext.Security));
             cc.Add("IsAttending", isAttending);
             cc.Add("Closed", conf.EndDate.IsBefore(System.DateTime.Now));
-            cc.Add("OnGoing", System.DateTime.Now.IsBetween(conf.StartDate, conf.EndDate));
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(cc.ToString(), System.Text.Encoding.UTF8, "application/json");
             return response;

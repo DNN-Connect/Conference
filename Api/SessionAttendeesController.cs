@@ -45,12 +45,22 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage Attend(int conferenceId, int id)
         {
+            var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
+            if (!conf.OnGoing)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotAcceptable, "This conference is not ongoing");
+            }
             var confAtt = AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID);
             if (confAtt != null)
             {
-                SessionAttendeeRepository.Instance.SetSessionAttendee(id, UserInfo.UserID);
+                var session = SessionRepository.Instance.GetSession(id);
+                if (SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID).Where(sa => sa.SessionId != id && sa.SessionDateAndTime == session.SessionDateAndTime).Count() > 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "You were in another session");
+                }
+                SessionAttendeeRepository.Instance.SetSessionAttendee(id, UserInfo.UserID, UserInfo.UserID);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, "");
+            return Request.CreateResponse(HttpStatusCode.OK, SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID).FirstOrDefault(sa => sa.SessionId == id));
         }
 
         [HttpPost]
@@ -90,7 +100,7 @@ namespace Connect.DNN.Modules.Conference.Api
                     var attendee = AttendeeRepository.Instance.GetAttendeeByCode(conferenceId, code);
                     if (attendee != null)
                     {
-                        SessionAttendeeRepository.Instance.SetSessionAttendee(data.SessionId, attendee.UserId);
+                        SessionAttendeeRepository.Instance.SetSessionAttendee(data.SessionId, attendee.UserId, UserInfo.UserID);
                     }
                 }
             }
