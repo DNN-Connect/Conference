@@ -1,4 +1,6 @@
-﻿using DotNetNuke.Services.FileSystem;
+﻿using Connect.Conference.Core.Controllers;
+using Connect.Conference.Core.Data;
+using DotNetNuke.Services.FileSystem;
 using System.IO;
 
 namespace Connect.DNN.Modules.Conference.Common
@@ -14,6 +16,7 @@ namespace Connect.DNN.Modules.Conference.Common
             var fileName = hash + ".png";
             var contentType = "image/png";
             var user = DotNetNuke.Entities.Users.UserController.GetUserById(portalId, userId);
+            SaveText("Retrieved user", Newtonsoft.Json.JsonConvert.SerializeObject(user, Newtonsoft.Json.Formatting.Indented));
             var userFolder = FolderManager.Instance.GetUserFolder(user);
             IFileInfo file = null;
             using (var memStream = new MemoryStream())
@@ -27,7 +30,21 @@ namespace Connect.DNN.Modules.Conference.Common
                     CreateThumbnails(file.FileId);
                 }
             }
+            FixDnnController.SetUserProfileProperty(portalId, user.UserID, "Photo", file.FileId.ToString());
+            ImageController.ClearUserImageCache(portalId, user.UserID);
             return file;
+        }
+
+        private static void SaveText(string msg, string text)
+        {
+            var fileName = string.Format("{0}\\cclog-{1:d-HH-mm-ss}.log", DotNetNuke.Common.Globals.HostMapPath, System.DateTime.Now);
+            using (var sw = new StreamWriter(fileName, true))
+            {
+                sw.WriteLine(msg + ":");
+                sw.WriteLine(text);
+                sw.WriteLine();
+                sw.Flush();
+            }
         }
 
         private static void CreateThumbnails(int fileId)

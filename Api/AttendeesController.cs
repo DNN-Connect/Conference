@@ -1,4 +1,5 @@
 using Connect.Conference.Core.Common;
+using Connect.Conference.Core.Controllers;
 using Connect.Conference.Core.Models.Attendees;
 using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;

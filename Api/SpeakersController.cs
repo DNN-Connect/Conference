@@ -1,11 +1,9 @@
 using Connect.Conference.Core.Common;
 using Connect.Conference.Core.Repositories;
 using Connect.DNN.Modules.Conference.Common;
-using DotNetNuke.Services.FileSystem;
 using DotNetNuke.Web.Api;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -63,7 +61,8 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             var speaker = SpeakerRepository.Instance.GetSpeaker(conferenceId, id);
             var file = ImageUtils.SaveUserProfilePic(PortalSettings.PortalId, id, data.Image, UserInfo.UserID);
-            if (file != null) {
+            if (file != null)
+            {
                 speaker.PhotoFolder = file.Folder;
                 speaker.PhotoFilename = file.FileName;
                 speaker.PhotoContentType = file.ContentType;

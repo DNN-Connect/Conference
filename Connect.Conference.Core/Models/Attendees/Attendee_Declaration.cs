@@ -33,7 +33,7 @@ namespace Connect.Conference.Core.Models.Attendees
         [WebApiSecurity(WebApiSecurityLevel.Private)]
         public int? PhotoVisibility { get; set; }
         [DataMember]
-        [WebApiSecurity(WebApiSecurityLevel.Private)]
+        [WebApiSecurity(WebApiSecurityLevel.Attendee)]
         public string PhotoFilename { get; set; }
         [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Private)]

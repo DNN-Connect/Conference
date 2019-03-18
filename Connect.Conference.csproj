@@ -162,6 +162,7 @@
     <Compile Include="Api\SponsorsController.cs" />
     <Compile Include="Api\TagsController.cs" />
     <Compile Include="Api\TracksController.cs" />
+    <Compile Include="Api\UsersController.cs" />
     <Compile Include="Common\AppLink.cs" />
     <Compile Include="Common\AutoCompletePair.cs" />
     <Compile Include="Common\ConferenceApiController.cs" />
