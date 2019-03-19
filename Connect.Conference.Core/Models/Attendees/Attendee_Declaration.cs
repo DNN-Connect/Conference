@@ -69,6 +69,7 @@ namespace Connect.Conference.Core.Models.Attendees
             res.ReceiveNotifications = ReceiveNotifications;
             res.Company = Company;
             res.AttCode = AttCode;
+             res.NotificationToken = NotificationToken;
             res.CreatedByUserID = CreatedByUserID;
             res.CreatedOnDate = CreatedOnDate;
             res.LastModifiedByUserID = LastModifiedByUserID;
@@ -84,6 +85,7 @@ namespace Connect.Conference.Core.Models.Attendees
             res.ReceiveNotifications = ReceiveNotifications;
             res.Company = Company;
             res.AttCode = AttCode;
+            res.NotificationToken = NotificationToken;
             res.DisplayName = DisplayName;
             res.FirstName = FirstName;
             res.LastName = LastName;

@@ -190,6 +190,7 @@
     <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\ConferenceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Integration\Expo\ExpoController.cs" />
     <Compile Include="Integration\Mqtt\AttendanceMessage.cs" />
     <Compile Include="Integration\Mqtt\MqttClient.cs" />
     <Compile Include="Integration\Mqtt\MqttClientRepository.cs" />

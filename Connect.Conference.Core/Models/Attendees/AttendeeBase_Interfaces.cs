@@ -23,6 +23,7 @@ namespace Connect.Conference.Core.Models.Attendees
    ReceiveNotifications = Convert.ToBoolean(Null.SetNull(dr["ReceiveNotifications"], ReceiveNotifications));
    Company = Convert.ToString(Null.SetNull(dr["Company"], Company));
    AttCode = Convert.ToString(Null.SetNull(dr["AttCode"], AttCode));
+   NotificationToken = Convert.ToString(Null.SetNull(dr["NotificationToken"], NotificationToken));
         }
 
         [IgnoreColumn()]
@@ -58,6 +59,12 @@ namespace Connect.Conference.Core.Models.Attendees
          return "";
      };
      return PropertyAccess.FormatString(AttCode, strFormat);
+    case "notificationtoken": // VarChar
+     if (NotificationToken == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(NotificationToken, strFormat);
                 default:
                     propertyNotFound = true;
                     break;

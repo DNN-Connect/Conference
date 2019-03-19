@@ -1,6 +1,6 @@
 {
   "name": "conference",
-  "version": "2.2.11",
+  "version": "2.2.12",
   "description": "Conference module",
   "dnn": {
     "projectType": "module",

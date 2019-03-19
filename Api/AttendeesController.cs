@@ -190,6 +190,25 @@ namespace Connect.DNN.Modules.Conference.Api
             return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, id));
         }
 
+        public class SetNotificationTokenDTO
+        {
+            public string Token { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        public HttpResponseMessage SetNotificationToken(int conferenceId, int id, [FromBody]SetNotificationTokenDTO data)
+        {
+            var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, id);
+            if (attendee != null)
+            {
+                attendee.NotificationToken = data.Token;
+                AttendeeRepository.Instance.UpdateAttendee(attendee.GetAttendeeBase(), UserInfo.UserID);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, AttendeeRepository.Instance.GetAttendee(conferenceId, id));
+        }
+
         [HttpGet]
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage Download(int conferenceId)

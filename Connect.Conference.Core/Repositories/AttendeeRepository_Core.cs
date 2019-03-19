@@ -55,8 +55,8 @@ namespace Connect.Conference.Core.Repositories
                 context.Execute(System.Data.CommandType.Text,
                     "IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees " +
                     "WHERE ConferenceId=@0 AND UserId=@1) " +
-                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Attendees (ConferenceId, UserId, Status, ReceiveNotifications, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Company, AttCode) " +
-                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7, @8, @9", attendee.ConferenceId, attendee.UserId, attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate, attendee.Company, attendee.AttCode);
+                    "INSERT INTO {databaseOwner}{objectQualifier}Connect_Conference_Attendees (ConferenceId, UserId, Status, ReceiveNotifications, CreatedByUserID, CreatedOnDate, LastModifiedByUserID, LastModifiedOnDate, Company, AttCode, NotificationToken) " +
+                    "SELECT @0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10", attendee.ConferenceId, attendee.UserId, attendee.Status, attendee.ReceiveNotifications, attendee.CreatedByUserID, attendee.CreatedOnDate, attendee.LastModifiedByUserID, attendee.LastModifiedOnDate, attendee.Company, attendee.AttCode, attendee.NotificationToken);
             }
         }
         public void DeleteAttendee(AttendeeBase attendee)
@@ -102,8 +102,8 @@ namespace Connect.Conference.Core.Repositories
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<AttendeeBase>();
-                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5, Company=@6, AttCode=@7 WHERE ConferenceId=@8 AND UserId=@9",
-                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate,attendee.Company,attendee.AttCode, attendee.ConferenceId,attendee.UserId);
+                rep.Update("SET Status=@0, ReceiveNotifications=@1, CreatedByUserID=@2, CreatedOnDate=@3, LastModifiedByUserID=@4, LastModifiedOnDate=@5, Company=@6, AttCode=@7, NotificationToken=@8 WHERE ConferenceId=@9 AND UserId=@10",
+                          attendee.Status,attendee.ReceiveNotifications,attendee.CreatedByUserID,attendee.CreatedOnDate,attendee.LastModifiedByUserID,attendee.LastModifiedOnDate,attendee.Company,attendee.AttCode,attendee.NotificationToken, attendee.ConferenceId,attendee.UserId);
             }
         } 
  }

@@ -62,6 +62,12 @@ namespace Connect.DNN.Modules.Conference.Api
                         return AccessViolation("You need to be a presenter or manager to submit this comment");
                     }
                     break;
+                case 2: // from managers
+                    if (!ConferenceModuleContext.Security.CanManage)
+                    {
+                        return AccessViolation("You need to be a manager to submit this comment");
+                    }
+                    break;
                 default:
                     if (UserInfo.UserID <= 0)
                     {
@@ -73,6 +79,7 @@ namespace Connect.DNN.Modules.Conference.Api
             comment.UserId = UserInfo.UserID;
             comment.Datime = System.DateTime.Now;
             CommentRepository.Instance.AddComment(ref comment);
+            Integration.Expo.ExpoController.CheckAndSendNotifications(comment);
             return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetComment(conferenceId, comment.CommentId));
         }
 

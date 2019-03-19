@@ -36,6 +36,9 @@ namespace Connect.Conference.Core.Models.Attendees
         [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Management)]
         public string AttCode { get; set; }
+        [DataMember]
+        [WebApiSecurity(WebApiSecurityLevel.Private)]
+        public string NotificationToken { get; set; }
         #endregion
 
         #region Methods
@@ -66,6 +69,11 @@ namespace Connect.Conference.Core.Models.Attendees
             if (!String.IsNullOrEmpty(attendee.AttCode))
             {
                 AttCode = attendee.AttCode;
+            }
+
+            if (!String.IsNullOrEmpty(attendee.NotificationToken))
+            {
+                NotificationToken = attendee.NotificationToken;
             }
         }
         #endregion

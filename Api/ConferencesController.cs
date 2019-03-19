@@ -26,6 +26,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, id);
             conf.LoadComplete();
             var isAttending = false;
+            var hasNotificationToken = false;
             var level = WebApiSecurityLevel.Public;
             var att = AttendeeRepository.Instance.GetAttendee(id, UserInfo.UserID);
             if (att != null)
@@ -35,6 +36,7 @@ namespace Connect.DNN.Modules.Conference.Api
                     level = WebApiSecurityLevel.Attendee;
                     isAttending = true;
                 }
+                hasNotificationToken = att.HasNotificationToken;
             }
             if (ConferenceModuleContext.Security.CanManage)
             {
@@ -45,6 +47,7 @@ namespace Connect.DNN.Modules.Conference.Api
             var cc = JObject.FromObject(conf, serializer);
             cc.Add("Security", JObject.FromObject(ConferenceModuleContext.Security));
             cc.Add("IsAttending", isAttending);
+            cc.Add("HasNotificationToken", hasNotificationToken);
             cc.Add("Closed", conf.EndDate.IsBefore(System.DateTime.Now));
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(cc.ToString(), System.Text.Encoding.UTF8, "application/json");
