@@ -77,7 +77,7 @@ export default class Comments extends React.Component<
             <button
               className="btn btn-primary"
               ref="cmdAdd"
-              onClick={this.addComment}
+              onClick={e => this.addComment(e)}
             >
               {this.props.module.resources.AddComment}
             </button>

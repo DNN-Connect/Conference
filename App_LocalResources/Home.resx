@@ -123,6 +123,12 @@
   <data name="BulkAdd.Text" xml:space="preserve">
     <value>Bulk Add</value>
   </data>
+  <data name="ConferenceComments.Help" xml:space="preserve">
+    <value>These messages are broadcast by the organizing team</value>
+  </data>
+  <data name="ConferenceComments.Text" xml:space="preserve">
+    <value>Messages</value>
+  </data>
   <data name="Confirmed.Confirm" xml:space="preserve">
     <value>This attendee has been confirmed?</value>
   </data>

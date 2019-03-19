@@ -35,7 +35,7 @@ namespace Connect.DNN.Modules.Conference.Api
             }
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetCommentsBySession(sessionId, visibility, pageIndex, pageSize));
+                return Request.CreateResponse(HttpStatusCode.OK, CommentRepository.Instance.GetCommentsBySession(conferenceId, sessionId, visibility, pageIndex, pageSize));
             }
             catch
             {

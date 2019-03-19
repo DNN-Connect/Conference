@@ -276,7 +276,9 @@
     <Content Include="Views\Home\MyPresentations.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_LocalResources\Session.resx" />
+    <Content Include="App_LocalResources\Session.resx">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Speaker\Edit.cshtml" />
@@ -353,6 +355,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Sponsor\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\ConferenceComments.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

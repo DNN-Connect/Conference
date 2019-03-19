@@ -1,13 +1,8 @@
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
+using Connect.Conference.Core.Models.Comments;
 using DotNetNuke.Collections;
-using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
-using Connect.Conference.Core.Data;
-using Connect.Conference.Core.Models.Comments;
+using System.Collections.Generic;
 
 namespace Connect.Conference.Core.Repositories
 {
@@ -29,12 +24,12 @@ namespace Connect.Conference.Core.Repositories
                 return context.ExecuteScalar<int>(System.Data.CommandType.Text, "SELECT COUNT(*) FROM {databaseOwner}{objectQualifier}Connect_Conference_Comments WHERE SessionId=@0 AND Visibility=@1", sessionId, visibility);
             }
         }
-        public IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize)
+        public IPagedList<Comment> GetCommentsBySession(int conferenceId, int sessionId, int visibility, int pageIndex, int pageSize)
         {
             using (var context = DataContext.Instance())
             {
                 var rep = context.GetRepository<Comment>();
-                return rep.Find(pageIndex, pageSize, "WHERE SessionId=@0 AND Visibility=@1 ORDER BY Datime DESC", sessionId, visibility);
+                return rep.Find(pageIndex, pageSize, "WHERE ConferenceId=@0 AND SessionId=@1 AND Visibility=@2 ORDER BY Datime DESC", conferenceId, sessionId, visibility);
             }
         }
         public Comment GetComment(int conferenceId, int commentId)
@@ -67,7 +62,7 @@ namespace Connect.Conference.Core.Repositories
     {
         IEnumerable<Comment> GetNewComments(int sessionId, int visibility, System.DateTime lastCheck);
         int GetTotalComments(int sessionId, int visibility);
-        IPagedList<Comment> GetCommentsBySession(int sessionId, int visibility, int pageIndex, int pageSize);
+        IPagedList<Comment> GetCommentsBySession(int conferenceId, int sessionId, int visibility, int pageIndex, int pageSize);
         Comment GetComment(int conferenceId, int commentId);
         void DeleteComment(int conferenceId, int commentId);
         void DeleteCommentsBySession(int sessionId);

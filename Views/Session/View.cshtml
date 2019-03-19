@@ -138,7 +138,7 @@
   @if (isPresenter & Model.NrSpeakers > 1)
   {
    colWidth = 4;
-   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 0, 0, commentsPageSize);
+   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.ConferenceId, Model.SessionId, 0, 0, commentsPageSize);
    var totalComments = commentList.TotalCount;
    <div class="commentsComponent col-xs-12 col-sm-@colWidth" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("PrivateComments")" data-help="@Dnn.LocalizeString("PrivateComments.Help")"
@@ -150,7 +150,7 @@
   @if (ConferenceModuleContext.Security.CanManage | isPresenter)
   {
    if (colWidth == 12) { colWidth = 6; }
-   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 1, 0, commentsPageSize);
+   var commentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.ConferenceId, Model.SessionId, 1, 0, commentsPageSize);
    var totalComments = commentList.TotalCount;
    <div class="commentsComponent col-xs-12 col-sm-@colWidth" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-loggedin="@((Dnn.User.UserID > 0).ToString().ToLower())" data-title="@Dnn.LocalizeString("InternalComments")" data-help="@Dnn.LocalizeString("InternalComments.Help")"
@@ -160,7 +160,7 @@
    </div>
   }
   @{
-      var publicCommentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.SessionId, 2, 0, commentsPageSize);
+      var publicCommentList = Connect.Conference.Core.Repositories.CommentRepository.Instance.GetCommentsBySession(Model.ConferenceId, Model.SessionId, 2, 0, commentsPageSize);
       var publicTotalComments = publicCommentList.TotalCount;
   }
   <div class="commentsComponent col-xs-12 col-sm-@colWidth" data-moduleid="@Dnn.ModuleContext.ModuleId"

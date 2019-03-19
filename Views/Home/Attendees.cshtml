@@ -149,7 +149,7 @@
    </table>
   </div>
   @{
-   var commentList = CommentRepository.Instance.GetCommentsBySession(-1, 2, 0, commentsPageSize);
+   var commentList = CommentRepository.Instance.GetCommentsBySession(Model.ConferenceId, -1, 2, 0, commentsPageSize);
    var totalComments = commentList.TotalCount;
   }
   <div class="commentsComponent col-xs-12" data-moduleid="@Dnn.ModuleContext.ModuleId"
