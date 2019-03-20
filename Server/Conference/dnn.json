@@ -1,0 +1,63 @@
+{
+  "projectType": "module",
+  "name": "Connect.Conference",
+  "friendlyName": "Conference Module",
+  "description": "Connect Conference Module",
+  "packageName": "Connect_Conference",
+  "folder": "MVC/Connect/Conference",
+  "iconFile": "DesktopModules\\MVC\\Connect\\Conference\\Conference.png",
+  "module": {
+    "azureCompatible": "true",
+    "moduleName": "Connect_Conference",
+    "foldername": "Connect/Conference",
+    "moduleDefinitions": [
+      {
+        "friendlyName": "Connect Conference",
+        "defaultCacheTime": 0,
+        "moduleControls": [
+          {
+            "controlSrc": "Connect.DNN.Modules.Conference.Controllers/Home/Index.mvc",
+            "supportsPartialRendering": "False",
+            "controlTitle": "",
+            "controlType": "View",
+            "viewOrder": 0
+          },
+          {
+            "controlKey": "Settings",
+            "controlSrc": "DesktopModules/MVC/Connect/Conference/Settings.ascx",
+            "supportsPartialRendering": "False",
+            "controlTitle": "Conference Module Settings",
+            "controlType": "Edit",
+            "viewOrder": 1
+          }
+        ],
+        "permissions": [
+          {
+            "code": "Connect_Conference_MODULE",
+            "key": "SESSIONSUBMIT",
+            "name": "Submit Sessions"
+          },
+          {
+            "code": "Connect_Conference_MODULE",
+            "key": "CANATTEND",
+            "name": "Can Attend"
+          },
+          {
+            "code": "Connect_Conference_MODULE",
+            "key": "MANAGE",
+            "name": "Manage Conference"
+          }
+        ]
+      }
+    ]
+  },
+  "pathsAndFiles": {
+    "pathToAssemblies": "./bin",
+    "assemblies": [
+      "Connect.DNN.Modules.Conference.dll",
+      "Connect.Conference.Core.dll"
+    ],
+    "excludeFilter": ["Conference/bin/", "Conference/obj/"],
+    "zipName": "Connect.Conference"
+  }
+}

@@ -156,9 +156,7 @@ $RECYCLE.BIN/
 
 .vs/*
 packages
-_References
-_Development
-_Packages
-_BuildSupport
+_*
 node_modules
 bower_components
+Releases
