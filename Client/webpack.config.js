@@ -1,5 +1,7 @@
-var webpack = require("webpack");
-var path = require("path");
+var path = require("path"),
+  webpack = require("webpack"),
+  ExtractTextPlugin = require("extract-text-webpack-plugin"),
+  pkg = require("../package.json");
 
 // variables
 var isProduction =
@@ -10,6 +12,7 @@ var outPath = path.join(__dirname, "./js");
 var commonConfig = {
   context: sourcePath,
   target: "web",
+  mode: isProduction ? "production" : "development",
   module: {
     rules: [
       {
@@ -35,8 +38,6 @@ var commonConfig = {
     ]
   },
   externals: {
-    react: "React",
-    "react-dom": "ReactDOM",
     "simple-ajax-uploader": "simple-ajax-uploader",
     jquery: "jQuery"
   },
@@ -44,16 +45,28 @@ var commonConfig = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: "development", // use 'development' unless process.env.NODE_ENV is defined
       DEBUG: false
+    }),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    }),
+    new ExtractTextPlugin({
+      filename: "../module.css"
     })
   ]
 };
 
 var mainAppConfig = Object.assign({}, commonConfig, {
+  context: path.join(__dirname, "./js"),
   entry: {
     conference: "./App.ts"
   },
   output: {
-    path: outPath,
+    path: isProduction
+      ? path.resolve(__dirname, "../Server/Conference/js")
+      : pkg.dnn.pathsAndFiles.devSitePath +
+        "\\DesktopModules\\MVC\\Connect\\Conference\\js",
     filename: "[name].js"
   },
   resolve: {
@@ -66,9 +79,13 @@ var mainAppConfig = Object.assign({}, commonConfig, {
 });
 
 var libConfig = Object.assign({}, commonConfig, {
+  context: path.join(__dirname, "./js"),
   entry: "./Common.ts",
   output: {
-    path: outPath,
+    path: isProduction
+      ? path.resolve(__dirname, "../Server/Conference/js")
+      : pkg.dnn.pathsAndFiles.devSitePath +
+        "\\DesktopModules\\MVC\\Connect\\Conference\\js",
     filename: "common.js",
     libraryTarget: "var",
     library: "Common"
