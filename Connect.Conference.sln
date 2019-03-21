@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.Conference", "Connect.Conference.csproj", "{B972A864-16D9-4F71-AD12-21582057A004}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.Conference", "Server\Conference\Connect.Conference.csproj", "{B972A864-16D9-4F71-AD12-21582057A004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.Conference.Core", "Connect.Conference.Core\Connect.Conference.Core.csproj", "{4A405599-4ECF-4C72-B30B-95334C5E5891}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect.Conference.Core", "Server\Connect.Conference.Core\Connect.Conference.Core.csproj", "{4A405599-4ECF-4C72-B30B-95334C5E5891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
