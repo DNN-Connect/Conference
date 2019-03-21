@@ -110,17 +110,11 @@ namespace Connect.DNN.Modules.Conference.Common
                 AddScript("bootstrap.min.js", "bootstrap", "3.3.6");
             }
         }
-        public void AddReactJs()
-        {
-            AddScript("react.min.js", "react", "16.6.3");
-            AddScript("react-dom.min.js", "react-dom", "16.6.3");
-        }
         public void AddEditScripts()
         {
             RegisterAjaxScript();
             AddJqueryUi();
             AddBootstrapJs();
-            AddReactJs();
             AddScript("interact.min.js", "interact", "1.2.6");
             AddScript("moment-with-locales.min.js", "moment", "2.10.6");
             AddScript("bootstrap-datetimepicker.min.js", "bootstrap-datetimepicker", "4.17.37");
