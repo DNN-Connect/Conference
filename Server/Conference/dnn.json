@@ -12,7 +12,8 @@
     "foldername": "Connect/Conference",
     "moduleDefinitions": [
       {
-        "friendlyName": "Connect Conference",
+        "definitionName": "Connect_Conference",
+        "friendlyName": "Conference",
         "defaultCacheTime": 0,
         "moduleControls": [
           {
@@ -53,9 +54,12 @@
   },
   "pathsAndFiles": {
     "pathToAssemblies": "./bin",
+    "pathToScripts": "./Server/SqlScripts",
     "assemblies": [
       "Connect.DNN.Modules.Conference.dll",
-      "Connect.Conference.Core.dll"
+      "Connect.Conference.Core.dll",
+      "M2Mqtt.Net.dll",
+      "QRCoder.dll"
     ],
     "excludeFilter": ["Conference/bin/", "Conference/obj/"],
     "zipName": "Connect.Conference"

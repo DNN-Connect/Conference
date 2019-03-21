@@ -1,10 +1,10 @@
 #addin "Cake.FileHelpers"
 #addin "Cake.Npm"
-#reference "BuildSupport/netstandard2.0/Connect.CakeUtils.dll"
+#addin nuget:?package=Dnn.CakeUtils
 
-using Connect.CakeUtils;
-using Connect.CakeUtils.Compression;
-using Connect.CakeUtils.Manifest;
+using Dnn.CakeUtils;
+using Dnn.CakeUtils.Compression;
+using Dnn.CakeUtils.Manifest;
 
 ///////////////////////////////////////////////////////////////////////////////
 // VARIABLES

@@ -1,6 +1,6 @@
 {
   "name": "conference",
-  "version": "2.2.13",
+  "version": "2.3.0",
   "description": "Conference module",
   "dnn": {
     "projectFolders": [
@@ -15,12 +15,13 @@
     "pathsAndFiles": {
       "solutionFile": "./Connect.Conference.sln",
       "pathToAssemblies": "./bin",
-      "devSiteUrl": "",
-      "devSitePath": "",
+      "devSiteUrl": "https://www.dnnconnect.local",
+      "devSitePath": "D:\\Websites\\www.dnnconnect.local\\www",
       "excludeFilter": [
         "bin/",
         "obj/",
-        "node_modules"
+        "node_modules",
+        "_"
       ],
       "licenseFile": "./License.txt",
       "releaseNotesFile": "./ReleaseNotes.md",
@@ -34,6 +35,11 @@
         "**/*.html",
         "**/*.png",
         "**/*.gif",
+        "**/*.eot",
+        "**/*.svg",
+        "**/*.ttf",
+        "**/*.woff",
+        "**/*.woff2",
         "*.txt"
       ],
       "zipName": "Connect.Conference"
