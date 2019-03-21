@@ -1,0 +1,7 @@
+﻿@inherits ConferenceWebPage<Conference>
+@using Connect.DNN.Modules.Conference.Common;
+@using Connect.Conference.Core.Models.Conferences;
+@{
+}
+
+@Html.GenerateRelayQrCode(ConferenceModuleContext.AppLink(), 250, 250)
