@@ -1,8 +1,13 @@
 const chokidar = require("chokidar"),
   fs = require("fs-extra"),
   path = require("path"),
-  pkg = require("../package.json"),
-  pkgConference = require("../Server/Conference/dnn.json");
+  deepmerge = require("./deepmerge");
+
+var pkg = require("../package.json");
+if (fs.existsSync("./local.json")) {
+  var local = require("../local.json");
+  pkg = deepmerge.deepmerge(pkg, local);
+}
 
 var log = console.log.bind(console);
 
@@ -29,9 +34,6 @@ var ignore = [
   "**/.*"
 ];
 
-const allDlls = pkgConference.pathsAndFiles.assemblies
-  .map(dll => "bin/" + dll);
-
 const watcher = (src, dest) =>
   chokidar
     .watch(src, {
@@ -42,12 +44,18 @@ const watcher = (src, dest) =>
     .on("change", path => copy(src, path, dest));
 // Todo: delete events?
 
+let allDlls = [];
+
 // Initialize watchers.
-const ConferenceWatcher = watcher(
-  "Server/Conference",
-  pkg.dnn.pathsAndFiles.devSitePath +
-    "\\DesktopModules\\MVC\\Connect\\Conference"
-);
+pkg.dnn.projectFolders.forEach(pf => {
+  let projectPkg = require("../" + pf + "/dnn.json");
+  allDlls = allDlls.concat(
+    projectPkg.pathsAndFiles.assemblies.map(dll => "bin/" + dll)
+  );
+  if (projectPkg.projectType == "module") {
+    let projectWatcher = watcher(pf, pkg.dnn.pathsAndFiles.devSitePath + "\\DesktopModules\\" + projectPkg.folder.replace("/", "\\"));
+  }
+});
 
 const DllWatcher = chokidar
   .watch(allDlls, {

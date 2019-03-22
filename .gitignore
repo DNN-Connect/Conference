@@ -161,3 +161,4 @@ node_modules
 bower_components
 Releases
 tools
+local.json

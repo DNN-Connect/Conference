@@ -15,8 +15,8 @@
     "pathsAndFiles": {
       "solutionFile": "./Connect.Conference.sln",
       "pathToAssemblies": "./bin",
-      "devSiteUrl": "https://www.dnnconnect.local",
-      "devSitePath": "D:\\Websites\\www.dnnconnect.local\\www",
+      "devSiteUrl": "",
+      "devSitePath": "",
       "excludeFilter": [
         "bin/",
         "obj/",
