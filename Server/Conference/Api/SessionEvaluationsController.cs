@@ -14,7 +14,7 @@ namespace Connect.DNN.Modules.Conference.Api
     {
 
         [HttpGet]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage Get(int conferenceId, int sessionId)
         {
             var res = SessionEvaluationRepository.Instance.GetSessionEvaluation(sessionId, UserInfo.UserID);
@@ -23,7 +23,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage Set(int conferenceId, SessionEvaluationBase data)
         {
             var attended = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(UserInfo.UserID).FirstOrDefault(a => a.SessionId == data.SessionId);

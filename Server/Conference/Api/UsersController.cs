@@ -24,7 +24,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage Edit(int conferenceId, int id, [FromBody]EditProfileDTO data)
         {
             data.DisplayName = data.DisplayName.UnNull().Trim();

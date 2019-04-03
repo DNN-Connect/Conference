@@ -19,7 +19,7 @@ namespace Connect.DNN.Modules.Conference.Api
     {
 
         [HttpGet]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage Attendances(int conferenceId)
         {
             Logger.Trace("SessionAttendees.Attendances");
@@ -35,7 +35,7 @@ namespace Connect.DNN.Modules.Conference.Api
         }
 
         [HttpGet]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage SessionAttendees(int conferenceId, int id)
         {
             Logger.Trace("SessionAttendees.SessionAttendees");
@@ -68,7 +68,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage Set(int conferenceId, SessionEvaluationBase data)
         {
             Logger.Trace("SessionAttendees.Set");

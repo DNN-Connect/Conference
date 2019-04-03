@@ -197,7 +197,7 @@ namespace Connect.DNN.Modules.Conference.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
+        [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendsConference)]
         public HttpResponseMessage SetNotificationToken(int conferenceId, int id, [FromBody]SetNotificationTokenDTO data)
         {
             var attendee = AttendeeRepository.Instance.GetAttendee(conferenceId, id);

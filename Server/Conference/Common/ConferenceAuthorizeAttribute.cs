@@ -16,7 +16,8 @@ namespace Connect.DNN.Modules.Conference.Common
         Host = 5,
         SessionSubmit = 6,
         AttendConference = 7,
-        ManageConference = 8
+        ManageConference = 8,
+        AttendsConference = 9
     }
 
     public class ConferenceAuthorizeAttribute : AuthorizeAttributeBase, IOverrideDefaultAuthLevel
@@ -45,7 +46,7 @@ namespace Connect.DNN.Modules.Conference.Common
                 return true;
             }
             User = HttpContextSource.Current.Request.IsAuthenticated ? UserController.Instance.GetCurrentUserInfo() : new UserInfo();
-            Logger.Trace("User ID: " + User.UserID.ToString());
+            Logger.Trace("UserId " + User.UserID.ToString());
             if (AllowApiKeyAccess && User.UserID == -1 && HttpContextSource.Current.Request.Params["apikey"] != null)
             {
                 Logger.Trace("Using API key");
@@ -82,6 +83,9 @@ namespace Connect.DNN.Modules.Conference.Common
                     return security.CanAttend;
                 case SecurityAccessLevel.ManageConference:
                     return security.CanManage;
+                case SecurityAccessLevel.AttendsConference:
+                    var conferenceId = int.Parse(HttpContextSource.Current.Request.Params["conferenceid"]);
+                    return Connect.Conference.Core.Repositories.AttendeeRepository.Instance.GetAttendee(conferenceId, security.UserId) != null;
             }
             return false;
         }
