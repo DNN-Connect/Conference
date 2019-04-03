@@ -1,6 +1,7 @@
 ﻿using DotNetNuke.Common;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Users;
+using DotNetNuke.Instrumentation;
 using DotNetNuke.Web.Api;
 
 namespace Connect.DNN.Modules.Conference.Common
@@ -20,6 +21,7 @@ namespace Connect.DNN.Modules.Conference.Common
 
     public class ConferenceAuthorizeAttribute : AuthorizeAttributeBase, IOverrideDefaultAuthLevel
     {
+        private static readonly ILog Logger = LoggerSource.Instance.GetLogger(typeof(ConferenceAuthorizeAttribute));
         public SecurityAccessLevel SecurityLevel { get; set; }
         public UserInfo User { get; set; }
         public bool AllowApiKeyAccess { get; set; } = false;
@@ -36,13 +38,17 @@ namespace Connect.DNN.Modules.Conference.Common
 
         public override bool IsAuthorized(AuthFilterContext context)
         {
+            Logger.Trace("IsAuthorized");
             if (SecurityLevel == SecurityAccessLevel.Anonymous)
             {
+                Logger.Trace("Anonymous");
                 return true;
             }
             User = HttpContextSource.Current.Request.IsAuthenticated ? UserController.Instance.GetCurrentUserInfo() : new UserInfo();
+            Logger.Trace("User ID: " + User.UserID.ToString());
             if (AllowApiKeyAccess && User.UserID == -1 && HttpContextSource.Current.Request.Params["apikey"] != null)
             {
+                Logger.Trace("Using API key");
                 var conferenceId = int.Parse(HttpContextSource.Current.Request.Params["conferenceid"]);
                 var apiKey = Connect.Conference.Core.Repositories.ApiKeyRepository.Instance.GetApiKey(HttpContextSource.Current.Request.Params["apikey"]);
                 if (apiKey != null && apiKey.Expires != null && apiKey.Expires < System.DateTime.Now)
@@ -57,6 +63,7 @@ namespace Connect.DNN.Modules.Conference.Common
                 }
             }
             ContextSecurity security = new ContextSecurity(context.ActionContext.Request.FindModuleInfo());
+            Logger.Trace(security.ToString());
             switch (SecurityLevel)
             {
                 case SecurityAccessLevel.Authenticated:

@@ -70,5 +70,10 @@ namespace Connect.DNN.Modules.Conference.Common
             }
         }
 
+        public new string ToString()
+        {
+            return string.Format($"UserId: {UserId}, CanView: {CanView}, CanEdit: {CanEdit}, CanSubmitSessions: {CanSubmitSessions}, CanAttend: {CanAttend}, CanManage: {CanManage}, IsAdmin: {IsAdmin}");
+        }
+
     }
 }

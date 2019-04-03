@@ -22,6 +22,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
         public HttpResponseMessage Attendances(int conferenceId)
         {
+            Logger.Trace("SessionAttendees.Attendances");
             var res = JsonConvert.SerializeObject(SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID),
                             Formatting.None,
                             new JsonSerializerSettings
@@ -37,6 +38,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
         public HttpResponseMessage SessionAttendees(int conferenceId, int id)
         {
+            Logger.Trace("SessionAttendees.SessionAttendees");
             return Request.CreateResponse(HttpStatusCode.OK, SessionAttendeeRepository.Instance.GetSessionAttendeesBySession(id));
         }
 
@@ -45,6 +47,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage Attend(int conferenceId, int id)
         {
+            Logger.Trace("SessionAttendees.Attend");
             var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
             if (!conf.OnGoing)
             {
@@ -68,6 +71,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.AttendConference)]
         public HttpResponseMessage Set(int conferenceId, SessionEvaluationBase data)
         {
+            Logger.Trace("SessionAttendees.Set");
             var attended = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(UserInfo.UserID).FirstOrDefault(a => a.SessionId == data.SessionId);
             if (attended != null)
             {
@@ -92,6 +96,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.ManageConference)]
         public HttpResponseMessage AttendByCode(int conferenceId, AttendByCodeDTO data)
         {
+            Logger.Trace("SessionAttendees.AttendByCode");
             var lines = GetCodes(data.Codes);
             foreach (var code in lines)
             {
