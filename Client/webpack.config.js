@@ -1,13 +1,14 @@
 var path = require("path"),
   webpack = require("webpack"),
   ExtractTextPlugin = require("extract-text-webpack-plugin"),
-  pkg = require("../package.json");
+  pkg = require("../package.json"),
+  local = require("../local.json");
 
 // variables
 var isProduction =
   process.argv.indexOf("-p") >= 0 || process.env.NODE_ENV === "production";
 var sourcePath = path.join(__dirname, "./js/src");
-var outPath = path.join(__dirname, "./js");
+pkg = Object.assign({}, pkg, local);
 
 var commonConfig = {
   context: sourcePath,
