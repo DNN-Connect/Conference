@@ -27,15 +27,18 @@ const SessionVote: React.SFC<ISessionVoteProps> = props => {
     </td>
   ) : null;
   var speakers = props.item.Speakers.map(function(item) {
-    return <span className="detailItem">{item.Value}</span>;
+    return <span key={item.Key} className="detailItem">{item.Value}</span>;
   });
   var tags = props.item.Tags.map(function(item) {
-    return <span className="detailItem">{item.Value}</span>;
+    return <span key={item.Key} className="detailItem">{item.Value}</span>;
   });
   var rowStyle = {};
-  if (props.item.BackgroundColor != "") {
+  if (props.item.BackgroundColor) {
     rowStyle = {
-      backgroundColor: props.item.BackgroundColor
+      borderWidth: 2,
+      borderStyle: "solid",
+      borderRadius: 2,
+      borderColor: props.item.BackgroundColor
     };
   }
   var track =
@@ -53,9 +56,11 @@ const SessionVote: React.SFC<ISessionVoteProps> = props => {
       />
     );
   return (
-    <tr style={rowStyle}>
+    <tr>
       <td>
         <p>{props.item.Title}</p>
+        <div style={rowStyle} />
+        <p>{props.item.Description}</p>
         <p className="itemDetails">
           <span
             className="glyphicon glyphicon-user"
