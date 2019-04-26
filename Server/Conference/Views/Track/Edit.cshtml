@@ -54,7 +54,7 @@
   $('#BackgroundColor').css('background-color', $('#BackgroundColor').val());
   $('.cmdRefresh').click(function (e) {
    e.preventDefault();
-   var newColor = '#' + getPastel();
+   var newColor = '#' + window.Common.getPastel();
    $('#BackgroundColor').val(newColor);
    $('#BackgroundColor').css('background-color', $('#BackgroundColor').val());
   });
