@@ -27,10 +27,18 @@ const SessionVote: React.SFC<ISessionVoteProps> = props => {
     </td>
   ) : null;
   var speakers = props.item.Speakers.map(function(item) {
-    return <span key={item.Key} className="detailItem">{item.Value}</span>;
+    return (
+      <span key={item.Key} className="detailItem">
+        {item.Value}
+      </span>
+    );
   });
   var tags = props.item.Tags.map(function(item) {
-    return <span key={item.Key} className="detailItem">{item.Value}</span>;
+    return (
+      <span key={item.Key} className="detailItem">
+        {item.Value}
+      </span>
+    );
   });
   var rowStyle = {};
   if (props.item.BackgroundColor) {
@@ -60,7 +68,9 @@ const SessionVote: React.SFC<ISessionVoteProps> = props => {
       <td>
         <p>{props.item.Title}</p>
         <div style={rowStyle} />
-        <p>{props.item.Description}</p>
+        <p style={{ fontSize: "smaller", color: "#999", marginBottom: 20 }}>
+          {props.item.Description}
+        </p>
         <p className="itemDetails">
           <span
             className="glyphicon glyphicon-user"
