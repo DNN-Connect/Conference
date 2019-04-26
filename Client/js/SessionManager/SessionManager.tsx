@@ -25,7 +25,9 @@ export default class SessionManager extends React.Component<
   constructor(props: ISessionManagerProps) {
     super(props);
     var tracks = props.tracks;
-    tracks.unshift(new Models.Track());
+    var noTrack = new Models.Track();
+    noTrack.Title = this.props.module.resources.None;
+    tracks.unshift(noTrack);
     this.state = {
       sessions: props.sessions,
       tracks: tracks,
@@ -98,16 +100,16 @@ export default class SessionManager extends React.Component<
     for (var i = 0; i < this.props.statusOptions.length; i++) {
       var so = this.props.statusOptions[i];
       if (statusTotals[so.Id] != undefined) {
-        statusList.push(<dt>{so.Text}</dt>);
-        statusList.push(<dd>{statusTotals[so.Id]}</dd>);
+        statusList.push(<dt key={"dt" + i.toString()}>{so.Text}</dt>);
+        statusList.push(<dd key={"dd" + i.toString()}>{statusTotals[so.Id]}</dd>);
       }
     }
     var trackList: JSX.Element[] = [];
     for (var i = 0; i < this.state.tracks.length; i++) {
       var tr = this.state.tracks[i];
-      trackList.push(<dt>{tr.Title}</dt>);
+      trackList.push(<dt key={"dd" + i.toString()}>{tr.Title}</dt>);
       trackList.push(
-        <dd>
+        <dd key={"dt" + i.toString()}>
           {trackTotals[tr.TrackId] == undefined ? 0 : trackTotals[tr.TrackId]}
           &nbsp; (
           {trackTotalsAccepted[tr.TrackId] == undefined
@@ -121,8 +123,8 @@ export default class SessionManager extends React.Component<
     for (var key in speakerTotals) {
       if (speakerTotals.hasOwnProperty(key)) {
         nrSpeakers++;
-        speakerList.push(<dt>{key}</dt>);
-        speakerList.push(<dd>{speakerTotals[key]}</dd>);
+        speakerList.push(<dt key={"dt" + key}>{key}</dt>);
+        speakerList.push(<dd key={"dd" + key}>{speakerTotals[key]}</dd>);
       }
     }
 
@@ -204,11 +206,11 @@ export default class SessionManager extends React.Component<
     );
   }
 
-  changeSessionTrack(session: Models.ISession, newTrack: Models.ITrack) {
+  changeSessionTrack(sessionId: number, newTrackId: number) {
     this.props.module.service.changeSessionTrack(
       this.props.conferenceId,
-      session.SessionId,
-      newTrack.TrackId,
+      sessionId,
+      newTrackId,
       (data: Models.ISession) => {
         var newList = this.state.sessions.map(s => {
           return s.SessionId == data.SessionId ? data : s;

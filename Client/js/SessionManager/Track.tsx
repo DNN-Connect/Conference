@@ -4,12 +4,12 @@ import * as Models from "../Models/";
 interface ITrackProps {
   session: Models.ISession;
   tracks: Models.ITrack[];
-  changeTrack: (session: Models.ISession, track: Models.ITrack) => void;
+  changeTrack: (sessionId: number, trackId: number) => void;
 }
 
 const Track: React.SFC<ITrackProps> = props => {
   var btnClass = "";
-  var btnText = "";
+  var btnText = " ";
   var options: JSX.Element[] = [];
   var btnStyle: React.CSSProperties = {};
   var trackId = props.session.TrackId == null ? -1 : props.session.TrackId;
@@ -22,17 +22,18 @@ const Track: React.SFC<ITrackProps> = props => {
         backgroundColor: opt.BackgroundColor
       };
     } else {
+      let opt2 = opt;
       options.push(
-        <li>
+        <li key={opt2.TrackId}>
           <a
             href="#"
-            data-id={opt.TrackId}
+            data-id={opt2.TrackId}
             onClick={e => {
               e.preventDefault();
-              props.changeTrack(props.session, opt);
+              props.changeTrack(props.session.SessionId, opt2.TrackId);
             }}
           >
-            {opt.Title}
+            {opt2.Title}
           </a>
         </li>
       );
@@ -45,7 +46,7 @@ const Track: React.SFC<ITrackProps> = props => {
         className={"btn btn-sm btn-" + btnClass}
         style={btnStyle}
       >
-        {btnText}
+        {btnText}&nbsp;
       </button>
       <button
         type="button"

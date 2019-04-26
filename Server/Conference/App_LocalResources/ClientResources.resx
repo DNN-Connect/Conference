@@ -207,6 +207,9 @@
   <data name="NewUrl" xml:space="preserve">
     <value>New Url</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
   <data name="ReceiveNotifications" xml:space="preserve">
     <value>Receive Notifications</value>
   </data>

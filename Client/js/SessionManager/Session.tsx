@@ -7,7 +7,7 @@ interface ISessionProps {
   session: Models.ISession;
   tracks: Models.ITrack[];
   statusOptions: Models.ISwitchButtonOption[];
-  changeTrack: (session: Models.ISession, track: Models.ITrack) => void;
+  changeTrack: (sessionId: number, trackId: number) => void;
   changeStatus: (
     session: Models.ISession,
     status: Models.ISwitchButtonOption

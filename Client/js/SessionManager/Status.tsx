@@ -22,7 +22,7 @@ const Status: React.SFC<IStatusProps> = props => {
     } else {
       let opt2 = opt;
       options.push(
-        <li>
+        <li key={opt2.Id}>
           <a
             href="#"
             data-id={opt2.Id}
