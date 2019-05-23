@@ -5,7 +5,6 @@
 @{
     ConferenceModuleContext.AddBootstrapCss();
     var attendees = AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).Where(a => a.Status > 1).OrderBy(a => a.DisplayName);
-    var imgUrlSuffix = HttpContext.Current.Request.Params["refreshcache"] == null ? "" : "&nocache=1";
     var uc = new DotNetNuke.Entities.Users.UserController();
 }
 
@@ -17,7 +16,7 @@
    <div class="well attendeeCard">
     <div class="row">
      <div class="col-xs-3">
-      <img src="@uc.GetUserProfilePictureUrl(a.UserId, 64, 64)@(imgUrlSuffix)" class="img-circle" />
+      <img src="@uc.GetUserProfilePictureUrl(a.UserId, 64, 64)" class="img-circle" />
      </div>
      <div class="col-xs-9">
       <h4 style="padding-top:0;margin-top:0;height:2em;overflow:hidden;">@a.DisplayName</h4>
