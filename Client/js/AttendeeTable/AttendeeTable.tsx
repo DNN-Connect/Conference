@@ -46,7 +46,7 @@ export default class AttendeeTable extends React.Component<
           module={this.props.module}
           attendee={item}
           key={item.UserId}
-          update={this.updateAttendee}
+          update={a => this.updateAttendee(a)}
           index={i}
         />
       );

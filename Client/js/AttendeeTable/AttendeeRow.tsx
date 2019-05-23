@@ -31,9 +31,7 @@ export default class AttendeeRow extends React.Component<
   }
 
   editCompany() {
-    var oldValue = this.props.attendee.Company
-      ? this.props.attendee.Company
-      : "";
+    var oldValue = this.props.attendee.Company;
     if (this.state.company != oldValue) {
       var attendee = this.props.attendee;
       attendee.Company = this.state.company;
@@ -80,7 +78,7 @@ export default class AttendeeRow extends React.Component<
             value={this.state.company || ""}
             tabIndex={1000 + this.props.index}
             ref="txtCompany"
-            onBlur={this.editCompany.bind(null)}
+            onBlur={e => this.editCompany()}
             onChange={e =>
               this.setState({
                 company: e.target.value
