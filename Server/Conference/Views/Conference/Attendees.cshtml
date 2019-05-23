@@ -12,7 +12,8 @@
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))"
      data-conferenceid="@Model.ConferenceId"
-     data-attendees="@(Newtonsoft.Json.JsonConvert.SerializeObject(AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).OrderBy(s => s.LastName)))">
+     data-attendees="@(Newtonsoft.Json.JsonConvert.SerializeObject(AttendeeRepository.Instance.GetAttendeesByConference(Model.ConferenceId).OrderBy(s => s.LastName)))"
+     data-countries="@(Newtonsoft.Json.JsonConvert.SerializeObject(DotNetNuke.Common.Lists.CachedCountryList.GetCountryList(System.Threading.Thread.CurrentThread.CurrentCulture.Name).Values))">
 </div>
 
 <div class="container">

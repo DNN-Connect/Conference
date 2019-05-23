@@ -22,6 +22,7 @@ export interface IAttendee {
   PhotoContentType: string;
   Biography: string;
   ProfileCompany: string;
+  ProfileCountry: string;
   CreatedByUser: string;
   LastModifiedByUser: string;
 }
@@ -50,21 +51,21 @@ export class Attendee implements IAttendee {
   PhotoContentType: string;
   Biography: string;
   ProfileCompany: string;
+  ProfileCountry: string;
   CreatedByUser: string;
   LastModifiedByUser: string;
-    constructor() {
-  this.ConferenceId = -1;
-  this.UserId = -1;
-  this.Status = -1;
-  this.ReceiveNotifications = false;
-  this.CreatedByUserID = -1;
-  this.CreatedOnDate = new Date();
-  this.LastModifiedByUserID = -1;
-  this.LastModifiedOnDate = new Date();
-  this.DisplayName = "";
-  this.FirstName = "";
-  this.LastName = "";
-  this.Username = "";
-   }
+  constructor() {
+    this.ConferenceId = -1;
+    this.UserId = -1;
+    this.Status = -1;
+    this.ReceiveNotifications = false;
+    this.CreatedByUserID = -1;
+    this.CreatedOnDate = new Date();
+    this.LastModifiedByUserID = -1;
+    this.LastModifiedOnDate = new Date();
+    this.DisplayName = "";
+    this.FirstName = "";
+    this.LastName = "";
+    this.Username = "";
+  }
 }
-

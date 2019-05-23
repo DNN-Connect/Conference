@@ -52,6 +52,8 @@ namespace Connect.Conference.Core.Models.Attendees
         [DataMember]
         public string ProfileCompany { get; set; }
         [DataMember]
+        public string ProfileCountry { get; set; }
+        [DataMember]
         [WebApiSecurity(WebApiSecurityLevel.Private)]
         public string CreatedByUser { get; set; }
         [DataMember]
@@ -99,6 +101,7 @@ namespace Connect.Conference.Core.Models.Attendees
             res.PhotoContentType = PhotoContentType;
             res.Biography = Biography;
             res.ProfileCompany = ProfileCompany;
+            res.ProfileCountry = ProfileCountry;
             res.CreatedByUser = CreatedByUser;
             res.LastModifiedByUser = LastModifiedByUser;
             res.CreatedByUserID = CreatedByUserID;

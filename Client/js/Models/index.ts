@@ -2,6 +2,7 @@ export * from './IApiKey';
 export * from './IAttendee';
 export * from './IComment';
 export * from './IConference';
+export * from './ICountry';
 export * from './ILocation';
 export * from './ISession';
 export * from './ISessionAttendee';

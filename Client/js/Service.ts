@@ -130,11 +130,7 @@ export default class DataService {
         this.ajaxCall('POST', 'Tracks', 'Delete', conferenceId, trackId, null, success, fail);
     }
     public editAttendee(conferenceId: number, attendee, success: Function, fail?: Function) {
-        this.ajaxCall('POST', 'Attendees', 'Edit', conferenceId, attendee.UserId, {
-            Company: attendee.Company,
-            AttCode: attendee.AttCode,
-            ReceiveNotifications: attendee.ReceiveNotifications
-        }, success, fail);
+        this.ajaxCall('POST', 'Attendees', 'Edit', conferenceId, attendee.UserId, attendee, success, fail);
     }
     public editResource(conferenceId: number, sessionId: number, sessionResource: ISessionResource, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'SessionResources', 'Edit', conferenceId, sessionId, { SessionResource: sessionResource }, success, fail);
@@ -146,6 +142,9 @@ export default class DataService {
     }
     public getConferenceSlots(conferenceId: number, success: Function, fail?: Function) {
         this.ajaxCall('POST', 'Slots', 'List', conferenceId, null, null, success, fail);
+    }
+    public getCountries(success: Function, fail?: Function) {
+        this.ajaxCall('POST', 'Module', 'CountryList', null, null, null, success, fail);
     }
     public getLocations(conferenceId: number, success: Function, fail?: Function) {
         this.ajaxCall('GET', 'Locations', 'List', conferenceId, null, null, success, fail);

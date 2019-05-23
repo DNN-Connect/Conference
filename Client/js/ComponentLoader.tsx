@@ -219,6 +219,7 @@ export class ComponentLoader {
           module={AppManager.Modules.Item(moduleId.toString())}
           conferenceId={$(el).data("conferenceid")}
           attendees={$(el).data("attendees")}
+          countries={$(el).data("countries")}
         />,
         el
       );

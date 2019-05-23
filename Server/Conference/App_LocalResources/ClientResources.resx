@@ -162,6 +162,9 @@
   <data name="Company" xml:space="preserve">
     <value>Company</value>
   </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
   <data name="Day" xml:space="preserve">
     <value>Day</value>
   </data>

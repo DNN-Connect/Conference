@@ -1,59 +1,44 @@
 import * as React from "react";
 import * as Models from "../Models/";
+import { linkState } from "../LinkState";
+import CountryDropdown from "../Generic/CountryDropdown";
 
 interface IAttendeeRowProps {
   module: Models.IAppModule;
   attendee: Models.IAttendee;
   update: (a: Models.IAttendee) => void;
   index: number;
+  countries: Models.ICountry[];
 }
 
 interface IAttendeeRowState {
-  code: string;
-  company: string;
+  attendee: Models.IAttendee;
 }
 
 export default class AttendeeRow extends React.Component<
   IAttendeeRowProps,
   IAttendeeRowState
 > {
-  refs: {
-    txtCompany: HTMLInputElement;
-    txtCode: HTMLInputElement;
-  };
-
   constructor(props: IAttendeeRowProps) {
     super(props);
     this.state = {
-      code: props.attendee.AttCode,
-      company: props.attendee.Company
+      attendee: Object.assign({}, props.attendee)
     };
   }
 
-  editCompany() {
-    var oldValue = this.props.attendee.Company;
-    if (this.state.company != oldValue) {
-      var attendee = this.props.attendee;
-      attendee.Company = this.state.company;
-      this.props.update(this.props.attendee);
-    }
-  }
-
-  editCode() {
-    var oldValue = this.props.attendee.AttCode
-      ? this.props.attendee.AttCode
-      : "";
-    if (this.state.code != oldValue) {
-      var attendee = this.props.attendee;
-      attendee.AttCode = this.state.code;
-      this.props.update(this.props.attendee);
+  updateIfChanged(propName: string) {
+    if (this.props.attendee[propName] != this.state.attendee[propName]) {
+      this.props.update(this.state.attendee);
     }
   }
 
   toggleReceive() {
-    var attendee = this.props.attendee;
+    var attendee = this.state.attendee;
     attendee.ReceiveNotifications = !attendee.ReceiveNotifications;
-    this.props.update(this.props.attendee);
+    this.setState({
+      attendee: attendee
+    });
+    this.props.update(attendee);
   }
 
   render() {
@@ -61,7 +46,24 @@ export default class AttendeeRow extends React.Component<
       <tr>
         <td className="nrcol">{this.props.index + 1}.</td>
         <td>
-          {this.props.attendee.LastName}, {this.props.attendee.FirstName}
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.attendee.LastName || ""}
+            tabIndex={1000 + this.props.index}
+            onBlur={e => this.updateIfChanged("LastName")}
+            onChange={linkState(this, "attendee", "LastName")}
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.attendee.FirstName || ""}
+            tabIndex={1000 + this.props.index + 1}
+            onBlur={e => this.updateIfChanged("FirstName")}
+            onChange={linkState(this, "attendee", "FirstName")}
+          />
         </td>
         <td>{this.props.attendee.Email}</td>
         <td>
@@ -75,30 +77,33 @@ export default class AttendeeRow extends React.Component<
           <input
             type="text"
             className="form-control"
-            value={this.state.company || ""}
-            tabIndex={1000 + this.props.index}
-            ref="txtCompany"
-            onBlur={e => this.editCompany()}
-            onChange={e =>
-              this.setState({
-                company: e.target.value
-              })
-            }
+            value={this.state.attendee.Company || ""}
+            tabIndex={2000 + this.props.index}
+            onBlur={e => this.updateIfChanged("Company")}
+            onChange={linkState(this, "attendee", "Company")}
           />
         </td>
         <td>
           <input
             type="text"
             className="form-control"
-            value={this.state.code || ""}
-            tabIndex={2000 + this.props.index}
-            ref="txtCode"
-            onBlur={e => this.editCode()}
-            onChange={e =>
-              this.setState({
-                code: e.target.value
-              })
-            }
+            value={this.state.attendee.AttCode || ""}
+            tabIndex={3000 + this.props.index}
+            onBlur={e => this.updateIfChanged("AttCode")}
+            onChange={linkState(this, "attendee", "AttCode")}
+          />
+        </td>
+        <td>
+          <CountryDropdown
+            module={this.props.module}
+            countries={this.props.countries}
+            value={this.state.attendee.ProfileCountry}
+            onChange={cid => {
+              var a = this.state.attendee;
+              a.ProfileCountry = cid;
+              this.setState({ attendee: a });
+              this.props.update(a);
+            }}
           />
         </td>
       </tr>

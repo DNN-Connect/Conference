@@ -30,6 +30,7 @@ namespace Connect.Conference.Core.Models.Attendees
    PhotoContentType = Convert.ToString(Null.SetNull(dr["PhotoContentType"], PhotoContentType));
    Biography = Convert.ToString(Null.SetNull(dr["Biography"], Biography));
    ProfileCompany = Convert.ToString(Null.SetNull(dr["ProfileCompany"], ProfileCompany));
+   ProfileCountry = Convert.ToString(Null.SetNull(dr["ProfileCountry"], ProfileCountry));
    CreatedByUser = Convert.ToString(Null.SetNull(dr["CreatedByUser"], CreatedByUser));
    LastModifiedByUser = Convert.ToString(Null.SetNull(dr["LastModifiedByUser"], LastModifiedByUser));
   }
@@ -101,6 +102,12 @@ namespace Connect.Conference.Core.Models.Attendees
          return "";
      };
      return PropertyAccess.FormatString(ProfileCompany, strFormat);
+    case "profilecountry": // NVarChar
+     if (ProfileCountry == null)
+     {
+         return "";
+     };
+     return PropertyAccess.FormatString(ProfileCountry, strFormat);
     case "createdbyuser": // NVarChar
      if (CreatedByUser == null)
      {

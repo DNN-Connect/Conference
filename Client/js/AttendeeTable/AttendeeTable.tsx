@@ -6,6 +6,7 @@ interface IAttendeeTableProps {
   module: Models.IAppModule;
   attendees: Models.IAttendee[];
   conferenceId: number;
+  countries: Models.ICountry[];
 }
 
 interface IAttendeeTableState {
@@ -16,7 +17,6 @@ export default class AttendeeTable extends React.Component<
   IAttendeeTableProps,
   IAttendeeTableState
 > {
-
   constructor(props: IAttendeeTableProps) {
     super(props);
     this.state = {
@@ -48,6 +48,7 @@ export default class AttendeeTable extends React.Component<
           key={item.UserId}
           update={a => this.updateAttendee(a)}
           index={i}
+          countries={this.props.countries}
         />
       );
     });
@@ -59,11 +60,13 @@ export default class AttendeeTable extends React.Component<
               <thead>
                 <tr>
                   <th />
-                  <th>{this.props.module.resources.Name}</th>
+                  <th>{this.props.module.resources.LastName}</th>
+                  <th>{this.props.module.resources.FirstName}</th>
                   <th>{this.props.module.resources.Email}</th>
                   <th>N</th>
                   <th>{this.props.module.resources.Company}</th>
                   <th>{this.props.module.resources.Code}</th>
+                  <th>{this.props.module.resources.Country}</th>
                 </tr>
               </thead>
               <tbody>{attendees}</tbody>
