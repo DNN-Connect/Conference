@@ -20,7 +20,7 @@ namespace Connect.DNN.Modules.Conference.Api
         [ConferenceAuthorize(SecurityLevel = SecurityAccessLevel.View)]
         public HttpResponseMessage List(int conferenceId)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(conferenceId, (int)SessionStatus.Accepted).OrderBy(s => s.LastName));
+            return Request.CreateResponse(HttpStatusCode.OK, SpeakerRepository.Instance.GetSpeakersByConferenceWithNrSessions(conferenceId, (int)SessionStatus.Accepted).Where(s => s.NrSessions > 0).OrderBy(s => s.LastName));
         }
 
         [HttpPost]

@@ -1,0 +1,69 @@
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees'))
+DROP VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW {databaseOwner}{objectQualifier}vw_Connect_Conference_Attendees
+AS
+SELECT
+ a.*,
+ u.DisplayName,
+ u.FirstName,
+ u.LastName,
+ u.Email,
+ u.Username,
+ propPhoto.Visibility PhotoVisibility,
+ propPhoto.[FileName] PhotoFilename,
+ propPhoto.Folder PhotoFolder,
+ propPhoto.Width PhotoWidth,
+ propPhoto.Height PhotoHeight,
+ propPhoto.ContentType PhotoContentType,
+ propBio.PropertyValue Biography,
+ propCompany.PropertyValue ProfileCompany,
+ propCountry.PropertyValue ProfileCountry,
+ uc.DisplayName CreatedByUser,
+ um.DisplayName LastModifiedByUser
+FROM {databaseOwner}{objectQualifier}Connect_Conference_Attendees a
+ INNER JOIN {databaseOwner}{objectQualifier}Connect_Conference_Conferences c ON c.ConferenceId=a.ConferenceId
+ INNER JOIN {databaseOwner}{objectQualifier}Users u ON u.UserID=a.UserId
+LEFT JOIN (
+SELECT
+ ppd.PortalID propPortalId,
+ up.UserID,
+ up.Visibility,
+ f.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+ INNER JOIN {databaseOwner}{objectQualifier}Files f ON up.PropertyValue=f.FileId
+WHERE ppd.PropertyName='Photo'
+) propPhoto ON propPhoto.propPortalId=c.PortalId AND propPhoto.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Biography'
+) propBio ON propBio.PortalID=c.PortalId AND propBio.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Company'
+) propCompany ON propCompany.PortalID=c.PortalId AND propCompany.UserID=u.UserID
+LEFT JOIN (
+SELECT
+ ppd.PortalID,
+ up.*
+FROM {databaseOwner}{objectQualifier}UserProfile up
+ INNER JOIN {databaseOwner}{objectQualifier}ProfilePropertyDefinition ppd ON ppd.PropertyDefinitionID=up.PropertyDefinitionID
+WHERE ppd.PropertyName='Country'
+) propCountry ON propCountry.PortalID=c.PortalId AND propCountry.UserID=u.UserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users uc ON uc.UserID=a.CreatedByUserID
+ LEFT JOIN {databaseOwner}{objectQualifier}Users um ON um.UserID=a.LastModifiedByUserID
+GO
