@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Models from "../Models/";
+import StatusApprovalButton from "./StatusApprovalButton";
 
 interface IVideoProps {
   module: Models.IAppModule;
@@ -65,18 +66,11 @@ export default class Video extends React.Component<IVideoProps, IVideoState> {
       </td>
     ) : null;
     var okCol = this.props.module.security.CanManage ? (
-      <td className="iconCol">
-        <a
-          href="#"
-          onClick={e => {
-            e.preventDefault();
-            this.props.approveResource(this.props.resource);
-          }}
-          title={this.props.module.resources.Approve}
-        >
-          <span className="btn btn-sm btn-success glyphicon glyphicon-check" />
-        </a>
-      </td>
+      <StatusApprovalButton
+        module={this.props.module}
+        resource={this.props.resource}
+        approveResource={r => this.props.approveResource(r)}
+      />
     ) : (
       <td className="iconCol" />
     );
