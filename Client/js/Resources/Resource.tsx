@@ -79,8 +79,8 @@ export default class Resource extends React.Component<
         type="text"
         value={this.state.description}
         className="form-control"
-        onBlur={this.onDescriptionChanged}
-        onChange={this.onDescriptionChange}
+        onBlur={e => this.onDescriptionChanged(e)}
+        onChange={e => this.onDescriptionChange(e)}
       />
     ) : (
       this.props.resource.ResourceDescription

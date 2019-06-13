@@ -21,7 +21,6 @@ export default class SessionManager extends React.Component<
   ISessionManagerProps,
   ISessionManagerState
 > {
-
   constructor(props: ISessionManagerProps) {
     super(props);
     var tracks = props.tracks;
@@ -101,7 +100,9 @@ export default class SessionManager extends React.Component<
       var so = this.props.statusOptions[i];
       if (statusTotals[so.Id] != undefined) {
         statusList.push(<dt key={"dt" + i.toString()}>{so.Text}</dt>);
-        statusList.push(<dd key={"dd" + i.toString()}>{statusTotals[so.Id]}</dd>);
+        statusList.push(
+          <dd key={"dd" + i.toString()}>{statusTotals[so.Id]}</dd>
+        );
       }
     }
     var trackList: JSX.Element[] = [];
@@ -153,25 +154,37 @@ export default class SessionManager extends React.Component<
                 <tr>
                   <th
                     className="sortable"
-                    onClick={this.sortSessions.bind(null, "Title")}
+                    onClick={e => {
+                      e.preventDefault();
+                      this.sortSessions("Title");
+                    }}
                   >
                     {this.props.module.resources.Session}
                   </th>
                   <th
                     className="text-right sortable"
-                    onClick={this.sortSessions.bind(null, "NrVotes")}
+                    onClick={e => {
+                      e.preventDefault();
+                      this.sortSessions("NrVotes");
+                    }}
                   >
                     {this.props.module.resources.Votes}
                   </th>
                   <th
                     className="text-right sortable"
-                    onClick={this.sortSessions.bind(null, "Status")}
+                    onClick={e => {
+                      e.preventDefault();
+                      this.sortSessions("Status");
+                    }}
                   >
                     {this.props.module.resources.Status}
                   </th>
                   <th
                     className="text-right sortable"
-                    onClick={this.sortSessions.bind(null, "TrackId")}
+                    onClick={e => {
+                      e.preventDefault();
+                      this.sortSessions("TrackId");
+                    }}
                   >
                     {this.props.module.resources.Track}
                   </th>
@@ -185,7 +198,10 @@ export default class SessionManager extends React.Component<
     );
   }
 
-  changeSessionStatus(session: Models.ISession, newStatus: Models.ISwitchButtonOption) {
+  changeSessionStatus(
+    session: Models.ISession,
+    newStatus: Models.ISwitchButtonOption
+  ) {
     if (newStatus.Confirm != undefined) {
       if (!confirm(newStatus.Confirm)) {
         return;

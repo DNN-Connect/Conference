@@ -60,7 +60,7 @@ export default class Resources extends React.Component<
           <a
             href="#"
             className="input-group-addon btn btn-default"
-            onClick={this.addUrl}
+            onClick={e => this.addUrl(e)}
           >
             {this.props.module.resources.Add}
           </a>

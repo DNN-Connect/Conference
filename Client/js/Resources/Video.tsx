@@ -85,8 +85,8 @@ export default class Video extends React.Component<IVideoProps, IVideoState> {
         type="text"
         value={this.state.description}
         className="form-control"
-        onBlur={this.onDescriptionChanged}
-        onChange={this.onDescriptionChange}
+        onBlur={e => this.onDescriptionChanged(e)}
+        onChange={e => this.onDescriptionChange(e)}
       />
     ) : (
       this.props.resource.ResourceDescription
