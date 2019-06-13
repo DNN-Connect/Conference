@@ -27,6 +27,25 @@ namespace Connect.DNN.Modules.Conference.Api
         public HttpResponseMessage Set(int conferenceId, SessionEvaluationBase data)
         {
             var attended = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(UserInfo.UserID).FirstOrDefault(a => a.SessionId == data.SessionId);
+            if (attended == null)
+            {
+                var conf = ConferenceRepository.Instance.GetConference(PortalSettings.PortalId, conferenceId);
+                if (!conf.OnGoing)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "This conference is not ongoing");
+                }
+                var confAtt = AttendeeRepository.Instance.GetAttendee(conferenceId, UserInfo.UserID);
+                if (confAtt != null)
+                {
+                    var session = SessionRepository.Instance.GetSession(data.SessionId);
+                    if (SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(conferenceId, UserInfo.UserID).Where(sa => sa.SessionId != data.SessionId && sa.SessionDateAndTime == session.SessionDateAndTime).Count() > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotAcceptable, "You were in another session");
+                    }
+                    SessionAttendeeRepository.Instance.SetSessionAttendee(data.SessionId, UserInfo.UserID, UserInfo.UserID);
+                }
+                attended = SessionAttendeeRepository.Instance.GetSessionAttendeesByUser(UserInfo.UserID).FirstOrDefault(a => a.SessionId == data.SessionId);
+            }
             if (attended != null)
             {
                 data.UserId = UserInfo.UserID;
