@@ -8,7 +8,7 @@
     var speakers = SpeakerRepository.Instance.GetSpeakersByConference(Model.ConferenceId).OrderBy(s => s.LastName);
 }
 
-<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId" data-tabid="@Dnn.ModuleContext.TabId"
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
 </div>

@@ -14,7 +14,7 @@
     var speakers = Model.GetSpeakers();
 }
 
-<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId"
+<div class="connectConference" data-moduleid="@Dnn.ModuleContext.ModuleId" data-tabid="@Dnn.ModuleContext.TabId"
      data-resources="@SerializedResources()"
      data-security="@(Newtonsoft.Json.JsonConvert.SerializeObject(ConferenceModuleContext.Security))">
 </div>
@@ -126,7 +126,7 @@
  }
  <div class="row">
   <div class="col-xs-12">
-   <div class="resourcesComponent" data-moduleid="@Dnn.ModuleContext.ModuleId" data-tabid="@Dnn.ModuleContext.TabId"
+   <div class="resourcesComponent" data-moduleid="@Dnn.ModuleContext.ModuleId"
         data-conferenceid="@Model.ConferenceId" data-sessionid="@Model.SessionId"
         data-resourcedir="@(Dnn.PortalSettings.HomeDirectory)@(Model.GetSessionResourcesPath("/"))"
         data-resources="@(Newtonsoft.Json.JsonConvert.SerializeObject(SessionResourceRepository.Instance.GetSessionResourcesBySession(Model.SessionId).Where(r => r.Visibility == 1 | isPresenter | ConferenceModuleContext.Security.CanManage)))"
