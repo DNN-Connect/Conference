@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+    <AssemblyVersion>2.3.9</AssemblyVersion>
+    <FileVersion>2.3.9</FileVersion>
+    <Company>DNN Connect</Company>
+    <Copyright>Copyright 2022 by DNN Connect</Copyright>
+    <Product>conference</Product>
+    <Description>Conference module</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Cake.FileHelpers" Version="5.0.0" />
+    <PackageReference Include="Cake.Frosting" Version="2.0.0" />
+    <PackageReference Include="Cake.Npm" Version="1.0.0" />
+    <PackageReference Include="Dnn.CakeUtils" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+</Project>

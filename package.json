@@ -21,7 +21,7 @@
         "bin/",
         "obj/",
         "node_modules",
-        "_"
+        "_*"
       ],
       "licenseFile": "./License.md",
       "releaseNotesFile": "",
